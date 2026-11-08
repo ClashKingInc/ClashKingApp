@@ -114,9 +114,16 @@ export function LegendsRoot({
   );
   useEffect(() => {
     let current = true;
+    let complete = false;
+    // The daily panel needs only its battlelog. The service shares this request
+    // with the full load, so history/season/opponent enrichment cannot delay it.
+    void runtime.players.loadLegendBattlelog(player.tag, selectedDay).then((day) => {
+      if (current && !complete && day) setData(baseline.withCurrentDay(day));
+    }).catch(() => { /* The full load below owns the page's error state. */ });
     void runtime.players
       .loadLegendLeagueData(player.tag, false, selectedDay, baseline)
       .then((value) => {
+        complete = true;
         if (current) setData(value);
       })
       .catch((caught) => {

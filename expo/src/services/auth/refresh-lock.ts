@@ -1,7 +1,8 @@
 import type { RuntimePlatform } from '../storage/auth-storage';
+import { TransportError } from '@clashking/api-client';
 
 export interface AuthRefreshLock {
-  run<T>(operation: () => Promise<T>): Promise<T | null>;
+  run<T>(operation: () => Promise<T>): Promise<T>;
 }
 
 /** Web Locks coordinate tabs on this origin; the API cookie is shared across
@@ -14,14 +15,19 @@ export function withWebAuthRefreshLock<T>(apiUrl: string, operation: () => Promi
 export class NativeAuthRefreshLock implements AuthRefreshLock {
   constructor(private readonly platform: RuntimePlatform) {}
 
-  async run<T>(operation: () => Promise<T>): Promise<T | null> {
+  async run<T>(operation: () => Promise<T>): Promise<T> {
     if (this.platform !== 'ios') return operation();
     try {
       const { default: ClashKingNative } = await import('@clashking/native');
       const acquired = await ClashKingNative.acquireSharedAuthRefreshLock(12);
-      if (!acquired) return null;
-    } catch {
-      return null;
+      if (!acquired) throw new Error('Shared authentication lock is busy.');
+    } catch (cause) {
+      // A busy/unavailable bridge says nothing about the saved refresh token.
+      // Returning null here would turn a transient lock failure into sign-out.
+      throw new TransportError({
+        cause,
+        message: 'Shared authentication lock is unavailable. Retry authentication.',
+      });
     }
 
     try {

@@ -1,3 +1,4 @@
+import { readPlayerLegendHistory } from './player-legend-history';
 import {
   expoEndpoints,
   LegendBattlelogEndpoint,
@@ -9,7 +10,6 @@ import {
   PlayerJoinLeaveEndpoint,
   PlayerJoinLeaveTotalsEndpoint,
   PlayerLastActivityEndpoint,
-  PlayerLeagueHistoryEndpoint,
   PlayerSearchEndpoint,
   PlayerTimersEndpoint,
   PlayerWarStatsEndpoint,
@@ -399,19 +399,8 @@ export class PlayerService {
     this.activityCache.set(key, result);
     return result;
   }
-  async loadPlayerLegendHistory(rawTag: string): Promise<readonly PlayerLegendHistoryEntry[]> {
-    // Finished seasons belong to the player even after they leave Legend League.
-    // Do not gate this request on their current league or substitute current-season data.
-    const response = await Effect.runPromise(
-      this.api.execute(PlayerLeagueHistoryEndpoint, {
-        path: { playerTag: canonicalTag(rawTag) },
-        query: {},
-        body: {},
-      }),
-    );
-    return records(response.items)
-      .filter((item) => string(item.mode) === 'legend')
-      .map(PlayerLegendHistoryEntry.fromJson);
+  loadPlayerLegendHistory(rawTag: string): Promise<readonly PlayerLegendHistoryEntry[]> {
+    return readPlayerLegendHistory(this.api, rawTag);
   }
 
   loadPlayerCwlHistory(rawTag: string, forceRefresh = false) {
@@ -629,16 +618,7 @@ export class PlayerService {
               body: {},
             }),
           ),
-      legendSource(
-        Effect.runPromise(
-          this.api.execute(PlayerLeagueHistoryEndpoint, {
-            path: { playerTag: tag },
-            query: {},
-            body: {},
-          }),
-        ),
-        null,
-      ),
+      legendSource(readPlayerLegendHistory(this.api, tag), null),
       legendSource(this.loadLegendBattlelog(tag, day, forceRefresh), baseline?.currentDay ?? null),
       legendSource(
         Effect.runPromise(
@@ -737,11 +717,7 @@ export class PlayerService {
     if (!anyLegendSourceAvailable && !hasStoredLegendData) {
       throw new Error('Legend League data is temporarily unavailable.');
     }
-    const history = historyResponse
-      ? records(historyResponse.items)
-          .filter((item) => string(item.mode) === 'legend')
-          .map(PlayerLegendHistoryEntry.fromJson)
-      : (baseline?.history ?? []);
+    const history = historyResponse ?? baseline?.history ?? [];
     const currentRank =
       records(currentRankResponse?.items)
         .map(PlayerLegendRank.fromJson)

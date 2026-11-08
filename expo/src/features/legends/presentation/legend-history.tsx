@@ -4,21 +4,7 @@ import { ImageAssets } from '../../../core/assets/image-assets';
 import { toIntlLocale, useI18n } from '../../../i18n';
 import { CKText, EmptyState, MobileWebImage, ResponsiveGrid, Surface, ckRadius } from '../../../ui';
 import type { PlayerLegendHistoryEntry } from '../../player/models';
-import { legendSeasonFinish } from '../../player/models/legend-season-window';
-
-function historyBadge(season: PlayerLegendHistoryEntry): string {
-  const finish = legendSeasonFinish(season.season);
-  // A finish on the migration boundary still belongs to the system that just ended.
-  // Old API rows may carry today's reused league ID, so dates take priority here.
-  if (finish <= Date.parse('2025-10-06T05:00:00Z')) return ImageAssets.originalLegendLeague;
-  if (finish <= Date.parse('2026-04-27T05:00:00Z')) return ImageAssets.legacyLegendLeague;
-  if (
-    season.leagueName &&
-    /^(?:legend league|legend)\s+(?:[123]|i{1,3})$/iu.test(season.leagueName.trim())
-  )
-    return ImageAssets.getLeagueImage(season.leagueName);
-  return ImageAssets.legendLeagueOne;
-}
+import { formatLegendHistorySeason, legendHistoryBadge } from './legend-history-presentation';
 
 export function LegendHistoryList({
   history,
@@ -61,12 +47,16 @@ function LegendHistoryRow({
   const { t } = useI18n();
   const format = new Intl.NumberFormat(toIntlLocale(locale));
   const topPercent = legendHistoryTopPercent(season.rank, season.population);
+  const badge = legendHistoryBadge(season);
+  const badgeUrl = badge?.kind === 'source'
+    ? badge.imageUrl
+    : badge?.kind === 'named' ? ImageAssets.getLeagueImage(badge.name) : null;
   return (
     <Surface radius={ckRadius.tile} style={styles.seasonCard}>
       <View style={styles.historyHeader}>
-        <MobileWebImage imageUrl={historyBadge(season)} style={styles.historyBadge} />
-        <CKText role="titleMedium" style={styles.grow}>
-          {formatSeason(season.season, locale)}
+        {badgeUrl && badgeUrl !== ImageAssets.defaultImage ? <MobileWebImage imageUrl={badgeUrl} style={styles.historyBadge} /> : null}
+        <CKText role="titleMedium" numberOfLines={2} style={styles.grow}>
+          {formatLegendHistorySeason(season, toIntlLocale(locale))}
         </CKText>
         <View style={styles.historyRank}>
           <CKText role="rowTitle">{season.rank ? `#${format.format(season.rank)}` : '—'}</CKText>
@@ -119,22 +109,6 @@ function HistoryMetric({
       </View>
     </View>
   );
-}
-
-function formatSeason(season: string, locale: string) {
-  const value = season.startsWith('v2-')
-    ? season.slice(3)
-    : season.length === 7
-      ? `${season}-01T00:00:00Z`
-      : season;
-  const date = new Date(value);
-  if (!Number.isFinite(date.getTime())) return season;
-  return new Intl.DateTimeFormat(toIntlLocale(locale), {
-    month: 'long',
-    year: 'numeric',
-    ...(season.length === 7 ? {} : { day: 'numeric' as const }),
-    timeZone: 'UTC',
-  }).format(date);
 }
 
 const styles = StyleSheet.create({
