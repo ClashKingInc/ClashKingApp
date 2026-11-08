@@ -1989,6 +1989,44 @@ const upgradeGroupOrder: readonly UpgradeGroup[] = [
   'helpers',
 ];
 
+function groupedIdleSupercharges(items: readonly UpgradeTrackerItem[]): UpgradeTrackerItem[] {
+  const result: UpgradeTrackerItem[] = [];
+  const positions = new Map<string, number>();
+  for (const item of items) {
+    // Exported rows may be individual buildings or an existing cnt group.
+    // Combine equivalent idle tiles, but retain each timer/helper instance.
+    if (
+      item.activeSeconds !== null ||
+      item.helperSeconds !== null ||
+      item.cooldownSeconds !== null ||
+      item.recurrentHelper
+    ) {
+      result.push(item);
+      continue;
+    }
+    const key = JSON.stringify([
+      item.id,
+      item.village,
+      item.currentLevel,
+      item.targetLevel,
+      item.imageUrl,
+      item.isExtra,
+    ]);
+    const position = positions.get(key);
+    if (position === undefined) {
+      positions.set(key, result.length);
+      result.push(item);
+    } else {
+      const existing = result[position]!;
+      result[position] = new UpgradeTrackerItem({
+        ...existing,
+        count: existing.count + item.count,
+      });
+    }
+  }
+  return result;
+}
+
 function groupedUpgradeItems(
   items: readonly UpgradeTrackerItem[],
   village: UpgradeVillageValue,
@@ -2018,7 +2056,14 @@ function groupedUpgradeItems(
   }
   return upgradeGroupOrder.flatMap((group) => {
     const groupItems = values.get(group);
-    return groupItems?.length ? [[group, groupItems] as [UpgradeGroup, UpgradeTrackerItem[]]] : [];
+    return groupItems?.length
+      ? [
+          [group, group === 'supercharges' ? groupedIdleSupercharges(groupItems) : groupItems] as [
+            UpgradeGroup,
+            UpgradeTrackerItem[],
+          ],
+        ]
+      : [];
   });
 }
 

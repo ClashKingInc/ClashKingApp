@@ -281,7 +281,7 @@ function addBuildingItems(
     }),
   );
   if (target >= maxLevel(mapList(data.levels)))
-    addSupercharge(output, raw, data, image, itemVillage);
+    addSupercharge(output, raw, data, image, itemVillage, hall);
   addCraftedDefenses(output, raw, data, lookup, itemVillage, hall);
 }
 
@@ -291,12 +291,16 @@ function addSupercharge(
   data: JsonRecord,
   image: string,
   itemVillage: UpgradeVillageValue,
+  hall: number,
 ) {
   const levels = Array.isArray(data.levels) ? data.levels : [],
     last = levels.at(-1);
   if (!isRecord(last) || !isRecord(last.supercharge)) return;
-  const supercharge = last.supercharge,
-    superLevels = mapList(supercharge.levels);
+  const supercharge = last.supercharge;
+  // Supercharge eligibility can be later than the final normal building
+  // level (for example, resource collectors). Preserve that game-data gate.
+  if (hall < int(supercharge.required_townhall)) return;
+  const superLevels = mapList(supercharge.levels);
   if (!superLevels.length) return;
   const current = int(raw.supercharge),
     target = maxLevel(superLevels),
