@@ -1,5 +1,6 @@
 import {
   armySetupQuery,
+  completedRankedDates,
   StatsAudience,
   StatsClanCountsResponse,
   StatsCwlQuery,
@@ -56,7 +57,10 @@ export class StatsProvider {
     return this.datesFor(this.section);
   }
   set dates(value: StatsDateFilter) {
-    this.sectionDates.set(this.section, value);
+    this.sectionDates.set(
+      this.section,
+      this.section === StatsSection.ranked ? completedRankedDates(value, this.now()) : value,
+    );
   }
   datesFor(section: StatsSectionValue): StatsDateFilter {
     return this.sectionDates.get(section) ?? this.defaultDates;
@@ -67,7 +71,8 @@ export class StatsProvider {
   armiesLeagueTier?: number;
   armiesMinimumSample = 100;
   armiesLimit = 25;
-  armiesSortBy: 'usage' | 'tripleRate' | 'zeroStarRate' | 'averageDuration' | 'averageDestruction' = 'usage';
+  armiesSortBy: 'usage' | 'tripleRate' | 'zeroStarRate' | 'averageDuration' | 'averageDestruction' =
+    'usage';
   armiesInclude: readonly StatsItemQuantityFilter[] = [];
   armiesExclude: readonly string[] = [];
   armyRankLimit?: 200 | 1000;
@@ -94,7 +99,10 @@ export class StatsProvider {
     this.defaultDates = new StatsDateFilter(addDays(today, -89), today);
     // Start Ranked comparisons with the recent month; explicit calendar changes
     // still own the selected range and never affect other statistics pages.
-    this.sectionDates.set(StatsSection.ranked, new StatsDateFilter(addDays(today, -29), today));
+    this.sectionDates.set(
+      StatsSection.ranked,
+      completedRankedDates(new StatsDateFilter(addDays(today, -29), today), this.now()),
+    );
     this.warDates = this.defaultDates;
     this.cwlDates = new StatsDateFilter(
       new Date(today.getFullYear(), today.getMonth() - 1, 1),
@@ -320,7 +328,16 @@ export class StatsProvider {
     });
     this.notify();
     try {
-      const data = await this.loadSection(target, force);
+      const data = await this.loadSection(target, force, (data) => {
+        if (this.requestVersions.get(target) !== version) return;
+        this.states.set(target, {
+          status: StatsLoadStatus.data,
+          data,
+          updatedAt: this.now(),
+          isRefreshing: true,
+        });
+        this.notify();
+      });
       if (this.requestVersions.get(target) !== version) return;
       this.states.set(target, {
         status: isEmpty(data) ? StatsLoadStatus.empty : StatsLoadStatus.data,
@@ -340,7 +357,11 @@ export class StatsProvider {
     }
     this.notify();
   }
-  private loadSection(target: StatsSectionValue, fresh: boolean): Promise<object> {
+  private loadSection(
+    target: StatsSectionValue,
+    fresh: boolean,
+    progress?: (data: StatsPerformanceResponse) => void,
+  ): Promise<object> {
     const dates = this.datesFor(target);
     switch (target) {
       case StatsSection.players:
@@ -374,6 +395,7 @@ export class StatsProvider {
             this.warEqualTownHalls,
           ),
           fresh,
+          progress,
         );
       case StatsSection.cwl:
         return this.repository.loadCwl(new StatsCwlQuery(this.cwlSeason), fresh).then((data) => {

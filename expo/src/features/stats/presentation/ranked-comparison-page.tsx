@@ -18,6 +18,7 @@ import {
 import { StatsRepository, type LegendDayPerformance } from '../data/stats-repository';
 import { loadObservedRankedRange, totalLegendDays } from '../data/ranked-comparison-data';
 import {
+  completedRankedDates,
   StatsDateFilter,
   StatsLegendCohort,
   StatsLegendQuery,
@@ -49,8 +50,9 @@ export function RankedComparisonPage({
   const { t, locale } = useI18n();
   const theme = useCKTheme();
   const repository = useMemo(() => new StatsRepository(api), [api]);
-  const first = StatsDateFilter.formatDate(dates.start),
-    last = StatsDateFilter.formatDate(dates.end),
+  const completedDates = completedRankedDates(dates);
+  const first = StatsDateFilter.formatDate(completedDates.start),
+    last = StatsDateFilter.formatDate(completedDates.end),
     key = `${first}:${last}`;
   const [selectedMetric, setSelectedMetric] = useState<
     number | 'averageStars' | 'destruction' | 'duration'

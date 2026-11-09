@@ -374,7 +374,12 @@ function StatsSectionContent({
       );
       break;
     case StatsSection.war:
-      content = <WarOverview data={state.data as StatsPerformanceResponse} />;
+      content = (
+        <WarOverview
+          data={state.data as StatsPerformanceResponse}
+          onRetry={() => void provider.load(StatsSection.war, true)}
+        />
+      );
       break;
     case StatsSection.cwl:
       content = (
@@ -1767,14 +1772,24 @@ function RankedOverview({
   );
 }
 
-function WarOverview({ data }: { readonly data: StatsPerformanceResponse }) {
+function WarOverview({
+  data,
+  onRetry,
+}: {
+  readonly data: StatsPerformanceResponse;
+  readonly onRetry?: () => void;
+}) {
   const { t, locale } = useI18n();
   const theme = useCKTheme();
   const layout = useAdaptiveLayout();
   const [expandedTownHall, setExpandedTownHall] = useState<number | null>(null);
   const summaries = data.warSummaries;
-  const totalWars = summaries.reduce((sum, item) => sum + item.wars, 0);
-  const missedAttacks = summaries.reduce((sum, item) => sum + (item.missedAttacks ?? 0), 0);
+  const totalWars = summaries.length
+    ? summaries.reduce((sum, item) => sum + item.wars, 0)
+    : undefined;
+  const missedAttacks = summaries.length
+    ? summaries.reduce((sum, item) => sum + (item.missedAttacks ?? 0), 0)
+    : undefined;
   const townHalls = [
     ...new Set([
       ...data.warHitRates.map((item) => item.townHall),
@@ -1797,6 +1812,12 @@ function WarOverview({ data }: { readonly data: StatsPerformanceResponse }) {
     .sort((a, b) => b.wars - a.wars);
   return (
     <Section panels={!layout.isExpanded}>
+      {data.warChartsLoading ? <ActivityIndicator color={theme.primary} /> : null}
+      {data.warChartFailures.length ? (
+        <Pressable accessibilityRole="button" onPress={onRetry}>
+          <CKText role="bodySmall">{t('generalRetry')}</CKText>
+        </Pressable>
+      ) : null}
       {layout.isExpanded ? (
         <OverviewMetrics metrics={data.metrics} wars={totalWars} missed={missedAttacks} />
       ) : null}
@@ -1864,7 +1885,7 @@ function WarOverview({ data }: { readonly data: StatsPerformanceResponse }) {
                     >
                       <View
                         style={{
-                          width: `${Math.max(1, (100 * wars) / Math.max(totalWars, 1))}%`,
+                          width: `${Math.max(1, (100 * wars) / Math.max(totalWars ?? 0, 1))}%`,
                           height: 9,
                           borderRadius: 9,
                           backgroundColor: theme.secondary,
