@@ -1,3 +1,4 @@
+import * as Updates from 'expo-updates';
 import * as Application from 'expo-application';
 import Constants from 'expo-constants';
 import {
@@ -106,6 +107,8 @@ export function reportException(
   try {
     withScope((scope) => {
       scope.setTag('operation', sanitizeText(operation));
+      scope.setTag('ota_update', Updates.updateId ?? (Updates.isEmbeddedLaunch ? 'embedded' : 'unknown'));
+      if(Updates.runtimeVersion)scope.setTag('runtime_version',Updates.runtimeVersion);
       captureException(error);
     });
   } catch {

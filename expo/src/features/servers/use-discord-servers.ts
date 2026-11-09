@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import { AppState, Platform } from 'react-native';
 import { Effect } from 'effect';
+import { ApiResponseError } from '@clashking/api-client';
 import { GuildsEndpoint, type EndpointResponse } from '@clashking/api-contracts/expo';
 import { useAppRuntime } from '../../core/app/runtime-context';
 import type { AuthUser } from '../auth/models';
@@ -20,20 +21,29 @@ export function useDiscordServers(user: AuthUser | null | undefined) {
     servers: readonly DashboardServer[];
     generation: number;
     error: boolean;
+    reconnect?: boolean;
   }>({ userId: undefined, servers: [], generation: -1, error: false });
   const refresh = useCallback(() => setGeneration((value) => value + 1), []);
   useEffect(() => {
     if (!enabled) return;
     let active = true;
+    const controller=new AbortController();
     let retry: ReturnType<typeof setTimeout> | undefined;
     const load = (attempt = 0) =>
       void Effect.runPromise(
-        runtime.contractApi.execute(GuildsEndpoint, { path: {}, query: {}, body: {} }),
+        Effect.result(runtime.contractApi.execute(GuildsEndpoint, { path: {}, query: {}, body: {} }, {signal:controller.signal,expectedStatuses:[401,403],retryTransientRead:false})),
       )
-        .then((servers) => {
-          if (active) setResult({ userId, servers, generation, error: false });
+        .then((result) => {
+          if(result._tag==='Failure')throw result.failure;
+          if (active) setResult({ userId, servers:result.success, generation, error: false });
         })
-        .catch(() => {
+        .catch((failure:unknown) => {
+          if(controller.signal.aborted)return;
+          // Missing guilds scope cannot be repaired by repeated GETs or token refresh.
+          if(failure instanceof ApiResponseError && [401,403].includes(failure.status)){
+            if(active)setResult({userId,servers:[],generation,error:true,reconnect:true});
+            return;
+          }
           // A brief tunnel/Discord outage must not strand a fresh sign-in on an
           // empty list. Keep any known servers and bound automatic retries.
           if (active && attempt < 2) {
@@ -51,6 +61,7 @@ export function useDiscordServers(user: AuthUser | null | undefined) {
     load();
     return () => {
       active = false;
+      controller.abort();
       clearTimeout(retry);
     };
   }, [runtime, userId, enabled, generation]);
@@ -73,7 +84,8 @@ export function useDiscordServers(user: AuthUser | null | undefined) {
         loading,
         error: !loading && result.error,
       };
-  return { ...current, hasDiscordIdentity, refresh };
+  const reconnect=useCallback(async()=>{await runtime.auth.signInWithDiscord();refresh();},[runtime,refresh]);
+  return { ...current, hasDiscordIdentity, refresh, requiresReconnect:enabled && result.userId===userId && result.reconnect===true, reconnect };
 }
 
 export type DiscordServersState = ReturnType<typeof useDiscordServers>;

@@ -1,13 +1,14 @@
 import type { ApiClientError, ApiTransport } from '@clashking/api-client';
 import type { AnyEndpoint } from '@clashking/api-contracts/expo';
-import { Effect } from 'effect';
+import { Effect, Schedule } from 'effect';
 
 import type { HttpBreadcrumbInput } from '../observability/observability';
-import type { ContractApiService } from './contract-api';
+import type { ContractApiService, AppExecuteOptions } from './contract-api';
 
 interface ApiObservability {
   addHttpBreadcrumb(input: HttpBreadcrumbInput): void;
   reportException(error: unknown, operation: string, dedupeKey?: unknown): void;
+  isOffline?(): Promise<boolean>;
 }
 
 /** Preserve HTTP diagnostics without cloning or consuming streamed downloads. */
@@ -42,10 +43,13 @@ export function observedTransport(
 
 export function withApiDiagnostics(
   client: ContractApiService,
-  observability: Pick<ApiObservability, 'reportException'>,
+  observability: Pick<ApiObservability, 'reportException' | 'isOffline'>,
 ): ContractApiService {
-  const report = (endpoint: AnyEndpoint, error: ApiClientError) =>
-    Effect.sync(() => {
+  const report = (endpoint: AnyEndpoint, error: ApiClientError, options?: AppExecuteOptions) =>
+    Effect.promise(async () => {
+      if(options?.signal?.aborted)return;
+      if(error._tag==='ApiResponseError' && options?.expectedStatuses?.includes(error.status))return;
+      if(error._tag==='TransportError' && await observability.isOffline?.().catch(()=>false))return;
       // Endpoint templates contain no account IDs, query values, tokens, or bodies.
       const operation = `${endpoint.method} ${endpoint.path}`;
       const diagnostic = new Error(
@@ -66,15 +70,17 @@ export function withApiDiagnostics(
       diagnostic.name = error._tag;
       observability.reportException(diagnostic, operation, error);
     });
+  const retry = <A>(effect: Effect.Effect<A, ApiClientError>, endpoint: AnyEndpoint, options?: AppExecuteOptions) =>
+    endpoint.method === 'GET' && options?.retryTransientRead !== false
+      ? effect.pipe(Effect.retry({times:1,schedule:Schedule.exponential('500 millis'),while:error=>
+          !options?.signal?.aborted && (error._tag==='TransportError' ||
+          error._tag==='ApiResponseError' && [502,503,504].includes(error.status))}))
+      : effect;
   return {
-    execute: (endpoint, input, options) =>
-      client
-        .execute(endpoint, input, options)
-        .pipe(Effect.tapError((error) => report(endpoint, error))),
-    executeStatus: (endpoint, input, options) =>
-      client
-        .executeStatus(endpoint, input, options)
-        .pipe(Effect.tapError((error) => report(endpoint, error))),
+    execute: (endpoint,input,options)=>retry(client.execute(endpoint,input,options),endpoint,options)
+      .pipe(Effect.tapError(error=>report(endpoint,error,options))),
+    executeStatus: (endpoint,input,options)=>retry(client.executeStatus(endpoint,input,options),endpoint,options)
+      .pipe(Effect.tapError(error=>report(endpoint,error,options))),
   };
 }
 

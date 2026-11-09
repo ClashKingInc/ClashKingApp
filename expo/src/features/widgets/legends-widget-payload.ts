@@ -317,3 +317,13 @@ function optionalBattle<Key extends 'latestAttack' | 'latestDefense'>(
     },
   } as Partial<Record<Key, LegendsWidgetBattlePayload>>;
 }
+
+/** No current tournament is a supported state, not a stale prior-week result. */
+export function buildInactiveRankedWidgetPayload(player:LegendsWidgetPlayer,t:LegendsWidgetTranslate,now=new Date()):LegendsWidgetPayload {
+  const day=currentLegendDay(now),start=new Date(`${day}T05:00:00Z`);
+  return {schemaVersion:1,mode:'ranked',periodLabel:t('rankedLeagueNoGroup'),tag:canonicalPlayerTag(player.tag),name:player.name,
+    destinationUrl:`clashking://ranked?player=${canonicalPlayerTag(player.tag).slice(1)}`,
+    townHallLevel:player.townHallLevel,townHallImageUrl:ImageAssets.townHall(player.townHallLevel),
+    updatedAt:now.toISOString(),legendDay:day,dayStartsAt:start.toISOString(),dayEndsAt:new Date(start.getTime()+86400000).toISOString(),
+    labels:{...legendsWidgetLabels(t),title:t('rankedLeagueTitle'),noData:t('rankedLeagueNoGroup')}};
+}

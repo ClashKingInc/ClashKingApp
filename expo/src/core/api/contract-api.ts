@@ -23,16 +23,21 @@ export class EmailVerificationRequiredException extends Error {
   }
 }
 
+export interface AppExecuteOptions extends ExecuteOptions {
+  /** Only call sites that handle these statuses as normal states opt out of reporting. */
+  readonly expectedStatuses?: readonly number[];
+  readonly retryTransientRead?: boolean;
+}
 export interface ContractApiService {
   readonly execute: <E extends AnyEndpoint>(
     endpoint: E,
     input: EndpointRequest<E>,
-    options?: ExecuteOptions,
+    options?: AppExecuteOptions,
   ) => Effect.Effect<EndpointResponse<E>, ApiClientError>;
   readonly executeStatus: <E extends AnyEndpoint>(
     endpoint: E,
     input: EndpointRequest<E>,
-    options?: ExecuteOptions,
+    options?: AppExecuteOptions,
   ) => Effect.Effect<ApiStatusResult<E>, ApiClientError>;
 }
 

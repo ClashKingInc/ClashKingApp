@@ -1,3 +1,4 @@
+import { ApiResponseError } from '@clashking/api-client';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useLinkParameters, linkChoice } from '../../core/deep-links/link-parameters';
 import { Keyboard, Platform, View } from 'react-native';
@@ -162,8 +163,11 @@ export function SearchRoot({
             })
           : await service.searchClans(query.trim(), normalizeClanSearchFilters(clanFilters));
       publishRequest(completeSearch(requestRef.current, version, results));
-    } catch {
-      publishRequest(failSearch(requestRef.current, version));
+    } catch (error) {
+      // A validly formed tag can still identify no player; present an empty
+      // result instead of an infrastructure failure and allow another search.
+      publishRequest(error instanceof ApiResponseError && error.status===404
+        ? completeSearch(requestRef.current,version,[]) : failSearch(requestRef.current, version));
     }
   }, [clanFilters, mode, playerFilters, publishRequest, query, runtime.players, service, userId]);
 
@@ -240,9 +244,10 @@ export function SearchRoot({
       if (!mounted.current) return;
       if (destination.kind === 'player') onOpenPlayer(destination.player);
       else onOpenClan(destination.clan);
-    } catch {
+    } catch (error) {
       if (!mounted.current) return;
       setSnackbar(
+        error instanceof ApiResponseError && error.status===404 ? t('accountsErrorTagNotExists') :
         type === 'players' ? t('searchErrorPlayerLoadFailed') : t('searchErrorClanLoadFailed'),
       );
     } finally {
