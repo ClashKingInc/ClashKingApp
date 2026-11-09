@@ -1,6 +1,7 @@
 import * as Updates from 'expo-updates';
 import * as Application from 'expo-application';
 import Constants from 'expo-constants';
+import { Platform } from 'react-native';
 import {
   captureException,
   init,
@@ -12,6 +13,7 @@ import {
 
 import type { AuthUser } from '../../features/auth/models';
 import { resolveObservabilityConfig } from './observability-config';
+import { safeRequestTags, type RequestDiagnostics } from './request-diagnostics';
 
 const DEFAULT_DEDUPE_WINDOW_MS = Number.POSITIVE_INFINITY;
 const DEFAULT_DEDUPE_CAP = 256;
@@ -98,6 +100,7 @@ export function reportException(
   error: unknown,
   operation: string,
   dedupeKey: unknown = error,
+  diagnostics?: RequestDiagnostics,
 ): void {
   if (!enabled) return;
   if (isObject(dedupeKey)) {
@@ -107,8 +110,14 @@ export function reportException(
   try {
     withScope((scope) => {
       scope.setTag('operation', sanitizeText(operation));
-      scope.setTag('ota_update', Updates.updateId ?? (Updates.isEmbeddedLaunch ? 'embedded' : 'unknown'));
-      if(Updates.runtimeVersion)scope.setTag('runtime_version',Updates.runtimeVersion);
+      scope.setTag('client_platform', Platform.OS);
+      for (const [key, value] of Object.entries(safeRequestTags({ ...diagnostics })))
+        scope.setTag(key, value);
+      scope.setTag(
+        'ota_update',
+        Updates.updateId ?? (Updates.isEmbeddedLaunch ? 'embedded' : 'unknown'),
+      );
+      if (Updates.runtimeVersion) scope.setTag('runtime_version', Updates.runtimeVersion);
       captureException(error);
     });
   } catch {
@@ -184,6 +193,7 @@ export function createBeforeSend({
 }
 
 export function sanitizeEvent(event: ErrorEvent): ErrorEvent {
+  const tags = safeEventTags(event.tags);
   return {
     ...event,
     message: event.message === undefined ? undefined : sanitizeText(event.message),
@@ -191,11 +201,19 @@ export function sanitizeEvent(event: ErrorEvent): ErrorEvent {
     server_name: undefined,
     user: undefined,
     request: undefined,
-    fingerprint: undefined,
-    tags:
-      event.tags?.operation === undefined
+    // Rebuild the allowlist here: adding a scope tag must not silently defeat privacy,
+    // and safe request diagnostics must survive beforeSend to be useful in production.
+    fingerprint:
+      tags.request_stage === undefined
         ? undefined
-        : { operation: sanitizeText(String(event.tags.operation)) },
+        : [
+            'api-request',
+            tags.operation ?? 'unknown',
+            ...['request_stage', 'network_failure', 'http_status'].map(
+              (key) => tags[key] ?? 'none',
+            ),
+          ],
+    tags,
     breadcrumbs: undefined,
     contexts: undefined,
     extra: undefined,
@@ -246,6 +264,26 @@ export function sanitizeEvent(event: ErrorEvent): ErrorEvent {
   };
 }
 
+function safeEventTags(input: ErrorEvent['tags']): Record<string, string> {
+  const tags = safeRequestTags(input ?? {});
+  if (input?.operation !== undefined) tags.operation = sanitizeText(String(input.operation));
+  if (
+    typeof input?.ota_update === 'string' &&
+    /^(?:[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}|embedded|unknown)$/i.test(
+      input.ota_update,
+    )
+  )
+    tags.ota_update = input.ota_update;
+  if (typeof input?.runtime_version === 'string' && /^[0-9a-f]{64}$/i.test(input.runtime_version))
+    tags.runtime_version = input.runtime_version;
+  if (
+    typeof input?.client_platform === 'string' &&
+    ['ios', 'android', 'web'].includes(input.client_platform)
+  )
+    tags.client_platform = input.client_platform;
+  return tags;
+}
+
 function eventSignature(event: ErrorEvent): string | null {
   const exceptions =
     event.exception?.values
@@ -261,7 +299,11 @@ function eventSignature(event: ErrorEvent): string | null {
       })
       .join('||') ?? '';
   const description = `${String(event.tags?.operation ?? '')}\u0000${event.message ?? ''}\u0000${exceptions}`;
-  return description === '\u0000\u0000' ? null : hashSignature(description);
+  if (description === '\u0000\u0000') return null;
+  // Different failure categories remain visible; duration never changes grouping.
+  return hashSignature(
+    `${description}\u0000${String(event.tags?.request_stage ?? '')}:${String(event.tags?.network_failure ?? '')}:${String(event.tags?.network_error_code ?? '')}`,
+  );
 }
 
 function hashSignature(value: string): string {
