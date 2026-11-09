@@ -4,7 +4,7 @@ import { useCallback, useEffect, useState, useRef } from 'react';
 import { BackHandler, Pressable, View, useWindowDimensions } from 'react-native';
 import { ChevronLeft } from 'lucide-react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { Effect } from 'effect';
+import { Effect, Schedule } from 'effect';
 import * as Crypto from 'expo-crypto';
 import { DashboardGrantEndpoint } from '@clashking/api-contracts/expo';
 import { useAppRuntime } from '../../core/app/runtime-context';
@@ -45,6 +45,7 @@ export function ServerDashboardScreen({
       : 'https://local-dash.clashk.ing';
   useEffect(() => {
     let active = true;
+    const controller = new AbortController();
     void (async () => {
       const codeVerifier = Crypto.randomUUID() + Crypto.randomUUID();
       const digest = await Crypto.digestStringAsync(
@@ -54,20 +55,42 @@ export function ServerDashboardScreen({
       );
       const pkceChallenge = digest.replaceAll('+', '-').replaceAll('/', '_').replaceAll('=', '');
       const grant = await Effect.runPromise(
-        runtime.contractApi.execute(DashboardGrantEndpoint, {
-          path: { serverId: selected.id },
-          query: {},
-          body: { source: 'app', pkceChallenge },
-        }),
+        runtime.contractApi
+          .execute(
+            DashboardGrantEndpoint,
+            {
+              path: { serverId: selected.id },
+              query: {},
+              body: { source: 'app', pkceChallenge },
+            },
+            { timeoutMs: 5_000 },
+          )
+          .pipe(
+            // A reconnecting Gateway can briefly make authorization unavailable.
+            // Retry only transient failures; never retry denied access or reuse a
+            // consumed handoff. Leaving the screen cancels the whole attempt.
+            Effect.retry({
+              times: 3,
+              schedule: Schedule.exponential('1 second'),
+              while: (failure) =>
+                failure._tag === 'TransportError' ||
+                (failure._tag === 'ApiResponseError' && [502, 503, 504].includes(failure.status)),
+            }),
+          ),
+        { signal: controller.signal },
       );
-      if (active) setHandoff({ code: grant.code, codeVerifier, locale, theme: mode });
+      if (active) {
+        setError(false);
+        setHandoff({ code: grant.code, codeVerifier, locale, theme: mode });
+      }
     })().catch(() => {
       if (active) setError(true);
     });
     return () => {
       active = false;
+      controller.abort();
     };
-  }, [runtime, selected, generation, locale, mode]);
+  }, [runtime, selected.id, generation, locale, mode]);
   const expired = useCallback(() => {
     if (renewals.current++ < 2) {
       setHandoff(undefined);
@@ -135,8 +158,10 @@ export function ServerDashboardScreen({
             setHandoff(undefined);
             setGeneration((value) => value + 1);
           }}
-          style={{ padding: 24 }}
+          accessibilityRole="button"
+          style={{ flex: 1, alignItems: 'center', justifyContent: 'center', padding: 24, gap: 16 }}
         >
+          <CKText>{t('apiErrorServer')}</CKText>
           <CKText>{t('generalRetry')}</CKText>
         </Pressable>
       ) : handoff ? (
