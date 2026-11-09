@@ -75,6 +75,14 @@ export class StatsDateFilter {
     return `${value.getFullYear().toString().padStart(4, '0')}-${(value.getMonth() + 1).toString().padStart(2, '0')}-${value.getDate().toString().padStart(2, '0')}`;
   }
 }
+/** Ranked statistics use completed 05:00 UTC game days on every card. */
+export function completedRankedDates(dates: StatsDateFilter, now = new Date()): StatsDateFilter {
+  const last = new Date(Math.floor((now.getTime() - 5 * 3600000) / 86400000) * 86400000 - 86400000);
+  const latest = new Date(last.getUTCFullYear(), last.getUTCMonth(), last.getUTCDate());
+  const end = dates.end > latest ? latest : dates.end;
+  return new StatsDateFilter(dates.start > end ? end : dates.start, end);
+}
+
 export class StatsItemQuantityFilter {
   constructor(
     readonly item: string,
@@ -662,6 +670,8 @@ export class StatsPerformanceResponse {
     readonly warHitRates: readonly StatsWarHitRate[] = [],
     readonly warSummaries: readonly StatsWarSummary[] = [],
     readonly warSizes: readonly StatsWarSummary[] = [],
+    readonly warChartsLoading = false,
+    readonly warChartFailures: readonly string[] = [],
   ) {}
   static fromJson(value: unknown): StatsPerformanceResponse {
     const j = record(value);

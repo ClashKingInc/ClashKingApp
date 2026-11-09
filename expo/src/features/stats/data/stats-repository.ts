@@ -24,6 +24,7 @@ import { gameDataState, isRecord } from '../../../core/game-data/game-data-state
 import {
   decodeStatsLocationMetadata,
   decodeStatsGroupedCounts,
+  completedRankedDates,
   StatsBreakdown,
   StatsClanCountsResponse,
   StatsCwlResponse,
@@ -61,7 +62,11 @@ export interface StatsRepositoryContract {
   ): Promise<StatsArmySetupTimelineResponse>;
   loadItems(request: StatsLegendQuery, fresh?: boolean): Promise<StatsLegendResponse>;
   loadRanked(request: StatsRankedQuery, fresh?: boolean): Promise<StatsPerformanceResponse>;
-  loadWar(request: StatsWarQuery, fresh?: boolean): Promise<StatsPerformanceResponse>;
+  loadWar(
+    request: StatsWarQuery,
+    fresh?: boolean,
+    progress?: (data: StatsPerformanceResponse) => void,
+  ): Promise<StatsPerformanceResponse>;
   loadCwl(request: StatsCwlQuery, fresh?: boolean): Promise<StatsCwlResponse>;
 }
 
@@ -179,7 +184,7 @@ export class StatsRepository implements StatsRepositoryContract {
     withArmyTypes = true,
   ): Promise<LegendDayPerformance> {
     const query = {
-      ...request.toQuery(),
+      ...new StatsLegendQuery(completedRankedDates(request.dates), request.cohort).toQuery(),
       ...(observed
         ? {
             cohort: 'observed' as const,
@@ -248,7 +253,11 @@ export class StatsRepository implements StatsRepositoryContract {
       );
     });
   }
-  async loadWar(request: StatsWarQuery, fresh = false): Promise<StatsPerformanceResponse> {
+  async loadWar(
+    request: StatsWarQuery,
+    fresh = false,
+    progress?: (data: StatsPerformanceResponse) => void,
+  ): Promise<StatsPerformanceResponse> {
     return this.cached(`war:${JSON.stringify(request.toQuery())}`, fresh, async () => {
       const current = await this.fetchWar(request);
       const window = {
@@ -256,50 +265,86 @@ export class StatsRepository implements StatsRepositoryContract {
         'time[before]': StatsDateFilter.formatDate(request.dates.end),
         interval: 'day' as const,
       };
-      const [hitRates, summaries, sizes] = await Promise.all([
+      let hitRates: readonly StatsWarHitRate[] = [],
+        summaries: readonly StatsWarSummary[] = [],
+        sizes: readonly StatsWarSummary[] = [];
+      const failures: string[] = [];
+      const publish = (loading: boolean) =>
+        new StatsPerformanceResponse(
+          current.dateRange,
+          current.metrics,
+          [],
+          comparisons,
+          hitRates,
+          summaries,
+          sizes,
+          loading,
+          [...failures],
+        );
+      const unfiltered = request.townHallLevel == null && request.opponentTownHallLevel == null;
+      const byTownHall = new Map(current.breakdowns.map((entry) => [entry.key, entry.metrics]));
+      const comparisons =
+        unfiltered && current.breakdowns.length > 0
+          ? Array.from(
+              { length: 18 },
+              (_, index) =>
+                new StatsBreakdown(
+                  `TH${index + 1}`,
+                  byTownHall.get(`TH${index + 1}`) ?? unavailableMetrics(),
+                ),
+            )
+          : current.breakdowns;
+      // Publish useful main data before optional charts. A chart failure must
+      // never discard the main response or another chart that already loaded.
+      progress?.(publish(true));
+      await Promise.allSettled([
         Effect.runPromise(
           this.contractApi.execute(WarHitratesEndpoint, {
             path: {},
             query: window,
             body: {},
           }),
-        ),
+        )
+          .then((value) => {
+            hitRates = value.items as readonly StatsWarHitRate[];
+            progress?.(publish(true));
+          })
+          .catch((error) => {
+            failures.push('hitrates');
+            throw error;
+          }),
         Effect.runPromise(
           this.contractApi.execute(WarSummaryEndpoint, {
             path: {},
             query: window,
             body: {},
           }),
-        ),
+        )
+          .then((value) => {
+            summaries = value.items as readonly StatsWarSummary[];
+            progress?.(publish(true));
+          })
+          .catch((error) => {
+            failures.push('summary');
+            throw error;
+          }),
         Effect.runPromise(
           this.contractApi.execute(WarSummaryEndpoint, {
             path: {},
             query: { ...window, groupBy: 'warSize' },
             body: {},
           }),
-        ),
+        )
+          .then((value) => {
+            sizes = value.items as readonly StatsWarSummary[];
+            progress?.(publish(true));
+          })
+          .catch((error) => {
+            failures.push('sizes');
+            throw error;
+          }),
       ]);
-      const unfiltered = request.townHallLevel == null && request.opponentTownHallLevel == null;
-      const byTownHall = new Map(current.breakdowns.map((entry) => [entry.key, entry.metrics]));
-      const comparisons =
-        unfiltered && current.breakdowns.length > 0
-          ? Array.from({ length: 18 }, (_, index) => index + 1).map(
-              (level) =>
-                new StatsBreakdown(
-                  `TH${level}`,
-                  byTownHall.get(`TH${level}`) ?? unavailableMetrics(),
-                ),
-            )
-          : current.breakdowns;
-      return new StatsPerformanceResponse(
-        current.dateRange,
-        current.metrics,
-        [],
-        comparisons,
-        hitRates.items as readonly StatsWarHitRate[],
-        summaries.items as readonly StatsWarSummary[],
-        sizes.items as readonly StatsWarSummary[],
-      );
+      return publish(false);
     });
   }
   async loadCwl(request: StatsCwlQuery, fresh = false): Promise<StatsCwlResponse> {
