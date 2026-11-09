@@ -1,3 +1,4 @@
+import { ApiResponseError, TransportError } from '@clashking/api-client';
 import type { StringStore } from '../../services/storage/auth-storage';
 import type { Player } from '../player/models';
 import type { RankedLeagueData } from '../player/models/player-ranked';
@@ -6,6 +7,7 @@ import type { NativeWidgetBridge, WidgetPlatform } from './contracts';
 import {
   buildLegendsWidgetPayload,
   buildRankedWidgetPayload,
+  buildInactiveRankedWidgetPayload,
   canonicalPlayerTag,
   type LegendsWidgetTranslate,
 } from './legends-widget-payload';
@@ -145,6 +147,7 @@ export class LegendsWidgetService {
     await mapWithConcurrency(players, this.options.concurrency ?? 3, async (bookmark) => {
       if (generation !== this.generation) return;
       const tag = canonicalPlayerTag(bookmark.tag);
+      let ranked=false;
       try {
         const now = this.now();
         const day = currentLegendDay(now);
@@ -157,12 +160,15 @@ export class LegendsWidgetService {
         });
         // Legend II/III use the weekly Ranked source, not the daily Legend I feed.
         if (!player.isLegendLeague) {
+          ranked=true;
           const data = await this.options.loadRankedData(tag);
           if (generation !== this.generation) return;
-          // Missing membership is not a zero-attack week. Retain the previous
-          // snapshot as stale until the authoritative period can be refreshed.
-          if (!data.currentGroup && !data.currentBattlelog)
-            throw new Error('Ranked refresh returned no current period');
+          // Missing membership is a valid inactive state. Replace prior-week
+          // counters rather than keeping a stale Ranked snapshot.
+          if (!data.currentGroup && !data.currentBattlelog){
+            await this.writeValue(generation,legendsWidgetKeyForPlayer(tag),JSON.stringify(buildInactiveRankedWidgetPayload(player,this.options.t,now)));
+            return;
+          }
           const payload = buildRankedWidgetPayload(
             player,
             data,
@@ -185,6 +191,9 @@ export class LegendsWidgetService {
         const payload = buildLegendsWidgetPayload(player, data, this.options.t, now);
         await this.writeValue(generation, legendsWidgetKeyForPlayer(tag), JSON.stringify(payload));
       } catch (error) {
+        const absent=error instanceof ApiResponseError && error.status===404;
+        if(ranked || absent)await this.writeValue(generation,legendsWidgetKeyForPlayer(tag),null);
+        if(error instanceof ApiResponseError || error instanceof TransportError)return;
         await this.report({ operation: 'legends_widget.player', error, tag });
       }
     });

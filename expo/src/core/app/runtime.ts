@@ -1,3 +1,4 @@
+import NetInfo from '@react-native-community/netinfo';
 import * as Application from 'expo-application';
 import Constants from 'expo-constants';
 import * as Crypto from 'expo-crypto';
@@ -155,7 +156,7 @@ export function createAppRuntime(): AppRuntime {
       }),
       tokens,
     ),
-    { reportException },
+    { reportException, isOffline:async()=>{const state=await NetInfo.fetch();return state.isConnected===false || state.isInternetReachable===false;} },
   );
   const gameData = createExpoGameDataService();
   const featureFlags = new RemoteFeatureFlagService({

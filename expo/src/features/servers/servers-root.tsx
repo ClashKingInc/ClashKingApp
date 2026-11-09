@@ -28,7 +28,7 @@ export function ServersRoot({
   const theme = useCKTheme();
   const layout = useAdaptiveLayout();
   const { t } = useI18n();
-  const { servers, loading, error, hasDiscordIdentity, refresh } = directory;
+  const { servers, loading, error, hasDiscordIdentity, refresh, requiresReconnect, reconnect } = directory;
   const [viewportHeight, setViewportHeight] = useState(0);
   const [contentHeight, setContentHeight] = useState(0);
   const installed = servers.filter((server) => server.has_bot);
@@ -144,9 +144,9 @@ export function ServersRoot({
               </View>
             ) : null}
             {hasDiscordIdentity && error ? (
-              <Pressable accessibilityRole="button" onPress={refresh} style={styles.headerAction}>
+              <Pressable accessibilityRole="button" onPress={()=>{if(requiresReconnect)void reconnect().catch(()=>undefined);else refresh();}} style={styles.headerAction}>
                 <CKText>
-                  {t('apiErrorServer')} · {t('generalRetry')}
+                  {requiresReconnect ? t('authAccountAddDiscordAuth') : `${t('apiErrorServer')} · ${t('generalRetry')}`}
                 </CKText>
               </Pressable>
             ) : null}

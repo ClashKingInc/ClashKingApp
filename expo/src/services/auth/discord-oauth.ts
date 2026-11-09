@@ -107,7 +107,9 @@ export function buildDiscordAuthorizationUrl(
   const url = new URL('https://discord.com/api/oauth2/authorize');
   url.searchParams.set('response_type', 'code');
   url.searchParams.set('client_id', clientId);
-  url.searchParams.set('scope', 'identify');
+  // Guild listing requires consent beyond profile identity. Existing sessions
+  // without this scope must reconnect; refreshing a token cannot add scopes.
+  url.searchParams.set('scope', 'identify guilds');
   url.searchParams.set('redirect_uri', redirectUri);
   url.searchParams.set('code_challenge', codeChallenge);
   url.searchParams.set('code_challenge_method', 'S256');
