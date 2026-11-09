@@ -799,41 +799,26 @@ function HeroSeasonSummary({
   const tripleRate = (triples: number, attacks: number) =>
     attacks > 0 ? `${((triples / attacks) * 100).toFixed(1)}%` : '—';
   const content = (
-    <>
-      <View style={styles.heroChips}>
-        <HeroChip
-          imageUrl={
-            location?.countryCode ? ImageAssets.flag(location.countryCode) : ImageAssets.planet
-          }
-          label={t('sideLocation')}
-          value={location?.name ?? '—'}
-        />
-        <HeroChip
-          imageUrl={ImageAssets.trophies}
-          label={t('rankedLeagueTrophies')}
-          value={trophies.toLocaleString(toIntlLocale(locale))}
-        />
-        <HeroChip
-          imageUrl={ImageAssets.bestTrophies}
-          label={t('legendsGlobalRankTitle')}
-          value={rank !== null ? `#${rank.toLocaleString(toIntlLocale(locale))}` : '—'}
-        />
-        <HeroChip
-          imageUrl={ImageAssets.attackStar}
-          label={t('legendsHitrate')}
-          value={stats ? tripleRate(stats.attackTriples, stats.attacks) : '—'}
-        />
-      </View>
+    <View style={styles.heroChips}>
+      <HeroChip
+        imageUrl={location?.countryCode ? ImageAssets.flag(location.countryCode) : ImageAssets.planet}
+        label={t('sideLocation')}
+        value={location?.name ?? '—'}
+      />
+      <HeroChip imageUrl={ImageAssets.trophies} label={t('rankedLeagueTrophies')}
+        value={trophies.toLocaleString(toIntlLocale(locale))} />
+      <HeroChip imageUrl={ImageAssets.bestTrophies} label={t('legendsGlobalRankTitle')}
+        value={rank !== null ? `#${rank.toLocaleString(toIntlLocale(locale))}` : '—'} />
+      <HeroChip imageUrl={ImageAssets.attackStar} label={t('legendsHitrate')}
+        value={stats ? tripleRate(stats.attackTriples, stats.attacks) : '—'} />
       {favorite ? (
-        <View style={styles.favoriteChipRow}>
-          <HeroChip
-            imageUrl={favorite?.item.imageUrl ?? ImageAssets.defaultImage}
-            label={favorite.item.name}
-            value={t('legendsPopularTroop')}
-          />
-        </View>
+        <HeroChip
+          imageUrl={favorite.item.imageUrl}
+          label={favorite.item.name}
+          value={t('legendsPopularTroop')}
+        />
       ) : null}
-    </>
+    </View>
   );
   return layout.isExpanded ? <View style={{ flex: 1, minWidth: 0 }}>{content}</View> : content;
 }
@@ -857,7 +842,7 @@ function HeroChip({
     >
       <MobileWebImage imageUrl={imageUrl} style={styles.heroChipImage} />
       <View style={styles.heroChipText}>
-        <CKText numberOfLines={1} role="labelLarge">
+        <CKText role="labelLarge">
           {value}
         </CKText>
       </View>
@@ -1342,6 +1327,8 @@ const styles = StyleSheet.create({
   },
   clanBadge: { width: 18, height: 18 },
   heroChips: {
+    // Favorite participates in the same flow, so it can share the second row.
+    // Keep each chip at its content width; do not truncate long country names.
     flexDirection: 'row',
     flexWrap: 'wrap',
     alignItems: 'center',
@@ -1349,7 +1336,6 @@ const styles = StyleSheet.create({
     gap: 7,
     marginTop: 10,
   },
-  favoriteChipRow: { alignItems: 'center', marginTop: 3 },
   sectionPage: { gap: 12, paddingBottom: 8 },
   heroChip: {
     flexDirection: 'row',
