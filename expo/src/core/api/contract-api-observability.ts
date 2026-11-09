@@ -3,11 +3,23 @@ import type { AnyEndpoint } from '@clashking/api-contracts/expo';
 import { Effect, Schedule } from 'effect';
 
 import type { HttpBreadcrumbInput } from '../observability/observability';
+import {
+  classifyNetworkFailure,
+  type RequestDiagnostics,
+} from '../observability/request-diagnostics';
+
 import type { ContractApiService, AppExecuteOptions } from './contract-api';
+
+const transportFailures = new WeakMap<object, RequestDiagnostics>();
 
 interface ApiObservability {
   addHttpBreadcrumb(input: HttpBreadcrumbInput): void;
-  reportException(error: unknown, operation: string, dedupeKey?: unknown): void;
+  reportException(
+    error: unknown,
+    operation: string,
+    dedupeKey?: unknown,
+    diagnostics?: RequestDiagnostics,
+  ): void;
   isOffline?(): Promise<boolean>;
 }
 
@@ -21,6 +33,16 @@ export function observedTransport(
       Effect.suspend(() => {
         const startedAt = Date.now();
         return transport.execute(request).pipe(
+          Effect.tapError((error) =>
+            Effect.sync(() => {
+              transportFailures.set(error, {
+                request_stage: 'transport',
+                // Fetch may reject with AbortError even when our deadline fired.
+                ...classifyNetworkFailure(request.signal.aborted ? request.signal.reason : error),
+                request_duration_ms: Math.min(300_000, Math.max(0, Date.now() - startedAt)),
+              });
+            }),
+          ),
           Effect.tap((response) =>
             Effect.sync(() => {
               const length = response.headers.get('content-length');
@@ -47,9 +69,11 @@ export function withApiDiagnostics(
 ): ContractApiService {
   const report = (endpoint: AnyEndpoint, error: ApiClientError, options?: AppExecuteOptions) =>
     Effect.promise(async () => {
-      if(options?.signal?.aborted)return;
-      if(error._tag==='ApiResponseError' && options?.expectedStatuses?.includes(error.status))return;
-      if(error._tag==='TransportError' && await observability.isOffline?.().catch(()=>false))return;
+      if (options?.signal?.aborted) return;
+      if (error._tag === 'ApiResponseError' && options?.expectedStatuses?.includes(error.status))
+        return;
+      if (error._tag === 'TransportError' && (await observability.isOffline?.().catch(() => false)))
+        return;
       // Endpoint templates contain no account IDs, query values, tokens, or bodies.
       const operation = `${endpoint.method} ${endpoint.path}`;
       const diagnostic = new Error(
@@ -68,19 +92,43 @@ export function withApiDiagnostics(
         console.warn('[API failure]', operation, error.status, error.requestId ?? '');
       }
       diagnostic.name = error._tag;
-      observability.reportException(diagnostic, operation, error);
+      const details: RequestDiagnostics =
+        transportFailures.get(error) ??
+        (error._tag === 'ApiResponseError'
+          ? { request_stage: 'http_response', http_status: error.status }
+          : error._tag === 'ResponseDecodeError'
+            ? { request_stage: 'response_decode' }
+            : error._tag === 'RequestBuildError'
+              ? { request_stage: 'request_build' }
+              : { request_stage: 'unknown', ...classifyNetworkFailure(error) });
+      observability.reportException(diagnostic, operation, error, details);
     });
-  const retry = <A>(effect: Effect.Effect<A, ApiClientError>, endpoint: AnyEndpoint, options?: AppExecuteOptions) =>
+  const retry = <A>(
+    effect: Effect.Effect<A, ApiClientError>,
+    endpoint: AnyEndpoint,
+    options?: AppExecuteOptions,
+  ) =>
     endpoint.method === 'GET' && options?.retryTransientRead !== false
-      ? effect.pipe(Effect.retry({times:1,schedule:Schedule.exponential('500 millis'),while:error=>
-          !options?.signal?.aborted && (error._tag==='TransportError' ||
-          error._tag==='ApiResponseError' && [502,503,504].includes(error.status))}))
+      ? effect.pipe(
+          Effect.retry({
+            times: 1,
+            schedule: Schedule.exponential('500 millis'),
+            while: (error) =>
+              !options?.signal?.aborted &&
+              (error._tag === 'TransportError' ||
+                (error._tag === 'ApiResponseError' && [502, 503, 504].includes(error.status))),
+          }),
+        )
       : effect;
   return {
-    execute: (endpoint,input,options)=>retry(client.execute(endpoint,input,options),endpoint,options)
-      .pipe(Effect.tapError(error=>report(endpoint,error,options))),
-    executeStatus: (endpoint,input,options)=>retry(client.executeStatus(endpoint,input,options),endpoint,options)
-      .pipe(Effect.tapError(error=>report(endpoint,error,options))),
+    execute: (endpoint, input, options) =>
+      retry(client.execute(endpoint, input, options), endpoint, options).pipe(
+        Effect.tapError((error) => report(endpoint, error, options)),
+      ),
+    executeStatus: (endpoint, input, options) =>
+      retry(client.executeStatus(endpoint, input, options), endpoint, options).pipe(
+        Effect.tapError((error) => report(endpoint, error, options)),
+      ),
   };
 }
 
