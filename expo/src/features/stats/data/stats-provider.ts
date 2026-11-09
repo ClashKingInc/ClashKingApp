@@ -99,9 +99,10 @@ export class StatsProvider {
     this.defaultDates = new StatsDateFilter(addDays(today, -89), today);
     // Start Ranked comparisons with the recent month; explicit calendar changes
     // still own the selected range and never affect other statistics pages.
+    const rankedEnd = completedRankedDates(new StatsDateFilter(today, today), this.now()).end;
     this.sectionDates.set(
       StatsSection.ranked,
-      completedRankedDates(new StatsDateFilter(addDays(today, -29), today), this.now()),
+      new StatsDateFilter(addDays(rankedEnd, -29), rankedEnd),
     );
     this.warDates = this.defaultDates;
     this.cwlDates = new StatsDateFilter(
