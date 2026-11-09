@@ -70,6 +70,7 @@ function notificationData(response: Notifications.NotificationResponse | null): 
 export class ExpoPushRuntime implements PushRuntime {
   private responseSubscription: Notifications.EventSubscription | null = null;
   private localNotificationSequence = 0;
+  private tokenRequest: Promise<string | null> | null = null;
 
   async initializeLocalNotifications(
     onResponse: (data: PushData) => void,
@@ -120,9 +121,31 @@ export class ExpoPushRuntime implements PushRuntime {
     return authorizationStatus(permissions);
   }
 
-  async getToken(): Promise<string | null> {
+  getToken(): Promise<string | null> {
+    // Startup and the Enable action can overlap. Expo replaces an outstanding
+    // native token promise when called again, so both callers share one attempt.
+    if (this.tokenRequest !== null) return this.tokenRequest;
+    const request = this.requestToken();
+    this.tokenRequest = request;
+    void request.finally(() => {
+      if (this.tokenRequest === request) this.tokenRequest = null;
+    }).catch(() => undefined);
+    return request;
+  }
+
+  private async requestToken(): Promise<string | null> {
     const messaging = getMessaging();
-    if (Platform.OS === 'ios' && (await getAPNSToken(messaging)) === null) {
+    let apnsToken: string | null = null;
+    if (Platform.OS === 'ios') {
+      try {
+        apnsToken = await getAPNSToken(messaging);
+      } catch (error) {
+        // Firebase rejects this read before iOS registration, rather than
+        // returning null. Continue to Expo's registration in that one case.
+        if ((error as { code?: string }).code !== 'messaging/unregistered') throw error;
+      }
+    }
+    if (Platform.OS === 'ios' && apnsToken === null) {
       // Expo owns notification permission/registration. Its delegate may receive
       // APNs before Firebase does, so explicitly pass the native token to FCM.
       // Never request an FCM token until APNs is ready; a timeout is retryable.
