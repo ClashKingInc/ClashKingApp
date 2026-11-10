@@ -82,9 +82,11 @@ export function NavigationShell(props: NavigationShellProps) {
   const measured = useWindowDimensions().width;
   const width = props.viewportWidth ?? measured;
   const platform = props.platform ?? Platform.OS;
-  // UIKit owns iOS tab selection and its gestures. The native shell keeps
-  // labels hidden while retaining the app's page-swipe coordination.
-  if (platform === 'ios') return <IosNativeTabs {...props} />;
+  // iPad's floating UITabBar can block the main thread during initial layout.
+  // Keep it unmounted (hiding it still runs layout) and reuse the retained pager
+  // and app-owned bar there. iPhone keeps UIKit tab selection and gestures.
+  const isIpad = Platform.OS === 'ios' && Platform.isPad;
+  if (platform === 'ios' && !isIpad) return <IosNativeTabs {...props} />;
   return resolveShellLayout(platform, width) === 'desktop' ? (
     <DesktopNavigationShell {...props} width={width} />
   ) : (
