@@ -1361,5 +1361,8 @@ function selectNativePrimary(route: PrimaryRouteId) {
   // Dismiss the outer detail stack before targeting a nested tab. Dispatching
   // both in the same commit lets the detail dismissal undo the tab selection.
   router.dismissAll();
+  // iPad uses the retained pager, not nested native tab routes. Its caller has
+  // already selected the page in state; only dismiss any native detail stack.
+  if (Platform.OS === 'ios' && Platform.isPad) return;
   requestAnimationFrame(() => router.navigate(routeById(route).href as Href));
 }
