@@ -129,7 +129,7 @@ export class UpgradeWidgetSyncService {
         townHallLevel > 0
           ? ImageAssets.townHall(townHallLevel)
           : ImageAssets.builderHall(builderHallLevel),
-      updatedAt: widgetTimestamp(now),
+      updatedAt: this.widgetTimestamp(now),
       hasStaleData: upgradeSnapshotNeedsRefresh(snapshot, now),
       // Match the Home card exactly: Home Village overall progress excludes the
       // helper/builders category and uses the existing time/resource weighting.
@@ -151,7 +151,7 @@ export class UpgradeWidgetSyncService {
             kind: effect.key,
             label: translationForTid(effect.nameTid) ?? effect.name,
             imageUrl: effect.imageUrl,
-            expiresAt: widgetTimestamp(
+            expiresAt: this.widgetTimestamp(
               addSeconds(now, snapshot.remainingCapturedSeconds(effect.seconds, now)),
             ),
           })),
@@ -217,7 +217,7 @@ export class UpgradeWidgetSyncService {
         .filter((item) => !item.isComplete)
         .reduce((sum, item) => sum + instanceCount(item), 0),
       tasks: visible.map((group) => this.widgetTask(snapshot, group, now)),
-      ...(hiddenFinish ? { hiddenFinishesAt: widgetTimestamp(hiddenFinish) } : null),
+      ...(hiddenFinish ? { hiddenFinishesAt: this.widgetTimestamp(hiddenFinish) } : null),
     };
   }
   private ongoingQueues(snapshot: UpgradeTrackerSnapshot, village: UpgradeVillageValue, now: Date) {
@@ -238,7 +238,7 @@ export class UpgradeWidgetSyncService {
               village,
             ),
       capacity: section.capacity,
-      finishesAt: section.times.map((seconds) => widgetTimestamp(addSeconds(now, seconds))),
+      finishesAt: section.times.map((seconds) => this.widgetTimestamp(addSeconds(now, seconds))),
       extra: section.extra,
       nextTask: section.work[0]
         ? this.widgetTask(snapshot, { item: section.work[0], count: 1 }, now)
@@ -255,11 +255,11 @@ export class UpgradeWidgetSyncService {
       fromLevel: item.currentLevel,
       toLevel: clamp(item.currentLevel + 1, 0, item.targetLevel),
       ...(group.count > 1 ? { count: group.count } : null),
-      finishesAt: widgetTimestamp(addSeconds(now, remaining)),
+      finishesAt: this.widgetTimestamp(addSeconds(now, remaining)),
       ...(helper > 0
         ? {
             helperName: snapshot.helperNameFor(item),
-            helperFinishesAt: widgetTimestamp(addSeconds(now, helper)),
+            helperFinishesAt: this.widgetTimestamp(addSeconds(now, helper)),
           }
         : null),
     };
@@ -272,7 +272,7 @@ export class UpgradeWidgetSyncService {
         label,
         shortLabel,
         imageUrl,
-        expiresAt: widgetTimestamp(addSeconds(now, snapshot.remainingCapturedSeconds(raw, now))),
+        expiresAt: this.widgetTimestamp(addSeconds(now, snapshot.remainingCapturedSeconds(raw, now))),
       });
     return [
       ...(snapshot.remainingCapturedSeconds(b.builderConsumableSeconds, now) > 0
@@ -399,9 +399,9 @@ export class UpgradeWidgetSyncService {
           active = assigned ? snapshot.remainingHelperSeconds(assigned, now) : 0,
           statusUntil =
             active > 0
-              ? widgetTimestamp(addSeconds(now, active))
+              ? this.widgetTimestamp(addSeconds(now, active))
               : !assigned && cooldown > 0
-                ? widgetTimestamp(addSeconds(now, cooldown))
+                ? this.widgetTimestamp(addSeconds(now, cooldown))
                 : null;
         return {
           name: localizedItemName(helper),
@@ -447,6 +447,14 @@ export class UpgradeWidgetSyncService {
       toLevel: t('upgradeTrackerToLevel', { level: '{level}' }),
     };
   }
+  // iOS 18 rejects fractional seconds and discards the entire widget payload.
+  // Normalize only this payload; Android uses exact timestamps to guard async
+  // image updates, and persisted tracker data must retain its full precision.
+  private widgetTimestamp(date: Date): string {
+    const value = date.toISOString();
+    return this.options.platform === 'ios' ? value.replace(/\.\d{3}Z$/, 'Z') : value;
+  }
+
   private async clearCurrentSelection() {
     if (this.options.platform !== 'android') return;
     await this.write(WIDGET_STORAGE_KEYS.upgradeAndroidData, '');
@@ -547,11 +555,4 @@ function clamp(value: number, min: number, max: number) {
 }
 function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === 'object' && value !== null && !Array.isArray(value);
-}
-
-// iOS 18's native widget decoder rejects fractional seconds. Keep every date
-// in this widget-only payload at whole-second precision so one timestamp cannot
-// discard the entire account. Persisted tracker data retains its full precision.
-function widgetTimestamp(date: Date): string {
-  return date.toISOString().replace(/\.\d{3}Z$/, 'Z');
 }
