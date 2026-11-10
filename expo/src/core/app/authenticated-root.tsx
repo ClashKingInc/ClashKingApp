@@ -940,6 +940,21 @@ export function AuthenticatedRoot({
             />
           </View>
         );
+      // Explicit shared links can request Legends for any player. Resolve the
+      // current tier here too: Legend II/III use weekly Ranked, not daily Legend I.
+      if (!player.isLegendLeague) {
+        return (
+          <RankedRoot
+            key={`ranked:${player.tag}:player`}
+            player={player}
+            allowAccountSwitch={false}
+            onBack={closeSecondary}
+            openPlayer={pushPlayer}
+            openPlayerTag={loadPlayer}
+            openInGame={openPlayerInGame}
+          />
+        );
+      }
       return (
         <LegendsRoot
           key={`legends:${player.tag}`}

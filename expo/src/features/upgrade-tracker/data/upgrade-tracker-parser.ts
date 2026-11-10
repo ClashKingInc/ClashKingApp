@@ -250,6 +250,10 @@ function addBuildingItems(
       category === UpgradeCategory.walls
         ? resourceProgressTotals(data, current, true, category, steps)
         : null;
+  // The Crafting Station has no levels of its own. Parse its nested defense
+  // modules before skipping unavailable parents, or the whole crafted section
+  // disappears from imported and previously saved snapshots.
+  addCraftedDefenses(output, raw, data, lookup, itemVillage, hall);
   if (target <= 0) return;
   output.push(
     new UpgradeTrackerItem({
@@ -282,7 +286,6 @@ function addBuildingItems(
   );
   if (target >= maxLevel(mapList(data.levels)))
     addSupercharge(output, raw, data, image, itemVillage, hall);
-  addCraftedDefenses(output, raw, data, lookup, itemVillage, hall);
 }
 
 function addSupercharge(
