@@ -35,6 +35,7 @@ interface ResolvedUpgradeWidgetAccount {
 
 export interface UpgradeWidgetSyncOptions {
   readonly platform: WidgetPlatform;
+  readonly iosVersion?: string | number;
   readonly native: Pick<NativeWidgetBridge, 'setWidgetValue' | 'reloadWidgets'>;
   readonly mirror: StringStore;
   readonly translate: (key: MessageKey, values?: Record<string, string | number>) => string;
@@ -272,7 +273,9 @@ export class UpgradeWidgetSyncService {
         label,
         shortLabel,
         imageUrl,
-        expiresAt: this.widgetTimestamp(addSeconds(now, snapshot.remainingCapturedSeconds(raw, now))),
+        expiresAt: this.widgetTimestamp(
+          addSeconds(now, snapshot.remainingCapturedSeconds(raw, now)),
+        ),
       });
     return [
       ...(snapshot.remainingCapturedSeconds(b.builderConsumableSeconds, now) > 0
@@ -447,12 +450,16 @@ export class UpgradeWidgetSyncService {
       toLevel: t('upgradeTrackerToLevel', { level: '{level}' }),
     };
   }
-  // iOS 18 rejects fractional seconds and discards the entire widget payload.
+  // Before iOS 26, the native decoder rejects fractional seconds and discards
+  // the entire widget payload. Newer iOS keeps its original timestamp format.
   // Normalize only this payload; Android uses exact timestamps to guard async
   // image updates, and persisted tracker data must retain its full precision.
   private widgetTimestamp(date: Date): string {
     const value = date.toISOString();
-    return this.options.platform === 'ios' ? value.replace(/\.\d{3}Z$/, 'Z') : value;
+    const majorVersion = Number.parseInt(String(this.options.iosVersion), 10);
+    return this.options.platform === 'ios' && majorVersion > 0 && majorVersion < 26
+      ? value.replace(/\.\d{3}Z$/, 'Z')
+      : value;
   }
 
   private async clearCurrentSelection() {

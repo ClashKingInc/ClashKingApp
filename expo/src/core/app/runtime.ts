@@ -156,7 +156,13 @@ export function createAppRuntime(): AppRuntime {
       }),
       tokens,
     ),
-    { reportException, isOffline:async()=>{const state=await NetInfo.fetch();return state.isConnected===false || state.isInternetReachable===false;} },
+    {
+      reportException,
+      isOffline: async () => {
+        const state = await NetInfo.fetch();
+        return state.isConnected === false || state.isInternetReachable === false;
+      },
+    },
   );
   const gameData = createExpoGameDataService();
   const featureFlags = new RemoteFeatureFlagService({
@@ -218,6 +224,7 @@ export function createAppRuntime(): AppRuntime {
   const upgrades = new UpgradeTrackerRepository(contractApi, preferences);
   const upgradeWidgets = new UpgradeWidgetSyncService({
     platform: runtimePlatform,
+    iosVersion: Platform.OS === 'ios' ? Platform.Version : undefined,
     native: ClashKingNative,
     mirror: preferences,
     translate: (key, values) => createTranslator(appState.getState().locale)(key, values),
