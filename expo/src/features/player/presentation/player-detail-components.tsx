@@ -1,3 +1,4 @@
+import { PlayerName } from '../../../ui/player-name';
 import { SafeAreaProvider, SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useAdaptiveLayout } from '../../../ui/adaptive-layout';
 import { illustratedHeaderLayout } from '../../../ui/illustrated-header-layout';
@@ -464,7 +465,7 @@ export function PlayerDetailHeader({
                 testID="player-header-name-copy"
                 onPress={copyPlayerTag}
               >
-                <CKText
+                <PlayerName
                   role="titleLarge"
                   numberOfLines={1}
                   style={[
@@ -477,7 +478,7 @@ export function PlayerDetailHeader({
                   ]}
                 >
                   {player.name}
-                </CKText>
+                </PlayerName>
               </Pressable>
               <Pressable
                 accessibilityRole="button"

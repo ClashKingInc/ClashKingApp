@@ -86,7 +86,9 @@ export function RankedRoot({
         if (request === seasonGeneration.current && activeSeason.current === season)
           setSeasonError(
             t('generalRefreshFailed', {
-              error: caught instanceof Error ? caught.message : String(caught),
+              error:
+                (caught instanceof Error ? caught.message : String(caught)).trim() ||
+                t('generalTryAgain'),
             }),
           );
       } finally {
@@ -135,7 +137,9 @@ export function RankedRoot({
       } catch (caught) {
         if (request !== generation.current) return;
         if (!silent) {
-          const detail = caught instanceof Error ? caught.message : String(caught);
+          const detail =
+            (caught instanceof Error ? caught.message : String(caught)).trim() ||
+            t('generalTryAgain');
           setError(t('generalRefreshFailed', { error: detail }));
         }
       } finally {
@@ -195,7 +199,9 @@ export function RankedRoot({
     } catch (caught) {
       setMessage(
         t('generalRefreshFailed', {
-          error: caught instanceof Error ? caught.message : String(caught),
+          error:
+            (caught instanceof Error ? caught.message : String(caught)).trim() ||
+            t('generalTryAgain'),
         }),
       );
     }
@@ -206,7 +212,9 @@ export function RankedRoot({
     } catch (caught) {
       setMessage(
         t('generalRefreshFailed', {
-          error: caught instanceof Error ? caught.message : String(caught),
+          error:
+            (caught instanceof Error ? caught.message : String(caught)).trim() ||
+            t('generalTryAgain'),
         }),
       );
     }

@@ -1,3 +1,4 @@
+import { PlayerName } from '../../../ui/player-name';
 import { useAdaptiveLayout } from '../../../ui/adaptive-layout';
 import { illustratedHeaderLayout } from '../../../ui/illustrated-header-layout';
 import {
@@ -117,9 +118,14 @@ export function LegendsRoot({
     let complete = false;
     // The daily panel needs only its battlelog. The service shares this request
     // with the full load, so history/season/opponent enrichment cannot delay it.
-    void runtime.players.loadLegendBattlelog(player.tag, selectedDay).then((day) => {
-      if (current && !complete && day) setData(baseline.withCurrentDay(day));
-    }).catch(() => { /* The full load below owns the page's error state. */ });
+    void runtime.players
+      .loadLegendBattlelog(player.tag, selectedDay)
+      .then((day) => {
+        if (current && !complete && day) setData(baseline.withCurrentDay(day));
+      })
+      .catch(() => {
+        /* The full load below owns the page's error state. */
+      });
     void runtime.players
       .loadLegendLeagueData(player.tag, false, selectedDay, baseline)
       .then((value) => {
@@ -429,7 +435,7 @@ export function LegendsScreen({
                     />
                   </View>
                 </View>
-                <CKText
+                <PlayerName
                   numberOfLines={1}
                   role="screenTitle"
                   style={[
@@ -441,7 +447,7 @@ export function LegendsScreen({
                   ]}
                 >
                   {data?.playerName ?? ''}
-                </CKText>
+                </PlayerName>
                 {clanIdentity?.tag ? (
                   <Pressable
                     accessibilityRole={onOpenClan ? 'button' : undefined}
@@ -801,16 +807,27 @@ function HeroSeasonSummary({
   const content = (
     <View style={styles.heroChips}>
       <HeroChip
-        imageUrl={location?.countryCode ? ImageAssets.flag(location.countryCode) : ImageAssets.planet}
+        imageUrl={
+          location?.countryCode ? ImageAssets.flag(location.countryCode) : ImageAssets.planet
+        }
         label={t('sideLocation')}
         value={location?.name ?? '—'}
       />
-      <HeroChip imageUrl={ImageAssets.trophies} label={t('rankedLeagueTrophies')}
-        value={trophies.toLocaleString(toIntlLocale(locale))} />
-      <HeroChip imageUrl={ImageAssets.bestTrophies} label={t('legendsGlobalRankTitle')}
-        value={rank !== null ? `#${rank.toLocaleString(toIntlLocale(locale))}` : '—'} />
-      <HeroChip imageUrl={ImageAssets.attackStar} label={t('legendsHitrate')}
-        value={stats ? tripleRate(stats.attackTriples, stats.attacks) : '—'} />
+      <HeroChip
+        imageUrl={ImageAssets.trophies}
+        label={t('rankedLeagueTrophies')}
+        value={trophies.toLocaleString(toIntlLocale(locale))}
+      />
+      <HeroChip
+        imageUrl={ImageAssets.bestTrophies}
+        label={t('legendsGlobalRankTitle')}
+        value={rank !== null ? `#${rank.toLocaleString(toIntlLocale(locale))}` : '—'}
+      />
+      <HeroChip
+        imageUrl={ImageAssets.attackStar}
+        label={t('legendsHitrate')}
+        value={stats ? tripleRate(stats.attackTriples, stats.attacks) : '—'}
+      />
       {favorite ? (
         <HeroChip
           imageUrl={favorite.item.imageUrl}
@@ -842,9 +859,7 @@ function HeroChip({
     >
       <MobileWebImage imageUrl={imageUrl} style={styles.heroChipImage} />
       <View style={styles.heroChipText}>
-        <CKText role="labelLarge">
-          {value}
-        </CKText>
+        <CKText role="labelLarge">{value}</CKText>
       </View>
       {detail ? (
         <CKText numberOfLines={1} role="metadata" style={styles.whiteSoft}>

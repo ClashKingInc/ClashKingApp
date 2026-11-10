@@ -1,3 +1,4 @@
+import { PlayerName } from '../../../ui/player-name';
 import { WarPanelGrid, EntityModalViewport } from '../../war/presentation/war-panel-grid';
 import { useAdaptiveLayout } from '../../../ui/adaptive-layout';
 import { illustratedHeaderLayout } from '../../../ui/illustrated-header-layout';
@@ -688,7 +689,7 @@ function RankedHeader({
                 <View
                   style={[styles.identityCopy, layout.isExpanded && styles.expandedIdentityCopy]}
                 >
-                  <CKText
+                  <PlayerName
                     role="screenTitle"
                     numberOfLines={1}
                     style={[
@@ -702,7 +703,7 @@ function RankedHeader({
                     ]}
                   >
                     {player.name}
-                  </CKText>
+                  </PlayerName>
                   {clanIdentity.name ? (
                     <View style={styles.clanLine}>
                       {clanIdentity.badgeUrl ? (

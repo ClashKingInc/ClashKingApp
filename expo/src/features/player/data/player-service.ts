@@ -80,7 +80,7 @@ export class PlayerService {
   private readonly listeners = new Set<() => void>();
   private readonly officialLoads = new Map<string, Promise<Player>>();
   private readonly profileJsonLoads = new Map<string, Promise<JsonRecord>>();
-  private readonly missingProfiles = new Map<string,{error:unknown;at:number}>();
+  private readonly missingProfiles = new Map<string, { error: unknown; at: number }>();
   private readonly profileJsonCache = new Map<string, { value: JsonRecord; at: number }>();
   private readonly battlelogCache = new Map<string, PlayerBattlelogData>();
   private readonly battlelogLoads = new Map<string, Promise<PlayerBattlelogData>>();
@@ -222,7 +222,8 @@ export class PlayerService {
     } catch (error) {
       // The shared API layer already classifies and reports network/HTTP failures.
       // Reporting them here would bypass expected-state and offline handling.
-      if(!(error instanceof ApiResponseError || error instanceof TransportError))this.reportError?.('player.load_official', error);
+      if (!(error instanceof ApiResponseError || error instanceof TransportError))
+        this.reportError?.('player.load_official', error);
       if (options.throwOnError) throw error;
       return clanTags;
     } finally {
@@ -252,25 +253,37 @@ export class PlayerService {
     const key = `${tag}|${JSON.stringify(Object.entries(headers ?? {}).sort())}`;
     const pending = this.profileJsonLoads.get(key);
     if (pending) return pending;
-    const missing=this.missingProfiles.get(key);
-    if(!forceRefresh && missing && Date.now()-missing.at<30_000)return Promise.reject(missing.error);
+    const missing = this.missingProfiles.get(key);
+    if (!forceRefresh && missing && Date.now() - missing.at < 30_000)
+      return Promise.reject(missing.error);
     const cached = this.profileJsonCache.get(key);
     const age = cached ? Date.now() - cached.at : Infinity;
     if (!forceRefresh && cached && age >= 0 && age < 30_000) return Promise.resolve(cached.value);
     const generation = this.rankedGeneration;
-    const load = Effect.runPromise(Effect.result(
-      this.api.execute(
-        ProxyPlayerEndpoint,
-        { path: { playerTag: tag }, query: {}, body: {} },
-        { headers,expectedStatuses:[404] },
-      ).pipe(Effect.catch(error=>{
-        if(error._tag==='ApiResponseError'&&error.status===404){
-          if(this.missingProfiles.size>=200)this.missingProfiles.delete(this.missingProfiles.keys().next().value!);
-          this.missingProfiles.set(key,{error,at:Date.now()});
-        }
-        return Effect.fail(error);
-      })),
-    )).then(result=>{if(result._tag==='Failure')throw result.failure;return result.success;})
+    const load = Effect.runPromise(
+      Effect.result(
+        this.api
+          .execute(
+            ProxyPlayerEndpoint,
+            { path: { playerTag: tag }, query: {}, body: {} },
+            { headers, expectedStatuses: [404] },
+          )
+          .pipe(
+            Effect.catch((error) => {
+              if (error._tag === 'ApiResponseError' && error.status === 404) {
+                if (this.missingProfiles.size >= 200)
+                  this.missingProfiles.delete(this.missingProfiles.keys().next().value!);
+                this.missingProfiles.set(key, { error, at: Date.now() });
+              }
+              return Effect.fail(error);
+            }),
+          ),
+      ),
+    )
+      .then((result) => {
+        if (result._tag === 'Failure') throw result.failure;
+        return result.success;
+      })
       .then((json) => {
         this.missingProfiles.delete(key);
         if (!string(json.tag) || canonicalTag(string(json.tag)) !== canonicalTag(tag))
@@ -494,7 +507,11 @@ export class PlayerService {
     // Effect wraps it, which would hide a nonexistent player's 404.
     const result = await Effect.runPromise(
       Effect.result(
-        this.api.execute(ProxyPlayerEndpoint, { path: { playerTag: tag }, query: {}, body: {} },{expectedStatuses:[404]}),
+        this.api.execute(
+          ProxyPlayerEndpoint,
+          { path: { playerTag: tag }, query: {}, body: {} },
+          { expectedStatuses: [404] },
+        ),
       ),
     );
     if (result._tag === 'Failure') throw result.failure;
@@ -1044,7 +1061,11 @@ export class PlayerService {
         ? this.loadLeagueTiers()
         : Promise.resolve(new Map<number, RankedLeagueTier>()),
       loadGroup(currentTag, currentSeason),
-      scope === 'detail' ? loadGroup(previousTag, previousSeason) : Promise.resolve(null),
+      // Stale previous groups may return 500; optional history must not hide
+      // the successfully loaded current Ranked group.
+      scope === 'detail'
+        ? loadGroup(previousTag, previousSeason).catch(() => null)
+        : Promise.resolve(null),
       loadBattlelog(currentTag, currentSeason),
       loadBattlelog(previousTag, previousSeason),
       scope === 'detail'
