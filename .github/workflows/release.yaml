@@ -213,9 +213,9 @@ jobs:
           CK_UPDATES_CERTIFICATE_PATH: ./.release/updates-certificate.pem
         run: |
           CK_RUNTIME_VERSION="${{ needs.plan.outputs.ios_fingerprint }}" npx expo config --type public --json > "$RUNNER_TEMP/expo-config-ios.json"
-          CK_RUNTIME_VERSION="${{ needs.plan.outputs.ios_fingerprint }}" npx expo export --platform ios --output-dir "$RUNNER_TEMP/expo-update-ios" --dump-assetmap
+          CK_RUNTIME_VERSION="${{ needs.plan.outputs.ios_fingerprint }}" npx expo export --platform ios --output-dir "$RUNNER_TEMP/expo-update-ios" --dump-assetmap --clear
           CK_RUNTIME_VERSION="${{ needs.plan.outputs.android_fingerprint }}" npx expo config --type public --json > "$RUNNER_TEMP/expo-config-android.json"
-          CK_RUNTIME_VERSION="${{ needs.plan.outputs.android_fingerprint }}" npx expo export --platform android --output-dir "$RUNNER_TEMP/expo-update-android" --dump-assetmap
+          CK_RUNTIME_VERSION="${{ needs.plan.outputs.android_fingerprint }}" npx expo export --platform android --output-dir "$RUNNER_TEMP/expo-update-android" --dump-assetmap --clear
       - name: Publish immutable native marker last
         if: inputs.enable_updates == true
         env:
@@ -290,9 +290,9 @@ jobs:
           CK_UPDATES_CERTIFICATE_PATH: ./.release/updates-certificate.pem
         run: |
           CK_RUNTIME_VERSION="${{ needs.plan.outputs.ios_fingerprint }}" npx expo config --type public --json > "$RUNNER_TEMP/expo-config-ios.json"
-          CK_RUNTIME_VERSION="${{ needs.plan.outputs.ios_fingerprint }}" npx expo export --platform ios --output-dir "$RUNNER_TEMP/expo-update-ios" --dump-assetmap
+          CK_RUNTIME_VERSION="${{ needs.plan.outputs.ios_fingerprint }}" npx expo export --platform ios --output-dir "$RUNNER_TEMP/expo-update-ios" --dump-assetmap --clear
           CK_RUNTIME_VERSION="${{ needs.plan.outputs.android_fingerprint }}" npx expo config --type public --json > "$RUNNER_TEMP/expo-config-android.json"
-          CK_RUNTIME_VERSION="${{ needs.plan.outputs.android_fingerprint }}" npx expo export --platform android --output-dir "$RUNNER_TEMP/expo-update-android" --dump-assetmap
+          CK_RUNTIME_VERSION="${{ needs.plan.outputs.android_fingerprint }}" npx expo export --platform android --output-dir "$RUNNER_TEMP/expo-update-android" --dump-assetmap --clear
       - name: Upload content and immutable marker
         env:
           CK_RELEASE_VERSION: ${{ needs.plan.outputs.version }}
