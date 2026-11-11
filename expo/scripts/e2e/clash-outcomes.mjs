@@ -22,17 +22,23 @@ try {
  import assert from 'node:assert/strict';
  import {createApiClient,httpTransport} from '@clashking/api-client';
  import {WarCwlService} from './src/features/war/data/war-cwl-service';
- const client=createApiClient({baseUrl:process.env.CLASHKING_E2E_BASE_URL,transport:httpTransport((request)=>{request.headers.set('authorization','Bearer '+process.env.CLASHKING_E2E_ACCESS_TOKEN);return fetch(request);})});
+ import {withApiDiagnostics} from './src/core/api/contract-api-observability';
+ const requests:string[]=[],reports:unknown[]=[];
+ const base=createApiClient({baseUrl:process.env.CLASHKING_E2E_BASE_URL,transport:httpTransport((request)=>{requests.push(new URL(request.url).pathname);request.headers.set('authorization','Bearer '+process.env.CLASHKING_E2E_ACCESS_TOKEN);return fetch(request);})});
+ const client=withApiDiagnostics(base,{reportException:(...event)=>{reports.push(event);}});
  const service=new WarCwlService(client),tag='#2PP';
  const control=async(status:number,reason:string,cwlStatus=404,cwlReason='notFound')=>{await fetch(process.env.CLASHKING_E2E_PROVIDER_URL+'/test/control',{method:'POST',body:JSON.stringify({status,reason,cwlStatus,cwlReason})});};
  await control(200,'');await service.loadAllWarData([tag],{throwOnError:true});
  assert.equal(service.getWarCwlByTag(tag)?.warInfo.state,'notInWar');
- await control(403,'accessDenied');await service.loadAllWarData([tag],{throwOnError:true});
+ await control(403,'accessDenied.privateWarLog');await service.loadAllWarData([tag],{throwOnError:true});
  assert.equal(service.getWarCwlByTag(tag)?.warInfo.state,'accessDenied');
  const retained=service.getWarCwlByTag(tag);
  for(const [status,reason] of [[403,'accessDenied.invalidIp'],[503,'inMaintenance'],[503,'upstreamUnavailable'],[500,'unknownException']] as const){
+  const before=requests.filter(p=>p.endsWith('/currentwar')).length;reports.length=0;
   await control(status,reason);await assert.rejects(service.loadAllWarData([tag],{throwOnError:true}),error=>error._tag==='ApiResponseError'&&error.status===status);
   assert.equal(service.getWarCwlByTag(tag),retained,'An outage replaced readable state');
+  assert.equal(requests.filter(p=>p.endsWith('/currentwar')).length-before,status===503&&reason==='upstreamUnavailable'?2:1,'Declared failures bypassed retry policy');
+  assert.equal(reports.length,status>=500?1:0,'Declared server failure bypassed diagnostics');
  }
  await control(200,'',503,'inMaintenance');await assert.rejects(service.loadAllWarData([tag],{throwOnError:true}),error=>error._tag==='ApiResponseError'&&error.status===503);
  service.dispose();console.log('PASS real App war service: notInWar, private log, invalid credentials, maintenance, outages and retained readable state');

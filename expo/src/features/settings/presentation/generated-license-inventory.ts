@@ -188,7 +188,7 @@ export const GENERATED_LICENSE_INVENTORY: readonly GeneratedLicenseEntry[] = [
   },
   {
     "packages": [
-      "@clashking/clash-contract@1.1.2",
+      "@clashking/clash-contract@1.1.3",
       "@firebase/ai@2.14.0",
       "@firebase/analytics-compat@0.2.29",
       "@firebase/analytics-types@0.8.4",

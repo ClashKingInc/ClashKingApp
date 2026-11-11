@@ -1,5 +1,10 @@
 import { classifyClashResponse } from '@clashking/clash-contract/outcomes';
-import type { ApiClientError, ApiTransport } from '@clashking/api-client';
+import {
+  ApiResponseError,
+  type ApiClientError,
+  type ApiTransport,
+  type ApiStatusResult,
+} from '@clashking/api-client';
 import type { AnyEndpoint } from '@clashking/api-contracts/expo';
 import { Effect, Schedule } from 'effect';
 
@@ -132,10 +137,28 @@ export function withApiDiagnostics(
       retry(client.execute(endpoint, input, options), endpoint, options).pipe(
         Effect.tapError((error) => report(endpoint, error, options)),
       ),
-    executeStatus: (endpoint, input, options) =>
-      retry(client.executeStatus(endpoint, input, options), endpoint, options).pipe(
+    executeStatus: (endpoint, input, options) => {
+      const failures = new WeakMap<ApiResponseError, ApiStatusResult<typeof endpoint>>();
+      // Declared 5xx results must cross the same retry/report boundary as
+      // thrown failures. Restore their original status result only afterwards.
+      const observed = client.executeStatus(endpoint, input, options).pipe(
+        Effect.flatMap((result) => {
+          if ('body' in result && !result.ok && result.status >= 500) {
+            const error = new ApiResponseError(result);
+            failures.set(error, result);
+            return Effect.fail(error);
+          }
+          return Effect.succeed(result);
+        }),
+      );
+      return retry(observed, endpoint, options).pipe(
         Effect.tapError((error) => report(endpoint, error, options)),
-      ),
+        Effect.catch((error) => {
+          const result = error._tag === 'ApiResponseError' ? failures.get(error) : undefined;
+          return result === undefined ? Effect.fail(error) : Effect.succeed(result);
+        }),
+      );
+    },
   };
 }
 
