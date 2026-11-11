@@ -1,3 +1,4 @@
+import './check-push-release-environment.mjs';
 import assert from 'node:assert/strict';
 import { execFileSync } from 'node:child_process';
 import { readFileSync } from 'node:fs';

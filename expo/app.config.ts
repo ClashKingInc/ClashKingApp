@@ -166,6 +166,7 @@ export default ({ config }: ConfigContext): ExpoConfig => {
     },
     plugins: [
       'expo-router',
+      'expo-status-bar',
       ['expo-screen-orientation', { initialOrientation: 'PORTRAIT_UP' }],
       'expo-localization',
       'expo-image',
