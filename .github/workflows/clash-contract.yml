@@ -1,0 +1,43 @@
+name: Clash service contract
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+permissions:
+  contents: read
+jobs:
+  war-outcomes:
+    name: App war service through local API
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '26'
+      - uses: actions/setup-go@v5
+        with:
+          go-version: '1.26'
+      - uses: actions/checkout@v4
+        with:
+          repository: ClashKingInc/ClashKingAPI
+          ref: 01c4e2dfa029364533acf23ee9cdbb610029378b
+          path: .ci-api
+          persist-credentials: false
+      - uses: actions/checkout@v4
+        with:
+          repository: ClashKingInc/DevKit
+          ref: 9bcda285f434976095b17f5d8a89c7018e7f2f84
+          path: .ci-schema
+          persist-credentials: false
+      - run: npm ci --ignore-scripts --prefix expo
+      - run: npm ci --ignore-scripts --prefix .ci-api
+      - run: npm run build --prefix .ci-api
+      - run: go install github.com/pressly/goose/v3/cmd/goose@v3.26.0
+      - name: Verify real API/client and app war outcome handling
+        working-directory: .ci-api
+        env:
+          CLASHKING_E2E_API_REPO: ${{ github.workspace }}/.ci-api
+          CLASHKING_E2E_APP_REPO: ${{ github.workspace }}/expo
+        run: bash ../.ci-schema/scripts/with-test-integration.sh --profile retained-api -- node scripts/e2e/clash-http-outcomes.mjs

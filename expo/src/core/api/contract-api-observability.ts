@@ -1,3 +1,4 @@
+import { classifyClashResponse } from '@clashking/clash-contract/outcomes';
 import type { ApiClientError, ApiTransport } from '@clashking/api-client';
 import type { AnyEndpoint } from '@clashking/api-contracts/expo';
 import { Effect, Schedule } from 'effect';
@@ -116,7 +117,13 @@ export function withApiDiagnostics(
             while: (error) =>
               !options?.signal?.aborted &&
               (error._tag === 'TransportError' ||
-                (error._tag === 'ApiResponseError' && [502, 503, 504].includes(error.status))),
+                (error._tag === 'ApiResponseError' &&
+                  [502, 503, 504].includes(error.status) &&
+                  classifyClashResponse({
+                    path: endpoint.path,
+                    status: error.status,
+                    body: error.body,
+                  }).retryable)),
           }),
         )
       : effect;
