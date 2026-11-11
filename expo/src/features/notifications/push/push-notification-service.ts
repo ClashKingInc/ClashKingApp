@@ -4,7 +4,7 @@ import {
 } from '@clashking/api-contracts/expo';
 import { Effect } from 'effect';
 
-import type { ApiEnvironment } from '../../../core/api/contract-api';
+import { pushEnvironment } from '../../../core/config/push-environment.js';
 import { STORAGE_KEYS } from '../../../core/storage/storage';
 import type {
   PushAuthorizationStatus,
@@ -44,16 +44,7 @@ export function apiAuthorizationStatus(
   return status;
 }
 
-export function pushEnvironment(
-  environment: ApiEnvironment,
-  pushApiV2BaseUrlOverride?: string,
-): 'sandbox' | 'production' {
-  return pushApiV2BaseUrlOverride?.trim()
-    ? 'sandbox'
-    : environment === 'production'
-      ? 'production'
-      : 'sandbox';
-}
+export { pushEnvironment } from '../../../core/config/push-environment.js';
 
 export function buildNotificationDeviceRegistrationPayload(input: {
   token: string;
