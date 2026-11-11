@@ -22,7 +22,7 @@ jobs:
       - uses: actions/checkout@v4
         with:
           repository: ClashKingInc/ClashKingAPI
-          ref: 7d514f19371470b46d86bf6eba746b0b29f8c505
+          ref: 14aac2041a6004e64cae0e1abbee4cb0d6ca3dce
           path: .ci-api
           persist-credentials: false
       - uses: actions/checkout@v4
