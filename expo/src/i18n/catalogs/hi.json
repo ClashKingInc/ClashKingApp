@@ -2382,5 +2382,7 @@
   "upgradeTrackerOwnedByTier": "स्तर के अनुसार स्वामित्व में",
   "upgradeTrackerOwnedBySize": "आकार के अनुसार स्वामित्व में",
   "upgradeTrackerPercentComplete": "{percent}% पूरा",
-  "upgradeTrackerTimeLeft": "शेष समय"
+  "upgradeTrackerTimeLeft": "शेष समय",
+  "todoFilterNeedsAction": "करने के लिए",
+  "todoFilterCompleted": "पूर्ण"
 }

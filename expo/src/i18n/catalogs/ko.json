@@ -2382,5 +2382,7 @@
   "upgradeTrackerOwnedByTier": "등급별 보유",
   "upgradeTrackerOwnedBySize": "크기별 보유",
   "upgradeTrackerPercentComplete": "{percent}% 완료",
-  "upgradeTrackerTimeLeft": "남은 시간"
+  "upgradeTrackerTimeLeft": "남은 시간",
+  "todoFilterNeedsAction": "할 일",
+  "todoFilterCompleted": "완료됨"
 }

@@ -2382,5 +2382,7 @@
   "upgradeTrackerOwnedByTier": "В наличии по уровню",
   "upgradeTrackerOwnedBySize": "В наличии по размеру",
   "upgradeTrackerPercentComplete": "Выполнено на {percent}%",
-  "upgradeTrackerTimeLeft": "Осталось времени"
+  "upgradeTrackerTimeLeft": "Осталось времени",
+  "todoFilterNeedsAction": "К выполнению",
+  "todoFilterCompleted": "Завершённые"
 }

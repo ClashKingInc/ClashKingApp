@@ -2382,5 +2382,7 @@
   "upgradeTrackerOwnedByTier": "Zdobyte wg poziomu",
   "upgradeTrackerOwnedBySize": "Zdobyte wg rozmiaru",
   "upgradeTrackerPercentComplete": "Ukończono w {percent}%",
-  "upgradeTrackerTimeLeft": "Pozostały czas"
+  "upgradeTrackerTimeLeft": "Pozostały czas",
+  "todoFilterNeedsAction": "Do zrobienia",
+  "todoFilterCompleted": "Ukończone"
 }

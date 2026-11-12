@@ -2382,5 +2382,7 @@
   "upgradeTrackerOwnedByTier": "Поседовано по нивоу",
   "upgradeTrackerOwnedBySize": "Поседовано по величини",
   "upgradeTrackerPercentComplete": "{percent}% завршено",
-  "upgradeTrackerTimeLeft": "Преостало време"
+  "upgradeTrackerTimeLeft": "Преостало време",
+  "todoFilterNeedsAction": "За урадити",
+  "todoFilterCompleted": "Завршено"
 }

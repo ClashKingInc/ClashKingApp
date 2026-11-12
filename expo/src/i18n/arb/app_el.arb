@@ -5213,5 +5213,7 @@
       }
     },
     "description": "Completion percentage of an upgrade category (ex: 42.5% complete)"
-  }
+  },
+  "todoFilterNeedsAction": "Προς ολοκλήρωση",
+  "todoFilterCompleted": "Ολοκληρωμένοι"
 }

@@ -2382,5 +2382,7 @@
   "upgradeTrackerOwnedByTier": "Отримано за рівнем",
   "upgradeTrackerOwnedBySize": "Отримано за розміром",
   "upgradeTrackerPercentComplete": "Виконано на {percent}%",
-  "upgradeTrackerTimeLeft": "Залишилось часу"
+  "upgradeTrackerTimeLeft": "Залишилось часу",
+  "todoFilterNeedsAction": "До виконання",
+  "todoFilterCompleted": "Завершені"
 }

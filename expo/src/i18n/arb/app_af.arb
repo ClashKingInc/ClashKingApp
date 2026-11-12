@@ -5118,5 +5118,7 @@
       }
     },
     "description": "Completion percentage of an upgrade category (ex: 42.5% complete)"
-  }
+  },
+  "todoFilterNeedsAction": "Om te doen",
+  "todoFilterCompleted": "Voltooi"
 }

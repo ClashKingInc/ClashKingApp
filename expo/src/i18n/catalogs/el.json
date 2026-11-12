@@ -2382,5 +2382,7 @@
   "upgradeTrackerOwnedByTier": "Ιδιόκτητα ανά βαθμίδα",
   "upgradeTrackerOwnedBySize": "Ιδιόκτητα ανά μέγεθος",
   "upgradeTrackerPercentComplete": "Ολοκληρώθηκε κατά {percent}%",
-  "upgradeTrackerTimeLeft": "Χρόνος που απομένει"
+  "upgradeTrackerTimeLeft": "Χρόνος που απομένει",
+  "todoFilterNeedsAction": "Προς ολοκλήρωση",
+  "todoFilterCompleted": "Ολοκληρωμένοι"
 }

@@ -2382,5 +2382,7 @@
   "upgradeTrackerOwnedByTier": "Omistettu tason mukaan",
   "upgradeTrackerOwnedBySize": "Omistettu koon mukaan",
   "upgradeTrackerPercentComplete": "{percent} % valmis",
-  "upgradeTrackerTimeLeft": "Aikaa jäljellä"
+  "upgradeTrackerTimeLeft": "Aikaa jäljellä",
+  "todoFilterNeedsAction": "Tekemättä",
+  "todoFilterCompleted": "Valmiit"
 }

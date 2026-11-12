@@ -2382,5 +2382,7 @@
   "upgradeTrackerOwnedByTier": "In bezit per niveau",
   "upgradeTrackerOwnedBySize": "In bezit per grootte",
   "upgradeTrackerPercentComplete": "{percent}% voltooid",
-  "upgradeTrackerTimeLeft": "Resterende tijd"
+  "upgradeTrackerTimeLeft": "Resterende tijd",
+  "todoFilterNeedsAction": "Te doen",
+  "todoFilterCompleted": "Voltooid"
 }

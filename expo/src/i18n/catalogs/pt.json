@@ -2382,5 +2382,7 @@
   "upgradeTrackerOwnedByTier": "Possuídos por nível",
   "upgradeTrackerOwnedBySize": "Possuídos por tamanho",
   "upgradeTrackerPercentComplete": "{percent}% concluído",
-  "upgradeTrackerTimeLeft": "Tempo restante"
+  "upgradeTrackerTimeLeft": "Tempo restante",
+  "todoFilterNeedsAction": "Pendentes",
+  "todoFilterCompleted": "Concluídas"
 }

@@ -2382,5 +2382,7 @@
   "upgradeTrackerOwnedByTier": "Ejet efter niveau",
   "upgradeTrackerOwnedBySize": "Ejet efter størrelse",
   "upgradeTrackerPercentComplete": "{percent}% gennemført",
-  "upgradeTrackerTimeLeft": "Tid tilbage"
+  "upgradeTrackerTimeLeft": "Tid tilbage",
+  "todoFilterNeedsAction": "At gøre",
+  "todoFilterCompleted": "Fuldført"
 }

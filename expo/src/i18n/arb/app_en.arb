@@ -5343,5 +5343,7 @@
       }
     },
     "description": "Completion percentage of an upgrade category (ex: 42.5% complete)"
-  }
+  },
+  "todoFilterNeedsAction": "To do",
+  "todoFilterCompleted": "Completed"
 }

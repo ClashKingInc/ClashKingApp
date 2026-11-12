@@ -2382,5 +2382,7 @@
   "upgradeTrackerOwnedByTier": "Deținute pe nivel",
   "upgradeTrackerOwnedBySize": "Deținute pe dimensiune",
   "upgradeTrackerPercentComplete": "{percent}% finalizat",
-  "upgradeTrackerTimeLeft": "Timp rămas"
+  "upgradeTrackerTimeLeft": "Timp rămas",
+  "todoFilterNeedsAction": "De făcut",
+  "todoFilterCompleted": "Finalizate"
 }

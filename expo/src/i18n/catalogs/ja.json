@@ -2382,5 +2382,7 @@
   "upgradeTrackerOwnedByTier": "ランク別の所有数",
   "upgradeTrackerOwnedBySize": "サイズ別の所有数",
   "upgradeTrackerPercentComplete": "{percent}% 完了",
-  "upgradeTrackerTimeLeft": "残り時間"
+  "upgradeTrackerTimeLeft": "残り時間",
+  "todoFilterNeedsAction": "未完了",
+  "todoFilterCompleted": "完了"
 }

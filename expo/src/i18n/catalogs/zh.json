@@ -2382,5 +2382,7 @@
   "upgradeTrackerOwnedByTier": "按等级统计已拥有",
   "upgradeTrackerOwnedBySize": "按尺寸统计已拥有",
   "upgradeTrackerPercentComplete": "已完成 {percent}%",
-  "upgradeTrackerTimeLeft": "剩余时间"
+  "upgradeTrackerTimeLeft": "剩余时间",
+  "todoFilterNeedsAction": "待办",
+  "todoFilterCompleted": "已完成"
 }

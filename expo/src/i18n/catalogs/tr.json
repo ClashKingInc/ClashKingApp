@@ -2382,5 +2382,7 @@
   "upgradeTrackerOwnedByTier": "Seviyeye göre sahip olunan",
   "upgradeTrackerOwnedBySize": "Boyuta göre sahip olunan",
   "upgradeTrackerPercentComplete": "%{percent} tamamlandı",
-  "upgradeTrackerTimeLeft": "Kalan süre"
+  "upgradeTrackerTimeLeft": "Kalan süre",
+  "todoFilterNeedsAction": "Yapılacaklar",
+  "todoFilterCompleted": "Tamamlananlar"
 }

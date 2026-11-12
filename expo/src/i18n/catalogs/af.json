@@ -2382,5 +2382,7 @@
   "upgradeTrackerOwnedByTier": "Besit volgens vlak",
   "upgradeTrackerOwnedBySize": "Besit volgens grootte",
   "upgradeTrackerPercentComplete": "{percent}% voltooi",
-  "upgradeTrackerTimeLeft": "Oorblywende tyd"
+  "upgradeTrackerTimeLeft": "Oorblywende tyd",
+  "todoFilterNeedsAction": "Om te doen",
+  "todoFilterCompleted": "Voltooi"
 }

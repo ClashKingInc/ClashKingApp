@@ -2382,5 +2382,7 @@
   "upgradeTrackerOwnedByTier": "Ägda per nivå",
   "upgradeTrackerOwnedBySize": "Ägda per storlek",
   "upgradeTrackerPercentComplete": "{percent}% klart",
-  "upgradeTrackerTimeLeft": "Tid kvar"
+  "upgradeTrackerTimeLeft": "Tid kvar",
+  "todoFilterNeedsAction": "Att göra",
+  "todoFilterCompleted": "Slutförda"
 }

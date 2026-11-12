@@ -2382,5 +2382,7 @@
   "upgradeTrackerOwnedByTier": "المملوك حسب المستوى",
   "upgradeTrackerOwnedBySize": "المملوك حسب الحجم",
   "upgradeTrackerPercentComplete": "اكتمل {percent}%",
-  "upgradeTrackerTimeLeft": "الوقت المتبقي"
+  "upgradeTrackerTimeLeft": "الوقت المتبقي",
+  "todoFilterNeedsAction": "المطلوب إنجازه",
+  "todoFilterCompleted": "مكتملة"
 }

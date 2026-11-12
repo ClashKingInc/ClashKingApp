@@ -2382,5 +2382,7 @@
   "upgradeTrackerOwnedByTier": "Đã sở hữu theo cấp",
   "upgradeTrackerOwnedBySize": "Đã sở hữu theo kích thước",
   "upgradeTrackerPercentComplete": "Hoàn thành {percent}%",
-  "upgradeTrackerTimeLeft": "Thời gian còn lại"
+  "upgradeTrackerTimeLeft": "Thời gian còn lại",
+  "todoFilterNeedsAction": "Cần làm",
+  "todoFilterCompleted": "Đã hoàn thành"
 }

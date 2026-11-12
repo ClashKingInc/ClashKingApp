@@ -2382,5 +2382,7 @@
   "upgradeTrackerOwnedByTier": "Vorhanden nach Stufe",
   "upgradeTrackerOwnedBySize": "Vorhanden nach Größe",
   "upgradeTrackerPercentComplete": "{percent}% abgeschlossen",
-  "upgradeTrackerTimeLeft": "Verbleibende Zeit"
+  "upgradeTrackerTimeLeft": "Verbleibende Zeit",
+  "todoFilterNeedsAction": "Zu erledigen",
+  "todoFilterCompleted": "Abgeschlossen"
 }

@@ -2382,5 +2382,7 @@
   "upgradeTrackerOwnedByTier": "Meglévő szint szerint",
   "upgradeTrackerOwnedBySize": "Meglévő méret szerint",
   "upgradeTrackerPercentComplete": "{percent}% kész",
-  "upgradeTrackerTimeLeft": "Hátralévő idő"
+  "upgradeTrackerTimeLeft": "Hátralévő idő",
+  "todoFilterNeedsAction": "Teendő",
+  "todoFilterCompleted": "Befejezett"
 }

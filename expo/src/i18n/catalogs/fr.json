@@ -2382,5 +2382,7 @@
   "upgradeTrackerOwnedByTier": "Possédés par rareté",
   "upgradeTrackerOwnedBySize": "Possédés par taille",
   "upgradeTrackerPercentComplete": "{percent} % terminé",
-  "upgradeTrackerTimeLeft": "Temps restant"
+  "upgradeTrackerTimeLeft": "Temps restant",
+  "todoFilterNeedsAction": "À faire",
+  "todoFilterCompleted": "Terminés"
 }

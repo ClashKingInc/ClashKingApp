@@ -2382,5 +2382,7 @@
   "upgradeTrackerOwnedByTier": "Vlastněno podle úrovně",
   "upgradeTrackerOwnedBySize": "Vlastněno podle velikosti",
   "upgradeTrackerPercentComplete": "Dokončeno na {percent} %",
-  "upgradeTrackerTimeLeft": "Zbývající čas"
+  "upgradeTrackerTimeLeft": "Zbývající čas",
+  "todoFilterNeedsAction": "K vyřízení",
+  "todoFilterCompleted": "Dokončené"
 }

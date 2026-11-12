@@ -2382,5 +2382,7 @@
   "upgradeTrackerOwnedByTier": "Propietat per nivell",
   "upgradeTrackerOwnedBySize": "Propietat per mida",
   "upgradeTrackerPercentComplete": "{percent}% completat",
-  "upgradeTrackerTimeLeft": "Temps restant"
+  "upgradeTrackerTimeLeft": "Temps restant",
+  "todoFilterNeedsAction": "Per fer",
+  "todoFilterCompleted": "Completats"
 }

@@ -2382,5 +2382,7 @@
   "upgradeTrackerOwnedByTier": "سطح کے لحاظ سے ملکیت میں",
   "upgradeTrackerOwnedBySize": "سائز کے لحاظ سے ملکیت میں",
   "upgradeTrackerPercentComplete": "{percent}% مکمل",
-  "upgradeTrackerTimeLeft": "باقی وقت"
+  "upgradeTrackerTimeLeft": "باقی وقت",
+  "todoFilterNeedsAction": "کرنے والے",
+  "todoFilterCompleted": "مکمل"
 }

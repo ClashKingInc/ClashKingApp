@@ -776,8 +776,8 @@ function filterLabel(filter: TodoAccountFilter, model: TodoScreenModel, t: I18nV
     filter === 'all'
       ? t('todoAllAccounts')
       : filter === 'needs_action'
-        ? t('homeTodoTitle')
-        : t('homeRecentlyCompleted');
+        ? t('todoFilterNeedsAction')
+        : t('todoFilterCompleted');
   return `${label} (${count})`;
 }
 

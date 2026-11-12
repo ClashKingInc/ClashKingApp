@@ -2382,5 +2382,7 @@
   "upgradeTrackerOwnedByTier": "Eid etter nivå",
   "upgradeTrackerOwnedBySize": "Eid etter størrelse",
   "upgradeTrackerPercentComplete": "{percent}% fullført",
-  "upgradeTrackerTimeLeft": "Tid igjen"
+  "upgradeTrackerTimeLeft": "Tid igjen",
+  "todoFilterNeedsAction": "Å gjøre",
+  "todoFilterCompleted": "Fullført"
 }

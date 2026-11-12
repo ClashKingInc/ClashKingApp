@@ -2382,5 +2382,7 @@
   "upgradeTrackerOwnedByTier": "Owned by tier",
   "upgradeTrackerOwnedBySize": "Owned by size",
   "upgradeTrackerPercentComplete": "{percent}% complete",
-  "upgradeTrackerTimeLeft": "Time left"
+  "upgradeTrackerTimeLeft": "Time left",
+  "todoFilterNeedsAction": "To do",
+  "todoFilterCompleted": "Completed"
 }

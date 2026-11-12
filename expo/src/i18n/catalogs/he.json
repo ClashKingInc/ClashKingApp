@@ -2382,5 +2382,7 @@
   "upgradeTrackerOwnedByTier": "בבעלות לפי דרגה",
   "upgradeTrackerOwnedBySize": "בבעלות לפי גודל",
   "upgradeTrackerPercentComplete": "{percent}% הושלמו",
-  "upgradeTrackerTimeLeft": "הזמן שנותר"
+  "upgradeTrackerTimeLeft": "הזמן שנותר",
+  "todoFilterNeedsAction": "לביצוע",
+  "todoFilterCompleted": "הושלמו"
 }
