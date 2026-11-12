@@ -74,7 +74,9 @@ export function UpgradeCollectionSummaryModal({
       </ResponsiveGrid>
       {details.length ? (
         <>
-          <SectionLabel>{type === 'skins' ? 'Owned by tier' : 'Owned by size'}</SectionLabel>
+          <SectionLabel>
+            {type === 'skins' ? t('upgradeTrackerOwnedByTier') : t('upgradeTrackerOwnedBySize')}
+          </SectionLabel>
           <ResponsiveGrid minItemWidth={110} maxColumns={4}>
             {details.map((detail) => (
               <Metric key={detail.label} label={detail.label} value={detail.count} />
@@ -97,18 +99,18 @@ export function UpgradeCategorySummaryModal({
   summary: UpgradeCategorySummary | null;
   onClose: () => void;
 }) {
-  const { locale } = useI18n();
+  const { t, locale } = useI18n();
   const intlLocale = toIntlLocale(locale);
   if (!summary) return null;
   return (
     <BreakdownModal visible={visible} title={title} onClose={onClose}>
       <CKText muted role="bodySmall">
-        {(summary.completion * 100).toFixed(1)}% complete
+        {t('upgradeTrackerPercentComplete', { percent: (summary.completion * 100).toFixed(1) })}
       </CKText>
       <ResponsiveGrid minItemWidth={112} maxColumns={3}>
-        <Metric label="Levels left" value={summary.levelsRemaining} />
+        <Metric label={t('upgradeTrackerHeaderLevelsLeft')} value={summary.levelsRemaining} />
         {summary.seconds > 0 ? (
-          <Metric label="Time left" value={formatTrackerDuration(summary.seconds)} />
+          <Metric label={t('upgradeTrackerTimeLeft')} value={formatTrackerDuration(summary.seconds)} />
         ) : null}
         {Object.entries(summary.costs)
           .sort(([left], [right]) => resourceWeight(left) - resourceWeight(right))

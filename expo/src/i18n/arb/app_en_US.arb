@@ -5105,5 +5105,18 @@
   "accountsSetupBody": "Add and verify your Clash of Clans accounts.",
   "accountsMyTitle": "My Accounts",
   "profileAvatar": "Change look",
-  "avatarPickerTitle": "Pick an avatar"
+  "avatarPickerTitle": "Pick an avatar",
+  "clanFamilyFriendly": "Family-friendly",
+  "upgradeTrackerOwnedByTier": "Owned by tier",
+  "upgradeTrackerOwnedBySize": "Owned by size",
+  "upgradeTrackerPercentComplete": "{percent}% complete",
+  "upgradeTrackerTimeLeft": "Time left",
+  "@upgradeTrackerPercentComplete": {
+    "placeholders": {
+      "percent": {
+        "type": "String"
+      }
+    },
+    "description": "Completion percentage of an upgrade category (ex: 42.5% complete)"
+  }
 }
