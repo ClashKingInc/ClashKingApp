@@ -1,3 +1,4 @@
+import { classifyClashResponse } from '@clashking/clash-contract/outcomes';
 import type { StoreApi } from 'zustand/vanilla';
 import { ApiResponseError, TransportError } from '@clashking/api-client';
 
@@ -191,5 +192,5 @@ export function defaultIsMaintenanceError(error: unknown): boolean {
   const body = error.body;
   if (!body || typeof body !== 'object') return false;
   // HTTP 500/503 also cover our backend and database failures, not just game maintenance.
-  return 'reason' in body && body.reason === 'maintenance';
+  return classifyClashResponse({ path: '/', status: error.status, body }).kind === 'maintenance';
 }

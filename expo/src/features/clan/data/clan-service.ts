@@ -1,3 +1,4 @@
+import { classifyClashResponse } from '@clashking/clash-contract/outcomes';
 import {
   ClanChangesEndpoint,
   ClanCurrentRankingsEndpoint,
@@ -388,8 +389,18 @@ export class ClanService {
                 const log = ClanWarLog.fromJson(summary, normalized);
                 log.warLogStats = analyzeWarLogs(log.items);
                 return log;
-              } catch {
-                // Privacy can change after the profile loads; keep the archive fallback.
+              } catch (error) {
+                // Only confirmed privacy changes use the archive. Maintenance,
+                // invalid credentials and transport failures must retain their meaning.
+                if (
+                  !(error instanceof ApiResponseError) ||
+                  classifyClashResponse({
+                    path: '/clans/' + encodeURIComponent(normalized) + '/warlog',
+                    status: error.status,
+                    body: error.body,
+                  }).kind !== 'privateWarLog'
+                )
+                  throw error;
               }
             }
             const response = await Effect.runPromise(

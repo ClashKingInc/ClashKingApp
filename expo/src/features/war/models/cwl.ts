@@ -1,4 +1,4 @@
-import { ClanBadgeUrls } from '../../clan/models';
+import { ClanBadgeUrls } from '../../clan/models/clan-core';
 import {
   int,
   intMap,

@@ -1,3 +1,5 @@
+import { ApiResponseError } from '@clashking/api-client';
+import { classifyClashResponse } from '@clashking/clash-contract/outcomes';
 import {
   StoredCwlGroupEndpoint,
   ClanWarsEndpoint,
@@ -210,6 +212,15 @@ export class WarCwlService {
         body: {},
       }),
     );
+    if (
+      !response.ok &&
+      classifyClashResponse({
+        path: '/clans/' + encodeURIComponent(tag) + '/currentwar/leaguegroup',
+        status: response.status,
+        body: response.body,
+      }).kind !== 'noCurrentEvent'
+    )
+      throw new ApiResponseError(response);
     if (!response.ok || string(response.value.season).slice(0, 7) !== season.slice(0, 7)) {
       return (await this.loadLinkedCwl(tag, season)).summary;
     }
@@ -393,7 +404,19 @@ export class WarCwlService {
     const response = await Effect.runPromise(
       this.api.executeStatus(ProxyCurrentWarEndpoint, { path: { clanTag }, query: {}, body: {} }),
     );
-    if (!response.ok) return response.status === 403 ? new WarInfo('accessDenied') : null;
+    if (!response.ok) {
+      // A forbidden credential is not a private war; outages must not become
+      // a successful empty state that overwrites the last readable matchup.
+      if (
+        classifyClashResponse({
+          path: '/clans/' + encodeURIComponent(clanTag) + '/currentwar',
+          status: response.status,
+          body: response.body,
+        }).kind === 'privateWarLog'
+      )
+        return new WarInfo('accessDenied');
+      throw new ApiResponseError(response);
+    }
     const war = WarInfo.fromJson(response.value);
     // A stale pointer's type must not label a newer live matchup as friendly.
     return basic && matchesScheduledWar(war, basic)
@@ -409,6 +432,15 @@ export class WarCwlService {
         body: {},
       }),
     );
+    if (
+      !response.ok &&
+      classifyClashResponse({
+        path: '/clans/' + encodeURIComponent(clanTag) + '/currentwar/leaguegroup',
+        status: response.status,
+        body: response.body,
+      }).kind !== 'noCurrentEvent'
+    )
+      throw new ApiResponseError(response);
     const group = response.ok ? response.value : null;
 
     const fetched = new Map<string, Promise<WarInfo | null>>();
@@ -450,7 +482,10 @@ export class WarCwlService {
     const response = await Effect.runPromise(
       this.api.executeStatus(ProxyCwlWarEndpoint, { path: { warTag }, query: {}, body: {} }),
     );
-    if (!response.ok) return null;
+    if (!response.ok) {
+      if (response.status === 404) return null; // An expired CWL war can be absent from the live API.
+      throw new ApiResponseError(response);
+    }
     return WarInfo.fromJson({ ...response.value, war_tag: warTag, warType: 'cwl' });
   }
 
