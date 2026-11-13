@@ -56,6 +56,7 @@ export function PostsScreen({ service, onBack, initialPostId }: PostsScreenProps
   const [stories, setStories] = useState<readonly AppAnnouncement[]>([]);
   const [storiesLoading, setStoriesLoading] = useState(false);
   const [openingStory, setOpeningStory] = useState<string>();
+  const openingStoryRef = useRef(false);
   const [storyError, setStoryError] = useState(false);
   const [posts, setPosts] = useState<readonly AppAnnouncement[]>([]);
   const [loading, setLoading] = useState(false);
@@ -141,7 +142,8 @@ export function PostsScreen({ service, onBack, initialPostId }: PostsScreenProps
   }, [initialPostId, openAnnouncement, service]);
 
   const replayStory = async (id: string) => {
-    if (openingStory) return;
+    if (openingStoryRef.current) return;
+    openingStoryRef.current = true;
     setOpeningStory(id);
     setStoryError(false);
     try {
@@ -154,6 +156,7 @@ export function PostsScreen({ service, onBack, initialPostId }: PostsScreenProps
     } catch {
       setStoryError(true);
     } finally {
+      openingStoryRef.current = false;
       setOpeningStory(undefined);
     }
   };
