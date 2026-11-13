@@ -1,20 +1,20 @@
 {
-  "capitalCurrentOpponent": "היריב הנוכחי",
-  "capitalRaidMedals": "מדליות פשיטה",
-  "warReplayTitle": "היסטוריית התוצאה",
-  "warReplayPlay": "נגן היסטוריה",
-  "warReplayPause": "השהה היסטוריה",
-  "cwlLeading": "מוביל",
-  "cwlTrailing": "בפיגור",
-  "cwlYourClan": "השבט שלך",
-  "cwlPromotionZone": "אזור עלייה",
-  "cwlDemotionZone": "אזור ירידה",
-  "cwlNotInLineup": "לא בהרכב",
-  "esportsEloSubtitle": "דירוג קבוצות עולמי ומשחקים מאת",
-  "esportsTopTeamsMatches": "משחקים של 50 הקבוצות המובילות כרגע.",
-  "esportsPartialMatches": "לא ניתן היה לרענן חלק מהקבוצות.",
-  "settingsHideAccounts": "הסתרת חשבונות",
-  "settingsHideAccountsDescription": "הצגת האפשרות להסתיר חשבונות מקושרים. בחירות הפרטיות הקיימות לא ישתנו.",
+  "capitalCurrentOpponent": "Current opponent",
+  "capitalRaidMedals": "Raid medals",
+  "warReplayTitle": "Score history",
+  "warReplayPlay": "Play history",
+  "warReplayPause": "Pause history",
+  "cwlLeading": "Leading",
+  "cwlTrailing": "Trailing",
+  "cwlYourClan": "Your clan",
+  "cwlPromotionZone": "Promotion zone",
+  "cwlDemotionZone": "Demotion zone",
+  "cwlNotInLineup": "Not in lineup",
+  "esportsEloSubtitle": "Global team rankings and matches from",
+  "esportsTopTeamsMatches": "Matches from the current top 50 teams.",
+  "esportsPartialMatches": "Some teams could not be refreshed.",
+  "settingsHideAccounts": "Hide accounts",
+  "settingsHideAccountsDescription": "Show the option to hide linked accounts. Existing privacy choices stay unchanged.",
   "calcRocketBalloonAssumption": "1 hit + death · {damage} damage each",
   "calcKeepEquipped": "Keep one equipped",
   "calcCustomLevels": "Custom levels",
@@ -38,31 +38,31 @@
   "personalBasesEmptyBody": "Bases you post through ClashKing on Discord appear here. You can also save bases from the library.",
   "personalArmiesEmptyTitle": "Keep your armies close",
   "personalArmiesEmptyBody": "Armies you post through ClashKing on Discord appear here. Save your favourites to find them before your next attack.",
-  "homeCardOriginal": "מקורי",
-  "homeCardTint": "צבע עדין",
-  "homeCardEdge": "מסגרות צבעוניות",
-  "homeCardGlow": "זוהר איטי",
-  "competitiveNoHistory": "עדיין אין טורנירים",
-  "competitiveHistoryHint": "הקבוצות שלך ותוצאות הטורנירים שלך יופיעו כאן.",
-  "esportsMonthlyFinals": "גמרים חודשיים",
-  "esportsMonthlyQualifier": "מוקדמות חודשיות",
-  "esportsHeroSubtitle": "הדרך לאליפות העולם",
-  "esportsViewEvent": "גלו את האירוע",
-  "esportsWinLoss": "{wins} ניצחונות · {losses} הפסדים",
-  "esportsViewPlayer": "הצגת שחקן",
-  "esportsRecentMatches": "משחקים אחרונים",
-  "esportsHideAttacks": "הסתרת פרטי הקרב",
-  "esportsViewAttacks": "הצגת פרטי הקרב",
-  "esportsPlayer": "שחקן ספורט אלקטרוני",
+  "homeCardOriginal": "Original",
+  "homeCardTint": "Soft color",
+  "homeCardEdge": "Colored edges",
+  "homeCardGlow": "Slow glow",
+  "competitiveNoHistory": "No tournaments yet",
+  "competitiveHistoryHint": "Your teams and tournament results will appear here.",
+  "esportsMonthlyFinals": "Monthly finals",
+  "esportsMonthlyQualifier": "Monthly qualifiers",
+  "esportsHeroSubtitle": "The road to the World Championship",
+  "esportsViewEvent": "Explore event",
+  "esportsWinLoss": "{wins} wins · {losses} losses",
+  "esportsViewPlayer": "View player",
+  "esportsRecentMatches": "Recent matches",
+  "esportsHideAttacks": "Hide battle details",
+  "esportsViewAttacks": "View battle details",
+  "esportsPlayer": "Esports player",
   "esportsBattles": "קרבות",
-  "esportsTriples": "התקפות של שלושה כוכבים",
+  "esportsTriples": "Triples",
   "esportsAverageStars": "ממוצע כוכבים",
   "esportsDestruction": "הרס",
-  "esportsAccounts": "חשבונות משחק",
+  "esportsAccounts": "Game accounts",
   "esportsAttack": "התקפה",
-  "esportsDefense": "הגנה",
-  "competitiveArenaSubtitle": "השבט שלך. הקבוצה שלך. האתגר הבא שלך.",
-  "competitiveViewTournament": "הצגת הטורניר",
+  "esportsDefense": "הֲגָנָה",
+  "competitiveArenaSubtitle": "Your clan. Your team. Your next challenge.",
+  "competitiveViewTournament": "View tournament",
   "@esportsWinLoss": {
     "placeholders": {
       "wins": {
@@ -87,50 +87,50 @@
   "esportsStage": "Stage",
   "esportsStandings": "Standings",
   "esportsMatches": "Matches",
-  "esportsPoints": "Points",
+  "esportsPoints": "נקודות",
   "esportsPlayed": "played",
   "esportsSource": "Data from Competitive Clash Network",
-  "esportsRoster": "Roster",
+  "esportsRoster": "סגל",
   "esportsSeasonPoints": "Season points",
   "esportsStageStandings": "Stage standings",
-  "competitiveCompetition": "תחרות",
-  "competitiveWebsite": "אתר אינטרנט",
-  "competitiveVerifiedAccounts": "חשבונות מאומתים",
-  "competitiveEsports": "ספורט אלקטרוני",
-  "competitiveTournaments": "טורנירים",
+  "competitiveCompetition": "Competition",
+  "competitiveWebsite": "Website",
+  "competitiveVerifiedAccounts": "Verified accounts",
+  "competitiveEsports": "eSports",
+  "competitiveTournaments": "Tournaments",
   "competitiveProfile": "פרופיל",
   "competitiveTeams": "קבוצות",
-  "competitiveFreeEntry": "השתתפות חינם",
-  "competitiveRegister": "רישום קבוצה",
-  "competitiveCheckIn": "אישור נוכחות",
-  "competitiveRules": "כללים",
-  "competitiveUnavailable": "נתוני התחרות אינם זמינים. נסו שוב.",
-  "competitiveRegistrationSaved": "הרישום נשלח",
-  "competitiveTeamHistory": "היסטוריית הקבוצה",
-  "competitiveDebutName": "טורניר ראשון",
-  "competitiveDebutDescription": "השתתפו בטורניר עם החשבון המאומת שלכם.",
-  "competitiveViewProfile": "הצגת פרופיל",
+  "competitiveFreeEntry": "Free entry",
+  "competitiveRegister": "Register team",
+  "competitiveCheckIn": "Check in",
+  "competitiveRules": "Rules",
+  "competitiveUnavailable": "Competition data is unavailable. Try again.",
+  "competitiveRegistrationSaved": "Registration submitted",
+  "competitiveTeamHistory": "Team history",
+  "competitiveDebutName": "Tournament debut",
+  "competitiveDebutDescription": "Participate in a tournament with your verified account.",
+  "competitiveViewProfile": "View profile",
   "calcPinEquipment": "Keep one equipped",
-  "calcSearch": "Search",
+  "calcSearch": "חיפוש",
   "calcEquipmentTitle": "Equipment Compare",
   "calcDamageIntro": "Find the combinations that take a defense down.",
   "calcFarmIntro": "Plan the loot needed for your next upgrades.",
   "calcEquipmentIntro": "Compare hero loadouts, levels, and ability stats.",
   "calcComingSoon": "Coming soon",
-  "calcHero": "Hero",
+  "calcHero": "גיבור",
   "calcHeroLevel": "Hero level",
   "calcMaxLevels": "Max levels",
   "calcEquipmentPool": "Equipment to compare",
   "calcPoolHelp": "Choose pieces and default levels. Compare every pair, then customize individual rows.",
   "calcSelectAll": "Select all",
-  "calcClear": "Clear",
+  "calcClear": "בָּרוּר",
   "calcAttributes": "Attributes",
   "calcAddAttribute": "Add attribute",
-  "calcTable": "Compare",
+  "calcTable": "השוואה",
   "calcProgression": "Level progression",
   "calcCompareHelp": "DPS adds the hero's base and equipment DPS. Speed bonuses and temporary effects are separate attributes; healing is not extra max HP.",
   "calcChartHelp": "Equipment levels increase together; each piece stops at its own maximum. Hero levels stay fixed. First six loadouts shown.",
-  "calcSort": "Sort by",
+  "calcSort": "מיין לפי",
   "calcNoEquipment": "No equipment",
   "calcDuplicate": "Duplicate loadout",
   "calcRemove": "Remove loadout",
@@ -154,9 +154,9 @@
   "calcComparisonDownloaded": "Comparison image downloaded",
   "calcComparisonExportFailed": "Could not copy the comparison image. Please try again.",
   "calcEffectiveLevel": "Effective level {level}",
-  "calcTarget": "Target",
+  "calcTarget": "יעד",
   "calcSupercharge": "Supercharge",
-  "calcNone": "None",
+  "calcNone": "ללא",
   "calcResults": "{count} combinations",
   "calcResultsHelp": "Smallest spell cost first, then fewer equipment activations. Extra sources that do not help are removed.",
   "calcNoCombinationHelp": "Try another source, a higher level, or more spell capacity.",
@@ -164,63 +164,63 @@
   "calcAlternative": "Alternative",
   "calcCombinationCost": "{housing} spell space · {equipment} equipment",
   "calcUseStack": "Use stack",
-  "homeRankingsAndStats": "דירוגים וסטטיסטיקה",
-  "homeActivityRecorded": "פעילות מתועדת בלבד; ההיסטוריה עשויה להיות חלקית.",
-  "homeWidgetsServers": "שרתים",
-  "homeWidgetsEdit": "עריכת הבית",
-  "homeWidgetsAdd": "הוספת רכיב",
-  "homeWidgetsRemove": "הסרת רכיב",
-  "homeWidgetsMoveUp": "הזזה למעלה",
-  "homeWidgetsMoveDown": "הזזה למטה",
+  "homeRankingsAndStats": "Rankings & Stats",
+  "homeActivityRecorded": "Recorded activity only; history may be incomplete.",
+  "homeWidgetsServers": "Servers",
+  "homeWidgetsEdit": "Edit Home",
+  "homeWidgetsAdd": "Add widget",
+  "homeWidgetsRemove": "Remove widget",
+  "homeWidgetsMoveUp": "Move up",
+  "homeWidgetsMoveDown": "Move down",
   "homeWidgetsSmall": "קטן",
-  "homeWidgetsWide": "רחב",
-  "homeWidgetsSaveError": "לא ניתן לסנכרן את הבית. יש לרענן לפני עריכה נוספת.",
-  "homeWidgetsUnavailable": "אין נתונים מתועדים",
-  "homeWidgetsBookmarkFirst": "יש להוסיף שחקן או שבט למועדפים תחילה.",
-  "rankingsWarTripleStreak": "רצף שלשות במלחמה",
+  "homeWidgetsWide": "Wide",
+  "homeWidgetsSaveError": "Could not sync Home. Please refresh before editing again.",
+  "homeWidgetsUnavailable": "No recorded data available",
+  "homeWidgetsBookmarkFirst": "Bookmark a player or clan first.",
+  "rankingsWarTripleStreak": "War Triple Streak",
   "rankingsWarTripleRulesTitle": "How streaks count",
   "rankingsWarTripleRulesBody": "+2 for two triples against your own Town Hall level in a regular war.\n\nA missed attack, non-triple, or different-TH target resets your streak.\n\nCWL and friendly wars don’t count. Streaks are separate for each Town Hall level.",
-  "clanLegendsRanked": "אגדות ודירוג",
-  "appIconChangeWarning": "שינוי סמל האפליקציה יסגור את ClashKing. להמשיך?",
-  "upgradeTrackerUnverifiedAccount": "החשבון הזה מקושר אך אינו מאומת. אמתו אותו בניהול החשבונות כדי לייבא את נתוני השדרוגים.",
-  "clanWarNotificationsTitle": "התראות מלחמה",
-  "clanCapitalNotificationsTitle": "התראות בירת השבט",
-  "clanWarNotificationsBody": "קבלו עדכוני מלחמה עבור השבט הזה.",
-  "clanCapitalNotificationsBody": "קבלו עדכונים על בירת השבט הזה.",
-  "notifSystemNotifications": "התראות מערכת",
-  "notifSystemSettings": "פתיחת הגדרות ההתראות",
-  "notifSystemSettingsDescription": "נהל התראות, צלילים ותגים בהגדרות המכשיר.",
-  "notifSystemSettingsFailed": "לא ניתן לפתוח את הגדרות ההתראות. יש לפתוח את ההגדרות במכשיר.",
-  "notifManagePlayersDescription": "נהל התראות חשבון דרך שחקנים ← מקושרים ← אפשרויות.",
-  "notifCustomReminders": "תזכורות מותאמות אישית",
-  "notifTestType": "סוג התראה",
-  "statsBattlelogsGroup": "יומני קרבות",
-  "statsGlobalStatsGroup": "נתונים עולמיים",
-  "playerOptionShowOnHomeTitle": "הצגת החשבון בדף הבית",
-  "playerOptionShowOnHomeSubtitle": "כלול את החשבון המאומת הזה בכרטיסי דף הבית (עד 5).",
-  "playerOptionShowOnHomeVerifyFirst": "אמת את החשבון הזה כדי להציג אותו בדף הבית.",
-  "playerOptionHomeInclusionFirst": "יש להפעיל קודם את הצגת החשבון בדף הבית.",
-  "homeIncludedAccountsLimit": "דף הבית יכול להציג עד 5 חשבונות. יש להסיר חשבון אחד תחילה.",
-  "statsHitratesByTownHall": "שיעורי הצלחה לפי בית עירייה",
-  "statsChartGranularity": "מרווח התרשים",
+  "clanLegendsRanked": "Legends & Ranked",
+  "appIconChangeWarning": "Changing the app icon will close ClashKing. Continue?",
+  "upgradeTrackerUnverifiedAccount": "This account is linked but not verified. Verify it in Manage Accounts to import your upgrade data.",
+  "clanWarNotificationsTitle": "War notifications",
+  "clanCapitalNotificationsTitle": "Clan Capital notifications",
+  "clanWarNotificationsBody": "Receive war updates for this clan.",
+  "clanCapitalNotificationsBody": "Receive Clan Capital updates for this clan.",
+  "notifSystemNotifications": "System notifications",
+  "notifSystemSettings": "Open notification settings",
+  "notifSystemSettingsDescription": "Manage alerts, sounds, and badges in your device settings.",
+  "notifSystemSettingsFailed": "Could not open notification settings. Please open Settings on your device.",
+  "notifManagePlayersDescription": "Manage account notifications in Players → Linked → Options.",
+  "notifCustomReminders": "Custom reminders",
+  "notifTestType": "Notification type",
+  "statsBattlelogsGroup": "Battlelogs",
+  "statsGlobalStatsGroup": "Global Stats",
+  "playerOptionShowOnHomeTitle": "Show account on Home",
+  "playerOptionShowOnHomeSubtitle": "Include this verified account in Home cards (up to 5).",
+  "playerOptionShowOnHomeVerifyFirst": "Verify this account to show it on Home.",
+  "playerOptionHomeInclusionFirst": "Turn on Show account on Home first.",
+  "homeIncludedAccountsLimit": "Home can show up to 5 accounts. Remove one first.",
+  "statsHitratesByTownHall": "Hitrates by Town Hall",
+  "statsChartGranularity": "Chart interval",
   "statsDaily": "יומי",
   "statsWeekly": "שבועי",
-  "playerBattlelogCumulative": "מצטבר",
-  "statsMonthly": "חודשי",
-  "statsCompareCohorts": "השוואת קבוצות",
-  "statsAcrossCohorts": "שימוש לפי קבוצות",
-  "legendsTrophyGrid": "סקירת העונה",
-  "legendsPopularArmyItems": "רכיבי הצבא הפופולריים ביותר",
-  "legendsPopularTroop": "מועדף",
-  "legendsHitrate": "שיעור הצלחה",
-  "legendsAvgOffense": "ממוצע התקפה",
-  "legendsAvgDefense": "ממוצע הגנה",
-  "settingsClearImageCache": "ניקוי מטמון התמונות",
-  "settingsImageCacheCleared": "מטמון התמונות נוקה.",
-  "settingsImageCacheClearFailed": "לא ניתן לנקות את מטמון התמונות. נסה שוב.",
-  "startupCheckingUpdate": "מחפש עדכונים…",
-  "startupDownloadingUpdate": "מוריד עדכון…",
-  "startupUpdateInBackground": "עדכון ברקע",
+  "playerBattlelogCumulative": "Cumulative",
+  "statsMonthly": "Monthly",
+  "statsCompareCohorts": "Compare cohorts",
+  "statsAcrossCohorts": "Usage across cohorts",
+  "legendsTrophyGrid": "Season overview",
+  "legendsPopularArmyItems": "Most popular army items",
+  "legendsPopularTroop": "Favorite",
+  "legendsHitrate": "Hitrate",
+  "legendsAvgOffense": "Avg. Offense",
+  "legendsAvgDefense": "Avg. Defense",
+  "settingsClearImageCache": "Clear image cache",
+  "settingsImageCacheCleared": "Image cache cleared.",
+  "settingsImageCacheClearFailed": "Could not clear the image cache. Please try again.",
+  "startupCheckingUpdate": "Checking for updates…",
+  "startupDownloadingUpdate": "Downloading update…",
+  "startupUpdateInBackground": "Update in background",
   "warStatsRangeTitle": "טווח סטטיסטיקות מלחמה",
   "warStatsRangeDescription": "בחר אם הסטטיסטיקות יכללו מספר קבוע של מלחמות אחרונות או תקופה אחרונה בימים.",
   "warStatsRangeDays": "ימים",
@@ -375,17 +375,59 @@
   "notifPushEnabled": "התראות דחיפה מופעלות",
   "notifReceiveNotifications": "קבלת התראות",
   "notifTokenPreview": "אסימון: {token}",
+  "@notifTokenPreview": {
+    "placeholders": {
+      "token": {
+        "type": "String"
+      }
+    }
+  },
   "notifEnabledDeliveryDescription": "ניתן לשלוח את ההתראות שהפעלת למכשיר הזה.",
   "notifDisabledAccountDescription": "ההתראות כבויות בכל חשבון ClashKing שלך.",
   "notifMaximumRemindersAdded": "נוסף מספר התזכורות המרבי",
   "notifAddReminder": "הוספת תזכורת",
   "notifDurationOneHour": "שעה אחת",
   "notifDurationHours": "{count} שעות",
+  "@notifDurationHours": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "notifDurationMinutes": "{count} דקות",
+  "@notifDurationMinutes": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "notifAddTiming": "הוספת {timing}",
+  "@notifAddTiming": {
+    "placeholders": {
+      "timing": {
+        "type": "String"
+      }
+    }
+  },
   "notifTimingOneHourBefore": "שעה אחת לפני",
   "notifTimingHoursBefore": "{count} שעות לפני",
+  "@notifTimingHoursBefore": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "notifTimingMinutesBefore": "{count} דקות לפני",
+  "@notifTimingMinutesBefore": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "notifPushReady": "התראות הדחיפה מוכנות במכשיר הזה.",
   "notifPushPermissionRequired": "יש לאפשר התראות כדי לקבל התראות ClashKing.",
   "notifPushPermissionDenied": "ההרשאה להתראות נדחתה.",
@@ -394,12 +436,13 @@
   "notifPushUnsupported": "התראות דחיפה אינן נתמכות בפלטפורמה זו.",
   "notifPushInitializing": "הגדרת התראות דחיפה…",
   "notificationPrimerTitle": "להפעיל התראות?",
-  "notificationPrimerBody": "ClashKing יכול לשלוח עדכונים על אירועים, הכרזות, הגנות בליגת האגדות ותמיכה. תזכורות למלחמות ולסופי שבוע של פשיטות נשארות כבויות עד שמגדירים אותן. אפשר לשנות את הבחירות בהגדרות > התראות.",
+  "notificationPrimerBody": "ClashKing יכול להודיע לך על עדכונים במלחמות, ב-CWL, בחשבון ובפרויקטים. אפשר לשנות זאת בכל עת דרך הגדרות > התראות.",
   "notificationPrimerNotNow": "לא עכשיו",
   "notificationPrimerAllow": "אישור",
+  "@@last_modified": "2024-12-23T10:00:00.000Z",
   "achievementsTitle": "הישגים",
   "achievementEarnedLabel": "הושג",
-  "achievementGemsEarnedRatio": "הושגו {earned} / {total}",
+  "achievementGemsEarnedRatio": "{earned} / {total} earned",
   "@achievementGemsEarnedRatio": {
     "placeholders": {
       "earned": {
@@ -410,7 +453,7 @@
       }
     }
   },
-  "achievementGemsAccessibility": "הושגו {earned} מתוך {total} אבני חן מהישגים.",
+  "achievementGemsAccessibility": "Earned {earned} of {total} achievement gems.",
   "@achievementGemsAccessibility": {
     "placeholders": {
       "earned": {
@@ -423,6 +466,23 @@
   },
   "achievementSummary": "{earned}/{total} הושלם",
   "achievementEarnedCount": "הושג ×{count}",
+  "@achievementSummary": {
+    "placeholders": {
+      "earned": {
+        "type": "String"
+      },
+      "total": {
+        "type": "String"
+      }
+    }
+  },
+  "@achievementEarnedCount": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
   "achievementTownhall18Name": "בית עירייה 18",
   "achievementTownhall18Requirement": "הגיעו לבית עירייה 18.",
   "achievementWarWarriorName": "לוחם מלחמה",
@@ -431,7 +491,6 @@
   "achievementMrLegendDescription": "השלמת יום התקפות מושלם בליגת האגדות.",
   "achievementDefenseDoesntMatterName": "הגנה לא משנה",
   "achievementDefenseDoesntMatterDescription": "שרדת יום הגנות מושלם בליגת האגדות.",
-  "@@last_modified": "2024-12-23T10:00:00.000Z",
   "appTitle": "ClashKing",
   "appDescription": "הנדבק המושלם שלך ל-Clash of Clans למעקב אחר סטטיסטיקות, ניהול קלאנים וניתוח ביצועים.",
   "generalLoading": "טוען...",
@@ -454,8 +513,8 @@
   "postsLoadMore": "טעינת עוד",
   "postsCurrent": "נוכחי",
   "postsPast": "קודמים",
-  "postsStoryFinished": "הסיפור הסתיים",
-  "postsWatchAgain": "צפייה חוזרת",
+  "postsStoryFinished": "Story finished",
+  "postsWatchAgain": "Watch again",
   "postsStory": "סיפור אינטראקטיבי",
   "postsPinned": "מומלץ",
   "generalTryAgain": "נסה שוב",
@@ -544,7 +603,7 @@
     "description": "Filter value is not set"
   },
   "generalWarning": "אזהרה",
-  "gameHandoffDontShowAgain": "אל תציג זאת שוב",
+  "gameHandoffDontShowAgain": "Don't show this again",
   "generalUnknown": "לא ידוע",
   "generalNoDataAvailable": "אין נתונים זמינים.",
   "generalNoFilteredResults": "אין תוצאות שתואמות למסננים שלך",
@@ -773,9 +832,9 @@
   "accountsAdd": "הוסף חשבון",
   "accountsAddInstruction": "הקש על כפתור + כדי להוסיף את החשבון שלך",
   "accountsApiToken": "אסימון API של החשבון",
-  "accountsEnterApiToken": "אמת שהחשבון הזה שלך באמצעות אסימון ה-API שלו מתוך המשחק.",
+  "accountsEnterApiToken": "נא להזין את אסימון ה-API של החשבון כדי לאשר שהוא שלך. אפשר למצוא אותו ב-Clash of Clans:",
   "accountsApiTokenLocation": "הגדרות > הגדרות נוספות > אסימון API",
-  "accountsOpenMoreSettings": "קבלת אסימון API",
+  "accountsOpenMoreSettings": "פתח הגדרות נוספות",
   "accountsCouldNotOpenClash": "לא ניתן לפתוח את Clash of Clans. נא לפתוח אותו ידנית.",
   "accountsFillAllFields": "נא למלא את כל השדות.",
   "accountsErrorTagNotExists": "תג השחקן שהוזן אינו קיים.",
@@ -1295,8 +1354,32 @@
   "warParticipation": "השתתפות במלחמה",
   "cwlParticipantOnly": "משתתף בלבד",
   "warStatsRangeWarsCompact": "{number} מלחמות",
+  "@warStatsRangeWarsCompact": {
+    "description": "Compact clan war statistics war range label",
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
   "warStatsRangeDaysCompact": "{number} ימים",
+  "@warStatsRangeDaysCompact": {
+    "description": "Compact clan war statistics day range label",
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
   "warStatsLastXDays": "{number} הימים האחרונים",
+  "@warStatsLastXDays": {
+    "description": "Clan war statistics date-range label",
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
   "warStatsCurrentMembers": "חברים נוכחיים",
   "warLeague": "מלחמה/ליגה",
   "warHistory": "היסטוריית מלחמות",
@@ -1305,6 +1388,13 @@
   "warLogClosed": "יומן המלחמה של {clan} סגור.",
   "warLogPrivate": "יומן המלחמה של {clan} פרטי.",
   "@warLogClosed": {
+    "placeholders": {
+      "clan": {
+        "type": "String"
+      }
+    }
+  },
+  "@warLogPrivate": {
     "placeholders": {
       "clan": {
         "type": "String"
@@ -1608,7 +1698,7 @@
   "warStarsTwo": "2 כוכבים",
   "warStarsThree": "3 כוכבים",
   "warStarsZero": "0 כוכבים",
-  "legendHistoryZeroStars": "אפס כוכבים",
+  "legendHistoryZeroStars": "Zero Stars",
   "warStarsBestPerformance": "הביצועים הטובים ביותר",
   "@warStarsBestPerformance": {
     "description": "Best performance in war"
@@ -1763,7 +1853,7 @@
   "clanLeaderboardHistoryTab": "היסטוריית דירוג",
   "clanLegendHistoryTab": "היסטוריית ליגת האגדות",
   "clanRecordsTab": "שיאים",
-  "clanRecordsChangesTab": "שיאים ושינויים",
+  "clanRecordsChangesTab": "Records & Changes",
   "clanProfileHistoryTab": "היסטוריית הפרופיל",
   "clanProfileLevelChanged": "רמת השבט השתנתה",
   "clanProfileDescriptionChanged": "התיאור השתנה",
@@ -1805,8 +1895,8 @@
   "legendsCountryTitle": "מְדִינָה",
   "legendsLocalRankTitle": "דרגה מקומית",
   "legendsGlobalRankTitle": "דרגה עולמית",
-  "legendsYourArmy": "הצבא שלך",
-  "legendsArmyUsedAgainstYou": "הצבא ששימש נגדך",
+  "legendsYourArmy": "Your army",
+  "legendsArmyUsedAgainstYou": "Army used against you",
   "warWinsTitle": "מנצח",
   "warLossesTitle": "אֲבֵדוֹת",
   "warDrawsTitle": "ציור",
@@ -2051,7 +2141,7 @@
   "faqWhatCanBotDo": "מה בוט ה-Discord של ClashKing יכול לעשות?",
   "faqWhatCanBotDoAnswer": "בוט ה-Discord של ClashKing עוזר לך לנהל את הקלאן ישירות מ-Discord עם כלי מעקב מקיפים, התראות אוטומטיות ושילוב חלק עם האפליקציה הזו. הוא מיועד למנהיגי קלאנים ולחברים שרוצים להישאר מחוברים ומאורגנים:",
   "faqInviteBotToServer": "הזמן את הבוט לשרת",
-  "drawerInviteDiscordBot": "הזמן את הבוט לשרת",
+  "drawerInviteDiscordBot": "Invite Discord Bot",
   "faqBotFeatureTracking": "מעקב שחקנים וקלאנים",
   "faqBotFeatureTrackingDesc": "הוסף ועקוב אחר כמה קלאנים ושחקנים עם עדכונים בזמן אמת",
   "faqBotFeatureWars": "ניהול מלחמות",
@@ -2208,7 +2298,7 @@
     "description": "Defender town hall filter label"
   },
   "filtersSameTownHallOnly": "רק אותו TH",
-  "warStatsSameTownHall": "אותה רמת בניין עירייה",
+  "warStatsSameTownHall": "Same Townhall",
   "@filtersSameTownHallOnly": {
     "description": "Same town hall filter option"
   },
@@ -2862,7 +2952,7 @@
   "@settingsNotificationsTitle": {
     "description": "Settings tile: notifications title"
   },
-  "settingsNotificationsSubtitle": "בחר אילו התראות לקבל.",
+  "settingsNotificationsSubtitle": "בחר התראות ושלח תצוגה מקדימה של בדיקה מקומית.",
   "@settingsNotificationsSubtitle": {
     "description": "Settings tile: notifications subtitle"
   },
@@ -3334,7 +3424,7 @@
   "playerBestTrophies": "שיא גביעים",
   "clanLoadFailed": "טעינת הקלאן נכשלה.",
   "gameItemLevels": "רמות",
-  "gameItemLevelCount": "{count, plural, one {רמה אחת} two {# רמות} other {# רמות}}",
+  "gameItemLevelCount": "{count, plural, one {# Level} other {# Levels}}",
   "@gameItemLevelCount": {
     "placeholders": {
       "count": {
@@ -3405,6 +3495,20 @@
   },
   "todoAllCaughtUpForNow": "הכול מעודכן כרגע",
   "timeDurationShort": "{unit, select, daysHours {{primary}י׳ {secondary}ש׳} hoursMinutes {{primary}ש׳ {secondary}דק׳} other {{primary}דק׳}}",
+  "@timeDurationShort": {
+    "description": "Compact localized duration used in countdowns",
+    "placeholders": {
+      "unit": {
+        "type": "String"
+      },
+      "primary": {
+        "type": "int"
+      },
+      "secondary": {
+        "type": "int"
+      }
+    }
+  },
   "todoEventEndsIn": "מסתיים בעוד {duration}",
   "@todoEventEndsIn": {
     "placeholders": {
@@ -3514,9 +3618,14 @@
   "statsHero": "גיבור",
   "statsPet": "חיות מחמד",
   "statsEquipment": "ציוד",
-  "statsPetCombinations": "שילובי חיות מחמד",
-  "statsEquipmentPairs": "זוגות ציוד",
-  "statsArmyFallback": "צבא {id}",
+  "statsPetCombinations": "Pet combinations",
+  "statsEquipmentPairs": "Equipment pairs",
+  "statsArmyFallback": "Army {id}",
+  "@statsArmyFallback": {
+    "placeholders": {
+      "id": {}
+    }
+  },
   "statsOwningHero": "בעלים על גיבור",
   "statsAddItem": "הוסף פריט",
   "statsAnalyzeItems": "נתח פריטים",
@@ -3902,7 +4011,7 @@
   },
   "appIconDefault": "ברירת מחדל",
   "appIconChristmas": "חג המולד",
-  "appIconHalloween": "ליל כל הקדושים",
+  "appIconHalloween": "Halloween",
   "appIconBlackWhite": "שחור-לבן",
   "appIconDarkMode": "מצב כהה",
   "generalMembersCount": "{count} חברים",
@@ -3960,9 +4069,9 @@
     }
   },
   "upgradeTrackerShare": "שיתוף המעקב",
-  "trackerPosterCopied": "התמונה הועתקה",
-  "trackerPosterCopy": "העתקת תמונה",
-  "trackerPosterShareAll": "שיתוף כל ה־3",
+  "trackerPosterCopied": "Image copied",
+  "trackerPosterCopy": "Copy image",
+  "trackerPosterShareAll": "Share all 3",
   "upgradeTrackerPasteJson": "הדבקת JSON של החשבון",
   "upgradeTrackerImportTitle": "ייבוא נתוני חשבון",
   "upgradeTrackerImportDescription": "הדביקו את ה-JSON הגולמי של החשבון. הוא נשאר במכשיר.",
@@ -4271,8 +4380,8 @@
   "homeActivityLeft": "עזב",
   "homeActivityAClan": "שבט",
   "statsCwlSeasonGroups": "קבוצות",
-  "statsCwlSeasonHistory": "ליגת מלחמות השבטים לאורך זמן",
-  "statsCwlRosterNotLineup": "הרכב הרשומים מותאם ל־{size} מקומות; ההרכב בפועל במלחמה עשוי להשתנות.",
+  "statsCwlSeasonHistory": "CWL over time",
+  "statsCwlRosterNotLineup": "Registered roster mix, scaled to {size} places; actual war lineups may differ.",
   "@statsCwlRosterNotLineup": {
     "placeholders": {
       "size": {
@@ -4280,28 +4389,28 @@
       }
     }
   },
-  "statsTroopStats": "נתוני חיילים",
-  "statsWarSizes": "גדלי מלחמות",
-  "statsMissedAttacks": "התקפות שהוחמצו",
-  "statsCopyChart": "העתקת התרשים",
-  "statsCompareItems": "השוואת פריטים",
-  "statsCompareItemsHint": "בחרו עד 5 פריטים להשוואה.",
-  "statsVsOverall": "לעומת הכולל",
-  "statsCopyChartFailed": "לא ניתן להעתיק את התרשים. נסו שוב.",
-  "statsPercentagePoints": "נקודות אחוז",
+  "statsTroopStats": "Troop Stats",
+  "statsWarSizes": "War sizes",
+  "statsMissedAttacks": "Missed attacks",
+  "statsCopyChart": "Copy chart",
+  "statsCompareItems": "Compare items",
+  "statsCompareItemsHint": "Select up to 5 items to compare.",
+  "statsVsOverall": "vs. overall",
+  "statsCopyChartFailed": "Could not copy chart. Try again.",
+  "statsPercentagePoints": "percentage points",
   "statsMeta": "מטא",
   "statsBattle": "הפצת קרב",
   "statsWorld": "עולם",
   "statsHeaderSubtitle": "גלו את ביצועי הקרבות ואת העולם שאנו עוקבים אחריו.",
   "statsPreview": "תצוגה מקדימה",
-  "statsTownHallDistribution": "בתי עירייה",
+  "statsTownHallDistribution": "הפצה בעירייה",
   "statsBuilderHallDistribution": "הפצת אולם בונה",
-  "statsLeagueDistribution": "ליגות מדורגות",
+  "statsLeagueDistribution": "הפצת ליגה מדורגת",
   "statsTrackedPlayers": "אוכלוסיית השחקנים הנוכחית במעקב",
   "statsTrackedClans": "אוכלוסיית השבט הנוכחית במעקב",
-  "statsCwlLeagueDistribution": "ליגות CWL",
-  "statsCapitalLeagueDistribution": "ליגות הבירה",
-  "statsTrackedLocations": "מיקומי קלאנים",
+  "statsCwlLeagueDistribution": "הפצה של ליגת CWL",
+  "statsCapitalLeagueDistribution": "הפצה בליגת הבירה",
+  "statsTrackedLocations": "מיקומי השבטים במעקב",
   "statsLocationCountHelp": "מדינות ומיקומים המיוצגים על ידי חמולות במעקב.",
   "statsLeagueId": "ליגה {id}",
   "@statsLeagueId": {
@@ -4379,7 +4488,7 @@
   "rankedLeagueNoBattles": "עדיין לא נרשם קרב.",
   "rankedLeagueGroupRanking": "דירוג הקבוצה",
   "rankedLeagueRankingSubtitle": "דירוג חי של הקבוצה הנוכחית. השחקן שלכם מודגש.",
-  "rankedLeagueJumpToMyRank": "מעבר לדירוג",
+  "rankedLeagueJumpToMyRank": "מעבר לדירוג שלי",
   "rankedLeagueLastPeriod": "התקופה הקודמת",
   "rankedLeagueBestGroupRank": "הדירוג הטוב ביותר",
   "rankedLeaguePeriodHistory": "היסטוריית תקופות",
@@ -4944,7 +5053,7 @@
       }
     }
   },
-  "upgradeTrackerPlanRuleNote": "גררו קטגוריות כדי לבחור מה לשדרג קודם. הגדרות השורה מאפשרות עדיפות משותפת או עצירה ביעד התקדמות.",
+  "upgradeTrackerPlanRuleNote": "שכבות ממוספרות פועלות ראשונות. שורות משותפות שומרות על אותו מספר שכבה, והתמהיל שלהן מנורמל מהמשקלים היחסיים, כך ש-50 + 25 הופך ל-67% / 33%. יעד מייצר תשואה של קטגוריה לאחר שהוא מגיע לאחוז הזה בזמן שהוא נשאר כשיר מאוחר יותר.",
   "upgradeTrackerPlanGoalMaxCurrentHall": "מקסימום לפני התקדמות",
   "upgradeTrackerPlanGoalRushNextHall": "להגיע מהר לאולם הבא",
   "upgradeTrackerPlanGoalCatchUp": "להדביק רמות נמהרות",
@@ -5046,19 +5155,40 @@
       }
     }
   },
-  "cwlRegisteredRoster": "סגל רשום",
-  "cwlMatches": "מפגשים",
-  "cwlNextMatchup": "המפגש הבא",
-  "cwlOtherMatches": "מפגשים נוספים",
-  "cwlOutlook": "תחזית העונה",
-  "cwlFirstPlace": "מקום ראשון",
-  "cwlTopTwo": "שני הראשונים",
-  "cwlRemainingOpponents": "היריבים שנותרו",
-  "cwlWinBonusNote": "הכוכבים כוללים 10 כוכבי בונוס לכל ניצחון שהושלם.",
-  "cwlEstimateNote": "ההערכות מבוססות על מלחמות שהושלמו ויריבים שנותרו, ולא על שינויי הרכב. נדרשות לפחות שתי מלחמות שהושלמו לכל שבט. ההערכות אינן מכוילות; כללי העלייה משתנים לפי הליגה.",
-  "cwlDuration": "{unit, select, hours {{count, plural, one {# שעה} other {# שעות}}} other {{count, plural, one {# דקה} other {# דקות}}}}",
-  "personalBasesDeleteOld": "הסרת בסיסים בני יותר מ-90 יום",
-  "personalBasesDeleteOldConfirm": "יוסרו {count} בסיסים שמורים בני יותר מ-90 יום. היסטוריית ההורדות והבסיסים המשותפים יישמרו.",
+  "@settingsWarWidgetIosReady": {
+    "placeholders": {
+      "clanName": {
+        "type": "String"
+      }
+    }
+  },
+  "@settingsWarWidgetAndroidReady": {
+    "placeholders": {
+      "clanName": {
+        "type": "String"
+      }
+    }
+  },
+  "@settingsWarWidgetPrepareFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "cwlRegisteredRoster": "Registered roster",
+  "cwlMatches": "Matchups",
+  "cwlNextMatchup": "Next matchup",
+  "cwlOtherMatches": "Other matchups",
+  "cwlOutlook": "Season outlook",
+  "cwlFirstPlace": "First place",
+  "cwlTopTwo": "Top two",
+  "cwlRemainingOpponents": "Remaining opponents",
+  "cwlWinBonusNote": "Stars include 10 bonus stars per completed win.",
+  "cwlEstimateNote": "Estimates use completed wars and remaining opponents, not lineup changes. At least two completed wars per clan are needed. These are uncalibrated estimates; promotion rules vary by league.",
+  "cwlDuration": "{unit, select, hours {{count, plural, one {# hour} other {# hours}}} other {{count, plural, one {# minute} other {# minutes}}}}",
+  "personalBasesDeleteOld": "Remove bases older than 90 days",
+  "personalBasesDeleteOldConfirm": "{count} saved bases older than 90 days will be removed. Download history and shared bases will remain.",
   "@personalBasesDeleteOldConfirm": {
     "description": "Confirms cleanup while preserving lifetime download history.",
     "placeholders": {
@@ -5067,9 +5197,9 @@
       }
     }
   },
-  "legendsAutomaticDefense": "הגנה אוטומטית",
-  "legendsPopularArmyItem": "פריט הצבא הפופולרי ביותר",
-  "legendsClanCastle": "טירת השבט",
+  "legendsAutomaticDefense": "Automatic defense",
+  "legendsPopularArmyItem": "Most popular army item",
+  "legendsClanCastle": "Clan Castle",
   "@cwlDuration": {
     "description": "Explicit countdown units; avoid native unit conversion.",
     "placeholders": {
@@ -5081,20 +5211,20 @@
       }
     }
   },
-  "clanNotificationRemoveConfirmation": "לכבות את ההתראות של הקלאן הזה ולהסיר את הסימנייה?",
-  "personalBasesTab": "Bases",
+  "clanNotificationRemoveConfirmation": "Turn off this clan’s notifications and remove the bookmark?",
+  "personalBasesTab": "בסיסים",
   "personalBasesDownloaded": "Downloaded",
   "personalArmyName": "Army name",
   "personalArmyNotes": "Notes",
   "personalArmyUnnamed": "Unnamed army",
   "personalArmyEdit": "Edit army",
   "personalArmyUnknownTownHall": "Unknown Town Hall",
-  "discordBotDashboard": "לוח הבקרה של בוט Discord",
-  "discordAddBot": "הוספת בוט",
-  "discordAddToMyDiscord": "הוספה ל-Discord שלי",
-  "discordServersWithoutBot": "שרתים ללא ClashKing",
-  "rankingsPlayerSection": "דירוגי שחקנים",
-  "rankingsClanSection": "דירוגי שבטים",
+  "discordBotDashboard": "Discord Bot Dashboard",
+  "discordAddBot": "Add bot",
+  "discordAddToMyDiscord": "Add to My Discord",
+  "discordServersWithoutBot": "Servers without ClashKing",
+  "rankingsPlayerSection": "Player Rankings",
+  "rankingsClanSection": "Clan Rankings",
   "cwlArchiveCoverage": "{available} of {total} matchups available.",
   "cwlStandingsIncomplete": "Missing archives are excluded. Group ranks and forecasts are unavailable.",
   "cwlPromotionChance": "Estimated promotion chance",
@@ -5105,62 +5235,62 @@
   "cwlRecordedStats": "Recorded wars only",
   "cwlMissingMatchups": "{count} matchups unavailable",
   "cwlHighestLeague": "Highest league · no promotion",
-  "warOutlookWinPossible": "עדיין אפשר לנצח",
-  "warOutlookDrawOnly": "לכל היותר תיקו",
-  "warOutlookDefeat": "אין אפשרות לנצח",
-  "warOutlookMaximum": "הניקוד המרבי האפשרי",
-  "warOutlookAssumption": "בהנחה שכל ההתקפות שנותרו מושלמות. זהו גבול מתמטי, לא תחזית.",
-  "warScoutTitle": "סקירת ההרכב",
-  "warScoutOpponent": "המלחמות האחרונות של היריב",
-  "warScoutScope": "ההרכב הנוכחי · אותם כללים · עד 10 מלחמות קודמות",
-  "upgradeTrackerCapturedWork": "מהעדכון האחרון שלך",
-  "tutorialWelcomeBody": "צאו לסיור קצר ב-ClashKing. אפשר לדלג עליו בכל רגע.",
-  "tutorialReorderBody": "לחצו לחיצה ארוכה על כרטיס וגררו אותו כדי לשנות את מיקומו.",
-  "tutorialSidebarBody": "החליקו במסך הבית לפתיחת התפריט, או הקישו על תמונת הפרופיל.",
-  "tutorialExploreBody": "בתפריט זה פתחו את ההגדרות ואז את ההתראות. המשיכו כדי לעבור לשם עכשיו.",
-  "tutorialRemindersBody": "בחרו תזכורות למטה. בסיום, חזרו למסך הבית.",
-  "tutorialResetTitle": "איפוס מדריכים",
-  "tutorialResetConfirm": "להתחיל שוב את המדריכים בביקורים הבאים?",
-  "upgradeTrackerOngoingUpgrades": "שדרוגים בתהליך",
-  "upgradeTrackerToLevel": "לרמה {level}",
-  "upgradeTrackerFreeSlots": "{count} פנויים",
-  "upgradeTrackerFreeIn": "פנוי בעוד {duration}",
-  "upgradeTrackerPetHouse": "בית חיות המחמד",
-  "upgradeTrackerNotBuilt": "לא נבנה",
-  "upgradeTrackerExtraSlots": "{count} נוספים",
-  "rankedLeagueOverTime": "ליגה לאורך זמן",
-  "rankedLeaguePromotionCutoff": "סף עלייה",
-  "rankedLeagueDemotionCutoff": "סף ירידה",
-  "rankedLeagueCutoffsUnavailable": "ספי העלייה והירידה אינם זמינים.",
-  "rankedAutomaticDefenseSummary": "{count} הגנות · {points} גביעים לכל אחת",
-  "rankedAutomaticDefenseExplanation": "מבוסס על כל ההגנות האמיתיות השבוע, בעיגול כלפי מטה.",
-  "warStatusInWar": "במלחמה",
-  "warStatusNoWar": "אין מלחמה",
-  "warNoActiveClans": "אף שבט אינו במלחמה כרגע.",
-  "warNoInactiveClans": "אין שבטים מחוץ למלחמה",
-  "warAllClansInWar": "כל השבטים שלך במלחמה כרגע.",
-  "warStatusOther": "אחרים",
-  "warNoOtherClans": "אין קלאנים אחרים.",
-  "playerWarLifetime": "כל ההיסטוריה",
-  "playerWarThScope": "חל רק על כרטיסי הסטטיסטיקה, לא על הקרבות. לחיצה ממושכת על הכפתור מציגה את ההסבר.",
-  "playerWarNoAttacks": "אין התקפות עדיין",
-  "playerWarRegularWars": "מלחמה רגילה",
-  "warWidgetNoActiveWar": "אין מלחמה פעילה",
-  "warWidgetPrivateWarLog": "יומן מלחמה פרטי",
-  "warWidgetChooseClan": "בחירת קלאן",
-  "legendPerformanceTitle": "ביצועים יומיים",
-  "legendCompleteDays": "ימים מלאים",
-  "legendPerfectDays": "ימים מושלמים",
-  "legendPartialDays": "ימים חלקיים",
-  "legendMissingDays": "ללא תיעוד",
-  "legendInvalidDays": "ימים לא תקינים",
-  "legendTrophiesGained": "גביעים שנצברו",
-  "legendTrophiesLost": "גביעים שאבדו",
+  "warOutlookWinPossible": "Win still possible",
+  "warOutlookDrawOnly": "Draw at best",
+  "warOutlookDefeat": "No path to a win",
+  "warOutlookMaximum": "Maximum possible score",
+  "warOutlookAssumption": "Assumes perfect remaining attacks. This is a mathematical limit, not a prediction.",
+  "warScoutTitle": "Lineup scouting",
+  "warScoutOpponent": "Opponent’s recent wars",
+  "warScoutScope": "Current lineup · same rules · up to 10 previous wars",
+  "upgradeTrackerCapturedWork": "From your last update",
+  "tutorialWelcomeBody": "Take a quick tour of ClashKing. You can skip it at any time.",
+  "tutorialReorderBody": "Hold a card, then drag it to change its position.",
+  "tutorialSidebarBody": "Swipe across Home to open the menu, or tap your avatar.",
+  "tutorialExploreBody": "From this menu, open Settings, then Notifications. Continue to go there now.",
+  "tutorialRemindersBody": "Choose reminders below. When you are done, return to Home.",
+  "tutorialResetTitle": "Reset tutorials",
+  "tutorialResetConfirm": "Start the tutorials again on your next visits?",
+  "upgradeTrackerOngoingUpgrades": "Ongoing Upgrades",
+  "upgradeTrackerToLevel": "To Level {level}",
+  "upgradeTrackerFreeSlots": "{count} free",
+  "upgradeTrackerFreeIn": "Free in {duration}",
+  "upgradeTrackerPetHouse": "Pet House",
+  "upgradeTrackerNotBuilt": "Not built",
+  "upgradeTrackerExtraSlots": "{count} extra",
+  "rankedLeagueOverTime": "League over time",
+  "rankedLeaguePromotionCutoff": "Promotion cutoff",
+  "rankedLeagueDemotionCutoff": "Demotion cutoff",
+  "rankedLeagueCutoffsUnavailable": "Promotion and demotion thresholds unavailable.",
+  "rankedAutomaticDefenseSummary": "{count} defenses · {points} trophies each",
+  "rankedAutomaticDefenseExplanation": "Based on all real defenses this week, rounded down.",
+  "warStatusInWar": "In war",
+  "warStatusNoWar": "No war",
+  "warNoActiveClans": "No clans are currently in war.",
+  "warNoInactiveClans": "No clans out of war",
+  "warAllClansInWar": "All your clans are currently in war.",
+  "warStatusOther": "אחר",
+  "warNoOtherClans": "No other clans.",
+  "playerWarLifetime": "Lifetime",
+  "playerWarThScope": "Applies only to the statistics cards, not Battles. Hold the button for this explanation.",
+  "playerWarNoAttacks": "No attacks yet",
+  "playerWarRegularWars": "Regular war",
+  "warWidgetNoActiveWar": "No active war",
+  "warWidgetPrivateWarLog": "Private war log",
+  "warWidgetChooseClan": "Choose a clan",
+  "legendPerformanceTitle": "Daily performance",
+  "legendCompleteDays": "Complete days",
+  "legendPerfectDays": "Perfect days",
+  "legendPartialDays": "Partial days",
+  "legendMissingDays": "No observations",
+  "legendInvalidDays": "Invalid days",
+  "legendTrophiesGained": "Trophies gained",
+  "legendTrophiesLost": "Trophies lost",
   "legendDistribution": "התפלגות",
-  "legendPreviousDays": "{count} הימים הקודמים",
-  "legendAvailableDays": "ימים זמינים",
-  "legendCompleteOnly": "ההתפלגות כוללת ימים שבהם תועדו 8 קרבות.",
-  "legendPerfectSources": "ימים מושלמים לפי דירוג",
+  "legendPreviousDays": "Previous {count} days",
+  "legendAvailableDays": "Days available",
+  "legendCompleteOnly": "Distribution uses days with 8 recorded battles.",
+  "legendPerfectSources": "Perfect days by rank",
   "@legendPreviousDays": {
     "placeholders": {
       "count": {
@@ -5168,15 +5298,15 @@
       }
     }
   },
-  "onboardingOverviewTitle": "החשבונות והקלאנים שלך",
-  "onboardingOverviewBody": "כל השחקנים, הקלאנים והשדרוגים שלכם במקום אחד.",
-  "onboardingProgressTitle": "צפו בדירוגים ובסטטיסטיקות",
-  "onboardingProgressBody": "עקוב אחר הקרבות, השווה את ההתקדמות והמשך בשדרוגים.",
-  "onboardingRemindersTitle": "קבלו תזכורות והתראות",
-  "onboardingRemindersBody": "קבל תזכורות מלחמה והתראות לבחירתך. בחר חשבונות וסוגי התראות בהגדרות.",
-  "onboardingReplayTitle": "הצג שוב את המבוא",
-  "statsViewLatestData": "הצג את הנתונים העדכניים",
-  "statsLatestAvailableDate": "הנתונים העדכניים הזמינים: {date}",
+  "onboardingOverviewTitle": "Your accounts & clans",
+  "onboardingOverviewBody": "Keep your players, clans, and upgrades together.",
+  "onboardingProgressTitle": "View rankings and stats",
+  "onboardingProgressBody": "Follow your battles, compare your progress, and keep upgrades moving.",
+  "onboardingRemindersTitle": "Get reminders and alerts",
+  "onboardingRemindersBody": "Get war reminders and the alerts you choose. Pick your accounts and alert types in Settings.",
+  "onboardingReplayTitle": "Replay introduction",
+  "statsViewLatestData": "View latest data",
+  "statsLatestAvailableDate": "Latest available: {date}",
   "@statsLatestAvailableDate": {
     "placeholders": {
       "date": {
@@ -5184,23 +5314,23 @@
       }
     }
   },
-  "legendPerfectedDefenseDays": "ימים שבהם ההגנה הובסה לחלוטין",
-  "legendCompleteDayDefinition": "נכללים רק ימים שבהם כל 8 הקרבות הושלמו.",
+  "legendPerfectedDefenseDays": "Perfected defense days",
+  "legendCompleteDayDefinition": "Only days with all 8 battles are included.",
   "statsCommunity": "קהילה",
-  "rankedFullOffenseDays": "+320 ימים",
-  "rankedFullDefenseDays": "−320 ימים",
-  "rankedTrophiesByRank": "גביעים לפי דירוג",
-  "statsArmyTypes": "סוגי צבאות",
-  "onboardingStatsBody": "גלו נתוני שחקנים, עקבו אחר הקלאנים שלכם וראו איך המשחק כולו משתנה.",
-  "onboardingWidgetsTitle": "הוסיפו ווידג׳טים למסך הבית",
-  "onboardingWidgetsBody": "עקבו אחר תוצאות מלחמה והתקדמות שדרוגים בעזרת ווידג׳טים במסך הבית.",
-  "onboardingAlertTitle": "המלחמה מסתיימת בקרוב",
-  "onboardingAlertBody": "הגיע הזמן להתקפה האחרונה שלכם.",
-  "onboardingSetupNotifications": "הפעלת התראות",
-  "onboardingAccountsReadyBody": "החשבונות המקושרים שלך מוכנים. אפשר להוסיף חשבון נוסף או להמשיך.",
-  "onboardingSkipAccountSetup": "דילוג",
-  "accountsSetupBody": "הוסף ואמת את חשבונות Clash of Clans שלך.",
-  "accountsMyTitle": "החשבונות שלי",
-  "profileAvatar": "שינוי מראה",
-  "avatarPickerTitle": "בחרו אווטאר"
+  "rankedFullOffenseDays": "+320 days",
+  "rankedFullDefenseDays": "−320 days",
+  "rankedTrophiesByRank": "Trophies by rank",
+  "statsArmyTypes": "Army Types",
+  "onboardingStatsBody": "Explore player stats, follow your clans, and see how the whole game is changing.",
+  "onboardingWidgetsTitle": "Add Home Screen widgets",
+  "onboardingWidgetsBody": "Keep war scores and upgrade progress close with Home Screen widgets.",
+  "onboardingAlertTitle": "War ends soon",
+  "onboardingAlertBody": "Time for your final attack.",
+  "onboardingSetupNotifications": "Enable notifications",
+  "onboardingAccountsReadyBody": "Your linked accounts are ready. Add another account or continue.",
+  "onboardingSkipAccountSetup": "Skip",
+  "accountsSetupBody": "Add and verify your Clash of Clans accounts.",
+  "accountsMyTitle": "My Accounts",
+  "profileAvatar": "Change look",
+  "avatarPickerTitle": "Pick an avatar"
 }
