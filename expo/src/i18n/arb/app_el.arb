@@ -1,20 +1,20 @@
 {
-  "capitalCurrentOpponent": "Τρέχων αντίπαλος",
-  "capitalRaidMedals": "Μετάλλια επιδρομών",
-  "warReplayTitle": "Ιστορικό σκορ",
-  "warReplayPlay": "Αναπαραγωγή ιστορικού",
-  "warReplayPause": "Παύση ιστορικού",
-  "cwlLeading": "Προηγείται",
-  "cwlTrailing": "Υπολείπεται",
-  "cwlYourClan": "Η φυλή σου",
-  "cwlPromotionZone": "Ζώνη ανόδου",
-  "cwlDemotionZone": "Ζώνη υποβιβασμού",
-  "cwlNotInLineup": "Εκτός σύνθεσης",
-  "esportsEloSubtitle": "Παγκόσμια κατάταξη ομάδων και αγώνες από",
-  "esportsTopTeamsMatches": "Αγώνες των 50 κορυφαίων ομάδων αυτή τη στιγμή.",
-  "esportsPartialMatches": "Δεν ήταν δυνατή η ενημέρωση ορισμένων ομάδων.",
-  "settingsHideAccounts": "Απόκρυψη λογαριασμών",
-  "settingsHideAccountsDescription": "Εμφάνιση της επιλογής απόκρυψης συνδεδεμένων λογαριασμών. Οι υπάρχουσες επιλογές απορρήτου δεν αλλάζουν.",
+  "capitalCurrentOpponent": "Current opponent",
+  "capitalRaidMedals": "Raid medals",
+  "warReplayTitle": "Score history",
+  "warReplayPlay": "Play history",
+  "warReplayPause": "Pause history",
+  "cwlLeading": "Leading",
+  "cwlTrailing": "Trailing",
+  "cwlYourClan": "Your clan",
+  "cwlPromotionZone": "Promotion zone",
+  "cwlDemotionZone": "Demotion zone",
+  "cwlNotInLineup": "Not in lineup",
+  "esportsEloSubtitle": "Global team rankings and matches from",
+  "esportsTopTeamsMatches": "Matches from the current top 50 teams.",
+  "esportsPartialMatches": "Some teams could not be refreshed.",
+  "settingsHideAccounts": "Hide accounts",
+  "settingsHideAccountsDescription": "Show the option to hide linked accounts. Existing privacy choices stay unchanged.",
   "calcRocketBalloonAssumption": "1 hit + death · {damage} damage each",
   "calcKeepEquipped": "Keep one equipped",
   "calcCustomLevels": "Custom levels",
@@ -38,31 +38,31 @@
   "personalBasesEmptyBody": "Bases you post through ClashKing on Discord appear here. You can also save bases from the library.",
   "personalArmiesEmptyTitle": "Keep your armies close",
   "personalArmiesEmptyBody": "Armies you post through ClashKing on Discord appear here. Save your favourites to find them before your next attack.",
-  "homeCardOriginal": "Αρχικό",
-  "homeCardTint": "Απαλό χρώμα",
-  "homeCardEdge": "Χρωματιστά περιγράμματα",
-  "homeCardGlow": "Αργή λάμψη",
-  "competitiveNoHistory": "Δεν υπάρχουν τουρνουά ακόμα",
-  "competitiveHistoryHint": "Οι ομάδες σου και τα αποτελέσματα των τουρνουά θα εμφανίζονται εδώ.",
-  "esportsMonthlyFinals": "Μηνιαίοι τελικοί",
-  "esportsMonthlyQualifier": "Μηνιαία προκριματικά",
-  "esportsHeroSubtitle": "Ο δρόμος προς το Παγκόσμιο Πρωτάθλημα",
-  "esportsViewEvent": "Εξερεύνηση διοργάνωσης",
-  "esportsWinLoss": "{wins} νίκες · {losses} ήττες",
-  "esportsViewPlayer": "Προβολή παίκτη",
-  "esportsRecentMatches": "Πρόσφατοι αγώνες",
-  "esportsHideAttacks": "Απόκρυψη λεπτομερειών μάχης",
-  "esportsViewAttacks": "Προβολή λεπτομερειών μάχης",
-  "esportsPlayer": "Παίκτης ηλεκτρονικού αθλητισμού",
+  "homeCardOriginal": "Original",
+  "homeCardTint": "Soft color",
+  "homeCardEdge": "Colored edges",
+  "homeCardGlow": "Slow glow",
+  "competitiveNoHistory": "No tournaments yet",
+  "competitiveHistoryHint": "Your teams and tournament results will appear here.",
+  "esportsMonthlyFinals": "Monthly finals",
+  "esportsMonthlyQualifier": "Monthly qualifiers",
+  "esportsHeroSubtitle": "The road to the World Championship",
+  "esportsViewEvent": "Explore event",
+  "esportsWinLoss": "{wins} wins · {losses} losses",
+  "esportsViewPlayer": "View player",
+  "esportsRecentMatches": "Recent matches",
+  "esportsHideAttacks": "Hide battle details",
+  "esportsViewAttacks": "View battle details",
+  "esportsPlayer": "Esports player",
   "esportsBattles": "Μάχες",
-  "esportsTriples": "Επιθέσεις τριών αστεριών",
+  "esportsTriples": "Triples",
   "esportsAverageStars": "Μέσος όρος αστεριών",
   "esportsDestruction": "Καταστροφή",
-  "esportsAccounts": "Λογαριασμοί παιχνιδιού",
+  "esportsAccounts": "Game accounts",
   "esportsAttack": "Επίθεση",
-  "esportsDefense": "Άμυνα",
-  "competitiveArenaSubtitle": "Η φυλή σου. Η ομάδα σου. Η επόμενη πρόκλησή σου.",
-  "competitiveViewTournament": "Προβολή τουρνουά",
+  "esportsDefense": "Αμυνα",
+  "competitiveArenaSubtitle": "Your clan. Your team. Your next challenge.",
+  "competitiveViewTournament": "View tournament",
   "@esportsWinLoss": {
     "placeholders": {
       "wins": {
@@ -87,50 +87,50 @@
   "esportsStage": "Stage",
   "esportsStandings": "Standings",
   "esportsMatches": "Matches",
-  "esportsPoints": "Points",
+  "esportsPoints": "Πόντοι",
   "esportsPlayed": "played",
   "esportsSource": "Data from Competitive Clash Network",
-  "esportsRoster": "Roster",
+  "esportsRoster": "Ρόστερ",
   "esportsSeasonPoints": "Season points",
   "esportsStageStandings": "Stage standings",
-  "competitiveCompetition": "Διοργάνωση",
-  "competitiveWebsite": "Ιστότοπος",
-  "competitiveVerifiedAccounts": "Επαληθευμένοι λογαριασμοί",
-  "competitiveEsports": "Ηλεκτρονικός αθλητισμός",
-  "competitiveTournaments": "Τουρνουά",
+  "competitiveCompetition": "Competition",
+  "competitiveWebsite": "Website",
+  "competitiveVerifiedAccounts": "Verified accounts",
+  "competitiveEsports": "eSports",
+  "competitiveTournaments": "Tournaments",
   "competitiveProfile": "Προφίλ",
   "competitiveTeams": "Ομάδες",
-  "competitiveFreeEntry": "Δωρεάν συμμετοχή",
-  "competitiveRegister": "Εγγραφή ομάδας",
-  "competitiveCheckIn": "Επιβεβαίωση παρουσίας",
-  "competitiveRules": "Κανόνες",
-  "competitiveUnavailable": "Τα δεδομένα της διοργάνωσης δεν είναι διαθέσιμα. Δοκιμάστε ξανά.",
-  "competitiveRegistrationSaved": "Η εγγραφή υποβλήθηκε",
-  "competitiveTeamHistory": "Ιστορικό ομάδας",
-  "competitiveDebutName": "Ντεμπούτο σε τουρνουά",
-  "competitiveDebutDescription": "Συμμετάσχετε σε τουρνουά με τον επαληθευμένο λογαριασμό σας.",
-  "competitiveViewProfile": "Προβολή προφίλ",
+  "competitiveFreeEntry": "Free entry",
+  "competitiveRegister": "Register team",
+  "competitiveCheckIn": "Check in",
+  "competitiveRules": "Rules",
+  "competitiveUnavailable": "Competition data is unavailable. Try again.",
+  "competitiveRegistrationSaved": "Registration submitted",
+  "competitiveTeamHistory": "Team history",
+  "competitiveDebutName": "Tournament debut",
+  "competitiveDebutDescription": "Participate in a tournament with your verified account.",
+  "competitiveViewProfile": "View profile",
   "calcPinEquipment": "Keep one equipped",
-  "calcSearch": "Search",
+  "calcSearch": "Αναζήτηση",
   "calcEquipmentTitle": "Equipment Compare",
   "calcDamageIntro": "Find the combinations that take a defense down.",
   "calcFarmIntro": "Plan the loot needed for your next upgrades.",
   "calcEquipmentIntro": "Compare hero loadouts, levels, and ability stats.",
   "calcComingSoon": "Coming soon",
-  "calcHero": "Hero",
+  "calcHero": "Ήρωας",
   "calcHeroLevel": "Hero level",
   "calcMaxLevels": "Max levels",
   "calcEquipmentPool": "Equipment to compare",
   "calcPoolHelp": "Choose pieces and default levels. Compare every pair, then customize individual rows.",
   "calcSelectAll": "Select all",
-  "calcClear": "Clear",
+  "calcClear": "Σαφής",
   "calcAttributes": "Attributes",
   "calcAddAttribute": "Add attribute",
-  "calcTable": "Compare",
+  "calcTable": "Σύγκριση",
   "calcProgression": "Level progression",
   "calcCompareHelp": "DPS adds the hero's base and equipment DPS. Speed bonuses and temporary effects are separate attributes; healing is not extra max HP.",
   "calcChartHelp": "Equipment levels increase together; each piece stops at its own maximum. Hero levels stay fixed. First six loadouts shown.",
-  "calcSort": "Sort by",
+  "calcSort": "Ταξινόμηση κατά",
   "calcNoEquipment": "No equipment",
   "calcDuplicate": "Duplicate loadout",
   "calcRemove": "Remove loadout",
@@ -154,9 +154,9 @@
   "calcComparisonDownloaded": "Comparison image downloaded",
   "calcComparisonExportFailed": "Could not copy the comparison image. Please try again.",
   "calcEffectiveLevel": "Effective level {level}",
-  "calcTarget": "Target",
+  "calcTarget": "Στόχος",
   "calcSupercharge": "Supercharge",
-  "calcNone": "None",
+  "calcNone": "Κανένα",
   "calcResults": "{count} combinations",
   "calcResultsHelp": "Smallest spell cost first, then fewer equipment activations. Extra sources that do not help are removed.",
   "calcNoCombinationHelp": "Try another source, a higher level, or more spell capacity.",
@@ -164,63 +164,63 @@
   "calcAlternative": "Alternative",
   "calcCombinationCost": "{housing} spell space · {equipment} equipment",
   "calcUseStack": "Use stack",
-  "homeRankingsAndStats": "Κατατάξεις και στατιστικά",
-  "homeActivityRecorded": "Μόνο καταγεγραμμένη δραστηριότητα· το ιστορικό μπορεί να είναι ελλιπές.",
-  "homeWidgetsServers": "Διακομιστές",
-  "homeWidgetsEdit": "Επεξεργασία αρχικής",
-  "homeWidgetsAdd": "Προσθήκη γραφικού στοιχείου",
-  "homeWidgetsRemove": "Αφαίρεση γραφικού στοιχείου",
-  "homeWidgetsMoveUp": "Μετακίνηση πάνω",
-  "homeWidgetsMoveDown": "Μετακίνηση κάτω",
+  "homeRankingsAndStats": "Rankings & Stats",
+  "homeActivityRecorded": "Recorded activity only; history may be incomplete.",
+  "homeWidgetsServers": "Servers",
+  "homeWidgetsEdit": "Edit Home",
+  "homeWidgetsAdd": "Add widget",
+  "homeWidgetsRemove": "Remove widget",
+  "homeWidgetsMoveUp": "Move up",
+  "homeWidgetsMoveDown": "Move down",
   "homeWidgetsSmall": "Μικρό",
-  "homeWidgetsWide": "Πλατύ",
-  "homeWidgetsSaveError": "Δεν συγχρονίστηκε η αρχική. Ανανεώστε πριν την επόμενη επεξεργασία.",
-  "homeWidgetsUnavailable": "Δεν υπάρχουν καταγεγραμμένα δεδομένα",
-  "homeWidgetsBookmarkFirst": "Προσθέστε πρώτα παίκτη ή φυλή στους σελιδοδείκτες.",
-  "rankingsWarTripleStreak": "Σερί τριών αστεριών πολέμου",
+  "homeWidgetsWide": "Wide",
+  "homeWidgetsSaveError": "Could not sync Home. Please refresh before editing again.",
+  "homeWidgetsUnavailable": "No recorded data available",
+  "homeWidgetsBookmarkFirst": "Bookmark a player or clan first.",
+  "rankingsWarTripleStreak": "War Triple Streak",
   "rankingsWarTripleRulesTitle": "How streaks count",
   "rankingsWarTripleRulesBody": "+2 for two triples against your own Town Hall level in a regular war.\n\nA missed attack, non-triple, or different-TH target resets your streak.\n\nCWL and friendly wars don’t count. Streaks are separate for each Town Hall level.",
-  "clanLegendsRanked": "Θρύλοι και κατάταξη",
-  "appIconChangeWarning": "Η αλλαγή του εικονιδίου θα κλείσει το ClashKing. Συνέχεια;",
-  "upgradeTrackerUnverifiedAccount": "Αυτός ο λογαριασμός είναι συνδεδεμένος αλλά δεν έχει επαληθευτεί. Επαλήθευσέ τον στη διαχείριση λογαριασμών για εισαγωγή δεδομένων αναβαθμίσεων.",
-  "clanWarNotificationsTitle": "Ειδοποιήσεις πολέμου",
-  "clanCapitalNotificationsTitle": "Ειδοποιήσεις πρωτεύουσας φυλής",
-  "clanWarNotificationsBody": "Λάβετε ενημερώσεις πολέμου για αυτή τη φυλή.",
-  "clanCapitalNotificationsBody": "Λάβετε ενημερώσεις για την πρωτεύουσα αυτής της φυλής.",
-  "notifSystemNotifications": "Ειδοποιήσεις συστήματος",
-  "notifSystemSettings": "Άνοιγμα ρυθμίσεων ειδοποιήσεων",
-  "notifSystemSettingsDescription": "Διαχειριστείτε ειδοποιήσεις, ήχους και σήματα στις ρυθμίσεις της συσκευής σας.",
-  "notifSystemSettingsFailed": "Δεν ήταν δυνατό το άνοιγμα των ρυθμίσεων ειδοποιήσεων. Ανοίξτε τις Ρυθμίσεις στη συσκευή σας.",
-  "notifManagePlayersDescription": "Διαχειριστείτε τις ειδοποιήσεις λογαριασμού από Παίκτες → Συνδεδεμένοι → Επιλογές.",
-  "notifCustomReminders": "Προσαρμοσμένες υπενθυμίσεις",
-  "notifTestType": "Τύπος ειδοποίησης",
-  "statsBattlelogsGroup": "Αρχεία μαχών",
-  "statsGlobalStatsGroup": "Παγκόσμια στατιστικά",
-  "playerOptionShowOnHomeTitle": "Εμφάνιση λογαριασμού στην Αρχική",
-  "playerOptionShowOnHomeSubtitle": "Συμπεριλάβετε αυτόν τον επαληθευμένο λογαριασμό στις κάρτες της Αρχικής (έως 5).",
-  "playerOptionShowOnHomeVerifyFirst": "Επαληθεύστε αυτόν τον λογαριασμό για να εμφανιστεί στην Αρχική.",
-  "playerOptionHomeInclusionFirst": "Ενεργοποιήστε πρώτα την Εμφάνιση λογαριασμού στην Αρχική.",
-  "homeIncludedAccountsLimit": "Η Αρχική μπορεί να εμφανίζει έως 5 λογαριασμούς. Αφαιρέστε πρώτα έναν.",
-  "statsHitratesByTownHall": "Ποσοστά επιτυχίας ανά Δημαρχείο",
-  "statsChartGranularity": "Διάστημα γραφήματος",
-  "statsDaily": "Ημερήσια",
+  "clanLegendsRanked": "Legends & Ranked",
+  "appIconChangeWarning": "Changing the app icon will close ClashKing. Continue?",
+  "upgradeTrackerUnverifiedAccount": "This account is linked but not verified. Verify it in Manage Accounts to import your upgrade data.",
+  "clanWarNotificationsTitle": "War notifications",
+  "clanCapitalNotificationsTitle": "Clan Capital notifications",
+  "clanWarNotificationsBody": "Receive war updates for this clan.",
+  "clanCapitalNotificationsBody": "Receive Clan Capital updates for this clan.",
+  "notifSystemNotifications": "System notifications",
+  "notifSystemSettings": "Open notification settings",
+  "notifSystemSettingsDescription": "Manage alerts, sounds, and badges in your device settings.",
+  "notifSystemSettingsFailed": "Could not open notification settings. Please open Settings on your device.",
+  "notifManagePlayersDescription": "Manage account notifications in Players → Linked → Options.",
+  "notifCustomReminders": "Custom reminders",
+  "notifTestType": "Notification type",
+  "statsBattlelogsGroup": "Battlelogs",
+  "statsGlobalStatsGroup": "Global Stats",
+  "playerOptionShowOnHomeTitle": "Show account on Home",
+  "playerOptionShowOnHomeSubtitle": "Include this verified account in Home cards (up to 5).",
+  "playerOptionShowOnHomeVerifyFirst": "Verify this account to show it on Home.",
+  "playerOptionHomeInclusionFirst": "Turn on Show account on Home first.",
+  "homeIncludedAccountsLimit": "Home can show up to 5 accounts. Remove one first.",
+  "statsHitratesByTownHall": "Hitrates by Town Hall",
+  "statsChartGranularity": "Chart interval",
+  "statsDaily": "Καθημερινά",
   "statsWeekly": "Εβδομαδιαία",
-  "playerBattlelogCumulative": "Αθροιστικά",
-  "statsMonthly": "Μηνιαία",
-  "statsCompareCohorts": "Σύγκριση ομάδων",
-  "statsAcrossCohorts": "Χρήση ανά ομάδα",
-  "legendsTrophyGrid": "Επισκόπηση σεζόν",
-  "legendsPopularArmyItems": "Δημοφιλέστερα στοιχεία στρατού",
-  "legendsPopularTroop": "Αγαπημένη",
-  "legendsHitrate": "Ποσοστό επιτυχίας",
-  "legendsAvgOffense": "Μ.Ο. επίθεσης",
-  "legendsAvgDefense": "Μ.Ο. άμυνας",
-  "settingsClearImageCache": "Εκκαθάριση προσωρινής μνήμης εικόνων",
-  "settingsImageCacheCleared": "Η προσωρινή μνήμη εικόνων εκκαθαρίστηκε.",
-  "settingsImageCacheClearFailed": "Δεν ήταν δυνατή η εκκαθάριση της προσωρινής μνήμης εικόνων. Δοκιμάστε ξανά.",
-  "startupCheckingUpdate": "Έλεγχος για ενημερώσεις…",
-  "startupDownloadingUpdate": "Λήψη ενημέρωσης…",
-  "startupUpdateInBackground": "Ενημέρωση στο παρασκήνιο",
+  "playerBattlelogCumulative": "Cumulative",
+  "statsMonthly": "Monthly",
+  "statsCompareCohorts": "Compare cohorts",
+  "statsAcrossCohorts": "Usage across cohorts",
+  "legendsTrophyGrid": "Season overview",
+  "legendsPopularArmyItems": "Most popular army items",
+  "legendsPopularTroop": "Favorite",
+  "legendsHitrate": "Hitrate",
+  "legendsAvgOffense": "Avg. Offense",
+  "legendsAvgDefense": "Avg. Defense",
+  "settingsClearImageCache": "Clear image cache",
+  "settingsImageCacheCleared": "Image cache cleared.",
+  "settingsImageCacheClearFailed": "Could not clear the image cache. Please try again.",
+  "startupCheckingUpdate": "Checking for updates…",
+  "startupDownloadingUpdate": "Downloading update…",
+  "startupUpdateInBackground": "Update in background",
   "warStatsRangeTitle": "Εύρος στατιστικών πολέμου",
   "warStatsRangeDescription": "Επίλεξε αν τα στατιστικά καλύπτουν έναν σταθερό αριθμό πρόσφατων πολέμων ή ένα πρόσφατο διάστημα ημερών.",
   "warStatsRangeDays": "Ημέρες",
@@ -375,17 +375,59 @@
   "notifPushEnabled": "Οι ειδοποιήσεις push ενεργοποιήθηκαν",
   "notifReceiveNotifications": "Λήψη ειδοποιήσεων",
   "notifTokenPreview": "Διακριτικό: {token}",
+  "@notifTokenPreview": {
+    "placeholders": {
+      "token": {
+        "type": "String"
+      }
+    }
+  },
   "notifEnabledDeliveryDescription": "Οι ενεργοποιημένες ειδοποιήσεις μπορούν να αποστέλλονται σε αυτήν τη συσκευή.",
   "notifDisabledAccountDescription": "Οι ειδοποιήσεις είναι απενεργοποιημένες σε ολόκληρο τον λογαριασμό ClashKing.",
   "notifMaximumRemindersAdded": "Προστέθηκε ο μέγιστος αριθμός υπενθυμίσεων",
   "notifAddReminder": "Προσθήκη υπενθύμισης",
   "notifDurationOneHour": "1 ώρα",
   "notifDurationHours": "{count} ώρες",
+  "@notifDurationHours": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "notifDurationMinutes": "{count} λεπτά",
+  "@notifDurationMinutes": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "notifAddTiming": "Προσθήκη {timing}",
+  "@notifAddTiming": {
+    "placeholders": {
+      "timing": {
+        "type": "String"
+      }
+    }
+  },
   "notifTimingOneHourBefore": "1 ώρα πριν",
   "notifTimingHoursBefore": "{count} ώρες πριν",
+  "@notifTimingHoursBefore": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "notifTimingMinutesBefore": "{count} λεπτά πριν",
+  "@notifTimingMinutesBefore": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "notifPushReady": "Οι ειδοποιήσεις push είναι έτοιμες σε αυτήν τη συσκευή.",
   "notifPushPermissionRequired": "Επιτρέψτε τις ειδοποιήσεις για να λαμβάνετε ενημερώσεις του ClashKing.",
   "notifPushPermissionDenied": "Η άδεια ειδοποιήσεων απορρίφθηκε.",
@@ -394,12 +436,13 @@
   "notifPushUnsupported": "Οι ειδοποιήσεις push δεν υποστηρίζονται σε αυτήν την πλατφόρμα.",
   "notifPushInitializing": "Ρύθμιση ειδοποιήσεων push…",
   "notificationPrimerTitle": "Ενεργοποίηση ειδοποιήσεων;",
-  "notificationPrimerBody": "Το ClashKing μπορεί να στέλνει ενημερώσεις για εκδηλώσεις, ανακοινώσεις, άμυνες Θρύλων και υποστήριξη. Οι υπενθυμίσεις πολέμου και Σαββατοκύριακου Επιδρομών μένουν απενεργοποιημένες ώσπου να τις ρυθμίσετε. Μπορείτε να αλλάξετε τις επιλογές στις Ρυθμίσεις > Ειδοποιήσεις.",
+  "notificationPrimerBody": "Το ClashKing μπορεί να σας ειδοποιεί για ενημερώσεις πολέμων, CWL, λογαριασμού και έργων. Μπορείτε να το αλλάξετε ανά πάσα στιγμή στις Ρυθμίσεις > Ειδοποιήσεις.",
   "notificationPrimerNotNow": "Όχι τώρα",
   "notificationPrimerAllow": "Να επιτρέπονται",
+  "@@last_modified": "2024-12-23T10:00:00.000Z",
   "achievementsTitle": "Επιτεύγματα",
   "achievementEarnedLabel": "Κερδήθηκε",
-  "achievementGemsEarnedRatio": "Κερδήθηκαν {earned} / {total}",
+  "achievementGemsEarnedRatio": "{earned} / {total} earned",
   "@achievementGemsEarnedRatio": {
     "placeholders": {
       "earned": {
@@ -410,7 +453,7 @@
       }
     }
   },
-  "achievementGemsAccessibility": "Κερδήθηκαν {earned} από {total} πολύτιμους λίθους επιτευγμάτων.",
+  "achievementGemsAccessibility": "Earned {earned} of {total} achievement gems.",
   "@achievementGemsAccessibility": {
     "placeholders": {
       "earned": {
@@ -423,6 +466,23 @@
   },
   "achievementSummary": "{earned}/{total} ολοκληρώθηκε",
   "achievementEarnedCount": "Κερδήθηκε ×{count}",
+  "@achievementSummary": {
+    "placeholders": {
+      "earned": {
+        "type": "String"
+      },
+      "total": {
+        "type": "String"
+      }
+    }
+  },
+  "@achievementEarnedCount": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
   "achievementTownhall18Name": "Δημαρχείο 18",
   "achievementTownhall18Requirement": "Φτάστε στο Δημαρχείο 18.",
   "achievementWarWarriorName": "Πολεμιστής Πολέμου",
@@ -431,7 +491,6 @@
   "achievementMrLegendDescription": "Ολοκληρώσατε μια άψογη ημέρα επιθέσεων στο Πρωτάθλημα Θρύλων.",
   "achievementDefenseDoesntMatterName": "Η Άμυνα Δεν Έχει Σημασία",
   "achievementDefenseDoesntMatterDescription": "Αντέξατε μια τέλεια ημέρα άμυνας στο Πρωτάθλημα Θρύλων.",
-  "@@last_modified": "2024-12-23T10:00:00.000Z",
   "appTitle": "ClashKing",
   "appDescription": "Ο υπέροχος σύντροφός σας στο Clash of Clans για παρακολούθηση στατιστικών, διαχείριση κλάν και ανάλυση απόδοσης.",
   "generalLoading": "Φορτώνει...",
@@ -454,8 +513,8 @@
   "postsLoadMore": "Φόρτωσε περισσότερα",
   "postsCurrent": "Ρεύμα",
   "postsPast": "Παρελθόν",
-  "postsStoryFinished": "Η ιστορία ολοκληρώθηκε",
-  "postsWatchAgain": "Δείτε ξανά",
+  "postsStoryFinished": "Story finished",
+  "postsWatchAgain": "Watch again",
   "postsStory": "Διαδραστική ιστορία",
   "postsPinned": "Προτεινόμενα",
   "generalTryAgain": "Δοκιμάστε ξανά",
@@ -544,7 +603,7 @@
     "description": "Filter value is not set"
   },
   "generalWarning": "Προειδοποίηση",
-  "gameHandoffDontShowAgain": "Να μην εμφανιστεί ξανά",
+  "gameHandoffDontShowAgain": "Don't show this again",
   "generalUnknown": "Άγνωστο",
   "generalNoDataAvailable": "Δεν υπάρχουν διαθέσιμα δεδομένα.",
   "generalNoFilteredResults": "Δεν υπάρχουν αποτελέσματα που να ταιριάζουν με τα φίλτρα σου",
@@ -773,9 +832,9 @@
   "accountsAdd": "Προσθήκη λογαριασμού",
   "accountsAddInstruction": "Πάτησε το κουμπί + για να προσθέσεις τον λογαριασμό σου",
   "accountsApiToken": "Κλειδί API λογαριασμού",
-  "accountsEnterApiToken": "Επιβεβαίωσε ότι ο λογαριασμός είναι δικός σου με το διακριτικό API του παιχνιδιού.",
+  "accountsEnterApiToken": "Πληκτρολόγησε το API token του λογαριασμού για να επιβεβαιώσεις ότι είναι δικός σου. Θα το βρεις στο Clash of Clans:",
   "accountsApiTokenLocation": "Ρυθμίσεις > Περισσότερες ρυθμίσεις > API Token",
-  "accountsOpenMoreSettings": "Λήψη διακριτικού API",
+  "accountsOpenMoreSettings": "Άνοιγμα περισσότερων ρυθμίσεων",
   "accountsCouldNotOpenClash": "Δεν ήταν δυνατό να ανοίξει το Clash of Clans. Άνοιξέ το χειροκίνητα.",
   "accountsFillAllFields": "Παρακαλώ συμπλήρωσε όλα τα πεδία.",
   "accountsErrorTagNotExists": "Ο αριθμός λογαριασμού που καταγράψατε δεν υπάρχει.",
@@ -1295,8 +1354,32 @@
   "warParticipation": "Συμμετοχή στον πόλεμο",
   "cwlParticipantOnly": "Μόνο συμμετέχων",
   "warStatsRangeWarsCompact": "{number} πόλεμοι",
+  "@warStatsRangeWarsCompact": {
+    "description": "Compact clan war statistics war range label",
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
   "warStatsRangeDaysCompact": "{number} ημέρες",
+  "@warStatsRangeDaysCompact": {
+    "description": "Compact clan war statistics day range label",
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
   "warStatsLastXDays": "Τελευταίες {number} ημέρες",
+  "@warStatsLastXDays": {
+    "description": "Clan war statistics date-range label",
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
   "warStatsCurrentMembers": "Τρέχοντα μέλη",
   "warLeague": "Πόλεμος/Λίγκα",
   "warHistory": "Ιστορικό πολέμων",
@@ -1305,6 +1388,13 @@
   "warLogClosed": "Το αρχείο πολέμων του {clan} είναι κλειστό.",
   "warLogPrivate": "Το αρχείο πολέμου της {clan} είναι ιδιωτικό.",
   "@warLogClosed": {
+    "placeholders": {
+      "clan": {
+        "type": "String"
+      }
+    }
+  },
+  "@warLogPrivate": {
     "placeholders": {
       "clan": {
         "type": "String"
@@ -1608,7 +1698,7 @@
   "warStarsTwo": "2 αστέρια",
   "warStarsThree": "3 αστέρια",
   "warStarsZero": "0 αστέρια",
-  "legendHistoryZeroStars": "Μηδέν αστέρια",
+  "legendHistoryZeroStars": "Zero Stars",
   "warStarsBestPerformance": "Καλύτερη επίδοση",
   "@warStarsBestPerformance": {
     "description": "Best performance in war"
@@ -1763,7 +1853,7 @@
   "clanLeaderboardHistoryTab": "Ιστορικό κατάταξης",
   "clanLegendHistoryTab": "Ιστορικό Θρύλων",
   "clanRecordsTab": "Ρεκόρ",
-  "clanRecordsChangesTab": "Ρεκόρ και αλλαγές",
+  "clanRecordsChangesTab": "Records & Changes",
   "clanProfileHistoryTab": "Ιστορικό προφίλ",
   "clanProfileLevelChanged": "Το επίπεδο της φυλής άλλαξε",
   "clanProfileDescriptionChanged": "Η περιγραφή άλλαξε",
@@ -1805,8 +1895,8 @@
   "legendsCountryTitle": "Χώρα",
   "legendsLocalRankTitle": "Τοπική κατάταξη",
   "legendsGlobalRankTitle": "Παγκόσμια κατάταξη",
-  "legendsYourArmy": "Ο στρατός σου",
-  "legendsArmyUsedAgainstYou": "Στρατός που χρησιμοποιήθηκε εναντίον σου",
+  "legendsYourArmy": "Your army",
+  "legendsArmyUsedAgainstYou": "Army used against you",
   "warWinsTitle": "Κερδίζει",
   "warLossesTitle": "Απώλειες",
   "warDrawsTitle": "Ισοπαλίες",
@@ -2051,7 +2141,7 @@
   "faqWhatCanBotDo": "Τι μπορεί να κάνει το ClashKing Discord bot;",
   "faqWhatCanBotDoAnswer": "Το ClashKing Discord bot σε βοηθά να διαχειρίζεσαι το clan σου απευθείας από το Discord με ολοκληρωμένα εργαλεία παρακολούθησης, αυτοματοποιημένες ειδοποιήσεις και άψογη ενσωμάτωση με αυτήν την εφαρμογή. Είναι σχεδιασμένο για αρχηγούς και μέλη clan που θέλουν να μένουν συνδεδεμένοι και οργανωμένοι:",
   "faqInviteBotToServer": "Πρόσκληση bot σε server",
-  "drawerInviteDiscordBot": "Πρόσκληση bot σε server",
+  "drawerInviteDiscordBot": "Invite Discord Bot",
   "faqBotFeatureTracking": "Παρακολούθηση παικτών & clan",
   "faqBotFeatureTrackingDesc": "Πρόσθεσε και παρακολούθησε πολλά clan και παίκτες με ενημερώσεις σε πραγματικό χρόνο",
   "faqBotFeatureWars": "Διαχείριση πολέμων",
@@ -2208,7 +2298,7 @@
     "description": "Defender town hall filter label"
   },
   "filtersSameTownHallOnly": "Μόνο ίδιο Δημαρχείο",
-  "warStatsSameTownHall": "Ίδιο δημαρχείο",
+  "warStatsSameTownHall": "Same Townhall",
   "@filtersSameTownHallOnly": {
     "description": "Same town hall filter option"
   },
@@ -2862,7 +2952,7 @@
   "@settingsNotificationsTitle": {
     "description": "Settings tile: notifications title"
   },
-  "settingsNotificationsSubtitle": "Επιλέξτε ποιες ειδοποιήσεις θα λαμβάνετε.",
+  "settingsNotificationsSubtitle": "Επιλέξτε ειδοποιήσεις και στείλτε τοπικές προεπισκοπήσεις δοκιμών.",
   "@settingsNotificationsSubtitle": {
     "description": "Settings tile: notifications subtitle"
   },
@@ -2931,7 +3021,7 @@
   "@searchTabPlayers": {
     "description": "Search mode tab: players"
   },
-  "searchTabClans": "Φυλές",
+  "searchTabClans": "Clan",
   "@searchTabClans": {
     "description": "Search mode tab: clans"
   },
@@ -3334,7 +3424,7 @@
   "playerBestTrophies": "Καλύτερα τρόπαια",
   "clanLoadFailed": "Αποτυχία φόρτωσης clan.",
   "gameItemLevels": "Επίπεδα",
-  "gameItemLevelCount": "{count, plural, one {# επίπεδο} other {# επίπεδα}}",
+  "gameItemLevelCount": "{count, plural, one {# Level} other {# Levels}}",
   "@gameItemLevelCount": {
     "placeholders": {
       "count": {
@@ -3405,6 +3495,20 @@
   },
   "todoAllCaughtUpForNow": "Όλα τακτοποιημένα για τώρα",
   "timeDurationShort": "{unit, select, daysHours {{primary}η {secondary}ώ} hoursMinutes {{primary}ώ {secondary}λ} other {{primary}λ}}",
+  "@timeDurationShort": {
+    "description": "Compact localized duration used in countdowns",
+    "placeholders": {
+      "unit": {
+        "type": "String"
+      },
+      "primary": {
+        "type": "int"
+      },
+      "secondary": {
+        "type": "int"
+      }
+    }
+  },
   "todoEventEndsIn": "Λήγει σε {duration}",
   "@todoEventEndsIn": {
     "placeholders": {
@@ -3514,9 +3618,14 @@
   "statsHero": "Ήρωας",
   "statsPet": "Κατοικίδιο",
   "statsEquipment": "Εξοπλισμός",
-  "statsPetCombinations": "Συνδυασμοί κατοικιδίων",
-  "statsEquipmentPairs": "Ζεύγη εξοπλισμού",
-  "statsArmyFallback": "Στρατός {id}",
+  "statsPetCombinations": "Pet combinations",
+  "statsEquipmentPairs": "Equipment pairs",
+  "statsArmyFallback": "Army {id}",
+  "@statsArmyFallback": {
+    "placeholders": {
+      "id": {}
+    }
+  },
   "statsOwningHero": "Ιδιοκτήτης ήρωας",
   "statsAddItem": "Προσθήκη στοιχείου",
   "statsAnalyzeItems": "Ανάλυση στοιχείων",
@@ -3902,7 +4011,7 @@
   },
   "appIconDefault": "Προεπιλογή",
   "appIconChristmas": "Χριστούγεννα",
-  "appIconHalloween": "Χάλοουιν",
+  "appIconHalloween": "Halloween",
   "appIconBlackWhite": "Ασπρόμαυρο",
   "appIconDarkMode": "Σκοτεινή λειτουργία",
   "generalMembersCount": "{count} μέλη",
@@ -3960,9 +4069,9 @@
     }
   },
   "upgradeTrackerShare": "Κοινή χρήση ιχνηλάτη",
-  "trackerPosterCopied": "Η εικόνα αντιγράφηκε",
-  "trackerPosterCopy": "Αντιγραφή εικόνας",
-  "trackerPosterShareAll": "Κοινοποίηση και των 3",
+  "trackerPosterCopied": "Image copied",
+  "trackerPosterCopy": "Copy image",
+  "trackerPosterShareAll": "Share all 3",
   "upgradeTrackerPasteJson": "Επικόλληση λογαριασμού JSON",
   "upgradeTrackerImportTitle": "Εισαγωγή δεδομένων λογαριασμού",
   "upgradeTrackerImportDescription": "Επικολλήστε τον ακατέργαστο λογαριασμό JSON. Παραμένει σε αυτήν τη συσκευή.",
@@ -4271,8 +4380,8 @@
   "homeActivityLeft": "αριστερά",
   "homeActivityAClan": "μια φυλή",
   "statsCwlSeasonGroups": "Ομάδες",
-  "statsCwlSeasonHistory": "Πρωτάθλημα πολέμων με την πάροδο του χρόνου",
-  "statsCwlRosterNotLineup": "Η σύνθεση των εγγεγραμμένων παικτών αναλογεί σε {size} θέσεις· οι πραγματικές συνθέσεις πολέμου μπορεί να διαφέρουν.",
+  "statsCwlSeasonHistory": "CWL over time",
+  "statsCwlRosterNotLineup": "Registered roster mix, scaled to {size} places; actual war lineups may differ.",
   "@statsCwlRosterNotLineup": {
     "placeholders": {
       "size": {
@@ -4280,28 +4389,28 @@
       }
     }
   },
-  "statsTroopStats": "Στατιστικά στρατευμάτων",
-  "statsWarSizes": "Μεγέθη πολέμων",
-  "statsMissedAttacks": "Χαμένες επιθέσεις",
-  "statsCopyChart": "Αντιγραφή γραφήματος",
-  "statsCompareItems": "Σύγκριση στοιχείων",
-  "statsCompareItemsHint": "Επιλέξτε έως 5 στοιχεία για σύγκριση.",
-  "statsVsOverall": "σε σύγκριση με το σύνολο",
-  "statsCopyChartFailed": "Δεν ήταν δυνατή η αντιγραφή του γραφήματος. Δοκιμάστε ξανά.",
-  "statsPercentagePoints": "ποσοστιαίες μονάδες",
+  "statsTroopStats": "Troop Stats",
+  "statsWarSizes": "War sizes",
+  "statsMissedAttacks": "Missed attacks",
+  "statsCopyChart": "Copy chart",
+  "statsCompareItems": "Compare items",
+  "statsCompareItemsHint": "Select up to 5 items to compare.",
+  "statsVsOverall": "vs. overall",
+  "statsCopyChartFailed": "Could not copy chart. Try again.",
+  "statsPercentagePoints": "percentage points",
   "statsMeta": "Μετα",
   "statsBattle": "Μάχη",
   "statsWorld": "Κόσμος",
   "statsHeaderSubtitle": "Εξερευνήστε την απόδοση μάχης και τον κόσμο που παρακολουθούμε.",
   "statsPreview": "Προεπισκόπηση",
-  "statsTownHallDistribution": "Δημαρχεία",
+  "statsTownHallDistribution": "Διανομή Δημαρχείου",
   "statsBuilderHallDistribution": "Διανομή Builder Hall",
-  "statsLeagueDistribution": "Πρωταθλήματα κατάταξης",
+  "statsLeagueDistribution": "Κατανομή πρωταθλήματος",
   "statsTrackedPlayers": "Τρέχων παρακολουθούμενος πληθυσμός παικτών",
   "statsTrackedClans": "Τρέχων παρακολουθούμενος πληθυσμός φυλών",
-  "statsCwlLeagueDistribution": "Πρωταθλήματα CWL",
-  "statsCapitalLeagueDistribution": "Πρωταθλήματα πρωτεύουσας",
-  "statsTrackedLocations": "Τοποθεσίες φυλών",
+  "statsCwlLeagueDistribution": "Διανομή πρωταθλήματος CWL",
+  "statsCapitalLeagueDistribution": "Διανομή πρωταθλήματος κεφαλαίου",
+  "statsTrackedLocations": "Παρακολούθησαν τοποθεσίες φυλών",
   "statsLocationCountHelp": "Χώρες και τοποθεσίες που αντιπροσωπεύονται από παρακολουθούμενες φυλές.",
   "statsLeagueId": "Πρωτάθλημα {id}",
   "@statsLeagueId": {
@@ -4379,7 +4488,7 @@
   "rankedLeagueNoBattles": "Δεν έχει καταγραφεί ακόμη μάχη.",
   "rankedLeagueGroupRanking": "Κατάταξη ομίλου",
   "rankedLeagueRankingSubtitle": "Ζωντανή βαθμολογία για τον τρέχοντα όμιλο. Ο παίκτης σας επισημαίνεται.",
-  "rankedLeagueJumpToMyRank": "Μετάβαση στην κατάταξη",
+  "rankedLeagueJumpToMyRank": "Μετάβαση στην κατάταξή μου",
   "rankedLeagueLastPeriod": "Τελευταία περίοδος",
   "rankedLeagueBestGroupRank": "Καλύτερη κατάταξη",
   "rankedLeaguePeriodHistory": "Ιστορικό περιόδου",
@@ -4944,7 +5053,7 @@
       }
     }
   },
-  "upgradeTrackerPlanRuleNote": "Σύρε τις κατηγορίες για να ορίσεις τη σειρά αναβάθμισης. Οι ρυθμίσεις σειράς επιτρέπουν κοινή προτεραιότητα ή παύση σε στόχο ολοκλήρωσης.",
+  "upgradeTrackerPlanRuleNote": "Τα αριθμημένα επίπεδα τρέχουν πρώτα. Οι κοινόχρηστες σειρές διατηρούν τον ίδιο αριθμό βαθμίδων και το μείγμα τους κανονικοποιείται από τα σχετικά βάρη, έτσι το 50 + 25 γίνεται 67% / 33%. Ένας στόχος κάνει μια απόδοση κατηγορίας αφού φτάσει σε αυτό το ποσοστό, ενώ παραμένει κατάλληλος αργότερα.",
   "upgradeTrackerPlanGoalMaxCurrentHall": "Max πριν προχωρήσετε",
   "upgradeTrackerPlanGoalRushNextHall": "Φτάστε γρήγορα στην επόμενη αίθουσα",
   "upgradeTrackerPlanGoalCatchUp": "Προλάβετε τα βιαστικά επίπεδα",
@@ -5046,19 +5155,40 @@
       }
     }
   },
-  "cwlRegisteredRoster": "Εγγεγραμμένο ρόστερ",
-  "cwlMatches": "Αναμετρήσεις",
-  "cwlNextMatchup": "Επόμενη αναμέτρηση",
-  "cwlOtherMatches": "Άλλες αναμετρήσεις",
-  "cwlOutlook": "Πρόβλεψη σεζόν",
-  "cwlFirstPlace": "Πρώτη θέση",
-  "cwlTopTwo": "Πρώτες δύο θέσεις",
-  "cwlRemainingOpponents": "Εναπομείναντες αντίπαλοι",
-  "cwlWinBonusNote": "Τα αστέρια περιλαμβάνουν 10 επιπλέον αστέρια ανά ολοκληρωμένη νίκη.",
-  "cwlEstimateNote": "Οι εκτιμήσεις βασίζονται σε ολοκληρωμένους πολέμους και εναπομείναντες αντιπάλους, όχι σε αλλαγές σύνθεσης. Απαιτούνται τουλάχιστον δύο ολοκληρωμένοι πόλεμοι ανά φυλή. Οι εκτιμήσεις δεν είναι βαθμονομημένες· οι κανόνες ανόδου διαφέρουν ανά λίγκα.",
-  "cwlDuration": "{unit, select, hours {{count, plural, one {# ώρα} other {# ώρες}}} other {{count, plural, one {# λεπτό} other {# λεπτά}}}}",
-  "personalBasesDeleteOld": "Αφαίρεση βάσεων παλαιότερων των 90 ημερών",
-  "personalBasesDeleteOldConfirm": "Θα αφαιρεθούν {count} αποθηκευμένες βάσεις παλαιότερες των 90 ημερών. Το ιστορικό λήψεων και οι κοινόχρηστες βάσεις θα διατηρηθούν.",
+  "@settingsWarWidgetIosReady": {
+    "placeholders": {
+      "clanName": {
+        "type": "String"
+      }
+    }
+  },
+  "@settingsWarWidgetAndroidReady": {
+    "placeholders": {
+      "clanName": {
+        "type": "String"
+      }
+    }
+  },
+  "@settingsWarWidgetPrepareFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "cwlRegisteredRoster": "Registered roster",
+  "cwlMatches": "Matchups",
+  "cwlNextMatchup": "Next matchup",
+  "cwlOtherMatches": "Other matchups",
+  "cwlOutlook": "Season outlook",
+  "cwlFirstPlace": "First place",
+  "cwlTopTwo": "Top two",
+  "cwlRemainingOpponents": "Remaining opponents",
+  "cwlWinBonusNote": "Stars include 10 bonus stars per completed win.",
+  "cwlEstimateNote": "Estimates use completed wars and remaining opponents, not lineup changes. At least two completed wars per clan are needed. These are uncalibrated estimates; promotion rules vary by league.",
+  "cwlDuration": "{unit, select, hours {{count, plural, one {# hour} other {# hours}}} other {{count, plural, one {# minute} other {# minutes}}}}",
+  "personalBasesDeleteOld": "Remove bases older than 90 days",
+  "personalBasesDeleteOldConfirm": "{count} saved bases older than 90 days will be removed. Download history and shared bases will remain.",
   "@personalBasesDeleteOldConfirm": {
     "description": "Confirms cleanup while preserving lifetime download history.",
     "placeholders": {
@@ -5067,9 +5197,9 @@
       }
     }
   },
-  "legendsAutomaticDefense": "Αυτόματη άμυνα",
-  "legendsPopularArmyItem": "Δημοφιλέστερο στοιχείο στρατού",
-  "legendsClanCastle": "Κάστρο φυλής",
+  "legendsAutomaticDefense": "Automatic defense",
+  "legendsPopularArmyItem": "Most popular army item",
+  "legendsClanCastle": "Clan Castle",
   "@cwlDuration": {
     "description": "Explicit countdown units; avoid native unit conversion.",
     "placeholders": {
@@ -5081,20 +5211,20 @@
       }
     }
   },
-  "clanNotificationRemoveConfirmation": "Να απενεργοποιηθούν οι ειδοποιήσεις αυτής της φυλής και να αφαιρεθεί ο σελιδοδείκτης;",
-  "personalBasesTab": "Bases",
+  "clanNotificationRemoveConfirmation": "Turn off this clan’s notifications and remove the bookmark?",
+  "personalBasesTab": "Βάσεις",
   "personalBasesDownloaded": "Downloaded",
   "personalArmyName": "Army name",
   "personalArmyNotes": "Notes",
   "personalArmyUnnamed": "Unnamed army",
   "personalArmyEdit": "Edit army",
   "personalArmyUnknownTownHall": "Unknown Town Hall",
-  "discordBotDashboard": "Πίνακας bot Discord",
-  "discordAddBot": "Προσθήκη bot",
-  "discordAddToMyDiscord": "Προσθήκη στο Discord μου",
-  "discordServersWithoutBot": "Διακομιστές χωρίς ClashKing",
-  "rankingsPlayerSection": "Κατατάξεις παικτών",
-  "rankingsClanSection": "Κατατάξεις φυλών",
+  "discordBotDashboard": "Discord Bot Dashboard",
+  "discordAddBot": "Add bot",
+  "discordAddToMyDiscord": "Add to My Discord",
+  "discordServersWithoutBot": "Servers without ClashKing",
+  "rankingsPlayerSection": "Player Rankings",
+  "rankingsClanSection": "Clan Rankings",
   "cwlArchiveCoverage": "{available} of {total} matchups available.",
   "cwlStandingsIncomplete": "Missing archives are excluded. Group ranks and forecasts are unavailable.",
   "cwlPromotionChance": "Estimated promotion chance",
@@ -5105,62 +5235,62 @@
   "cwlRecordedStats": "Recorded wars only",
   "cwlMissingMatchups": "{count} matchups unavailable",
   "cwlHighestLeague": "Highest league · no promotion",
-  "warOutlookWinPossible": "Η νίκη είναι ακόμα εφικτή",
-  "warOutlookDrawOnly": "Στην καλύτερη περίπτωση ισοπαλία",
-  "warOutlookDefeat": "Η νίκη δεν είναι εφικτή",
-  "warOutlookMaximum": "Μέγιστη δυνατή βαθμολογία",
-  "warOutlookAssumption": "Υποθέτει τέλειες εναπομείνασες επιθέσεις. Είναι μαθηματικό όριο, όχι πρόβλεψη.",
-  "warScoutTitle": "Ανάλυση σύνθεσης",
-  "warScoutOpponent": "Πρόσφατοι πόλεμοι αντιπάλου",
-  "warScoutScope": "Τρέχουσα σύνθεση · ίδιοι κανόνες · έως 10 προηγούμενοι πόλεμοι",
-  "upgradeTrackerCapturedWork": "Από την τελευταία ενημέρωσή σου",
-  "tutorialWelcomeBody": "Γνωρίστε το ClashKing με μια σύντομη περιήγηση. Μπορείτε να την παραλείψετε οποτεδήποτε.",
-  "tutorialReorderBody": "Κρατήστε πατημένη μια κάρτα και σύρετέ την για να αλλάξετε τη θέση της.",
-  "tutorialSidebarBody": "Σύρετε στην αρχική οθόνη για να ανοίξετε το μενού ή πατήστε το avatar σας.",
-  "tutorialExploreBody": "Από αυτό το μενού ανοίξτε Ρυθμίσεις και μετά Ειδοποιήσεις. Συνεχίστε για να μεταβείτε εκεί τώρα.",
-  "tutorialRemindersBody": "Επιλέξτε υπενθυμίσεις παρακάτω. Όταν τελειώσετε, επιστρέψτε στην αρχική οθόνη.",
-  "tutorialResetTitle": "Επαναφορά οδηγών",
-  "tutorialResetConfirm": "Να ξεκινήσουν ξανά οι οδηγοί στις επόμενες επισκέψεις σας;",
-  "upgradeTrackerOngoingUpgrades": "Αναβαθμίσεις σε εξέλιξη",
-  "upgradeTrackerToLevel": "Στο επίπεδο {level}",
-  "upgradeTrackerFreeSlots": "{count} διαθέσιμες",
-  "upgradeTrackerFreeIn": "Διαθέσιμη σε {duration}",
-  "upgradeTrackerPetHouse": "Σπίτι κατοικιδίων",
-  "upgradeTrackerNotBuilt": "Δεν έχει χτιστεί",
-  "upgradeTrackerExtraSlots": "{count} επιπλέον",
-  "rankedLeagueOverTime": "Πορεία πρωταθλήματος",
-  "rankedLeaguePromotionCutoff": "Όριο ανόδου",
-  "rankedLeagueDemotionCutoff": "Όριο υποβιβασμού",
-  "rankedLeagueCutoffsUnavailable": "Τα όρια ανόδου και υποβιβασμού δεν είναι διαθέσιμα.",
-  "rankedAutomaticDefenseSummary": "{count} άμυνες · {points} τρόπαια η καθεμία",
-  "rankedAutomaticDefenseExplanation": "Βάσει όλων των πραγματικών αμυνών αυτής της εβδομάδας, με στρογγυλοποίηση προς τα κάτω.",
-  "warStatusInWar": "Σε πόλεμο",
-  "warStatusNoWar": "Χωρίς πόλεμο",
-  "warNoActiveClans": "Καμία φυλή δεν βρίσκεται σε πόλεμο αυτή τη στιγμή.",
-  "warNoInactiveClans": "Δεν υπάρχουν φυλές εκτός πολέμου",
-  "warAllClansInWar": "Όλες οι φυλές σου βρίσκονται σε πόλεμο αυτή τη στιγμή.",
-  "warStatusOther": "Άλλα",
-  "warNoOtherClans": "Δεν υπάρχουν άλλες φυλές.",
-  "playerWarLifetime": "Όλο το ιστορικό",
-  "playerWarThScope": "Ισχύει μόνο για τις κάρτες στατιστικών, όχι για τις μάχες. Κρατήστε πατημένο το κουμπί για αυτή την εξήγηση.",
-  "playerWarNoAttacks": "Δεν υπάρχουν επιθέσεις ακόμη",
-  "playerWarRegularWars": "Κανονικός πόλεμος",
-  "warWidgetNoActiveWar": "Δεν υπάρχει ενεργός πόλεμος",
-  "warWidgetPrivateWarLog": "Ιδιωτικό ημερολόγιο πολέμου",
-  "warWidgetChooseClan": "Επίλεξε φυλή",
-  "legendPerformanceTitle": "Ημερήσια απόδοση",
-  "legendCompleteDays": "Πλήρεις ημέρες",
-  "legendPerfectDays": "Τέλειες ημέρες",
-  "legendPartialDays": "Μερικές ημέρες",
-  "legendMissingDays": "Χωρίς καταγραφές",
-  "legendInvalidDays": "Μη έγκυρες ημέρες",
-  "legendTrophiesGained": "Κερδισμένα τρόπαια",
-  "legendTrophiesLost": "Χαμένα τρόπαια",
+  "warOutlookWinPossible": "Win still possible",
+  "warOutlookDrawOnly": "Draw at best",
+  "warOutlookDefeat": "No path to a win",
+  "warOutlookMaximum": "Maximum possible score",
+  "warOutlookAssumption": "Assumes perfect remaining attacks. This is a mathematical limit, not a prediction.",
+  "warScoutTitle": "Lineup scouting",
+  "warScoutOpponent": "Opponent’s recent wars",
+  "warScoutScope": "Current lineup · same rules · up to 10 previous wars",
+  "upgradeTrackerCapturedWork": "From your last update",
+  "tutorialWelcomeBody": "Take a quick tour of ClashKing. You can skip it at any time.",
+  "tutorialReorderBody": "Hold a card, then drag it to change its position.",
+  "tutorialSidebarBody": "Swipe across Home to open the menu, or tap your avatar.",
+  "tutorialExploreBody": "From this menu, open Settings, then Notifications. Continue to go there now.",
+  "tutorialRemindersBody": "Choose reminders below. When you are done, return to Home.",
+  "tutorialResetTitle": "Reset tutorials",
+  "tutorialResetConfirm": "Start the tutorials again on your next visits?",
+  "upgradeTrackerOngoingUpgrades": "Ongoing Upgrades",
+  "upgradeTrackerToLevel": "To Level {level}",
+  "upgradeTrackerFreeSlots": "{count} free",
+  "upgradeTrackerFreeIn": "Free in {duration}",
+  "upgradeTrackerPetHouse": "Pet House",
+  "upgradeTrackerNotBuilt": "Not built",
+  "upgradeTrackerExtraSlots": "{count} extra",
+  "rankedLeagueOverTime": "League over time",
+  "rankedLeaguePromotionCutoff": "Promotion cutoff",
+  "rankedLeagueDemotionCutoff": "Demotion cutoff",
+  "rankedLeagueCutoffsUnavailable": "Promotion and demotion thresholds unavailable.",
+  "rankedAutomaticDefenseSummary": "{count} defenses · {points} trophies each",
+  "rankedAutomaticDefenseExplanation": "Based on all real defenses this week, rounded down.",
+  "warStatusInWar": "In war",
+  "warStatusNoWar": "No war",
+  "warNoActiveClans": "No clans are currently in war.",
+  "warNoInactiveClans": "No clans out of war",
+  "warAllClansInWar": "All your clans are currently in war.",
+  "warStatusOther": "Άλλο",
+  "warNoOtherClans": "No other clans.",
+  "playerWarLifetime": "Lifetime",
+  "playerWarThScope": "Applies only to the statistics cards, not Battles. Hold the button for this explanation.",
+  "playerWarNoAttacks": "No attacks yet",
+  "playerWarRegularWars": "Regular war",
+  "warWidgetNoActiveWar": "No active war",
+  "warWidgetPrivateWarLog": "Private war log",
+  "warWidgetChooseClan": "Choose a clan",
+  "legendPerformanceTitle": "Daily performance",
+  "legendCompleteDays": "Complete days",
+  "legendPerfectDays": "Perfect days",
+  "legendPartialDays": "Partial days",
+  "legendMissingDays": "No observations",
+  "legendInvalidDays": "Invalid days",
+  "legendTrophiesGained": "Trophies gained",
+  "legendTrophiesLost": "Trophies lost",
   "legendDistribution": "Κατανομή",
-  "legendPreviousDays": "Προηγούμενες {count} ημέρες",
-  "legendAvailableDays": "Διαθέσιμες ημέρες",
-  "legendCompleteOnly": "Η κατανομή περιλαμβάνει ημέρες με 8 καταγεγραμμένες μάχες.",
-  "legendPerfectSources": "Τέλειες ημέρες ανά κατάταξη",
+  "legendPreviousDays": "Previous {count} days",
+  "legendAvailableDays": "Days available",
+  "legendCompleteOnly": "Distribution uses days with 8 recorded battles.",
+  "legendPerfectSources": "Perfect days by rank",
   "@legendPreviousDays": {
     "placeholders": {
       "count": {
@@ -5168,15 +5298,15 @@
       }
     }
   },
-  "onboardingOverviewTitle": "Οι λογαριασμοί και οι φυλές σου",
-  "onboardingOverviewBody": "Κράτησε τους παίκτες, τις φυλές και τις αναβαθμίσεις σου μαζί.",
-  "onboardingProgressTitle": "Δες κατατάξεις και στατιστικά",
-  "onboardingProgressBody": "Παρακολούθησε μάχες, σύγκρινε την πρόοδό σου και συνέχισε τις αναβαθμίσεις.",
-  "onboardingRemindersTitle": "Λάβε υπενθυμίσεις και ειδοποιήσεις",
-  "onboardingRemindersBody": "Λάβε υπενθυμίσεις πολέμου και τις ειδοποιήσεις που επιλέγεις. Διάλεξε λογαριασμούς και τύπους ειδοποιήσεων στις Ρυθμίσεις.",
-  "onboardingReplayTitle": "Επανάληψη εισαγωγής",
-  "statsViewLatestData": "Προβολή νεότερων δεδομένων",
-  "statsLatestAvailableDate": "Νεότερα διαθέσιμα: {date}",
+  "onboardingOverviewTitle": "Your accounts & clans",
+  "onboardingOverviewBody": "Keep your players, clans, and upgrades together.",
+  "onboardingProgressTitle": "View rankings and stats",
+  "onboardingProgressBody": "Follow your battles, compare your progress, and keep upgrades moving.",
+  "onboardingRemindersTitle": "Get reminders and alerts",
+  "onboardingRemindersBody": "Get war reminders and the alerts you choose. Pick your accounts and alert types in Settings.",
+  "onboardingReplayTitle": "Replay introduction",
+  "statsViewLatestData": "View latest data",
+  "statsLatestAvailableDate": "Latest available: {date}",
   "@statsLatestAvailableDate": {
     "placeholders": {
       "date": {
@@ -5184,23 +5314,23 @@
       }
     }
   },
-  "legendPerfectedDefenseDays": "Ημέρες με ολοκληρωτικά ηττημένη άμυνα",
-  "legendCompleteDayDefinition": "Περιλαμβάνονται μόνο ημέρες με και τις 8 μάχες.",
+  "legendPerfectedDefenseDays": "Perfected defense days",
+  "legendCompleteDayDefinition": "Only days with all 8 battles are included.",
   "statsCommunity": "Κοινότητα",
-  "rankedFullOffenseDays": "+320 ημέρες",
-  "rankedFullDefenseDays": "−320 ημέρες",
-  "rankedTrophiesByRank": "Τρόπαια ανά κατάταξη",
-  "statsArmyTypes": "Τύποι στρατού",
-  "onboardingStatsBody": "Εξερεύνησε στατιστικά παικτών, παρακολούθησε τις φυλές σου και δες πώς αλλάζει όλο το παιχνίδι.",
-  "onboardingWidgetsTitle": "Πρόσθεσε γραφικά στοιχεία στην αρχική οθόνη",
-  "onboardingWidgetsBody": "Δες σκορ πολέμων και πρόοδο αναβαθμίσεων με γραφικά στοιχεία στην αρχική οθόνη.",
-  "onboardingAlertTitle": "Ο πόλεμος τελειώνει σύντομα",
-  "onboardingAlertBody": "Ώρα για την τελευταία σου επίθεση.",
-  "onboardingSetupNotifications": "Ενεργοποίηση ειδοποιήσεων",
-  "onboardingAccountsReadyBody": "Οι συνδεδεμένοι λογαριασμοί σου είναι έτοιμοι. Πρόσθεσε άλλον ή συνέχισε.",
-  "onboardingSkipAccountSetup": "Παράλειψη",
-  "accountsSetupBody": "Πρόσθεσε και επαλήθευσε τους λογαριασμούς σου στο Clash of Clans.",
-  "accountsMyTitle": "Οι λογαριασμοί μου",
-  "profileAvatar": "Αλλαγή εμφάνισης",
-  "avatarPickerTitle": "Διάλεξε ένα άβαταρ"
+  "rankedFullOffenseDays": "+320 days",
+  "rankedFullDefenseDays": "−320 days",
+  "rankedTrophiesByRank": "Trophies by rank",
+  "statsArmyTypes": "Army Types",
+  "onboardingStatsBody": "Explore player stats, follow your clans, and see how the whole game is changing.",
+  "onboardingWidgetsTitle": "Add Home Screen widgets",
+  "onboardingWidgetsBody": "Keep war scores and upgrade progress close with Home Screen widgets.",
+  "onboardingAlertTitle": "War ends soon",
+  "onboardingAlertBody": "Time for your final attack.",
+  "onboardingSetupNotifications": "Enable notifications",
+  "onboardingAccountsReadyBody": "Your linked accounts are ready. Add another account or continue.",
+  "onboardingSkipAccountSetup": "Skip",
+  "accountsSetupBody": "Add and verify your Clash of Clans accounts.",
+  "accountsMyTitle": "My Accounts",
+  "profileAvatar": "Change look",
+  "avatarPickerTitle": "Pick an avatar"
 }
