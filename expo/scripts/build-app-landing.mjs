@@ -62,11 +62,9 @@ const readerLocales = {};
 const readerKeys = [
   'postsStoryFinished',
   'postsWatchAgain',
-  'generalOpen',
   'apiErrorNotFound',
   'postsLoadFailed',
   'generalTryAgain',
-  'faqFanContentPolicy',
 ];
 for (const file of await readdir(join(root, 'src/i18n/arb'))) {
   if (!/^app_.*\.arb$/.test(file)) continue;
