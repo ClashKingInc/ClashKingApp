@@ -1,20 +1,20 @@
 {
-  "capitalCurrentOpponent": "Поточний суперник",
-  "capitalRaidMedals": "Рейдові медалі",
-  "warReplayTitle": "Історія рахунку",
-  "warReplayPlay": "Відтворити історію",
-  "warReplayPause": "Призупинити історію",
-  "cwlLeading": "Лідирує",
-  "cwlTrailing": "Відстає",
-  "cwlYourClan": "Ваш клан",
-  "cwlPromotionZone": "Зона підвищення",
-  "cwlDemotionZone": "Зона пониження",
-  "cwlNotInLineup": "Поза складом",
-  "esportsEloSubtitle": "Світовий рейтинг команд і матчі від",
-  "esportsTopTeamsMatches": "Матчі поточних 50 найкращих команд.",
-  "esportsPartialMatches": "Не вдалося оновити дані деяких команд.",
-  "settingsHideAccounts": "Приховувати облікові записи",
-  "settingsHideAccountsDescription": "Показувати можливість приховування пов’язаних облікових записів. Поточні налаштування приватності не зміняться.",
+  "capitalCurrentOpponent": "Current opponent",
+  "capitalRaidMedals": "Raid medals",
+  "warReplayTitle": "Score history",
+  "warReplayPlay": "Play history",
+  "warReplayPause": "Pause history",
+  "cwlLeading": "Leading",
+  "cwlTrailing": "Trailing",
+  "cwlYourClan": "Your clan",
+  "cwlPromotionZone": "Promotion zone",
+  "cwlDemotionZone": "Demotion zone",
+  "cwlNotInLineup": "Not in lineup",
+  "esportsEloSubtitle": "Global team rankings and matches from",
+  "esportsTopTeamsMatches": "Matches from the current top 50 teams.",
+  "esportsPartialMatches": "Some teams could not be refreshed.",
+  "settingsHideAccounts": "Hide accounts",
+  "settingsHideAccountsDescription": "Show the option to hide linked accounts. Existing privacy choices stay unchanged.",
   "calcRocketBalloonAssumption": "1 hit + death · {damage} damage each",
   "calcKeepEquipped": "Keep one equipped",
   "calcCustomLevels": "Custom levels",
@@ -38,31 +38,31 @@
   "personalBasesEmptyBody": "Bases you post through ClashKing on Discord appear here. You can also save bases from the library.",
   "personalArmiesEmptyTitle": "Keep your armies close",
   "personalArmiesEmptyBody": "Armies you post through ClashKing on Discord appear here. Save your favourites to find them before your next attack.",
-  "homeCardOriginal": "Початковий",
-  "homeCardTint": "М’який колір",
-  "homeCardEdge": "Кольорові контури",
-  "homeCardGlow": "Повільне сяйво",
-  "competitiveNoHistory": "Турнірів поки немає",
-  "competitiveHistoryHint": "Тут з’являться твої команди й результати турнірів.",
-  "esportsMonthlyFinals": "Щомісячні фінали",
-  "esportsMonthlyQualifier": "Щомісячні відбіркові",
-  "esportsHeroSubtitle": "Шлях до чемпіонату світу",
-  "esportsViewEvent": "Переглянути подію",
-  "esportsWinLoss": "Перемоги: {wins} · Поразки: {losses}",
-  "esportsViewPlayer": "Переглянути гравця",
-  "esportsRecentMatches": "Нещодавні матчі",
-  "esportsHideAttacks": "Приховати подробиці бою",
-  "esportsViewAttacks": "Переглянути подробиці бою",
-  "esportsPlayer": "Кіберспортсмен",
-  "esportsBattles": "Бої",
-  "esportsTriples": "Атаки на три зірки",
-  "esportsAverageStars": "Середня кількість зірок",
+  "homeCardOriginal": "Original",
+  "homeCardTint": "Soft color",
+  "homeCardEdge": "Colored edges",
+  "homeCardGlow": "Slow glow",
+  "competitiveNoHistory": "No tournaments yet",
+  "competitiveHistoryHint": "Your teams and tournament results will appear here.",
+  "esportsMonthlyFinals": "Monthly finals",
+  "esportsMonthlyQualifier": "Monthly qualifiers",
+  "esportsHeroSubtitle": "The road to the World Championship",
+  "esportsViewEvent": "Explore event",
+  "esportsWinLoss": "{wins} wins · {losses} losses",
+  "esportsViewPlayer": "View player",
+  "esportsRecentMatches": "Recent matches",
+  "esportsHideAttacks": "Hide battle details",
+  "esportsViewAttacks": "View battle details",
+  "esportsPlayer": "Esports player",
+  "esportsBattles": "Проведені битви",
+  "esportsTriples": "Triples",
+  "esportsAverageStars": "Середні зірки",
   "esportsDestruction": "Руйнування",
-  "esportsAccounts": "Ігрові облікові записи",
+  "esportsAccounts": "Game accounts",
   "esportsAttack": "Атака",
   "esportsDefense": "Захист",
-  "competitiveArenaSubtitle": "Твій клан. Твоя команда. Твій наступний виклик.",
-  "competitiveViewTournament": "Переглянути турнір",
+  "competitiveArenaSubtitle": "Your clan. Your team. Your next challenge.",
+  "competitiveViewTournament": "View tournament",
   "@esportsWinLoss": {
     "placeholders": {
       "wins": {
@@ -87,50 +87,50 @@
   "esportsStage": "Stage",
   "esportsStandings": "Standings",
   "esportsMatches": "Matches",
-  "esportsPoints": "Points",
+  "esportsPoints": "Очки",
   "esportsPlayed": "played",
   "esportsSource": "Data from Competitive Clash Network",
-  "esportsRoster": "Roster",
+  "esportsRoster": "Склад",
   "esportsSeasonPoints": "Season points",
   "esportsStageStandings": "Stage standings",
-  "competitiveCompetition": "Змагання",
-  "competitiveWebsite": "Вебсайт",
-  "competitiveVerifiedAccounts": "Підтверджені облікові записи",
-  "competitiveEsports": "Кіберспорт",
-  "competitiveTournaments": "Турніри",
+  "competitiveCompetition": "Competition",
+  "competitiveWebsite": "Website",
+  "competitiveVerifiedAccounts": "Verified accounts",
+  "competitiveEsports": "eSports",
+  "competitiveTournaments": "Tournaments",
   "competitiveProfile": "Профіль",
   "competitiveTeams": "Команди",
-  "competitiveFreeEntry": "Безкоштовна участь",
-  "competitiveRegister": "Зареєструвати команду",
-  "competitiveCheckIn": "Підтвердити участь",
-  "competitiveRules": "Правила",
-  "competitiveUnavailable": "Дані змагання недоступні. Спробуйте ще раз.",
-  "competitiveRegistrationSaved": "Заявку надіслано",
-  "competitiveTeamHistory": "Історія команди",
-  "competitiveDebutName": "Турнірний дебют",
-  "competitiveDebutDescription": "Візьміть участь у турнірі зі своїм підтвердженим обліковим записом.",
-  "competitiveViewProfile": "Переглянути профіль",
+  "competitiveFreeEntry": "Free entry",
+  "competitiveRegister": "Register team",
+  "competitiveCheckIn": "Check in",
+  "competitiveRules": "Rules",
+  "competitiveUnavailable": "Competition data is unavailable. Try again.",
+  "competitiveRegistrationSaved": "Registration submitted",
+  "competitiveTeamHistory": "Team history",
+  "competitiveDebutName": "Tournament debut",
+  "competitiveDebutDescription": "Participate in a tournament with your verified account.",
+  "competitiveViewProfile": "View profile",
   "calcPinEquipment": "Keep one equipped",
-  "calcSearch": "Search",
+  "calcSearch": "Пошук",
   "calcEquipmentTitle": "Equipment Compare",
   "calcDamageIntro": "Find the combinations that take a defense down.",
   "calcFarmIntro": "Plan the loot needed for your next upgrades.",
   "calcEquipmentIntro": "Compare hero loadouts, levels, and ability stats.",
   "calcComingSoon": "Coming soon",
-  "calcHero": "Hero",
+  "calcHero": "Герой",
   "calcHeroLevel": "Hero level",
   "calcMaxLevels": "Max levels",
   "calcEquipmentPool": "Equipment to compare",
   "calcPoolHelp": "Choose pieces and default levels. Compare every pair, then customize individual rows.",
   "calcSelectAll": "Select all",
-  "calcClear": "Clear",
+  "calcClear": "ясно",
   "calcAttributes": "Attributes",
   "calcAddAttribute": "Add attribute",
-  "calcTable": "Compare",
+  "calcTable": "Порівняти",
   "calcProgression": "Level progression",
   "calcCompareHelp": "DPS adds the hero's base and equipment DPS. Speed bonuses and temporary effects are separate attributes; healing is not extra max HP.",
   "calcChartHelp": "Equipment levels increase together; each piece stops at its own maximum. Hero levels stay fixed. First six loadouts shown.",
-  "calcSort": "Sort by",
+  "calcSort": "Сортування за",
   "calcNoEquipment": "No equipment",
   "calcDuplicate": "Duplicate loadout",
   "calcRemove": "Remove loadout",
@@ -154,9 +154,9 @@
   "calcComparisonDownloaded": "Comparison image downloaded",
   "calcComparisonExportFailed": "Could not copy the comparison image. Please try again.",
   "calcEffectiveLevel": "Effective level {level}",
-  "calcTarget": "Target",
+  "calcTarget": "Ціль",
   "calcSupercharge": "Supercharge",
-  "calcNone": "None",
+  "calcNone": "Немає",
   "calcResults": "{count} combinations",
   "calcResultsHelp": "Smallest spell cost first, then fewer equipment activations. Extra sources that do not help are removed.",
   "calcNoCombinationHelp": "Try another source, a higher level, or more spell capacity.",
@@ -164,63 +164,63 @@
   "calcAlternative": "Alternative",
   "calcCombinationCost": "{housing} spell space · {equipment} equipment",
   "calcUseStack": "Use stack",
-  "homeRankingsAndStats": "Рейтинги та статистика",
-  "homeActivityRecorded": "Лише записана активність; історія може бути неповною.",
-  "homeWidgetsServers": "Сервери",
-  "homeWidgetsEdit": "Редагувати головну",
-  "homeWidgetsAdd": "Додати віджет",
-  "homeWidgetsRemove": "Видалити віджет",
-  "homeWidgetsMoveUp": "Перемістити вгору",
-  "homeWidgetsMoveDown": "Перемістити вниз",
+  "homeRankingsAndStats": "Rankings & Stats",
+  "homeActivityRecorded": "Recorded activity only; history may be incomplete.",
+  "homeWidgetsServers": "Servers",
+  "homeWidgetsEdit": "Edit Home",
+  "homeWidgetsAdd": "Add widget",
+  "homeWidgetsRemove": "Remove widget",
+  "homeWidgetsMoveUp": "Move up",
+  "homeWidgetsMoveDown": "Move down",
   "homeWidgetsSmall": "Малий",
-  "homeWidgetsWide": "Широкий",
-  "homeWidgetsSaveError": "Не вдалося синхронізувати головну. Оновіть перед наступним редагуванням.",
-  "homeWidgetsUnavailable": "Немає записаних даних",
-  "homeWidgetsBookmarkFirst": "Спочатку додайте гравця або клан до закладок.",
-  "rankingsWarTripleStreak": "Серія трьох зірок у війні",
+  "homeWidgetsWide": "Wide",
+  "homeWidgetsSaveError": "Could not sync Home. Please refresh before editing again.",
+  "homeWidgetsUnavailable": "No recorded data available",
+  "homeWidgetsBookmarkFirst": "Bookmark a player or clan first.",
+  "rankingsWarTripleStreak": "War Triple Streak",
   "rankingsWarTripleRulesTitle": "How streaks count",
   "rankingsWarTripleRulesBody": "+2 for two triples against your own Town Hall level in a regular war.\n\nA missed attack, non-triple, or different-TH target resets your streak.\n\nCWL and friendly wars don’t count. Streaks are separate for each Town Hall level.",
-  "clanLegendsRanked": "Легенди та рейтинговий режим",
-  "appIconChangeWarning": "Зміна значка закриє ClashKing. Продовжити?",
-  "upgradeTrackerUnverifiedAccount": "Цей обліковий запис пов’язаний, але не підтверджений. Підтвердьте його в керуванні обліковими записами, щоб імпортувати дані поліпшень.",
-  "clanWarNotificationsTitle": "Сповіщення про війну",
-  "clanCapitalNotificationsTitle": "Сповіщення про столицю клану",
-  "clanWarNotificationsBody": "Отримуйте новини про війни цього клану.",
-  "clanCapitalNotificationsBody": "Отримуйте новини про столицю цього клану.",
-  "notifSystemNotifications": "Системні сповіщення",
-  "notifSystemSettings": "Відкрити налаштування сповіщень",
-  "notifSystemSettingsDescription": "Керуйте попередженнями, звуками та значками в налаштуваннях пристрою.",
-  "notifSystemSettingsFailed": "Не вдалося відкрити налаштування сповіщень. Відкрийте Налаштування на пристрої.",
-  "notifManagePlayersDescription": "Керуйте сповіщеннями акаунтів у Гравці → Прив'язані → Параметри.",
-  "notifCustomReminders": "Власні нагадування",
-  "notifTestType": "Тип сповіщення",
-  "statsBattlelogsGroup": "Журнали боїв",
-  "statsGlobalStatsGroup": "Глобальна статистика",
-  "playerOptionShowOnHomeTitle": "Показувати акаунт на головній",
-  "playerOptionShowOnHomeSubtitle": "Додати цей підтверджений акаунт до карток на головній (до 5).",
-  "playerOptionShowOnHomeVerifyFirst": "Підтвердьте цей акаунт, щоб показувати його на головній.",
-  "playerOptionHomeInclusionFirst": "Спочатку ввімкніть «Показувати акаунт на головній».",
-  "homeIncludedAccountsLimit": "На головній можна показувати до 5 акаунтів. Спочатку приберіть один.",
-  "statsHitratesByTownHall": "Успішність за ратушами",
-  "statsChartGranularity": "Інтервал графіка",
-  "statsDaily": "За днями",
-  "statsWeekly": "За тижнями",
-  "playerBattlelogCumulative": "Накопичувально",
-  "statsMonthly": "За місяцями",
-  "statsCompareCohorts": "Порівняти групи",
-  "statsAcrossCohorts": "Використання за групами",
-  "legendsTrophyGrid": "Огляд сезону",
-  "legendsPopularArmyItems": "Найпопулярніші елементи армії",
-  "legendsPopularTroop": "Улюблений",
-  "legendsHitrate": "Успішність",
-  "legendsAvgOffense": "Сер. атака",
-  "legendsAvgDefense": "Сер. захист",
-  "settingsClearImageCache": "Очистити кеш зображень",
-  "settingsImageCacheCleared": "Кеш зображень очищено.",
-  "settingsImageCacheClearFailed": "Не вдалося очистити кеш зображень. Спробуйте ще раз.",
-  "startupCheckingUpdate": "Перевірка оновлень…",
-  "startupDownloadingUpdate": "Завантаження оновлення…",
-  "startupUpdateInBackground": "Оновити у фоні",
+  "clanLegendsRanked": "Legends & Ranked",
+  "appIconChangeWarning": "Changing the app icon will close ClashKing. Continue?",
+  "upgradeTrackerUnverifiedAccount": "This account is linked but not verified. Verify it in Manage Accounts to import your upgrade data.",
+  "clanWarNotificationsTitle": "War notifications",
+  "clanCapitalNotificationsTitle": "Clan Capital notifications",
+  "clanWarNotificationsBody": "Receive war updates for this clan.",
+  "clanCapitalNotificationsBody": "Receive Clan Capital updates for this clan.",
+  "notifSystemNotifications": "System notifications",
+  "notifSystemSettings": "Open notification settings",
+  "notifSystemSettingsDescription": "Manage alerts, sounds, and badges in your device settings.",
+  "notifSystemSettingsFailed": "Could not open notification settings. Please open Settings on your device.",
+  "notifManagePlayersDescription": "Manage account notifications in Players → Linked → Options.",
+  "notifCustomReminders": "Custom reminders",
+  "notifTestType": "Notification type",
+  "statsBattlelogsGroup": "Battlelogs",
+  "statsGlobalStatsGroup": "Global Stats",
+  "playerOptionShowOnHomeTitle": "Show account on Home",
+  "playerOptionShowOnHomeSubtitle": "Include this verified account in Home cards (up to 5).",
+  "playerOptionShowOnHomeVerifyFirst": "Verify this account to show it on Home.",
+  "playerOptionHomeInclusionFirst": "Turn on Show account on Home first.",
+  "homeIncludedAccountsLimit": "Home can show up to 5 accounts. Remove one first.",
+  "statsHitratesByTownHall": "Hitrates by Town Hall",
+  "statsChartGranularity": "Chart interval",
+  "statsDaily": "Щодня",
+  "statsWeekly": "Щотижня",
+  "playerBattlelogCumulative": "Cumulative",
+  "statsMonthly": "Monthly",
+  "statsCompareCohorts": "Compare cohorts",
+  "statsAcrossCohorts": "Usage across cohorts",
+  "legendsTrophyGrid": "Season overview",
+  "legendsPopularArmyItems": "Most popular army items",
+  "legendsPopularTroop": "Favorite",
+  "legendsHitrate": "Hitrate",
+  "legendsAvgOffense": "Avg. Offense",
+  "legendsAvgDefense": "Avg. Defense",
+  "settingsClearImageCache": "Clear image cache",
+  "settingsImageCacheCleared": "Image cache cleared.",
+  "settingsImageCacheClearFailed": "Could not clear the image cache. Please try again.",
+  "startupCheckingUpdate": "Checking for updates…",
+  "startupDownloadingUpdate": "Downloading update…",
+  "startupUpdateInBackground": "Update in background",
   "warStatsRangeTitle": "Діапазон воєнної статистики",
   "warStatsRangeDescription": "Виберіть, чи охоплює статистика задану кількість нещодавніх воєн, чи нещодавній період у днях.",
   "warStatsRangeDays": "Дні",
@@ -375,17 +375,59 @@
   "notifPushEnabled": "Push-сповіщення ввімкнено",
   "notifReceiveNotifications": "Отримувати сповіщення",
   "notifTokenPreview": "Токен: {token}",
+  "@notifTokenPreview": {
+    "placeholders": {
+      "token": {
+        "type": "String"
+      }
+    }
+  },
   "notifEnabledDeliveryDescription": "Увімкнені попередження можуть надсилатися на цей пристрій.",
   "notifDisabledAccountDescription": "Сповіщення вимкнено для всього облікового запису ClashKing.",
   "notifMaximumRemindersAdded": "Додано максимальну кількість нагадувань",
   "notifAddReminder": "Додати нагадування",
   "notifDurationOneHour": "1 година",
   "notifDurationHours": "{count} годин",
+  "@notifDurationHours": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "notifDurationMinutes": "{count} хвилин",
+  "@notifDurationMinutes": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "notifAddTiming": "Додати {timing}",
+  "@notifAddTiming": {
+    "placeholders": {
+      "timing": {
+        "type": "String"
+      }
+    }
+  },
   "notifTimingOneHourBefore": "за 1 годину",
   "notifTimingHoursBefore": "за {count} годин",
+  "@notifTimingHoursBefore": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "notifTimingMinutesBefore": "за {count} хвилин",
+  "@notifTimingMinutesBefore": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "notifPushReady": "Push-сповіщення готові на цьому пристрої.",
   "notifPushPermissionRequired": "Дозвольте сповіщення, щоб отримувати попередження ClashKing.",
   "notifPushPermissionDenied": "У дозволі на сповіщення відмовлено.",
@@ -394,12 +436,13 @@
   "notifPushUnsupported": "Push-сповіщення не підтримуються на цій платформі.",
   "notifPushInitializing": "Налаштування push-сповіщень…",
   "notificationPrimerTitle": "Увімкнути сповіщення?",
-  "notificationPrimerBody": "ClashKing може надсилати оновлення про події, оголошення, захисти в Лізі легенд і підтримку. Нагадування про війни та рейдові вихідні залишаються вимкненими, доки ви їх не налаштуєте. Ці параметри можна змінити в Налаштування > Сповіщення.",
+  "notificationPrimerBody": "ClashKing може сповіщати вас про оновлення війн, CWL, облікового запису та проєктів. Це можна будь-коли змінити в Налаштування > Сповіщення.",
   "notificationPrimerNotNow": "Не зараз",
   "notificationPrimerAllow": "Дозволити",
+  "@@last_modified": "2024-12-23T10:00:00.000Z",
   "achievementsTitle": "Досягнення",
   "achievementEarnedLabel": "Отримано",
-  "achievementGemsEarnedRatio": "Отримано {earned} / {total}",
+  "achievementGemsEarnedRatio": "{earned} / {total} earned",
   "@achievementGemsEarnedRatio": {
     "placeholders": {
       "earned": {
@@ -410,7 +453,7 @@
       }
     }
   },
-  "achievementGemsAccessibility": "Отримано {earned} із {total} кристалів за досягнення.",
+  "achievementGemsAccessibility": "Earned {earned} of {total} achievement gems.",
   "@achievementGemsAccessibility": {
     "placeholders": {
       "earned": {
@@ -423,6 +466,23 @@
   },
   "achievementSummary": "{earned}/{total} завершено",
   "achievementEarnedCount": "Отримано ×{count}",
+  "@achievementSummary": {
+    "placeholders": {
+      "earned": {
+        "type": "String"
+      },
+      "total": {
+        "type": "String"
+      }
+    }
+  },
+  "@achievementEarnedCount": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
   "achievementTownhall18Name": "Ратуша 18",
   "achievementTownhall18Requirement": "Досягніть ратуші 18-го рівня.",
   "achievementWarWarriorName": "Воїн війни",
@@ -431,7 +491,6 @@
   "achievementMrLegendDescription": "Ви бездоганно завершили день атак у Лізі легенд.",
   "achievementDefenseDoesntMatterName": "Захист не має значення",
   "achievementDefenseDoesntMatterDescription": "Ви пережили ідеальний день захисту в Лізі легенд.",
-  "@@last_modified": "2024-12-23T10:00:00.000Z",
   "appTitle": "ClashKing",
   "appDescription": "Ваш кращий супутник Clash of Clans для відстеження статистики, управління кланами та аналізу продуктивності.",
   "generalLoading": "Завантаження...",
@@ -454,8 +513,8 @@
   "postsLoadMore": "Завантажити ще",
   "postsCurrent": "Поточні",
   "postsPast": "Архівні",
-  "postsStoryFinished": "Історію завершено",
-  "postsWatchAgain": "Переглянути знову",
+  "postsStoryFinished": "Story finished",
+  "postsWatchAgain": "Watch again",
   "postsStory": "Інтерактивна історія",
   "postsPinned": "Вибране",
   "generalTryAgain": "Спробуйте ще раз",
@@ -544,7 +603,7 @@
     "description": "Filter value is not set"
   },
   "generalWarning": "Попередження",
-  "gameHandoffDontShowAgain": "Більше не показувати",
+  "gameHandoffDontShowAgain": "Don't show this again",
   "generalUnknown": "Невідомо",
   "generalNoDataAvailable": "Дані відсутні.",
   "generalNoFilteredResults": "Немає результатів, що відповідають вашим фільтрам",
@@ -773,9 +832,9 @@
   "accountsAdd": "Додати обліковий запис",
   "accountsAddInstruction": "Натисніть кнопку +, щоб додати акаунт",
   "accountsApiToken": "API-токен облікового запису",
-  "accountsEnterApiToken": "Підтвердьте, що це ваш обліковий запис, за допомогою API-токена з гри.",
+  "accountsEnterApiToken": "Введіть API-токен акаунта, щоб підтвердити, що він ваш. Його можна знайти в Clash of Clans:",
   "accountsApiTokenLocation": "Налаштування > Додаткові налаштування > API-токен",
-  "accountsOpenMoreSettings": "Отримати API-токен",
+  "accountsOpenMoreSettings": "Відкрити додаткові налаштування",
   "accountsCouldNotOpenClash": "Не вдалося відкрити Clash of Clans. Відкрийте його вручну.",
   "accountsFillAllFields": "Будь ласка, заповніть усі поля.",
   "accountsErrorTagNotExists": "Тег гравця, який був введений, не існує.",
@@ -1295,8 +1354,32 @@
   "warParticipation": "Участь у війні",
   "cwlParticipantOnly": "Лише учасник",
   "warStatsRangeWarsCompact": "{number} війн",
+  "@warStatsRangeWarsCompact": {
+    "description": "Compact clan war statistics war range label",
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
   "warStatsRangeDaysCompact": "{number} днів",
+  "@warStatsRangeDaysCompact": {
+    "description": "Compact clan war statistics day range label",
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
   "warStatsLastXDays": "Останні {number} днів",
+  "@warStatsLastXDays": {
+    "description": "Clan war statistics date-range label",
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
   "warStatsCurrentMembers": "Поточні учасники",
   "warLeague": "Війна/Ліга",
   "warHistory": "Історія війн",
@@ -1305,6 +1388,13 @@
   "warLogClosed": "Журнал війн клану {clan} закритий.",
   "warLogPrivate": "Журнал війн клану {clan} приватний.",
   "@warLogClosed": {
+    "placeholders": {
+      "clan": {
+        "type": "String"
+      }
+    }
+  },
+  "@warLogPrivate": {
     "placeholders": {
       "clan": {
         "type": "String"
@@ -1608,7 +1698,7 @@
   "warStarsTwo": "2 зірки",
   "warStarsThree": "3 зірки",
   "warStarsZero": "0 зірок",
-  "legendHistoryZeroStars": "Нуль зірок",
+  "legendHistoryZeroStars": "Zero Stars",
   "warStarsBestPerformance": "Найкращий результат",
   "@warStarsBestPerformance": {
     "description": "Best performance in war"
@@ -1763,7 +1853,7 @@
   "clanLeaderboardHistoryTab": "Історія рейтингу",
   "clanLegendHistoryTab": "Історія Ліги легенд",
   "clanRecordsTab": "Рекорди",
-  "clanRecordsChangesTab": "Рекорди та зміни",
+  "clanRecordsChangesTab": "Records & Changes",
   "clanProfileHistoryTab": "Історія профілю",
   "clanProfileLevelChanged": "Рівень клану змінено",
   "clanProfileDescriptionChanged": "Опис змінено",
@@ -1805,8 +1895,8 @@
   "legendsCountryTitle": "Країна",
   "legendsLocalRankTitle": "Місцевий чин",
   "legendsGlobalRankTitle": "Глобальний рейтинг",
-  "legendsYourArmy": "Ваша армія",
-  "legendsArmyUsedAgainstYou": "Армія, використана проти вас",
+  "legendsYourArmy": "Your army",
+  "legendsArmyUsedAgainstYou": "Army used against you",
   "warWinsTitle": "Перемоги",
   "warLossesTitle": "Втрати",
   "warDrawsTitle": "Розігрує",
@@ -2051,7 +2141,7 @@
   "faqWhatCanBotDo": "Що може робити Discord-бот ClashKing?",
   "faqWhatCanBotDoAnswer": "Discord-бот ClashKing допомагає керувати кланом прямо з Discord завдяки комплексним інструментам відстеження, автоматичним сповіщенням і безшовній інтеграції з цим застосунком. Він створений для лідерів і учасників кланів, які хочуть залишатися на зв’язку та бути організованими:",
   "faqInviteBotToServer": "Запросити бота на сервер",
-  "drawerInviteDiscordBot": "Запросити бота на сервер",
+  "drawerInviteDiscordBot": "Invite Discord Bot",
   "faqBotFeatureTracking": "Відстеження гравців і кланів",
   "faqBotFeatureTrackingDesc": "Додавайте й відстежуйте кілька кланів і гравців з оновленнями в реальному часі",
   "faqBotFeatureWars": "Керування війнами",
@@ -2208,7 +2298,7 @@
     "description": "Defender town hall filter label"
   },
   "filtersSameTownHallOnly": "Лише однакова ратуша",
-  "warStatsSameTownHall": "Однакова ратуша",
+  "warStatsSameTownHall": "Same Townhall",
   "@filtersSameTownHallOnly": {
     "description": "Same town hall filter option"
   },
@@ -2862,7 +2952,7 @@
   "@settingsNotificationsTitle": {
     "description": "Settings tile: notifications title"
   },
-  "settingsNotificationsSubtitle": "Виберіть, які попередження отримувати.",
+  "settingsNotificationsSubtitle": "Виберіть сповіщення та надішліть попередній перегляд локальних тестів.",
   "@settingsNotificationsSubtitle": {
     "description": "Settings tile: notifications subtitle"
   },
@@ -3334,7 +3424,7 @@
   "playerBestTrophies": "Найкращі трофеї",
   "clanLoadFailed": "Не вдалося завантажити клан.",
   "gameItemLevels": "Рівні",
-  "gameItemLevelCount": "{count, plural, one {# рівень} few {# рівні} many {# рівнів} other {# рівня}}",
+  "gameItemLevelCount": "{count, plural, one {# Level} other {# Levels}}",
   "@gameItemLevelCount": {
     "placeholders": {
       "count": {
@@ -3405,6 +3495,20 @@
   },
   "todoAllCaughtUpForNow": "Поки що все виконано",
   "timeDurationShort": "{unit, select, daysHours {{primary}д {secondary}год} hoursMinutes {{primary}год {secondary}хв} other {{primary}хв}}",
+  "@timeDurationShort": {
+    "description": "Compact localized duration used in countdowns",
+    "placeholders": {
+      "unit": {
+        "type": "String"
+      },
+      "primary": {
+        "type": "int"
+      },
+      "secondary": {
+        "type": "int"
+      }
+    }
+  },
   "todoEventEndsIn": "Завершиться через {duration}",
   "@todoEventEndsIn": {
     "placeholders": {
@@ -3514,9 +3618,14 @@
   "statsHero": "Герой",
   "statsPet": "Пет",
   "statsEquipment": "Спорядження",
-  "statsPetCombinations": "Комбінації улюбленців",
-  "statsEquipmentPairs": "Пари спорядження",
-  "statsArmyFallback": "Армія {id}",
+  "statsPetCombinations": "Pet combinations",
+  "statsEquipmentPairs": "Equipment pairs",
+  "statsArmyFallback": "Army {id}",
+  "@statsArmyFallback": {
+    "placeholders": {
+      "id": {}
+    }
+  },
   "statsOwningHero": "Власний герой",
   "statsAddItem": "Додати предмет",
   "statsAnalyzeItems": "Аналізувати елементи",
@@ -3902,7 +4011,7 @@
   },
   "appIconDefault": "Стандартна",
   "appIconChristmas": "Різдвяна",
-  "appIconHalloween": "Гелловін",
+  "appIconHalloween": "Halloween",
   "appIconBlackWhite": "Чорно-біла",
   "appIconDarkMode": "Темний режим",
   "generalMembersCount": "Учасників: {count}",
@@ -3960,9 +4069,9 @@
     }
   },
   "upgradeTrackerShare": "Поділитися прогресом",
-  "trackerPosterCopied": "Зображення скопійовано",
-  "trackerPosterCopy": "Копіювати зображення",
-  "trackerPosterShareAll": "Поділитися всіма 3",
+  "trackerPosterCopied": "Image copied",
+  "trackerPosterCopy": "Copy image",
+  "trackerPosterShareAll": "Share all 3",
   "upgradeTrackerPasteJson": "Вставити JSON облікового запису",
   "upgradeTrackerImportTitle": "Імпорт даних гравця",
   "upgradeTrackerImportDescription": "Вставте необроблений JSON облікового запису. Дані залишаться на цьому пристрої.",
@@ -4271,8 +4380,8 @@
   "homeActivityLeft": "вихід",
   "homeActivityAClan": "клан",
   "statsCwlSeasonGroups": "Групи",
-  "statsCwlSeasonHistory": "Ліга кланових війн у часі",
-  "statsCwlRosterNotLineup": "Склад зареєстрованих гравців перераховано на {size} місць; фактичний склад у війні може відрізнятися.",
+  "statsCwlSeasonHistory": "CWL over time",
+  "statsCwlRosterNotLineup": "Registered roster mix, scaled to {size} places; actual war lineups may differ.",
   "@statsCwlRosterNotLineup": {
     "placeholders": {
       "size": {
@@ -4280,28 +4389,28 @@
       }
     }
   },
-  "statsTroopStats": "Статистика військ",
-  "statsWarSizes": "Розміри війн",
-  "statsMissedAttacks": "Пропущені атаки",
-  "statsCopyChart": "Копіювати графік",
-  "statsCompareItems": "Порівняти елементи",
-  "statsCompareItemsHint": "Виберіть до 5 елементів для порівняння.",
-  "statsVsOverall": "порівняно із загальним показником",
-  "statsCopyChartFailed": "Не вдалося скопіювати графік. Спробуйте ще раз.",
-  "statsPercentagePoints": "відсоткових пунктів",
+  "statsTroopStats": "Troop Stats",
+  "statsWarSizes": "War sizes",
+  "statsMissedAttacks": "Missed attacks",
+  "statsCopyChart": "Copy chart",
+  "statsCompareItems": "Compare items",
+  "statsCompareItemsHint": "Select up to 5 items to compare.",
+  "statsVsOverall": "vs. overall",
+  "statsCopyChartFailed": "Could not copy chart. Try again.",
+  "statsPercentagePoints": "percentage points",
   "statsMeta": "Мета",
   "statsBattle": "Битва",
   "statsWorld": "Світ",
   "statsHeaderSubtitle": "Досліджуйте результати битв і дані світу гри, які ми відстежуємо.",
   "statsPreview": "Попередній перегляд",
-  "statsTownHallDistribution": "Ратуші",
+  "statsTownHallDistribution": "Розподіл ратуші",
   "statsBuilderHallDistribution": "Розподіл Будівельників",
-  "statsLeagueDistribution": "Рейтингові ліги",
+  "statsLeagueDistribution": "Рейтинговий розподіл ліг",
   "statsTrackedPlayers": "Поточна відстежувана чисельність гравців",
   "statsTrackedClans": "Поточна відстежувана чисельність кланів",
-  "statsCwlLeagueDistribution": "Ліги CWL",
-  "statsCapitalLeagueDistribution": "Ліги столиці",
-  "statsTrackedLocations": "Розташування кланів",
+  "statsCwlLeagueDistribution": "Розподіл ліг CWL",
+  "statsCapitalLeagueDistribution": "Розподіл капітальних ліг",
+  "statsTrackedLocations": "Відстежувані місцезнаходження кланів",
   "statsLocationCountHelp": "Країни та місця, представлені відстежуваними кланами.",
   "statsLeagueId": "Ліга {id}",
   "@statsLeagueId": {
@@ -4379,7 +4488,7 @@
   "rankedLeagueNoBattles": "Жодної битви ще не зареєстровано.",
   "rankedLeagueGroupRanking": "Таблиця групи",
   "rankedLeagueRankingSubtitle": "Поточне положення в групі. Вашого гравця виділено.",
-  "rankedLeagueJumpToMyRank": "Перейти до місця",
+  "rankedLeagueJumpToMyRank": "Перейти до мого місця",
   "rankedLeagueLastPeriod": "Попередній період",
   "rankedLeagueBestGroupRank": "Найвище місце",
   "rankedLeaguePeriodHistory": "Історія періодів",
@@ -4944,7 +5053,7 @@
       }
     }
   },
-  "upgradeTrackerPlanRuleNote": "Перетягніть категорії, щоб вибрати порядок покращень. Налаштування рядка дозволяють спільний пріоритет або зупинку на цільовому прогресі.",
+  "upgradeTrackerPlanRuleNote": "Пронумеровані яруси запускаються першими. Спільні рядки зберігають той самий номер рівня, а їх суміш нормалізується на основі відносних ваг, тому 50 + 25 стає 67% / 33%. Ціль робить категорію прибутковою після того, як вона досягає цього відсотка, і залишається придатною пізніше.",
   "upgradeTrackerPlanGoalMaxCurrentHall": "Макс перед наступним",
   "upgradeTrackerPlanGoalRushNextHall": "Швидко дійдіть до наступного залу",
   "upgradeTrackerPlanGoalCatchUp": "Наздоганяйте швидкі рівні",
@@ -5046,19 +5155,40 @@
       }
     }
   },
-  "cwlRegisteredRoster": "Заявлений склад",
-  "cwlMatches": "Матчі",
-  "cwlNextMatchup": "Наступний матч",
-  "cwlOtherMatches": "Інші матчі",
-  "cwlOutlook": "Прогноз сезону",
-  "cwlFirstPlace": "Перше місце",
-  "cwlTopTwo": "Перші два місця",
-  "cwlRemainingOpponents": "Решта суперників",
-  "cwlWinBonusNote": "Зірки включають 10 бонусних зірок за кожну завершену перемогу.",
-  "cwlEstimateNote": "Оцінки враховують завершені війни та решту суперників, але не зміни складів. Потрібно щонайменше дві завершені війни на клан. Оцінки не відкалібровані; правила підвищення залежать від ліги.",
-  "cwlDuration": "{unit, select, hours {{count, plural, one {# година} few {# години} other {# годин}}} other {{count, plural, one {# хвилина} few {# хвилини} other {# хвилин}}}}",
-  "personalBasesDeleteOld": "Видалити бази, старші за 90 днів",
-  "personalBasesDeleteOldConfirm": "Буде видалено збережених баз, старших за 90 днів: {count}. Історія завантажень і спільні бази залишаться.",
+  "@settingsWarWidgetIosReady": {
+    "placeholders": {
+      "clanName": {
+        "type": "String"
+      }
+    }
+  },
+  "@settingsWarWidgetAndroidReady": {
+    "placeholders": {
+      "clanName": {
+        "type": "String"
+      }
+    }
+  },
+  "@settingsWarWidgetPrepareFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "cwlRegisteredRoster": "Registered roster",
+  "cwlMatches": "Matchups",
+  "cwlNextMatchup": "Next matchup",
+  "cwlOtherMatches": "Other matchups",
+  "cwlOutlook": "Season outlook",
+  "cwlFirstPlace": "First place",
+  "cwlTopTwo": "Top two",
+  "cwlRemainingOpponents": "Remaining opponents",
+  "cwlWinBonusNote": "Stars include 10 bonus stars per completed win.",
+  "cwlEstimateNote": "Estimates use completed wars and remaining opponents, not lineup changes. At least two completed wars per clan are needed. These are uncalibrated estimates; promotion rules vary by league.",
+  "cwlDuration": "{unit, select, hours {{count, plural, one {# hour} other {# hours}}} other {{count, plural, one {# minute} other {# minutes}}}}",
+  "personalBasesDeleteOld": "Remove bases older than 90 days",
+  "personalBasesDeleteOldConfirm": "{count} saved bases older than 90 days will be removed. Download history and shared bases will remain.",
   "@personalBasesDeleteOldConfirm": {
     "description": "Confirms cleanup while preserving lifetime download history.",
     "placeholders": {
@@ -5067,9 +5197,9 @@
       }
     }
   },
-  "legendsAutomaticDefense": "Автоматичний захист",
-  "legendsPopularArmyItem": "Найпопулярніший елемент армії",
-  "legendsClanCastle": "Фортеця клану",
+  "legendsAutomaticDefense": "Automatic defense",
+  "legendsPopularArmyItem": "Most popular army item",
+  "legendsClanCastle": "Clan Castle",
   "@cwlDuration": {
     "description": "Explicit countdown units; avoid native unit conversion.",
     "placeholders": {
@@ -5081,20 +5211,20 @@
       }
     }
   },
-  "clanNotificationRemoveConfirmation": "Вимкнути сповіщення цього клану та видалити закладку?",
-  "personalBasesTab": "Bases",
+  "clanNotificationRemoveConfirmation": "Turn off this clan’s notifications and remove the bookmark?",
+  "personalBasesTab": "Бази",
   "personalBasesDownloaded": "Downloaded",
   "personalArmyName": "Army name",
   "personalArmyNotes": "Notes",
   "personalArmyUnnamed": "Unnamed army",
   "personalArmyEdit": "Edit army",
   "personalArmyUnknownTownHall": "Unknown Town Hall",
-  "discordBotDashboard": "Панель Discord-бота",
-  "discordAddBot": "Додати бота",
-  "discordAddToMyDiscord": "Додати до мого Discord",
-  "discordServersWithoutBot": "Сервери без ClashKing",
-  "rankingsPlayerSection": "Рейтинги гравців",
-  "rankingsClanSection": "Рейтинги кланів",
+  "discordBotDashboard": "Discord Bot Dashboard",
+  "discordAddBot": "Add bot",
+  "discordAddToMyDiscord": "Add to My Discord",
+  "discordServersWithoutBot": "Servers without ClashKing",
+  "rankingsPlayerSection": "Player Rankings",
+  "rankingsClanSection": "Clan Rankings",
   "cwlArchiveCoverage": "{available} of {total} matchups available.",
   "cwlStandingsIncomplete": "Missing archives are excluded. Group ranks and forecasts are unavailable.",
   "cwlPromotionChance": "Estimated promotion chance",
@@ -5105,62 +5235,62 @@
   "cwlRecordedStats": "Recorded wars only",
   "cwlMissingMatchups": "{count} matchups unavailable",
   "cwlHighestLeague": "Highest league · no promotion",
-  "warOutlookWinPossible": "Перемога ще можлива",
-  "warOutlookDrawOnly": "Щонайбільше нічия",
-  "warOutlookDefeat": "Перемога неможлива",
-  "warOutlookMaximum": "Максимально можливий рахунок",
-  "warOutlookAssumption": "Передбачає ідеальні решту атак. Це математична межа, а не прогноз.",
-  "warScoutTitle": "Аналіз складу",
-  "warScoutOpponent": "Нещодавні війни суперника",
-  "warScoutScope": "Поточний склад · ті самі правила · до 10 попередніх війн",
-  "upgradeTrackerCapturedWork": "З останнього оновлення",
-  "tutorialWelcomeBody": "Ознайомтеся з ClashKing під час короткого огляду. Його можна пропустити будь-коли.",
-  "tutorialReorderBody": "Утримуйте картку й перетягніть її на нове місце.",
-  "tutorialSidebarBody": "Проведіть по головному екрану, щоб відкрити меню, або торкніться свого аватара.",
-  "tutorialExploreBody": "У цьому меню відкрийте Налаштування, а потім Сповіщення. Продовжте, щоб перейти туди зараз.",
-  "tutorialRemindersBody": "Виберіть нагадування нижче. Коли закінчите, поверніться на головний екран.",
-  "tutorialResetTitle": "Скинути навчання",
-  "tutorialResetConfirm": "Запустити навчання знову під час наступних відвідувань?",
-  "upgradeTrackerOngoingUpgrades": "Поточні покращення",
-  "upgradeTrackerToLevel": "До рівня {level}",
-  "upgradeTrackerFreeSlots": "Вільно: {count}",
-  "upgradeTrackerFreeIn": "Звільниться через {duration}",
-  "upgradeTrackerPetHouse": "Будинок улюбленців",
-  "upgradeTrackerNotBuilt": "Не збудовано",
-  "upgradeTrackerExtraSlots": "Додатково: {count}",
-  "rankedLeagueOverTime": "Ліга з часом",
-  "rankedLeaguePromotionCutoff": "Межа підвищення",
-  "rankedLeagueDemotionCutoff": "Межа пониження",
-  "rankedLeagueCutoffsUnavailable": "Межі підвищення та пониження недоступні.",
-  "rankedAutomaticDefenseSummary": "Захистів: {count} · по {points} трофеїв",
-  "rankedAutomaticDefenseExplanation": "На основі всіх реальних захистів за тиждень, з округленням донизу.",
-  "warStatusInWar": "На війні",
-  "warStatusNoWar": "Немає війни",
-  "warNoActiveClans": "Зараз жоден клан не бере участі у війні.",
-  "warNoInactiveClans": "Немає кланів поза війною",
-  "warAllClansInWar": "Зараз усі ваші клани беруть участь у війні.",
+  "warOutlookWinPossible": "Win still possible",
+  "warOutlookDrawOnly": "Draw at best",
+  "warOutlookDefeat": "No path to a win",
+  "warOutlookMaximum": "Maximum possible score",
+  "warOutlookAssumption": "Assumes perfect remaining attacks. This is a mathematical limit, not a prediction.",
+  "warScoutTitle": "Lineup scouting",
+  "warScoutOpponent": "Opponent’s recent wars",
+  "warScoutScope": "Current lineup · same rules · up to 10 previous wars",
+  "upgradeTrackerCapturedWork": "From your last update",
+  "tutorialWelcomeBody": "Take a quick tour of ClashKing. You can skip it at any time.",
+  "tutorialReorderBody": "Hold a card, then drag it to change its position.",
+  "tutorialSidebarBody": "Swipe across Home to open the menu, or tap your avatar.",
+  "tutorialExploreBody": "From this menu, open Settings, then Notifications. Continue to go there now.",
+  "tutorialRemindersBody": "Choose reminders below. When you are done, return to Home.",
+  "tutorialResetTitle": "Reset tutorials",
+  "tutorialResetConfirm": "Start the tutorials again on your next visits?",
+  "upgradeTrackerOngoingUpgrades": "Ongoing Upgrades",
+  "upgradeTrackerToLevel": "To Level {level}",
+  "upgradeTrackerFreeSlots": "{count} free",
+  "upgradeTrackerFreeIn": "Free in {duration}",
+  "upgradeTrackerPetHouse": "Pet House",
+  "upgradeTrackerNotBuilt": "Not built",
+  "upgradeTrackerExtraSlots": "{count} extra",
+  "rankedLeagueOverTime": "League over time",
+  "rankedLeaguePromotionCutoff": "Promotion cutoff",
+  "rankedLeagueDemotionCutoff": "Demotion cutoff",
+  "rankedLeagueCutoffsUnavailable": "Promotion and demotion thresholds unavailable.",
+  "rankedAutomaticDefenseSummary": "{count} defenses · {points} trophies each",
+  "rankedAutomaticDefenseExplanation": "Based on all real defenses this week, rounded down.",
+  "warStatusInWar": "In war",
+  "warStatusNoWar": "No war",
+  "warNoActiveClans": "No clans are currently in war.",
+  "warNoInactiveClans": "No clans out of war",
+  "warAllClansInWar": "All your clans are currently in war.",
   "warStatusOther": "Інші",
-  "warNoOtherClans": "Інших кланів немає.",
-  "playerWarLifetime": "Увесь час",
-  "playerWarThScope": "Застосовується лише до карток статистики, а не до боїв. Утримуйте кнопку, щоб побачити це пояснення.",
-  "playerWarNoAttacks": "Атак поки немає",
-  "playerWarRegularWars": "Звичайна війна",
-  "warWidgetNoActiveWar": "Немає активної війни",
-  "warWidgetPrivateWarLog": "Приватний журнал війн",
-  "warWidgetChooseClan": "Вибрати клан",
-  "legendPerformanceTitle": "Результати за днями",
-  "legendCompleteDays": "Повні дні",
-  "legendPerfectDays": "Ідеальні дні",
-  "legendPartialDays": "Неповні дні",
-  "legendMissingDays": "Немає записів",
-  "legendInvalidDays": "Некоректні дні",
-  "legendTrophiesGained": "Здобуті трофеї",
-  "legendTrophiesLost": "Втрачені трофеї",
+  "warNoOtherClans": "No other clans.",
+  "playerWarLifetime": "Lifetime",
+  "playerWarThScope": "Applies only to the statistics cards, not Battles. Hold the button for this explanation.",
+  "playerWarNoAttacks": "No attacks yet",
+  "playerWarRegularWars": "Regular war",
+  "warWidgetNoActiveWar": "No active war",
+  "warWidgetPrivateWarLog": "Private war log",
+  "warWidgetChooseClan": "Choose a clan",
+  "legendPerformanceTitle": "Daily performance",
+  "legendCompleteDays": "Complete days",
+  "legendPerfectDays": "Perfect days",
+  "legendPartialDays": "Partial days",
+  "legendMissingDays": "No observations",
+  "legendInvalidDays": "Invalid days",
+  "legendTrophiesGained": "Trophies gained",
+  "legendTrophiesLost": "Trophies lost",
   "legendDistribution": "Розподіл",
-  "legendPreviousDays": "Попередні {count} днів",
-  "legendAvailableDays": "Дні з даними",
-  "legendCompleteOnly": "Розподіл охоплює дні з 8 записаними боями.",
-  "legendPerfectSources": "Ідеальні дні за місцями",
+  "legendPreviousDays": "Previous {count} days",
+  "legendAvailableDays": "Days available",
+  "legendCompleteOnly": "Distribution uses days with 8 recorded battles.",
+  "legendPerfectSources": "Perfect days by rank",
   "@legendPreviousDays": {
     "placeholders": {
       "count": {
@@ -5168,15 +5298,15 @@
       }
     }
   },
-  "onboardingOverviewTitle": "Твої акаунти та клани",
-  "onboardingOverviewBody": "Твої гравці, клани та вдосконалення — в одному місці.",
-  "onboardingProgressTitle": "Переглядай рейтинги й статистику",
-  "onboardingProgressBody": "Стеж за боями, порівнюй поступ і продовжуй покращення.",
-  "onboardingRemindersTitle": "Отримуй нагадування та сповіщення",
-  "onboardingRemindersBody": "Отримуй нагадування про війни й вибрані сповіщення. Вибери облікові записи та типи сповіщень у налаштуваннях.",
-  "onboardingReplayTitle": "Повторити вступ",
-  "statsViewLatestData": "Переглянути найновіші дані",
-  "statsLatestAvailableDate": "Останні доступні дані: {date}",
+  "onboardingOverviewTitle": "Your accounts & clans",
+  "onboardingOverviewBody": "Keep your players, clans, and upgrades together.",
+  "onboardingProgressTitle": "View rankings and stats",
+  "onboardingProgressBody": "Follow your battles, compare your progress, and keep upgrades moving.",
+  "onboardingRemindersTitle": "Get reminders and alerts",
+  "onboardingRemindersBody": "Get war reminders and the alerts you choose. Pick your accounts and alert types in Settings.",
+  "onboardingReplayTitle": "Replay introduction",
+  "statsViewLatestData": "View latest data",
+  "statsLatestAvailableDate": "Latest available: {date}",
   "@statsLatestAvailableDate": {
     "placeholders": {
       "date": {
@@ -5184,23 +5314,23 @@
       }
     }
   },
-  "legendPerfectedDefenseDays": "Дні з повністю розгромленою обороною",
-  "legendCompleteDayDefinition": "Враховуються лише дні з усіма 8 боями.",
+  "legendPerfectedDefenseDays": "Perfected defense days",
+  "legendCompleteDayDefinition": "Only days with all 8 battles are included.",
   "statsCommunity": "Спільнота",
-  "rankedFullOffenseDays": "+320 днів",
-  "rankedFullDefenseDays": "−320 днів",
-  "rankedTrophiesByRank": "Трофеї за рейтингом",
-  "statsArmyTypes": "Типи армій",
-  "onboardingStatsBody": "Досліджуй статистику гравців, стеж за своїми кланами й дивись, як змінюється вся гра.",
-  "onboardingWidgetsTitle": "Додай віджети на головний екран",
-  "onboardingWidgetsBody": "Стеж за рахунками війн і вдосконаленнями за допомогою віджетів на головному екрані.",
-  "onboardingAlertTitle": "Війна скоро закінчиться",
-  "onboardingAlertBody": "Час для твоєї останньої атаки.",
-  "onboardingSetupNotifications": "Увімкнути сповіщення",
-  "onboardingAccountsReadyBody": "Твої прив’язані акаунти готові. Додай ще один або продовжуй.",
-  "onboardingSkipAccountSetup": "Пропустити",
-  "accountsSetupBody": "Додайте та підтвердьте свої облікові записи Clash of Clans.",
-  "accountsMyTitle": "Мої облікові записи",
-  "profileAvatar": "Змінити вигляд",
-  "avatarPickerTitle": "Обери аватар"
+  "rankedFullOffenseDays": "+320 days",
+  "rankedFullDefenseDays": "−320 days",
+  "rankedTrophiesByRank": "Trophies by rank",
+  "statsArmyTypes": "Army Types",
+  "onboardingStatsBody": "Explore player stats, follow your clans, and see how the whole game is changing.",
+  "onboardingWidgetsTitle": "Add Home Screen widgets",
+  "onboardingWidgetsBody": "Keep war scores and upgrade progress close with Home Screen widgets.",
+  "onboardingAlertTitle": "War ends soon",
+  "onboardingAlertBody": "Time for your final attack.",
+  "onboardingSetupNotifications": "Enable notifications",
+  "onboardingAccountsReadyBody": "Your linked accounts are ready. Add another account or continue.",
+  "onboardingSkipAccountSetup": "Skip",
+  "accountsSetupBody": "Add and verify your Clash of Clans accounts.",
+  "accountsMyTitle": "My Accounts",
+  "profileAvatar": "Change look",
+  "avatarPickerTitle": "Pick an avatar"
 }

@@ -1,20 +1,20 @@
 {
-  "capitalCurrentOpponent": "Obecny przeciwnik",
-  "capitalRaidMedals": "Medale najazdów",
-  "warReplayTitle": "Historia wyniku",
-  "warReplayPlay": "Odtwórz historię",
-  "warReplayPause": "Wstrzymaj historię",
-  "cwlLeading": "Prowadzi",
-  "cwlTrailing": "Przegrywa",
-  "cwlYourClan": "Twój klan",
-  "cwlPromotionZone": "Strefa awansu",
-  "cwlDemotionZone": "Strefa spadku",
-  "cwlNotInLineup": "Poza składem",
-  "esportsEloSubtitle": "Światowy ranking drużyn i mecze od",
-  "esportsTopTeamsMatches": "Mecze aktualnie najlepszych 50 drużyn.",
-  "esportsPartialMatches": "Nie udało się odświeżyć niektórych drużyn.",
-  "settingsHideAccounts": "Ukryj konta",
-  "settingsHideAccountsDescription": "Pokaż opcję ukrywania połączonych kont. Obecne ustawienia prywatności pozostaną bez zmian.",
+  "capitalCurrentOpponent": "Current opponent",
+  "capitalRaidMedals": "Raid medals",
+  "warReplayTitle": "Score history",
+  "warReplayPlay": "Play history",
+  "warReplayPause": "Pause history",
+  "cwlLeading": "Leading",
+  "cwlTrailing": "Trailing",
+  "cwlYourClan": "Your clan",
+  "cwlPromotionZone": "Promotion zone",
+  "cwlDemotionZone": "Demotion zone",
+  "cwlNotInLineup": "Not in lineup",
+  "esportsEloSubtitle": "Global team rankings and matches from",
+  "esportsTopTeamsMatches": "Matches from the current top 50 teams.",
+  "esportsPartialMatches": "Some teams could not be refreshed.",
+  "settingsHideAccounts": "Hide accounts",
+  "settingsHideAccountsDescription": "Show the option to hide linked accounts. Existing privacy choices stay unchanged.",
   "calcRocketBalloonAssumption": "1 hit + death · {damage} damage each",
   "calcKeepEquipped": "Keep one equipped",
   "calcCustomLevels": "Custom levels",
@@ -38,31 +38,31 @@
   "personalBasesEmptyBody": "Bases you post through ClashKing on Discord appear here. You can also save bases from the library.",
   "personalArmiesEmptyTitle": "Keep your armies close",
   "personalArmiesEmptyBody": "Armies you post through ClashKing on Discord appear here. Save your favourites to find them before your next attack.",
-  "homeCardOriginal": "Oryginalny",
-  "homeCardTint": "Delikatny kolor",
-  "homeCardEdge": "Kolorowe obramowania",
-  "homeCardGlow": "Powolna poświata",
-  "competitiveNoHistory": "Brak turniejów",
-  "competitiveHistoryHint": "Tutaj pojawią się twoje drużyny i wyniki turniejów.",
-  "esportsMonthlyFinals": "Miesięczne finały",
-  "esportsMonthlyQualifier": "Miesięczne kwalifikacje",
-  "esportsHeroSubtitle": "Droga do mistrzostw świata",
-  "esportsViewEvent": "Poznaj wydarzenie",
-  "esportsWinLoss": "Zwycięstwa: {wins} · Porażki: {losses}",
-  "esportsViewPlayer": "Zobacz gracza",
-  "esportsRecentMatches": "Ostatnie mecze",
-  "esportsHideAttacks": "Ukryj szczegóły bitwy",
-  "esportsViewAttacks": "Zobacz szczegóły bitwy",
-  "esportsPlayer": "Gracz e-sportowy",
-  "esportsBattles": "Bitwy",
-  "esportsTriples": "Ataki na trzy gwiazdki",
-  "esportsAverageStars": "Średnia gwiazdek",
+  "homeCardOriginal": "Original",
+  "homeCardTint": "Soft color",
+  "homeCardEdge": "Colored edges",
+  "homeCardGlow": "Slow glow",
+  "competitiveNoHistory": "No tournaments yet",
+  "competitiveHistoryHint": "Your teams and tournament results will appear here.",
+  "esportsMonthlyFinals": "Monthly finals",
+  "esportsMonthlyQualifier": "Monthly qualifiers",
+  "esportsHeroSubtitle": "The road to the World Championship",
+  "esportsViewEvent": "Explore event",
+  "esportsWinLoss": "{wins} wins · {losses} losses",
+  "esportsViewPlayer": "View player",
+  "esportsRecentMatches": "Recent matches",
+  "esportsHideAttacks": "Hide battle details",
+  "esportsViewAttacks": "View battle details",
+  "esportsPlayer": "Esports player",
+  "esportsBattles": "Stoczone bitwy",
+  "esportsTriples": "Triples",
+  "esportsAverageStars": "Średnie gwiazdki",
   "esportsDestruction": "Zniszczenie",
-  "esportsAccounts": "Konta w grze",
+  "esportsAccounts": "Game accounts",
   "esportsAttack": "Atak",
   "esportsDefense": "Obrona",
-  "competitiveArenaSubtitle": "Twój klan. Twoja drużyna. Twoje kolejne wyzwanie.",
-  "competitiveViewTournament": "Zobacz turniej",
+  "competitiveArenaSubtitle": "Your clan. Your team. Your next challenge.",
+  "competitiveViewTournament": "View tournament",
   "@esportsWinLoss": {
     "placeholders": {
       "wins": {
@@ -87,50 +87,50 @@
   "esportsStage": "Stage",
   "esportsStandings": "Standings",
   "esportsMatches": "Matches",
-  "esportsPoints": "Points",
+  "esportsPoints": "Zwrotnica",
   "esportsPlayed": "played",
   "esportsSource": "Data from Competitive Clash Network",
-  "esportsRoster": "Roster",
+  "esportsRoster": "Skład",
   "esportsSeasonPoints": "Season points",
   "esportsStageStandings": "Stage standings",
-  "competitiveCompetition": "Rywalizacja",
-  "competitiveWebsite": "Strona internetowa",
-  "competitiveVerifiedAccounts": "Zweryfikowane konta",
-  "competitiveEsports": "E-sport",
-  "competitiveTournaments": "Turnieje",
+  "competitiveCompetition": "Competition",
+  "competitiveWebsite": "Website",
+  "competitiveVerifiedAccounts": "Verified accounts",
+  "competitiveEsports": "eSports",
+  "competitiveTournaments": "Tournaments",
   "competitiveProfile": "Profil",
   "competitiveTeams": "Drużyny",
-  "competitiveFreeEntry": "Udział bezpłatny",
-  "competitiveRegister": "Zarejestruj drużynę",
-  "competitiveCheckIn": "Potwierdź obecność",
-  "competitiveRules": "Zasady",
-  "competitiveUnavailable": "Dane zawodów są niedostępne. Spróbuj ponownie.",
-  "competitiveRegistrationSaved": "Zgłoszenie wysłane",
-  "competitiveTeamHistory": "Historia drużyny",
-  "competitiveDebutName": "Debiut turniejowy",
-  "competitiveDebutDescription": "Weź udział w turnieju swoim zweryfikowanym kontem.",
-  "competitiveViewProfile": "Zobacz profil",
+  "competitiveFreeEntry": "Free entry",
+  "competitiveRegister": "Register team",
+  "competitiveCheckIn": "Check in",
+  "competitiveRules": "Rules",
+  "competitiveUnavailable": "Competition data is unavailable. Try again.",
+  "competitiveRegistrationSaved": "Registration submitted",
+  "competitiveTeamHistory": "Team history",
+  "competitiveDebutName": "Tournament debut",
+  "competitiveDebutDescription": "Participate in a tournament with your verified account.",
+  "competitiveViewProfile": "View profile",
   "calcPinEquipment": "Keep one equipped",
-  "calcSearch": "Search",
+  "calcSearch": "Szukaj",
   "calcEquipmentTitle": "Equipment Compare",
   "calcDamageIntro": "Find the combinations that take a defense down.",
   "calcFarmIntro": "Plan the loot needed for your next upgrades.",
   "calcEquipmentIntro": "Compare hero loadouts, levels, and ability stats.",
   "calcComingSoon": "Coming soon",
-  "calcHero": "Hero",
+  "calcHero": "Bohater",
   "calcHeroLevel": "Hero level",
   "calcMaxLevels": "Max levels",
   "calcEquipmentPool": "Equipment to compare",
   "calcPoolHelp": "Choose pieces and default levels. Compare every pair, then customize individual rows.",
   "calcSelectAll": "Select all",
-  "calcClear": "Clear",
+  "calcClear": "Jasne",
   "calcAttributes": "Attributes",
   "calcAddAttribute": "Add attribute",
-  "calcTable": "Compare",
+  "calcTable": "Porównaj",
   "calcProgression": "Level progression",
   "calcCompareHelp": "DPS adds the hero's base and equipment DPS. Speed bonuses and temporary effects are separate attributes; healing is not extra max HP.",
   "calcChartHelp": "Equipment levels increase together; each piece stops at its own maximum. Hero levels stay fixed. First six loadouts shown.",
-  "calcSort": "Sort by",
+  "calcSort": "Sortuj według",
   "calcNoEquipment": "No equipment",
   "calcDuplicate": "Duplicate loadout",
   "calcRemove": "Remove loadout",
@@ -154,9 +154,9 @@
   "calcComparisonDownloaded": "Comparison image downloaded",
   "calcComparisonExportFailed": "Could not copy the comparison image. Please try again.",
   "calcEffectiveLevel": "Effective level {level}",
-  "calcTarget": "Target",
+  "calcTarget": "Cel",
   "calcSupercharge": "Supercharge",
-  "calcNone": "None",
+  "calcNone": "Brak",
   "calcResults": "{count} combinations",
   "calcResultsHelp": "Smallest spell cost first, then fewer equipment activations. Extra sources that do not help are removed.",
   "calcNoCombinationHelp": "Try another source, a higher level, or more spell capacity.",
@@ -164,63 +164,63 @@
   "calcAlternative": "Alternative",
   "calcCombinationCost": "{housing} spell space · {equipment} equipment",
   "calcUseStack": "Use stack",
-  "homeRankingsAndStats": "Rankingi i statystyki",
-  "homeActivityRecorded": "Tylko zarejestrowana aktywność; historia może być niepełna.",
-  "homeWidgetsServers": "Serwery",
-  "homeWidgetsEdit": "Edytuj stronę główną",
-  "homeWidgetsAdd": "Dodaj widżet",
-  "homeWidgetsRemove": "Usuń widżet",
-  "homeWidgetsMoveUp": "Przenieś w górę",
-  "homeWidgetsMoveDown": "Przenieś w dół",
+  "homeRankingsAndStats": "Rankings & Stats",
+  "homeActivityRecorded": "Recorded activity only; history may be incomplete.",
+  "homeWidgetsServers": "Servers",
+  "homeWidgetsEdit": "Edit Home",
+  "homeWidgetsAdd": "Add widget",
+  "homeWidgetsRemove": "Remove widget",
+  "homeWidgetsMoveUp": "Move up",
+  "homeWidgetsMoveDown": "Move down",
   "homeWidgetsSmall": "Mały",
-  "homeWidgetsWide": "Szeroki",
-  "homeWidgetsSaveError": "Nie udało się zsynchronizować strony głównej. Odśwież przed ponowną edycją.",
-  "homeWidgetsUnavailable": "Brak zapisanych danych",
-  "homeWidgetsBookmarkFirst": "Najpierw dodaj gracza lub klan do zakładek.",
-  "rankingsWarTripleStreak": "Seria trzech gwiazdek w wojnie",
+  "homeWidgetsWide": "Wide",
+  "homeWidgetsSaveError": "Could not sync Home. Please refresh before editing again.",
+  "homeWidgetsUnavailable": "No recorded data available",
+  "homeWidgetsBookmarkFirst": "Bookmark a player or clan first.",
+  "rankingsWarTripleStreak": "War Triple Streak",
   "rankingsWarTripleRulesTitle": "How streaks count",
   "rankingsWarTripleRulesBody": "+2 for two triples against your own Town Hall level in a regular war.\n\nA missed attack, non-triple, or different-TH target resets your streak.\n\nCWL and friendly wars don’t count. Streaks are separate for each Town Hall level.",
-  "clanLegendsRanked": "Legendy i ranking",
-  "appIconChangeWarning": "Zmiana ikony aplikacji zamknie ClashKing. Kontynuować?",
-  "upgradeTrackerUnverifiedAccount": "To konto jest połączone, ale niezweryfikowane. Zweryfikuj je w zarządzaniu kontami, aby zaimportować dane ulepszeń.",
-  "clanWarNotificationsTitle": "Powiadomienia o wojnie",
-  "clanCapitalNotificationsTitle": "Powiadomienia o stolicy klanu",
-  "clanWarNotificationsBody": "Otrzymuj aktualności o wojnach tego klanu.",
-  "clanCapitalNotificationsBody": "Otrzymuj aktualności o stolicy tego klanu.",
-  "notifSystemNotifications": "Powiadomienia systemowe",
-  "notifSystemSettings": "Otwórz ustawienia powiadomień",
-  "notifSystemSettingsDescription": "Zarządzaj alertami, dźwiękami i odznakami w ustawieniach urządzenia.",
-  "notifSystemSettingsFailed": "Nie udało się otworzyć ustawień powiadomień. Otwórz Ustawienia na urządzeniu.",
-  "notifManagePlayersDescription": "Zarządzaj powiadomieniami kont w Gracze → Połączone → Opcje.",
-  "notifCustomReminders": "Własne przypomnienia",
-  "notifTestType": "Typ powiadomienia",
-  "statsBattlelogsGroup": "Dzienniki bitew",
-  "statsGlobalStatsGroup": "Statystyki globalne",
-  "playerOptionShowOnHomeTitle": "Pokaż konto na stronie głównej",
-  "playerOptionShowOnHomeSubtitle": "Uwzględnij to zweryfikowane konto na kartach strony głównej (maksymalnie 5).",
-  "playerOptionShowOnHomeVerifyFirst": "Zweryfikuj to konto, aby pokazać je na stronie głównej.",
-  "playerOptionHomeInclusionFirst": "Najpierw włącz opcję Pokaż konto na stronie głównej.",
-  "homeIncludedAccountsLimit": "Na stronie głównej można pokazać maksymalnie 5 kont. Najpierw usuń jedno.",
-  "statsHitratesByTownHall": "Skuteczność według ratusza",
-  "statsChartGranularity": "Przedział wykresu",
-  "statsDaily": "Dziennie",
+  "clanLegendsRanked": "Legends & Ranked",
+  "appIconChangeWarning": "Changing the app icon will close ClashKing. Continue?",
+  "upgradeTrackerUnverifiedAccount": "This account is linked but not verified. Verify it in Manage Accounts to import your upgrade data.",
+  "clanWarNotificationsTitle": "War notifications",
+  "clanCapitalNotificationsTitle": "Clan Capital notifications",
+  "clanWarNotificationsBody": "Receive war updates for this clan.",
+  "clanCapitalNotificationsBody": "Receive Clan Capital updates for this clan.",
+  "notifSystemNotifications": "System notifications",
+  "notifSystemSettings": "Open notification settings",
+  "notifSystemSettingsDescription": "Manage alerts, sounds, and badges in your device settings.",
+  "notifSystemSettingsFailed": "Could not open notification settings. Please open Settings on your device.",
+  "notifManagePlayersDescription": "Manage account notifications in Players → Linked → Options.",
+  "notifCustomReminders": "Custom reminders",
+  "notifTestType": "Notification type",
+  "statsBattlelogsGroup": "Battlelogs",
+  "statsGlobalStatsGroup": "Global Stats",
+  "playerOptionShowOnHomeTitle": "Show account on Home",
+  "playerOptionShowOnHomeSubtitle": "Include this verified account in Home cards (up to 5).",
+  "playerOptionShowOnHomeVerifyFirst": "Verify this account to show it on Home.",
+  "playerOptionHomeInclusionFirst": "Turn on Show account on Home first.",
+  "homeIncludedAccountsLimit": "Home can show up to 5 accounts. Remove one first.",
+  "statsHitratesByTownHall": "Hitrates by Town Hall",
+  "statsChartGranularity": "Chart interval",
+  "statsDaily": "Codziennie",
   "statsWeekly": "Tygodniowo",
-  "playerBattlelogCumulative": "Skumulowane",
-  "statsMonthly": "Miesięcznie",
-  "statsCompareCohorts": "Porównaj grupy",
-  "statsAcrossCohorts": "Użycie według grup",
-  "legendsTrophyGrid": "Przegląd sezonu",
-  "legendsPopularArmyItems": "Najpopularniejsze elementy armii",
-  "legendsPopularTroop": "Ulubiony",
-  "legendsHitrate": "Skuteczność",
-  "legendsAvgOffense": "Śr. atak",
-  "legendsAvgDefense": "Śr. obrona",
-  "settingsClearImageCache": "Wyczyść pamięć podręczną obrazów",
-  "settingsImageCacheCleared": "Pamięć podręczna obrazów została wyczyszczona.",
-  "settingsImageCacheClearFailed": "Nie udało się wyczyścić pamięci podręcznej obrazów. Spróbuj ponownie.",
-  "startupCheckingUpdate": "Sprawdzanie aktualizacji…",
-  "startupDownloadingUpdate": "Pobieranie aktualizacji…",
-  "startupUpdateInBackground": "Aktualizuj w tle",
+  "playerBattlelogCumulative": "Cumulative",
+  "statsMonthly": "Monthly",
+  "statsCompareCohorts": "Compare cohorts",
+  "statsAcrossCohorts": "Usage across cohorts",
+  "legendsTrophyGrid": "Season overview",
+  "legendsPopularArmyItems": "Most popular army items",
+  "legendsPopularTroop": "Favorite",
+  "legendsHitrate": "Hitrate",
+  "legendsAvgOffense": "Avg. Offense",
+  "legendsAvgDefense": "Avg. Defense",
+  "settingsClearImageCache": "Clear image cache",
+  "settingsImageCacheCleared": "Image cache cleared.",
+  "settingsImageCacheClearFailed": "Could not clear the image cache. Please try again.",
+  "startupCheckingUpdate": "Checking for updates…",
+  "startupDownloadingUpdate": "Downloading update…",
+  "startupUpdateInBackground": "Update in background",
   "warStatsRangeTitle": "Zakres statystyk wojennych",
   "warStatsRangeDescription": "Wybierz, czy statystyki mają obejmować stałą liczbę ostatnich wojen, czy ostatni okres podany w dniach.",
   "warStatsRangeDays": "Dni",
@@ -375,17 +375,59 @@
   "notifPushEnabled": "Powiadomienia push włączone",
   "notifReceiveNotifications": "Otrzymuj powiadomienia",
   "notifTokenPreview": "Token: {token}",
+  "@notifTokenPreview": {
+    "placeholders": {
+      "token": {
+        "type": "String"
+      }
+    }
+  },
   "notifEnabledDeliveryDescription": "Włączone alerty mogą być dostarczane na to urządzenie.",
   "notifDisabledAccountDescription": "Powiadomienia są wyłączone na całym koncie ClashKing.",
   "notifMaximumRemindersAdded": "Dodano maksymalną liczbę przypomnień",
   "notifAddReminder": "Dodaj przypomnienie",
   "notifDurationOneHour": "1 godzina",
   "notifDurationHours": "{count} godzin",
+  "@notifDurationHours": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "notifDurationMinutes": "{count} minut",
+  "@notifDurationMinutes": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "notifAddTiming": "Dodaj {timing}",
+  "@notifAddTiming": {
+    "placeholders": {
+      "timing": {
+        "type": "String"
+      }
+    }
+  },
   "notifTimingOneHourBefore": "1 godzinę wcześniej",
   "notifTimingHoursBefore": "{count} godzin wcześniej",
+  "@notifTimingHoursBefore": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "notifTimingMinutesBefore": "{count} minut wcześniej",
+  "@notifTimingMinutesBefore": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "notifPushReady": "Powiadomienia push są gotowe na tym urządzeniu.",
   "notifPushPermissionRequired": "Zezwól na powiadomienia, aby otrzymywać alerty ClashKing.",
   "notifPushPermissionDenied": "Odmówiono uprawnień do powiadomień.",
@@ -394,12 +436,13 @@
   "notifPushUnsupported": "Powiadomienia push nie są obsługiwane na tej platformie.",
   "notifPushInitializing": "Konfigurowanie powiadomień push…",
   "notificationPrimerTitle": "Włączyć powiadomienia?",
-  "notificationPrimerBody": "ClashKing może wysyłać informacje o wydarzeniach, ogłoszeniach, obronach w Lidze Legend i wsparciu. Przypomnienia o wojnach i weekendach najazdów pozostają wyłączone, dopóki ich nie skonfigurujesz. Możesz zmienić te opcje w Ustawienia > Powiadomienia.",
+  "notificationPrimerBody": "ClashKing może powiadamiać Cię o aktualizacjach wojen, CWL, konta i projektów. Możesz to zmienić w dowolnym momencie w Ustawieniach > Powiadomienia.",
   "notificationPrimerNotNow": "Nie teraz",
   "notificationPrimerAllow": "Zezwól",
+  "@@last_modified": "2024-12-23T10:00:00.000Z",
   "achievementsTitle": "Osiągnięcia",
   "achievementEarnedLabel": "Zdobyto",
-  "achievementGemsEarnedRatio": "Zdobyto {earned} / {total}",
+  "achievementGemsEarnedRatio": "{earned} / {total} earned",
   "@achievementGemsEarnedRatio": {
     "placeholders": {
       "earned": {
@@ -410,7 +453,7 @@
       }
     }
   },
-  "achievementGemsAccessibility": "Zdobyto {earned} z {total} klejnotów za osiągnięcia.",
+  "achievementGemsAccessibility": "Earned {earned} of {total} achievement gems.",
   "@achievementGemsAccessibility": {
     "placeholders": {
       "earned": {
@@ -423,6 +466,23 @@
   },
   "achievementSummary": "{earned}/{total} ukończono",
   "achievementEarnedCount": "Zdobyto ×{count}",
+  "@achievementSummary": {
+    "placeholders": {
+      "earned": {
+        "type": "String"
+      },
+      "total": {
+        "type": "String"
+      }
+    }
+  },
+  "@achievementEarnedCount": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
   "achievementTownhall18Name": "Ratusz 18",
   "achievementTownhall18Requirement": "Osiągnij 18. poziom ratusza.",
   "achievementWarWarriorName": "Wojenny wojownik",
@@ -431,7 +491,6 @@
   "achievementMrLegendDescription": "Ukończono bezbłędny dzień ataków w Lidze Legend.",
   "achievementDefenseDoesntMatterName": "Obrona nie ma znaczenia",
   "achievementDefenseDoesntMatterDescription": "Przetrwano idealny dzień obrony w Lidze Legend.",
-  "@@last_modified": "2024-12-23T10:00:00.000Z",
   "appTitle": "ClashKing",
   "appDescription": "Twój najlepszy towarzysz Clash of Clans do śledzenia statystyk, zarządzania klanami i analizowania wydajności.",
   "generalLoading": "Wczytywanie...",
@@ -454,8 +513,8 @@
   "postsLoadMore": "Wczytaj następne",
   "postsCurrent": "Bieżące",
   "postsPast": "Archiwalne",
-  "postsStoryFinished": "Relacja zakończona",
-  "postsWatchAgain": "Obejrzyj ponownie",
+  "postsStoryFinished": "Story finished",
+  "postsWatchAgain": "Watch again",
   "postsStory": "Interaktywna relacja",
   "postsPinned": "Wyróżnione",
   "generalTryAgain": "Spróbuj ponownie",
@@ -544,7 +603,7 @@
     "description": "Filter value is not set"
   },
   "generalWarning": "Ostrzeżenie",
-  "gameHandoffDontShowAgain": "Nie pokazuj ponownie",
+  "gameHandoffDontShowAgain": "Don't show this again",
   "generalUnknown": "Nieznane",
   "generalNoDataAvailable": "Brak dostępnych danych.",
   "generalNoFilteredResults": "Brak wyników pasujących do Twoich filtrów",
@@ -773,9 +832,9 @@
   "accountsAdd": "Dodaj konto",
   "accountsAddInstruction": "Naciśnij przycisk +, aby dodać swoje konto",
   "accountsApiToken": "Token API konta",
-  "accountsEnterApiToken": "Potwierdź, że to Twoje konto, za pomocą tokenu API z gry.",
+  "accountsEnterApiToken": "Wprowadź token API, aby potwierdzić, że jest twój. Możesz go znaleźć w Clash of Clans:",
   "accountsApiTokenLocation": "Ustawienia > Więcej Ustawień > Token API",
-  "accountsOpenMoreSettings": "Pobierz token API",
+  "accountsOpenMoreSettings": "Otwórz więcej ustawień",
   "accountsCouldNotOpenClash": "Nie udało się otworzyć Clash of Clans. Otwórz grę ręcznie.",
   "accountsFillAllFields": "Wypełnij wszystkie pola.",
   "accountsErrorTagNotExists": "Wprowadzony tag gracza nie istnieje.",
@@ -1295,8 +1354,32 @@
   "warParticipation": "Udział w wojnie",
   "cwlParticipantOnly": "Tylko uczestnik",
   "warStatsRangeWarsCompact": "{number} wojen",
+  "@warStatsRangeWarsCompact": {
+    "description": "Compact clan war statistics war range label",
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
   "warStatsRangeDaysCompact": "{number} dni",
+  "@warStatsRangeDaysCompact": {
+    "description": "Compact clan war statistics day range label",
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
   "warStatsLastXDays": "Ostatnie {number} dni",
+  "@warStatsLastXDays": {
+    "description": "Clan war statistics date-range label",
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
   "warStatsCurrentMembers": "Obecni członkowie",
   "warLeague": "Wojna/Liga",
   "warHistory": "Historia wojen",
@@ -1305,6 +1388,13 @@
   "warLogClosed": "Dziennik wojenny klanu {clan} jest zamknięty.",
   "warLogPrivate": "{clan} ma prywatny dziennik wojenny.",
   "@warLogClosed": {
+    "placeholders": {
+      "clan": {
+        "type": "String"
+      }
+    }
+  },
+  "@warLogPrivate": {
     "placeholders": {
       "clan": {
         "type": "String"
@@ -1608,7 +1698,7 @@
   "warStarsTwo": "2 gwiazdki",
   "warStarsThree": "3 gwiazdki",
   "warStarsZero": "0 gwiazdek",
-  "legendHistoryZeroStars": "Zero gwiazdek",
+  "legendHistoryZeroStars": "Zero Stars",
   "warStarsBestPerformance": "Najlepsza wydajność",
   "@warStarsBestPerformance": {
     "description": "Best performance in war"
@@ -1763,7 +1853,7 @@
   "clanLeaderboardHistoryTab": "Historia rankingu",
   "clanLegendHistoryTab": "Historia Legend",
   "clanRecordsTab": "Rekordy",
-  "clanRecordsChangesTab": "Rekordy i zmiany",
+  "clanRecordsChangesTab": "Records & Changes",
   "clanProfileHistoryTab": "Historia profilu",
   "clanProfileLevelChanged": "Poziom klanu zmieniony",
   "clanProfileDescriptionChanged": "Opis zmieniony",
@@ -1805,8 +1895,8 @@
   "legendsCountryTitle": "Kraj",
   "legendsLocalRankTitle": "Ranga lokalna",
   "legendsGlobalRankTitle": "Globalna ranga",
-  "legendsYourArmy": "Twoja armia",
-  "legendsArmyUsedAgainstYou": "Armia użyta przeciwko tobie",
+  "legendsYourArmy": "Your army",
+  "legendsArmyUsedAgainstYou": "Army used against you",
   "warWinsTitle": "Wygrywa",
   "warLossesTitle": "Straty",
   "warDrawsTitle": "Rysuje",
@@ -2051,7 +2141,7 @@
   "faqWhatCanBotDo": "Co może zrobić Bot Discord ClashKing?",
   "faqWhatCanBotDoAnswer": "Bot ClashKing Discord pomaga zarządzać klanem bezpośrednio z Discorda za pomocą kompleksowych narzędzi śledzenia, automatycznych powiadomień i bezproblemowej integracji z tą aplikacją. Jest on zaprojektowany dla przywódców klanów i członków, którzy chcą pozostać w kontakcie i zorganizowaniu:",
   "faqInviteBotToServer": "Zaproś bota na serwer",
-  "drawerInviteDiscordBot": "Zaproś bota na serwer",
+  "drawerInviteDiscordBot": "Invite Discord Bot",
   "faqBotFeatureTracking": "Śledzenie gracza i klanu",
   "faqBotFeatureTrackingDesc": "Dodaj i monitoruj wiele klanów i graczy z aktualizacjami w czasie rzeczywistym",
   "faqBotFeatureWars": "Zarządzanie Wojnami",
@@ -2208,7 +2298,7 @@
     "description": "Defender town hall filter label"
   },
   "filtersSameTownHallOnly": "Tylko ten sam poziom ratusza",
-  "warStatsSameTownHall": "Ten sam ratusz",
+  "warStatsSameTownHall": "Same Townhall",
   "@filtersSameTownHallOnly": {
     "description": "Same town hall filter option"
   },
@@ -2862,7 +2952,7 @@
   "@settingsNotificationsTitle": {
     "description": "Settings tile: notifications title"
   },
-  "settingsNotificationsSubtitle": "Wybierz alerty, które chcesz otrzymywać.",
+  "settingsNotificationsSubtitle": "Wybierz alerty i wyślij lokalne podglądy testów.",
   "@settingsNotificationsSubtitle": {
     "description": "Settings tile: notifications subtitle"
   },
@@ -3334,7 +3424,7 @@
   "playerBestTrophies": "Najlepsze trofea",
   "clanLoadFailed": "Nie udało się załadować klanu.",
   "gameItemLevels": "Poziomy",
-  "gameItemLevelCount": "{count, plural, one {# poziom} few {# poziomy} many {# poziomów} other {# poziomu}}",
+  "gameItemLevelCount": "{count, plural, one {# Level} other {# Levels}}",
   "@gameItemLevelCount": {
     "placeholders": {
       "count": {
@@ -3405,6 +3495,20 @@
   },
   "todoAllCaughtUpForNow": "Na razie wszystko nadrobione",
   "timeDurationShort": "{unit, select, daysHours {{primary}d {secondary}godz.} hoursMinutes {{primary}godz. {secondary}min} other {{primary}min}}",
+  "@timeDurationShort": {
+    "description": "Compact localized duration used in countdowns",
+    "placeholders": {
+      "unit": {
+        "type": "String"
+      },
+      "primary": {
+        "type": "int"
+      },
+      "secondary": {
+        "type": "int"
+      }
+    }
+  },
   "todoEventEndsIn": "Kończy się za {duration}",
   "@todoEventEndsIn": {
     "placeholders": {
@@ -3514,9 +3618,14 @@
   "statsHero": "Bohaterowie",
   "statsPet": "Zwierzak",
   "statsEquipment": "Wyposażenie",
-  "statsPetCombinations": "Kombinacje zwierzaków",
-  "statsEquipmentPairs": "Pary wyposażenia",
-  "statsArmyFallback": "Armia {id}",
+  "statsPetCombinations": "Pet combinations",
+  "statsEquipmentPairs": "Equipment pairs",
+  "statsArmyFallback": "Army {id}",
+  "@statsArmyFallback": {
+    "placeholders": {
+      "id": {}
+    }
+  },
   "statsOwningHero": "Posiadanie bohatera",
   "statsAddItem": "Dodaj przedmiot",
   "statsAnalyzeItems": "Analizuj elementy",
@@ -3960,9 +4069,9 @@
     }
   },
   "upgradeTrackerShare": "Udostępnij postęp",
-  "trackerPosterCopied": "Obraz skopiowany",
-  "trackerPosterCopy": "Kopiuj obraz",
-  "trackerPosterShareAll": "Udostępnij wszystkie 3",
+  "trackerPosterCopied": "Image copied",
+  "trackerPosterCopy": "Copy image",
+  "trackerPosterShareAll": "Share all 3",
   "upgradeTrackerPasteJson": "Wklej dane JSON konta",
   "upgradeTrackerImportTitle": "Import danych gracza",
   "upgradeTrackerImportDescription": "Wklej nieprzetworzony JSON konta. Dane pozostaną na tym urządzeniu.",
@@ -4271,8 +4380,8 @@
   "homeActivityLeft": "odejście",
   "homeActivityAClan": "klan",
   "statsCwlSeasonGroups": "Grupy",
-  "statsCwlSeasonHistory": "Liga wojen klanów w czasie",
-  "statsCwlRosterNotLineup": "Rozkład zapisanych graczy przeliczony na {size} miejsc; rzeczywiste składy wojenne mogą się różnić.",
+  "statsCwlSeasonHistory": "CWL over time",
+  "statsCwlRosterNotLineup": "Registered roster mix, scaled to {size} places; actual war lineups may differ.",
   "@statsCwlRosterNotLineup": {
     "placeholders": {
       "size": {
@@ -4280,28 +4389,28 @@
       }
     }
   },
-  "statsTroopStats": "Statystyki jednostek",
-  "statsWarSizes": "Rozmiary wojen",
-  "statsMissedAttacks": "Pominięte ataki",
-  "statsCopyChart": "Kopiuj wykres",
-  "statsCompareItems": "Porównaj elementy",
-  "statsCompareItemsHint": "Wybierz maksymalnie 5 elementów do porównania.",
-  "statsVsOverall": "w porównaniu z ogółem",
-  "statsCopyChartFailed": "Nie udało się skopiować wykresu. Spróbuj ponownie.",
-  "statsPercentagePoints": "punktów procentowych",
+  "statsTroopStats": "Troop Stats",
+  "statsWarSizes": "War sizes",
+  "statsMissedAttacks": "Missed attacks",
+  "statsCopyChart": "Copy chart",
+  "statsCompareItems": "Compare items",
+  "statsCompareItemsHint": "Select up to 5 items to compare.",
+  "statsVsOverall": "vs. overall",
+  "statsCopyChartFailed": "Could not copy chart. Try again.",
+  "statsPercentagePoints": "percentage points",
   "statsMeta": "Meta",
   "statsBattle": "Bitwa",
   "statsWorld": "Świat",
   "statsHeaderSubtitle": "Poznaj wyniki bitew i śledzone przez nas dane ze świata gry.",
   "statsPreview": "Podgląd",
-  "statsTownHallDistribution": "Ratusze",
+  "statsTownHallDistribution": "Rozkład ratusza",
   "statsBuilderHallDistribution": "Dystrybucja Builder Hall",
-  "statsLeagueDistribution": "Ligi rankingowe",
+  "statsLeagueDistribution": "Dystrybucja lig rankingowych",
   "statsTrackedPlayers": "Aktualnie śledzona populacja graczy",
   "statsTrackedClans": "Aktualnie śledzona populacja klanów",
-  "statsCwlLeagueDistribution": "Ligi CWL",
-  "statsCapitalLeagueDistribution": "Ligi stolicy",
-  "statsTrackedLocations": "Lokalizacje klanów",
+  "statsCwlLeagueDistribution": "Dystrybucja ligi CWL",
+  "statsCapitalLeagueDistribution": "Dystrybucja ligi stołecznej",
+  "statsTrackedLocations": "Śledzone lokalizacje klanów",
   "statsLocationCountHelp": "Kraje i lokalizacje reprezentowane przez śledzone klany.",
   "statsLeagueId": "Liga {id}",
   "@statsLeagueId": {
@@ -4379,7 +4488,7 @@
   "rankedLeagueNoBattles": "Nie zapisano jeszcze żadnej bitwy.",
   "rankedLeagueGroupRanking": "Tabela grupy",
   "rankedLeagueRankingSubtitle": "Bieżąca klasyfikacja grupy. Twój gracz jest wyróżniony.",
-  "rankedLeagueJumpToMyRank": "Przejdź do miejsca",
+  "rankedLeagueJumpToMyRank": "Przejdź do mojego miejsca",
   "rankedLeagueLastPeriod": "Poprzedni okres",
   "rankedLeagueBestGroupRank": "Najwyższe miejsce",
   "rankedLeaguePeriodHistory": "Historia okresów",
@@ -4944,7 +5053,7 @@
       }
     }
   },
-  "upgradeTrackerPlanRuleNote": "Przeciągnij kategorie, aby ustalić kolejność ulepszeń. Ustawienia wiersza pozwalają współdzielić priorytet lub zatrzymać się przy celu postępu.",
+  "upgradeTrackerPlanRuleNote": "Numerowane poziomy są uruchamiane jako pierwsze. Wspólne wiersze zachowują ten sam numer poziomu, a ich kombinacja jest normalizowana na podstawie względnych wag, więc 50 + 25 daje 67% / 33%. Cel generuje zysk w kategorii po osiągnięciu tego procentu, przy czym pozostaje on uprawniony później.",
   "upgradeTrackerPlanGoalMaxCurrentHall": "Maks przed awansem",
   "upgradeTrackerPlanGoalRushNextHall": "Szybko dotrzyj do kolejnej sali",
   "upgradeTrackerPlanGoalCatchUp": "Nadrabiaj pośpieszne poziomy",
@@ -5046,19 +5155,40 @@
       }
     }
   },
-  "cwlRegisteredRoster": "Zgłoszony skład",
-  "cwlMatches": "Starcia",
-  "cwlNextMatchup": "Następne starcie",
-  "cwlOtherMatches": "Pozostałe starcia",
-  "cwlOutlook": "Prognoza sezonu",
-  "cwlFirstPlace": "Pierwsze miejsce",
-  "cwlTopTwo": "Pierwsza dwójka",
-  "cwlRemainingOpponents": "Pozostali rywale",
-  "cwlWinBonusNote": "Gwiazdy obejmują 10 dodatkowych gwiazd za każde zakończone zwycięstwo.",
-  "cwlEstimateNote": "Szacunki uwzględniają zakończone wojny i pozostałych rywali, a nie zmiany składu. Wymagane są co najmniej dwie zakończone wojny na klan. Szacunki nie są skalibrowane; zasady awansu zależą od ligi.",
-  "cwlDuration": "{unit, select, hours {{count, plural, one {# godzina} few {# godziny} other {# godzin}}} other {{count, plural, one {# minuta} few {# minuty} other {# minut}}}}",
-  "personalBasesDeleteOld": "Usuń bazy starsze niż 90 dni",
-  "personalBasesDeleteOldConfirm": "Zostanie usuniętych {count} zapisanych baz starszych niż 90 dni. Historia pobierania i udostępnione bazy pozostaną.",
+  "@settingsWarWidgetIosReady": {
+    "placeholders": {
+      "clanName": {
+        "type": "String"
+      }
+    }
+  },
+  "@settingsWarWidgetAndroidReady": {
+    "placeholders": {
+      "clanName": {
+        "type": "String"
+      }
+    }
+  },
+  "@settingsWarWidgetPrepareFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "cwlRegisteredRoster": "Registered roster",
+  "cwlMatches": "Matchups",
+  "cwlNextMatchup": "Next matchup",
+  "cwlOtherMatches": "Other matchups",
+  "cwlOutlook": "Season outlook",
+  "cwlFirstPlace": "First place",
+  "cwlTopTwo": "Top two",
+  "cwlRemainingOpponents": "Remaining opponents",
+  "cwlWinBonusNote": "Stars include 10 bonus stars per completed win.",
+  "cwlEstimateNote": "Estimates use completed wars and remaining opponents, not lineup changes. At least two completed wars per clan are needed. These are uncalibrated estimates; promotion rules vary by league.",
+  "cwlDuration": "{unit, select, hours {{count, plural, one {# hour} other {# hours}}} other {{count, plural, one {# minute} other {# minutes}}}}",
+  "personalBasesDeleteOld": "Remove bases older than 90 days",
+  "personalBasesDeleteOldConfirm": "{count} saved bases older than 90 days will be removed. Download history and shared bases will remain.",
   "@personalBasesDeleteOldConfirm": {
     "description": "Confirms cleanup while preserving lifetime download history.",
     "placeholders": {
@@ -5067,9 +5197,9 @@
       }
     }
   },
-  "legendsAutomaticDefense": "Automatyczna obrona",
-  "legendsPopularArmyItem": "Najpopularniejszy element armii",
-  "legendsClanCastle": "Zamek klanowy",
+  "legendsAutomaticDefense": "Automatic defense",
+  "legendsPopularArmyItem": "Most popular army item",
+  "legendsClanCastle": "Clan Castle",
   "@cwlDuration": {
     "description": "Explicit countdown units; avoid native unit conversion.",
     "placeholders": {
@@ -5081,20 +5211,20 @@
       }
     }
   },
-  "clanNotificationRemoveConfirmation": "Wyłączyć powiadomienia tego klanu i usunąć zakładkę?",
-  "personalBasesTab": "Bases",
+  "clanNotificationRemoveConfirmation": "Turn off this clan’s notifications and remove the bookmark?",
+  "personalBasesTab": "Bazy",
   "personalBasesDownloaded": "Downloaded",
   "personalArmyName": "Army name",
   "personalArmyNotes": "Notes",
   "personalArmyUnnamed": "Unnamed army",
   "personalArmyEdit": "Edit army",
   "personalArmyUnknownTownHall": "Unknown Town Hall",
-  "discordBotDashboard": "Panel bota Discord",
-  "discordAddBot": "Dodaj bota",
-  "discordAddToMyDiscord": "Dodaj do mojego Discorda",
-  "discordServersWithoutBot": "Serwery bez ClashKing",
-  "rankingsPlayerSection": "Rankingi graczy",
-  "rankingsClanSection": "Rankingi klanów",
+  "discordBotDashboard": "Discord Bot Dashboard",
+  "discordAddBot": "Add bot",
+  "discordAddToMyDiscord": "Add to My Discord",
+  "discordServersWithoutBot": "Servers without ClashKing",
+  "rankingsPlayerSection": "Player Rankings",
+  "rankingsClanSection": "Clan Rankings",
   "cwlArchiveCoverage": "{available} of {total} matchups available.",
   "cwlStandingsIncomplete": "Missing archives are excluded. Group ranks and forecasts are unavailable.",
   "cwlPromotionChance": "Estimated promotion chance",
@@ -5105,62 +5235,62 @@
   "cwlRecordedStats": "Recorded wars only",
   "cwlMissingMatchups": "{count} matchups unavailable",
   "cwlHighestLeague": "Highest league · no promotion",
-  "warOutlookWinPossible": "Wygrana nadal możliwa",
-  "warOutlookDrawOnly": "Najwyżej remis",
-  "warOutlookDefeat": "Wygrana niemożliwa",
-  "warOutlookMaximum": "Maksymalny możliwy wynik",
-  "warOutlookAssumption": "Zakłada idealne pozostałe ataki. To granica matematyczna, nie prognoza.",
-  "warScoutTitle": "Analiza składu",
-  "warScoutOpponent": "Ostatnie wojny przeciwnika",
-  "warScoutScope": "Obecny skład · te same zasady · do 10 poprzednich wojen",
-  "upgradeTrackerCapturedWork": "Z ostatniej aktualizacji",
-  "tutorialWelcomeBody": "Poznaj ClashKing podczas krótkiego samouczka. Możesz go pominąć w każdej chwili.",
-  "tutorialReorderBody": "Przytrzymaj kartę i przeciągnij ją, aby zmienić jej położenie.",
-  "tutorialSidebarBody": "Przesuń palcem po ekranie głównym, aby otworzyć menu, lub dotknij swojego awatara.",
-  "tutorialExploreBody": "W tym menu otwórz Ustawienia, a następnie Powiadomienia. Kontynuuj, aby przejść tam teraz.",
-  "tutorialRemindersBody": "Wybierz przypomnienia poniżej. Po zakończeniu wróć na ekran główny.",
-  "tutorialResetTitle": "Zresetuj samouczki",
-  "tutorialResetConfirm": "Uruchomić samouczki ponownie podczas kolejnych wizyt?",
-  "upgradeTrackerOngoingUpgrades": "Trwające ulepszenia",
-  "upgradeTrackerToLevel": "Do poziomu {level}",
-  "upgradeTrackerFreeSlots": "{count} wolnych",
-  "upgradeTrackerFreeIn": "Wolne za {duration}",
-  "upgradeTrackerPetHouse": "Dom zwierzaków",
-  "upgradeTrackerNotBuilt": "Nie zbudowano",
-  "upgradeTrackerExtraSlots": "{count} dodatkowych",
-  "rankedLeagueOverTime": "Liga na przestrzeni czasu",
-  "rankedLeaguePromotionCutoff": "Próg awansu",
-  "rankedLeagueDemotionCutoff": "Próg spadku",
-  "rankedLeagueCutoffsUnavailable": "Progi awansu i spadku są niedostępne.",
-  "rankedAutomaticDefenseSummary": "{count} obron · po {points} trofeów",
-  "rankedAutomaticDefenseExplanation": "Na podstawie wszystkich rzeczywistych obron w tym tygodniu, zaokrąglone w dół.",
-  "warStatusInWar": "Na wojnie",
-  "warStatusNoWar": "Brak wojny",
-  "warNoActiveClans": "Żaden klan nie jest obecnie na wojnie.",
-  "warNoInactiveClans": "Brak klanów poza wojną",
-  "warAllClansInWar": "Wszystkie twoje klany są obecnie na wojnie.",
-  "warStatusOther": "Pozostałe",
-  "warNoOtherClans": "Brak innych klanów.",
-  "playerWarLifetime": "Cała historia",
-  "playerWarThScope": "Dotyczy tylko kart statystyk, nie bitew. Przytrzymaj przycisk, aby zobaczyć to wyjaśnienie.",
-  "playerWarNoAttacks": "Brak ataków",
-  "playerWarRegularWars": "Zwykła wojna",
-  "warWidgetNoActiveWar": "Brak aktywnej wojny",
-  "warWidgetPrivateWarLog": "Prywatny dziennik wojen",
-  "warWidgetChooseClan": "Wybierz klan",
-  "legendPerformanceTitle": "Wyniki dzienne",
-  "legendCompleteDays": "Pełne dni",
-  "legendPerfectDays": "Perfekcyjne dni",
-  "legendPartialDays": "Niepełne dni",
-  "legendMissingDays": "Brak zapisów",
-  "legendInvalidDays": "Nieprawidłowe dni",
-  "legendTrophiesGained": "Zdobyte trofea",
-  "legendTrophiesLost": "Utracone trofea",
+  "warOutlookWinPossible": "Win still possible",
+  "warOutlookDrawOnly": "Draw at best",
+  "warOutlookDefeat": "No path to a win",
+  "warOutlookMaximum": "Maximum possible score",
+  "warOutlookAssumption": "Assumes perfect remaining attacks. This is a mathematical limit, not a prediction.",
+  "warScoutTitle": "Lineup scouting",
+  "warScoutOpponent": "Opponent’s recent wars",
+  "warScoutScope": "Current lineup · same rules · up to 10 previous wars",
+  "upgradeTrackerCapturedWork": "From your last update",
+  "tutorialWelcomeBody": "Take a quick tour of ClashKing. You can skip it at any time.",
+  "tutorialReorderBody": "Hold a card, then drag it to change its position.",
+  "tutorialSidebarBody": "Swipe across Home to open the menu, or tap your avatar.",
+  "tutorialExploreBody": "From this menu, open Settings, then Notifications. Continue to go there now.",
+  "tutorialRemindersBody": "Choose reminders below. When you are done, return to Home.",
+  "tutorialResetTitle": "Reset tutorials",
+  "tutorialResetConfirm": "Start the tutorials again on your next visits?",
+  "upgradeTrackerOngoingUpgrades": "Ongoing Upgrades",
+  "upgradeTrackerToLevel": "To Level {level}",
+  "upgradeTrackerFreeSlots": "{count} free",
+  "upgradeTrackerFreeIn": "Free in {duration}",
+  "upgradeTrackerPetHouse": "Pet House",
+  "upgradeTrackerNotBuilt": "Not built",
+  "upgradeTrackerExtraSlots": "{count} extra",
+  "rankedLeagueOverTime": "League over time",
+  "rankedLeaguePromotionCutoff": "Promotion cutoff",
+  "rankedLeagueDemotionCutoff": "Demotion cutoff",
+  "rankedLeagueCutoffsUnavailable": "Promotion and demotion thresholds unavailable.",
+  "rankedAutomaticDefenseSummary": "{count} defenses · {points} trophies each",
+  "rankedAutomaticDefenseExplanation": "Based on all real defenses this week, rounded down.",
+  "warStatusInWar": "In war",
+  "warStatusNoWar": "No war",
+  "warNoActiveClans": "No clans are currently in war.",
+  "warNoInactiveClans": "No clans out of war",
+  "warAllClansInWar": "All your clans are currently in war.",
+  "warStatusOther": "Inne",
+  "warNoOtherClans": "No other clans.",
+  "playerWarLifetime": "Lifetime",
+  "playerWarThScope": "Applies only to the statistics cards, not Battles. Hold the button for this explanation.",
+  "playerWarNoAttacks": "No attacks yet",
+  "playerWarRegularWars": "Regular war",
+  "warWidgetNoActiveWar": "No active war",
+  "warWidgetPrivateWarLog": "Private war log",
+  "warWidgetChooseClan": "Choose a clan",
+  "legendPerformanceTitle": "Daily performance",
+  "legendCompleteDays": "Complete days",
+  "legendPerfectDays": "Perfect days",
+  "legendPartialDays": "Partial days",
+  "legendMissingDays": "No observations",
+  "legendInvalidDays": "Invalid days",
+  "legendTrophiesGained": "Trophies gained",
+  "legendTrophiesLost": "Trophies lost",
   "legendDistribution": "Rozkład",
-  "legendPreviousDays": "Poprzednie {count} dni",
-  "legendAvailableDays": "Dostępne dni",
-  "legendCompleteOnly": "Rozkład obejmuje dni z 8 zarejestrowanymi bitwami.",
-  "legendPerfectSources": "Perfekcyjne dni według pozycji",
+  "legendPreviousDays": "Previous {count} days",
+  "legendAvailableDays": "Days available",
+  "legendCompleteOnly": "Distribution uses days with 8 recorded battles.",
+  "legendPerfectSources": "Perfect days by rank",
   "@legendPreviousDays": {
     "placeholders": {
       "count": {
@@ -5168,15 +5298,15 @@
       }
     }
   },
-  "onboardingOverviewTitle": "Twoje konta i klany",
-  "onboardingOverviewBody": "Miej swoich graczy, klany i ulepszenia w jednym miejscu.",
-  "onboardingProgressTitle": "Przeglądaj rankingi i statystyki",
-  "onboardingProgressBody": "Śledź bitwy, porównuj postępy i kontynuuj ulepszenia.",
-  "onboardingRemindersTitle": "Otrzymuj przypomnienia i powiadomienia",
-  "onboardingRemindersBody": "Otrzymuj przypomnienia o wojnach i wybrane alerty. Wybierz konta i typy powiadomień w Ustawieniach.",
-  "onboardingReplayTitle": "Pokaż wprowadzenie ponownie",
-  "statsViewLatestData": "Pokaż najnowsze dane",
-  "statsLatestAvailableDate": "Najnowsze dostępne dane: {date}",
+  "onboardingOverviewTitle": "Your accounts & clans",
+  "onboardingOverviewBody": "Keep your players, clans, and upgrades together.",
+  "onboardingProgressTitle": "View rankings and stats",
+  "onboardingProgressBody": "Follow your battles, compare your progress, and keep upgrades moving.",
+  "onboardingRemindersTitle": "Get reminders and alerts",
+  "onboardingRemindersBody": "Get war reminders and the alerts you choose. Pick your accounts and alert types in Settings.",
+  "onboardingReplayTitle": "Replay introduction",
+  "statsViewLatestData": "View latest data",
+  "statsLatestAvailableDate": "Latest available: {date}",
   "@statsLatestAvailableDate": {
     "placeholders": {
       "date": {
@@ -5184,23 +5314,23 @@
       }
     }
   },
-  "legendPerfectedDefenseDays": "Dni z całkowicie pokonaną obroną",
-  "legendCompleteDayDefinition": "Uwzględniane są tylko dni ze wszystkimi 8 bitwami.",
+  "legendPerfectedDefenseDays": "Perfected defense days",
+  "legendCompleteDayDefinition": "Only days with all 8 battles are included.",
   "statsCommunity": "Społeczność",
-  "rankedFullOffenseDays": "+320 dni",
-  "rankedFullDefenseDays": "−320 dni",
-  "rankedTrophiesByRank": "Trofea według rankingu",
-  "statsArmyTypes": "Typy armii",
-  "onboardingStatsBody": "Przeglądaj statystyki graczy, obserwuj swoje klany i sprawdzaj, jak zmienia się cała gra.",
-  "onboardingWidgetsTitle": "Dodaj widżety do ekranu głównego",
-  "onboardingWidgetsBody": "Miej wyniki wojen i postępy ulepszeń pod ręką dzięki widżetom na ekranie głównym.",
-  "onboardingAlertTitle": "Wojna wkrótce się skończy",
-  "onboardingAlertBody": "Czas na twój ostatni atak.",
-  "onboardingSetupNotifications": "Włącz powiadomienia",
-  "onboardingAccountsReadyBody": "Twoje połączone konta są gotowe. Dodaj kolejne konto lub kontynuuj.",
-  "onboardingSkipAccountSetup": "Pomiń",
-  "accountsSetupBody": "Dodaj i zweryfikuj swoje konta Clash of Clans.",
-  "accountsMyTitle": "Moje konta",
-  "profileAvatar": "Zmień wygląd",
-  "avatarPickerTitle": "Wybierz awatar"
+  "rankedFullOffenseDays": "+320 days",
+  "rankedFullDefenseDays": "−320 days",
+  "rankedTrophiesByRank": "Trophies by rank",
+  "statsArmyTypes": "Army Types",
+  "onboardingStatsBody": "Explore player stats, follow your clans, and see how the whole game is changing.",
+  "onboardingWidgetsTitle": "Add Home Screen widgets",
+  "onboardingWidgetsBody": "Keep war scores and upgrade progress close with Home Screen widgets.",
+  "onboardingAlertTitle": "War ends soon",
+  "onboardingAlertBody": "Time for your final attack.",
+  "onboardingSetupNotifications": "Enable notifications",
+  "onboardingAccountsReadyBody": "Your linked accounts are ready. Add another account or continue.",
+  "onboardingSkipAccountSetup": "Skip",
+  "accountsSetupBody": "Add and verify your Clash of Clans accounts.",
+  "accountsMyTitle": "My Accounts",
+  "profileAvatar": "Change look",
+  "avatarPickerTitle": "Pick an avatar"
 }

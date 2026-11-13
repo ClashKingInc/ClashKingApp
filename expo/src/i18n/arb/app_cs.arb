@@ -1,20 +1,20 @@
 {
-  "capitalCurrentOpponent": "Aktuální soupeř",
-  "capitalRaidMedals": "Nájezdové medaile",
-  "warReplayTitle": "Vývoj skóre",
-  "warReplayPlay": "Přehrát historii",
-  "warReplayPause": "Pozastavit historii",
-  "cwlLeading": "Ve vedení",
-  "cwlTrailing": "Prohrává",
-  "cwlYourClan": "Tvůj klan",
-  "cwlPromotionZone": "Postupové pásmo",
-  "cwlDemotionZone": "Sestupové pásmo",
-  "cwlNotInLineup": "Mimo sestavu",
-  "esportsEloSubtitle": "Světový žebříček týmů a zápasy od",
-  "esportsTopTeamsMatches": "Zápasy aktuálně nejlepších 50 týmů.",
-  "esportsPartialMatches": "Některé týmy se nepodařilo aktualizovat.",
-  "settingsHideAccounts": "Skrýt účty",
-  "settingsHideAccountsDescription": "Zobrazit možnost skrýt propojené účty. Stávající nastavení soukromí se nezmění.",
+  "capitalCurrentOpponent": "Current opponent",
+  "capitalRaidMedals": "Raid medals",
+  "warReplayTitle": "Score history",
+  "warReplayPlay": "Play history",
+  "warReplayPause": "Pause history",
+  "cwlLeading": "Leading",
+  "cwlTrailing": "Trailing",
+  "cwlYourClan": "Your clan",
+  "cwlPromotionZone": "Promotion zone",
+  "cwlDemotionZone": "Demotion zone",
+  "cwlNotInLineup": "Not in lineup",
+  "esportsEloSubtitle": "Global team rankings and matches from",
+  "esportsTopTeamsMatches": "Matches from the current top 50 teams.",
+  "esportsPartialMatches": "Some teams could not be refreshed.",
+  "settingsHideAccounts": "Hide accounts",
+  "settingsHideAccountsDescription": "Show the option to hide linked accounts. Existing privacy choices stay unchanged.",
   "calcRocketBalloonAssumption": "1 hit + death · {damage} damage each",
   "calcKeepEquipped": "Keep one equipped",
   "calcCustomLevels": "Custom levels",
@@ -38,31 +38,31 @@
   "personalBasesEmptyBody": "Bases you post through ClashKing on Discord appear here. You can also save bases from the library.",
   "personalArmiesEmptyTitle": "Keep your armies close",
   "personalArmiesEmptyBody": "Armies you post through ClashKing on Discord appear here. Save your favourites to find them before your next attack.",
-  "homeCardOriginal": "Původní",
-  "homeCardTint": "Jemná barva",
-  "homeCardEdge": "Barevné okraje",
-  "homeCardGlow": "Pomalá záře",
-  "competitiveNoHistory": "Zatím žádné turnaje",
-  "competitiveHistoryHint": "Zde se zobrazí tvoje týmy a výsledky turnajů.",
-  "esportsMonthlyFinals": "Měsíční finále",
-  "esportsMonthlyQualifier": "Měsíční kvalifikace",
-  "esportsHeroSubtitle": "Cesta na mistrovství světa",
-  "esportsViewEvent": "Prozkoumat událost",
-  "esportsWinLoss": "{wins} výher · {losses} proher",
-  "esportsViewPlayer": "Zobrazit hráče",
-  "esportsRecentMatches": "Nedávné zápasy",
-  "esportsHideAttacks": "Skrýt podrobnosti bitvy",
-  "esportsViewAttacks": "Zobrazit podrobnosti bitvy",
-  "esportsPlayer": "Esportový hráč",
+  "homeCardOriginal": "Original",
+  "homeCardTint": "Soft color",
+  "homeCardEdge": "Colored edges",
+  "homeCardGlow": "Slow glow",
+  "competitiveNoHistory": "No tournaments yet",
+  "competitiveHistoryHint": "Your teams and tournament results will appear here.",
+  "esportsMonthlyFinals": "Monthly finals",
+  "esportsMonthlyQualifier": "Monthly qualifiers",
+  "esportsHeroSubtitle": "The road to the World Championship",
+  "esportsViewEvent": "Explore event",
+  "esportsWinLoss": "{wins} wins · {losses} losses",
+  "esportsViewPlayer": "View player",
+  "esportsRecentMatches": "Recent matches",
+  "esportsHideAttacks": "Hide battle details",
+  "esportsViewAttacks": "View battle details",
+  "esportsPlayer": "Esports player",
   "esportsBattles": "Bitvy",
-  "esportsTriples": "Tříhvězdičkové útoky",
-  "esportsAverageStars": "Průměr hvězd",
+  "esportsTriples": "Triples",
+  "esportsAverageStars": "Průměrné hvězdičky",
   "esportsDestruction": "Zničení",
-  "esportsAccounts": "Herní účty",
+  "esportsAccounts": "Game accounts",
   "esportsAttack": "Útok",
   "esportsDefense": "Obrana",
-  "competitiveArenaSubtitle": "Tvůj klan. Tvůj tým. Tvoje další výzva.",
-  "competitiveViewTournament": "Zobrazit turnaj",
+  "competitiveArenaSubtitle": "Your clan. Your team. Your next challenge.",
+  "competitiveViewTournament": "View tournament",
   "@esportsWinLoss": {
     "placeholders": {
       "wins": {
@@ -87,50 +87,50 @@
   "esportsStage": "Stage",
   "esportsStandings": "Standings",
   "esportsMatches": "Matches",
-  "esportsPoints": "Points",
+  "esportsPoints": "Body",
   "esportsPlayed": "played",
   "esportsSource": "Data from Competitive Clash Network",
-  "esportsRoster": "Roster",
+  "esportsRoster": "Soupiska",
   "esportsSeasonPoints": "Season points",
   "esportsStageStandings": "Stage standings",
-  "competitiveCompetition": "Soutěže",
-  "competitiveWebsite": "Webová stránka",
-  "competitiveVerifiedAccounts": "Ověřené účty",
-  "competitiveEsports": "Esport",
-  "competitiveTournaments": "Turnaje",
+  "competitiveCompetition": "Competition",
+  "competitiveWebsite": "Website",
+  "competitiveVerifiedAccounts": "Verified accounts",
+  "competitiveEsports": "eSports",
+  "competitiveTournaments": "Tournaments",
   "competitiveProfile": "Profil",
   "competitiveTeams": "Týmy",
-  "competitiveFreeEntry": "Účast zdarma",
-  "competitiveRegister": "Registrovat tým",
-  "competitiveCheckIn": "Potvrdit účast",
-  "competitiveRules": "Pravidla",
-  "competitiveUnavailable": "Údaje o soutěži nejsou dostupné. Zkuste to znovu.",
-  "competitiveRegistrationSaved": "Registrace odeslána",
-  "competitiveTeamHistory": "Historie týmu",
-  "competitiveDebutName": "Turnajový debut",
-  "competitiveDebutDescription": "Zúčastněte se turnaje se svým ověřeným účtem.",
-  "competitiveViewProfile": "Zobrazit profil",
+  "competitiveFreeEntry": "Free entry",
+  "competitiveRegister": "Register team",
+  "competitiveCheckIn": "Check in",
+  "competitiveRules": "Rules",
+  "competitiveUnavailable": "Competition data is unavailable. Try again.",
+  "competitiveRegistrationSaved": "Registration submitted",
+  "competitiveTeamHistory": "Team history",
+  "competitiveDebutName": "Tournament debut",
+  "competitiveDebutDescription": "Participate in a tournament with your verified account.",
+  "competitiveViewProfile": "View profile",
   "calcPinEquipment": "Keep one equipped",
-  "calcSearch": "Search",
+  "calcSearch": "Hledat",
   "calcEquipmentTitle": "Equipment Compare",
   "calcDamageIntro": "Find the combinations that take a defense down.",
   "calcFarmIntro": "Plan the loot needed for your next upgrades.",
   "calcEquipmentIntro": "Compare hero loadouts, levels, and ability stats.",
   "calcComingSoon": "Coming soon",
-  "calcHero": "Hero",
+  "calcHero": "Hrdina",
   "calcHeroLevel": "Hero level",
   "calcMaxLevels": "Max levels",
   "calcEquipmentPool": "Equipment to compare",
   "calcPoolHelp": "Choose pieces and default levels. Compare every pair, then customize individual rows.",
   "calcSelectAll": "Select all",
-  "calcClear": "Clear",
+  "calcClear": "Jasný",
   "calcAttributes": "Attributes",
   "calcAddAttribute": "Add attribute",
-  "calcTable": "Compare",
+  "calcTable": "Porovnat",
   "calcProgression": "Level progression",
   "calcCompareHelp": "DPS adds the hero's base and equipment DPS. Speed bonuses and temporary effects are separate attributes; healing is not extra max HP.",
   "calcChartHelp": "Equipment levels increase together; each piece stops at its own maximum. Hero levels stay fixed. First six loadouts shown.",
-  "calcSort": "Sort by",
+  "calcSort": "Seřadit podle",
   "calcNoEquipment": "No equipment",
   "calcDuplicate": "Duplicate loadout",
   "calcRemove": "Remove loadout",
@@ -154,9 +154,9 @@
   "calcComparisonDownloaded": "Comparison image downloaded",
   "calcComparisonExportFailed": "Could not copy the comparison image. Please try again.",
   "calcEffectiveLevel": "Effective level {level}",
-  "calcTarget": "Target",
+  "calcTarget": "Cíl",
   "calcSupercharge": "Supercharge",
-  "calcNone": "None",
+  "calcNone": "Žádné",
   "calcResults": "{count} combinations",
   "calcResultsHelp": "Smallest spell cost first, then fewer equipment activations. Extra sources that do not help are removed.",
   "calcNoCombinationHelp": "Try another source, a higher level, or more spell capacity.",
@@ -164,63 +164,63 @@
   "calcAlternative": "Alternative",
   "calcCombinationCost": "{housing} spell space · {equipment} equipment",
   "calcUseStack": "Use stack",
-  "homeRankingsAndStats": "Žebříčky a statistiky",
-  "homeActivityRecorded": "Pouze zaznamenaná aktivita; historie může být neúplná.",
-  "homeWidgetsServers": "Servery",
-  "homeWidgetsEdit": "Upravit úvod",
-  "homeWidgetsAdd": "Přidat widget",
-  "homeWidgetsRemove": "Odebrat widget",
-  "homeWidgetsMoveUp": "Posunout nahoru",
-  "homeWidgetsMoveDown": "Posunout dolů",
-  "homeWidgetsSmall": "Malý",
-  "homeWidgetsWide": "Široký",
-  "homeWidgetsSaveError": "Úvod se nepodařilo synchronizovat. Před další úpravou obnovte data.",
-  "homeWidgetsUnavailable": "Žádná zaznamenaná data",
-  "homeWidgetsBookmarkFirst": "Nejprve si uložte hráče nebo klan.",
-  "rankingsWarTripleStreak": "Série válečných trojhvězd",
+  "homeRankingsAndStats": "Rankings & Stats",
+  "homeActivityRecorded": "Recorded activity only; history may be incomplete.",
+  "homeWidgetsServers": "Servers",
+  "homeWidgetsEdit": "Edit Home",
+  "homeWidgetsAdd": "Add widget",
+  "homeWidgetsRemove": "Remove widget",
+  "homeWidgetsMoveUp": "Move up",
+  "homeWidgetsMoveDown": "Move down",
+  "homeWidgetsSmall": "Malé",
+  "homeWidgetsWide": "Wide",
+  "homeWidgetsSaveError": "Could not sync Home. Please refresh before editing again.",
+  "homeWidgetsUnavailable": "No recorded data available",
+  "homeWidgetsBookmarkFirst": "Bookmark a player or clan first.",
+  "rankingsWarTripleStreak": "War Triple Streak",
   "rankingsWarTripleRulesTitle": "How streaks count",
   "rankingsWarTripleRulesBody": "+2 for two triples against your own Town Hall level in a regular war.\n\nA missed attack, non-triple, or different-TH target resets your streak.\n\nCWL and friendly wars don’t count. Streaks are separate for each Town Hall level.",
-  "clanLegendsRanked": "Legendy a hodnocené",
-  "appIconChangeWarning": "Změna ikony aplikace zavře ClashKing. Pokračovat?",
-  "upgradeTrackerUnverifiedAccount": "Tento účet je propojený, ale neověřený. Ověřte jej ve správě účtů a importujte data vylepšení.",
-  "clanWarNotificationsTitle": "Oznámení o válce",
-  "clanCapitalNotificationsTitle": "Oznámení o hlavním městě klanu",
-  "clanWarNotificationsBody": "Dostávejte zprávy o válkách tohoto klanu.",
-  "clanCapitalNotificationsBody": "Dostávejte zprávy o hlavním městě tohoto klanu.",
-  "notifSystemNotifications": "Systémová oznámení",
-  "notifSystemSettings": "Otevřít nastavení oznámení",
-  "notifSystemSettingsDescription": "Spravujte upozornění, zvuky a odznaky v nastavení zařízení.",
-  "notifSystemSettingsFailed": "Nastavení oznámení se nepodařilo otevřít. Otevřete Nastavení v zařízení.",
-  "notifManagePlayersDescription": "Oznámení účtu spravujte v Hráči → Propojení → Možnosti.",
-  "notifCustomReminders": "Vlastní připomínky",
-  "notifTestType": "Typ oznámení",
-  "statsBattlelogsGroup": "Záznamy bitev",
-  "statsGlobalStatsGroup": "Globální statistiky",
-  "playerOptionShowOnHomeTitle": "Zobrazit účet na úvodní stránce",
-  "playerOptionShowOnHomeSubtitle": "Zahrnout tento ověřený účet do karet na úvodní stránce (až 5).",
-  "playerOptionShowOnHomeVerifyFirst": "Ověřte tento účet, aby se zobrazil na úvodní stránce.",
-  "playerOptionHomeInclusionFirst": "Nejprve zapněte Zobrazit účet na úvodní stránce.",
-  "homeIncludedAccountsLimit": "Na úvodní stránce lze zobrazit až 5 účtů. Nejprve jeden odeberte.",
-  "statsHitratesByTownHall": "Úspěšnost podle radnice",
-  "statsChartGranularity": "Interval grafu",
+  "clanLegendsRanked": "Legends & Ranked",
+  "appIconChangeWarning": "Changing the app icon will close ClashKing. Continue?",
+  "upgradeTrackerUnverifiedAccount": "This account is linked but not verified. Verify it in Manage Accounts to import your upgrade data.",
+  "clanWarNotificationsTitle": "War notifications",
+  "clanCapitalNotificationsTitle": "Clan Capital notifications",
+  "clanWarNotificationsBody": "Receive war updates for this clan.",
+  "clanCapitalNotificationsBody": "Receive Clan Capital updates for this clan.",
+  "notifSystemNotifications": "System notifications",
+  "notifSystemSettings": "Open notification settings",
+  "notifSystemSettingsDescription": "Manage alerts, sounds, and badges in your device settings.",
+  "notifSystemSettingsFailed": "Could not open notification settings. Please open Settings on your device.",
+  "notifManagePlayersDescription": "Manage account notifications in Players → Linked → Options.",
+  "notifCustomReminders": "Custom reminders",
+  "notifTestType": "Notification type",
+  "statsBattlelogsGroup": "Battlelogs",
+  "statsGlobalStatsGroup": "Global Stats",
+  "playerOptionShowOnHomeTitle": "Show account on Home",
+  "playerOptionShowOnHomeSubtitle": "Include this verified account in Home cards (up to 5).",
+  "playerOptionShowOnHomeVerifyFirst": "Verify this account to show it on Home.",
+  "playerOptionHomeInclusionFirst": "Turn on Show account on Home first.",
+  "homeIncludedAccountsLimit": "Home can show up to 5 accounts. Remove one first.",
+  "statsHitratesByTownHall": "Hitrates by Town Hall",
+  "statsChartGranularity": "Chart interval",
   "statsDaily": "Denně",
   "statsWeekly": "Týdně",
-  "playerBattlelogCumulative": "Kumulativní",
-  "statsMonthly": "Měsíčně",
-  "statsCompareCohorts": "Porovnat skupiny",
-  "statsAcrossCohorts": "Použití napříč skupinami",
-  "legendsTrophyGrid": "Přehled sezóny",
-  "legendsPopularArmyItems": "Nejoblíbenější prvky armády",
-  "legendsPopularTroop": "Oblíbená",
-  "legendsHitrate": "Úspěšnost",
-  "legendsAvgOffense": "Prům. útok",
-  "legendsAvgDefense": "Prům. obrana",
-  "settingsClearImageCache": "Vymazat mezipaměť obrázků",
-  "settingsImageCacheCleared": "Mezipaměť obrázků byla vymazána.",
-  "settingsImageCacheClearFailed": "Mezipaměť obrázků se nepodařilo vymazat. Zkuste to znovu.",
-  "startupCheckingUpdate": "Kontrola aktualizací…",
-  "startupDownloadingUpdate": "Stahování aktualizace…",
-  "startupUpdateInBackground": "Aktualizovat na pozadí",
+  "playerBattlelogCumulative": "Cumulative",
+  "statsMonthly": "Monthly",
+  "statsCompareCohorts": "Compare cohorts",
+  "statsAcrossCohorts": "Usage across cohorts",
+  "legendsTrophyGrid": "Season overview",
+  "legendsPopularArmyItems": "Most popular army items",
+  "legendsPopularTroop": "Favorite",
+  "legendsHitrate": "Hitrate",
+  "legendsAvgOffense": "Avg. Offense",
+  "legendsAvgDefense": "Avg. Defense",
+  "settingsClearImageCache": "Clear image cache",
+  "settingsImageCacheCleared": "Image cache cleared.",
+  "settingsImageCacheClearFailed": "Could not clear the image cache. Please try again.",
+  "startupCheckingUpdate": "Checking for updates…",
+  "startupDownloadingUpdate": "Downloading update…",
+  "startupUpdateInBackground": "Update in background",
   "warStatsRangeTitle": "Rozsah válečných statistik",
   "warStatsRangeDescription": "Zvolte, zda statistiky zahrnují pevný počet nedávných válek, nebo nedávné období ve dnech.",
   "warStatsRangeDays": "Dny",
@@ -235,20 +235,81 @@
   "upgradeTrackerCompletionDetails": "Podrobnosti o dokončení vesnice",
   "upgradeTrackerCustomSoundtrack": "Vlastní hudební doprovod",
   "upgradeTrackerGoldPassPercent": "Zlatý pas {percent} %",
+  "@upgradeTrackerGoldPassPercent": {
+    "placeholders": {
+      "percent": {
+        "type": "int"
+      }
+    }
+  },
   "upgradeTrackerGroupSummary": "Souhrn: {group}",
+  "@upgradeTrackerGroupSummary": {
+    "placeholders": {
+      "group": {
+        "type": "String"
+      }
+    }
+  },
   "upgradeTrackerGuardians": "Strážci",
   "upgradeTrackerHelpers": "Pomocníci",
   "upgradeTrackerHouseParts": "Části domu",
-  "upgradeTrackerIdleBuilders": "{count} nečinných stavitelů",
+  "upgradeTrackerIdleBuilders": "{count, plural, one {# idle builder} other {# idle builders}}",
+  "@upgradeTrackerIdleBuilders": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "upgradeTrackerInProgress": "Probíhá",
-  "upgradeTrackerItemSemanticLabel": "{item}, úroveň {currentLevel} z {targetLevel}, počet budov: {count}",
+  "upgradeTrackerItemSemanticLabel": "{item}, level {currentLevel} of {targetLevel}{count, plural, =1 {} other {, # buildings}}",
+  "@upgradeTrackerItemSemanticLabel": {
+    "placeholders": {
+      "item": {
+        "type": "String"
+      },
+      "currentLevel": {
+        "type": "int"
+      },
+      "targetLevel": {
+        "type": "int"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "upgradeTrackerItemsOwned": "Vlastněno: {count}",
+  "@upgradeTrackerItemsOwned": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "upgradeTrackerLane": "Fronta",
   "upgradeTrackerLevelTransition": "Úroveň {from} → {to}",
+  "@upgradeTrackerLevelTransition": {
+    "placeholders": {
+      "from": {
+        "type": "int"
+      },
+      "to": {
+        "type": "int"
+      }
+    }
+  },
   "upgradeTrackerLootNow": "Kořist nyní",
   "upgradeTrackerLootOutlook": "Výhled kořisti",
   "upgradeTrackerMusic": "Hudba",
-  "upgradeTrackerNextDays": "Příštích {count} dní",
+  "upgradeTrackerNextDays": "Next {count, plural, one {# day} other {# days}}",
+  "@upgradeTrackerNextDays": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "upgradeTrackerNextPeriod": "Další období",
   "upgradeTrackerNoGoldPass": "Bez Zlatého pasu",
   "upgradeTrackerNoMatchingUpgrades": "Žádná odpovídající vylepšení",
@@ -259,12 +320,46 @@
   "upgradeTrackerPassReward": "Odměna z pasu",
   "upgradeTrackerPauseSoundtrack": "Pozastavit hudební doprovod",
   "upgradeTrackerPeriodCount": "Období {current} / {total}",
+  "@upgradeTrackerPeriodCount": {
+    "placeholders": {
+      "current": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
   "upgradeTrackerPlaySoundtrack": "Přehrát hudební doprovod",
   "upgradeTrackerPreviousPeriod": "Předchozí období",
   "upgradeTrackerResourceAmount": "{resource}, {amount}",
+  "@upgradeTrackerResourceAmount": {
+    "placeholders": {
+      "resource": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
   "upgradeTrackerSceneries": "Scenérie",
   "upgradeTrackerScheduledLane": "Naplánováno č. {lane}",
+  "@upgradeTrackerScheduledLane": {
+    "placeholders": {
+      "lane": {
+        "type": "int"
+      }
+    }
+  },
   "upgradeTrackerShareProgress": "Postup: {village}",
+  "@upgradeTrackerShareProgress": {
+    "placeholders": {
+      "village": {
+        "type": "String"
+      }
+    }
+  },
   "upgradeTrackerSize": "Velikost",
   "upgradeTrackerSortLongest": "Nejdelší první",
   "upgradeTrackerSortName": "Název A–Z",
@@ -280,17 +375,59 @@
   "notifPushEnabled": "Push oznámení zapnuta",
   "notifReceiveNotifications": "Přijímat oznámení",
   "notifTokenPreview": "Token: {token}",
+  "@notifTokenPreview": {
+    "placeholders": {
+      "token": {
+        "type": "String"
+      }
+    }
+  },
   "notifEnabledDeliveryDescription": "Zapnutá upozornění lze doručovat do tohoto zařízení.",
   "notifDisabledAccountDescription": "Oznámení jsou vypnuta pro celý váš účet ClashKing.",
   "notifMaximumRemindersAdded": "Byl přidán maximální počet připomenutí",
   "notifAddReminder": "Přidat připomenutí",
   "notifDurationOneHour": "1 hodina",
   "notifDurationHours": "{count} hodin",
+  "@notifDurationHours": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "notifDurationMinutes": "{count} minut",
+  "@notifDurationMinutes": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "notifAddTiming": "Přidat {timing}",
+  "@notifAddTiming": {
+    "placeholders": {
+      "timing": {
+        "type": "String"
+      }
+    }
+  },
   "notifTimingOneHourBefore": "1 hodinu předem",
   "notifTimingHoursBefore": "{count} hodin předem",
+  "@notifTimingHoursBefore": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "notifTimingMinutesBefore": "{count} minut předem",
+  "@notifTimingMinutesBefore": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "notifPushReady": "Push oznámení jsou na tomto zařízení připravena.",
   "notifPushPermissionRequired": "Povolte oznámení, abyste dostávali upozornění ClashKing.",
   "notifPushPermissionDenied": "Oprávnění k oznámením bylo zamítnuto.",
@@ -299,12 +436,13 @@
   "notifPushUnsupported": "Push oznámení nejsou na této platformě podporována.",
   "notifPushInitializing": "Nastavují se push oznámení…",
   "notificationPrimerTitle": "Povolit oznámení?",
-  "notificationPrimerBody": "ClashKing může posílat aktualizace událostí, oznámení, obran v Legendární lize a podpory. Připomínky válek a nájezdových víkendů zůstávají vypnuté, dokud je nenastavíte. Volby lze změnit v Nastavení > Oznámení.",
+  "notificationPrimerBody": "ClashKing vás může upozornit na aktualizace válek, CWL, účtu a projektů. Toto nastavení můžete kdykoli změnit v Nastavení > Oznámení.",
   "notificationPrimerNotNow": "Teď ne",
   "notificationPrimerAllow": "Povolit",
+  "@@last_modified": "2024-12-23T10:00:00.000Z",
   "achievementsTitle": "Úspěchy",
   "achievementEarnedLabel": "Získáno",
-  "achievementGemsEarnedRatio": "Získáno {earned} / {total}",
+  "achievementGemsEarnedRatio": "{earned} / {total} earned",
   "@achievementGemsEarnedRatio": {
     "placeholders": {
       "earned": {
@@ -315,7 +453,7 @@
       }
     }
   },
-  "achievementGemsAccessibility": "Získáno {earned} z {total} drahokamů za úspěchy.",
+  "achievementGemsAccessibility": "Earned {earned} of {total} achievement gems.",
   "@achievementGemsAccessibility": {
     "placeholders": {
       "earned": {
@@ -328,6 +466,23 @@
   },
   "achievementSummary": "{earned}/{total} dokončeno",
   "achievementEarnedCount": "Získáno ×{count}",
+  "@achievementSummary": {
+    "placeholders": {
+      "earned": {
+        "type": "String"
+      },
+      "total": {
+        "type": "String"
+      }
+    }
+  },
+  "@achievementEarnedCount": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
   "achievementTownhall18Name": "Radnice 18",
   "achievementTownhall18Requirement": "Dosáhněte 18. úrovně radnice.",
   "achievementWarWarriorName": "Válečný bojovník",
@@ -336,7 +491,6 @@
   "achievementMrLegendDescription": "Dokončili jste bezchybný útočný den v Legendární lize.",
   "achievementDefenseDoesntMatterName": "Na obraně nezáleží",
   "achievementDefenseDoesntMatterDescription": "Přečkali jste perfektní obranný den v Legendární lize.",
-  "@@last_modified": "2024-12-23T10:00:00.000Z",
   "appTitle": "ClashKing",
   "appDescription": "Váš dokonalý průvodce Clash of Clans pro sledování statistik, správu klanů a analýzu výkonu.",
   "generalLoading": "Načítání...",
@@ -359,8 +513,8 @@
   "postsLoadMore": "Načíst další",
   "postsCurrent": "Aktuální",
   "postsPast": "Minulé",
-  "postsStoryFinished": "Příběh skončil",
-  "postsWatchAgain": "Přehrát znovu",
+  "postsStoryFinished": "Story finished",
+  "postsWatchAgain": "Watch again",
   "postsStory": "Interaktivní příběh",
   "postsPinned": "Doporučené",
   "generalTryAgain": "Zkusit znovu",
@@ -449,7 +603,7 @@
     "description": "Filter value is not set"
   },
   "generalWarning": "Varování",
-  "gameHandoffDontShowAgain": "Příště nezobrazovat",
+  "gameHandoffDontShowAgain": "Don't show this again",
   "generalUnknown": "Neznámé",
   "generalNoDataAvailable": "Žádná data nejsou k dispozici.",
   "generalNoFilteredResults": "Žádné výsledky neodpovídají filtrům",
@@ -678,9 +832,9 @@
   "accountsAdd": "Přidat účet",
   "accountsAddInstruction": "Klepnutím na tlačítko + přidej svůj účet",
   "accountsApiToken": "API token účtu",
-  "accountsEnterApiToken": "Potvrď vlastnictví tohoto účtu pomocí jeho API tokenu ze hry.",
+  "accountsEnterApiToken": "Zadej API token účtu, abys potvrdil, že je tvůj. Najdeš ho v Clash of Clans:",
   "accountsApiTokenLocation": "Nastavení > Další nastavení > API token",
-  "accountsOpenMoreSettings": "Získat API token",
+  "accountsOpenMoreSettings": "Otevřít další nastavení",
   "accountsCouldNotOpenClash": "Clash of Clans se nepodařilo otevřít. Otevři ho ručně.",
   "accountsFillAllFields": "Vyplňte prosím všechna pole.",
   "accountsErrorTagNotExists": "Zadaný štítek hráče neexistuje.",
@@ -1200,8 +1354,32 @@
   "warParticipation": "Účast na válce",
   "cwlParticipantOnly": "Pouze účastník",
   "warStatsRangeWarsCompact": "{number} válek",
+  "@warStatsRangeWarsCompact": {
+    "description": "Compact clan war statistics war range label",
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
   "warStatsRangeDaysCompact": "{number} dní",
+  "@warStatsRangeDaysCompact": {
+    "description": "Compact clan war statistics day range label",
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
   "warStatsLastXDays": "Posledních {number} dní",
+  "@warStatsLastXDays": {
+    "description": "Clan war statistics date-range label",
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
   "warStatsCurrentMembers": "Současní členové",
   "warLeague": "Válka/Liga",
   "warHistory": "Válečná historie",
@@ -1210,6 +1388,13 @@
   "warLogClosed": "Protokol války {clan}je uzavřen.",
   "warLogPrivate": "{clan} má soukromý válečný deník.",
   "@warLogClosed": {
+    "placeholders": {
+      "clan": {
+        "type": "String"
+      }
+    }
+  },
+  "@warLogPrivate": {
     "placeholders": {
       "clan": {
         "type": "String"
@@ -1513,7 +1698,7 @@
   "warStarsTwo": "2 hvězdičky",
   "warStarsThree": "3 hvězdičky",
   "warStarsZero": "0 hvězdiček",
-  "legendHistoryZeroStars": "Nula hvězd",
+  "legendHistoryZeroStars": "Zero Stars",
   "warStarsBestPerformance": "Nejlepší výkon",
   "@warStarsBestPerformance": {
     "description": "Best performance in war"
@@ -1668,7 +1853,7 @@
   "clanLeaderboardHistoryTab": "Historie žebříčku",
   "clanLegendHistoryTab": "Historie legend",
   "clanRecordsTab": "Rekordy",
-  "clanRecordsChangesTab": "Rekordy a změny",
+  "clanRecordsChangesTab": "Records & Changes",
   "clanProfileHistoryTab": "Historie profilu",
   "clanProfileLevelChanged": "Úroveň klanu změněna",
   "clanProfileDescriptionChanged": "Popis změněn",
@@ -1710,8 +1895,8 @@
   "legendsCountryTitle": "Země",
   "legendsLocalRankTitle": "Místní hodnost",
   "legendsGlobalRankTitle": "Globální hodnost",
-  "legendsYourArmy": "Tvá armáda",
-  "legendsArmyUsedAgainstYou": "Armáda použitá proti tobě",
+  "legendsYourArmy": "Your army",
+  "legendsArmyUsedAgainstYou": "Army used against you",
   "warWinsTitle": "Vyhrává",
   "warLossesTitle": "Ztráty",
   "warDrawsTitle": "Kreslí",
@@ -1956,7 +2141,7 @@
   "faqWhatCanBotDo": "Co umí Discord bot ClashKing?",
   "faqWhatCanBotDoAnswer": "Discord bot ClashKing ti pomáhá spravovat klan přímo z Discordu pomocí komplexních nástrojů pro sledování, automatických oznámení a plynulé integrace s touto aplikací. Je určen pro vůdce i členy klanu, kteří chtějí zůstat propojení a organizovaní:",
   "faqInviteBotToServer": "Pozvat bota na server",
-  "drawerInviteDiscordBot": "Pozvat bota na server",
+  "drawerInviteDiscordBot": "Invite Discord Bot",
   "faqBotFeatureTracking": "Sledování hráčů a klanů",
   "faqBotFeatureTrackingDesc": "Přidej a sleduj více klanů a hráčů s aktualizacemi v reálném čase",
   "faqBotFeatureWars": "Správa válek",
@@ -2113,7 +2298,7 @@
     "description": "Defender town hall filter label"
   },
   "filtersSameTownHallOnly": "Pouze stejná radnice",
-  "warStatsSameTownHall": "Stejná radnice",
+  "warStatsSameTownHall": "Same Townhall",
   "@filtersSameTownHallOnly": {
     "description": "Same town hall filter option"
   },
@@ -2767,7 +2952,7 @@
   "@settingsNotificationsTitle": {
     "description": "Settings tile: notifications title"
   },
-  "settingsNotificationsSubtitle": "Vyberte upozornění, která chcete dostávat.",
+  "settingsNotificationsSubtitle": "Vyberte si upozornění a odešlete místní náhledy testů.",
   "@settingsNotificationsSubtitle": {
     "description": "Settings tile: notifications subtitle"
   },
@@ -3239,7 +3424,7 @@
   "playerBestTrophies": "Nejlepší trofeje",
   "clanLoadFailed": "Nepodařilo se načíst klan.",
   "gameItemLevels": "Úrovně",
-  "gameItemLevelCount": "{count, plural, one {# úroveň} few {# úrovně} other {# úrovní}}",
+  "gameItemLevelCount": "{count, plural, one {# Level} other {# Levels}}",
   "@gameItemLevelCount": {
     "placeholders": {
       "count": {
@@ -3310,6 +3495,20 @@
   },
   "todoAllCaughtUpForNow": "Zatím je vše hotovo",
   "timeDurationShort": "{unit, select, daysHours {{primary}d {secondary}h} hoursMinutes {{primary}h {secondary}min} other {{primary}min}}",
+  "@timeDurationShort": {
+    "description": "Compact localized duration used in countdowns",
+    "placeholders": {
+      "unit": {
+        "type": "String"
+      },
+      "primary": {
+        "type": "int"
+      },
+      "secondary": {
+        "type": "int"
+      }
+    }
+  },
   "todoEventEndsIn": "Končí za {duration}",
   "@todoEventEndsIn": {
     "placeholders": {
@@ -3419,9 +3618,14 @@
   "statsHero": "Hrdina",
   "statsPet": "Domácí mazlíček",
   "statsEquipment": "Vybavení",
-  "statsPetCombinations": "Kombinace mazlíčků",
-  "statsEquipmentPairs": "Dvojice vybavení",
-  "statsArmyFallback": "Armáda {id}",
+  "statsPetCombinations": "Pet combinations",
+  "statsEquipmentPairs": "Equipment pairs",
+  "statsArmyFallback": "Army {id}",
+  "@statsArmyFallback": {
+    "placeholders": {
+      "id": {}
+    }
+  },
   "statsOwningHero": "Vlastnit hrdinu",
   "statsAddItem": "Přidat položku",
   "statsAnalyzeItems": "Analyzujte položky",
@@ -3865,9 +4069,9 @@
     }
   },
   "upgradeTrackerShare": "Sdílet sledování",
-  "trackerPosterCopied": "Obrázek zkopírován",
-  "trackerPosterCopy": "Kopírovat obrázek",
-  "trackerPosterShareAll": "Sdílet všechny 3",
+  "trackerPosterCopied": "Image copied",
+  "trackerPosterCopy": "Copy image",
+  "trackerPosterShareAll": "Share all 3",
   "upgradeTrackerPasteJson": "Vložit JSON účtu",
   "upgradeTrackerImportTitle": "Importovat data účtu",
   "upgradeTrackerImportDescription": "Vložte nezpracovaný JSON účtu. Zůstane v tomto zařízení.",
@@ -4176,8 +4380,8 @@
   "homeActivityLeft": "odešel/odešla",
   "homeActivityAClan": "ke klanu",
   "statsCwlSeasonGroups": "Skupiny",
-  "statsCwlSeasonHistory": "Klanová válečná liga v čase",
-  "statsCwlRosterNotLineup": "Složení registrované soupisky přepočtené na {size} míst; skutečné válečné sestavy se mohou lišit.",
+  "statsCwlSeasonHistory": "CWL over time",
+  "statsCwlRosterNotLineup": "Registered roster mix, scaled to {size} places; actual war lineups may differ.",
   "@statsCwlRosterNotLineup": {
     "placeholders": {
       "size": {
@@ -4185,28 +4389,28 @@
       }
     }
   },
-  "statsTroopStats": "Statistiky jednotek",
-  "statsWarSizes": "Velikosti válek",
-  "statsMissedAttacks": "Zmeškané útoky",
-  "statsCopyChart": "Kopírovat graf",
-  "statsCompareItems": "Porovnat položky",
-  "statsCompareItemsHint": "Vyberte až 5 položek k porovnání.",
-  "statsVsOverall": "oproti celku",
-  "statsCopyChartFailed": "Graf se nepodařilo zkopírovat. Zkuste to znovu.",
-  "statsPercentagePoints": "procentních bodů",
+  "statsTroopStats": "Troop Stats",
+  "statsWarSizes": "War sizes",
+  "statsMissedAttacks": "Missed attacks",
+  "statsCopyChart": "Copy chart",
+  "statsCompareItems": "Compare items",
+  "statsCompareItemsHint": "Select up to 5 items to compare.",
+  "statsVsOverall": "vs. overall",
+  "statsCopyChartFailed": "Could not copy chart. Try again.",
+  "statsPercentagePoints": "percentage points",
   "statsMeta": "Meta",
   "statsBattle": "Bitva",
   "statsWorld": "Svět",
   "statsHeaderSubtitle": "Prozkoumejte bojové výkony a svět, který sledujeme.",
   "statsPreview": "Náhled",
-  "statsTownHallDistribution": "Radnice",
+  "statsTownHallDistribution": "Radniční distribuce",
   "statsBuilderHallDistribution": "Rozvod Builder Hall",
-  "statsLeagueDistribution": "Žebříčkové ligy",
+  "statsLeagueDistribution": "Distribuce hodnocené ligy",
   "statsTrackedPlayers": "Aktuální sledovaná populace hráčů",
   "statsTrackedClans": "Aktuální sledovaná klanová populace",
-  "statsCwlLeagueDistribution": "Ligy CWL",
-  "statsCapitalLeagueDistribution": "Ligy hlavního města",
-  "statsTrackedLocations": "Umístění klanů",
+  "statsCwlLeagueDistribution": "Distribuce ligy CWL",
+  "statsCapitalLeagueDistribution": "Distribuce kapitálové ligy",
+  "statsTrackedLocations": "Sledovaná umístění klanu",
   "statsLocationCountHelp": "Země a místa reprezentovaná sledovanými klany.",
   "statsLeagueId": "Liga {id}",
   "@statsLeagueId": {
@@ -4284,7 +4488,7 @@
   "rankedLeagueNoBattles": "Zatím nebyla zaznamenána žádná bitva.",
   "rankedLeagueGroupRanking": "Pořadí skupiny",
   "rankedLeagueRankingSubtitle": "Živé pořadí aktuální skupiny. Váš hráč je zvýrazněn.",
-  "rankedLeagueJumpToMyRank": "Přejít na pořadí",
+  "rankedLeagueJumpToMyRank": "Přejít na mé pořadí",
   "rankedLeagueLastPeriod": "Minulé období",
   "rankedLeagueBestGroupRank": "Nejlepší pořadí",
   "rankedLeaguePeriodHistory": "Historie období",
@@ -4849,7 +5053,7 @@
       }
     }
   },
-  "upgradeTrackerPlanRuleNote": "Přetažením kategorií určíte pořadí vylepšení. Nastavení řádku umožňuje sdílet prioritu nebo zastavit na cílovém dokončení.",
+  "upgradeTrackerPlanRuleNote": "Číslované úrovně běží jako první. Sdílené řádky mají stejné číslo úrovně a jejich kombinace je normalizována z relativních vah, takže 50 + 25 se stává 67% / 33%. Cíl dosáhne výnosu kategorie poté, co dosáhne tohoto procenta, zatímco později zůstane způsobilý.",
   "upgradeTrackerPlanGoalMaxCurrentHall": "Max. před pokračováním",
   "upgradeTrackerPlanGoalRushNextHall": "Rychle se dostaň do další haly",
   "upgradeTrackerPlanGoalCatchUp": "Dohnat spěšné úrovně",
@@ -4951,19 +5155,40 @@
       }
     }
   },
-  "cwlRegisteredRoster": "Registrovaná soupiska",
-  "cwlMatches": "Souboje",
-  "cwlNextMatchup": "Příští souboj",
-  "cwlOtherMatches": "Ostatní souboje",
-  "cwlOutlook": "Výhled sezóny",
-  "cwlFirstPlace": "První místo",
-  "cwlTopTwo": "První dva",
-  "cwlRemainingOpponents": "Zbývající soupeři",
-  "cwlWinBonusNote": "Hvězdy zahrnují 10 bonusových hvězd za každou dokončenou výhru.",
-  "cwlEstimateNote": "Odhady vycházejí z dokončených válek a zbývajících soupeřů, ne ze změn sestav. Každý klan musí mít alespoň dvě dokončené války. Odhady nejsou kalibrované; pravidla postupu se liší podle ligy.",
-  "cwlDuration": "{unit, select, hours {{count, plural, one {# hodina} few {# hodiny} other {# hodin}}} other {{count, plural, one {# minuta} few {# minuty} other {# minut}}}}",
-  "personalBasesDeleteOld": "Odebrat základny starší než 90 dní",
-  "personalBasesDeleteOldConfirm": "Bude odebráno {count} uložených základen starších než 90 dní. Historie stažení a sdílené základny zůstanou zachovány.",
+  "@settingsWarWidgetIosReady": {
+    "placeholders": {
+      "clanName": {
+        "type": "String"
+      }
+    }
+  },
+  "@settingsWarWidgetAndroidReady": {
+    "placeholders": {
+      "clanName": {
+        "type": "String"
+      }
+    }
+  },
+  "@settingsWarWidgetPrepareFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "cwlRegisteredRoster": "Registered roster",
+  "cwlMatches": "Matchups",
+  "cwlNextMatchup": "Next matchup",
+  "cwlOtherMatches": "Other matchups",
+  "cwlOutlook": "Season outlook",
+  "cwlFirstPlace": "First place",
+  "cwlTopTwo": "Top two",
+  "cwlRemainingOpponents": "Remaining opponents",
+  "cwlWinBonusNote": "Stars include 10 bonus stars per completed win.",
+  "cwlEstimateNote": "Estimates use completed wars and remaining opponents, not lineup changes. At least two completed wars per clan are needed. These are uncalibrated estimates; promotion rules vary by league.",
+  "cwlDuration": "{unit, select, hours {{count, plural, one {# hour} other {# hours}}} other {{count, plural, one {# minute} other {# minutes}}}}",
+  "personalBasesDeleteOld": "Remove bases older than 90 days",
+  "personalBasesDeleteOldConfirm": "{count} saved bases older than 90 days will be removed. Download history and shared bases will remain.",
   "@personalBasesDeleteOldConfirm": {
     "description": "Confirms cleanup while preserving lifetime download history.",
     "placeholders": {
@@ -4972,9 +5197,9 @@
       }
     }
   },
-  "legendsAutomaticDefense": "Automatická obrana",
-  "legendsPopularArmyItem": "Nejoblíbenější prvek armády",
-  "legendsClanCastle": "Klanový hrad",
+  "legendsAutomaticDefense": "Automatic defense",
+  "legendsPopularArmyItem": "Most popular army item",
+  "legendsClanCastle": "Clan Castle",
   "@cwlDuration": {
     "description": "Explicit countdown units; avoid native unit conversion.",
     "placeholders": {
@@ -4986,20 +5211,20 @@
       }
     }
   },
-  "clanNotificationRemoveConfirmation": "Vypnout oznámení tohoto klanu a odstranit záložku?",
-  "personalBasesTab": "Bases",
+  "clanNotificationRemoveConfirmation": "Turn off this clan’s notifications and remove the bookmark?",
+  "personalBasesTab": "Základny",
   "personalBasesDownloaded": "Downloaded",
   "personalArmyName": "Army name",
   "personalArmyNotes": "Notes",
   "personalArmyUnnamed": "Unnamed army",
   "personalArmyEdit": "Edit army",
   "personalArmyUnknownTownHall": "Unknown Town Hall",
-  "discordBotDashboard": "Panel Discord bota",
-  "discordAddBot": "Přidat bota",
-  "discordAddToMyDiscord": "Přidat do mého Discordu",
-  "discordServersWithoutBot": "Servery bez ClashKing",
-  "rankingsPlayerSection": "Žebříčky hráčů",
-  "rankingsClanSection": "Žebříčky klanů",
+  "discordBotDashboard": "Discord Bot Dashboard",
+  "discordAddBot": "Add bot",
+  "discordAddToMyDiscord": "Add to My Discord",
+  "discordServersWithoutBot": "Servers without ClashKing",
+  "rankingsPlayerSection": "Player Rankings",
+  "rankingsClanSection": "Clan Rankings",
   "cwlArchiveCoverage": "{available} of {total} matchups available.",
   "cwlStandingsIncomplete": "Missing archives are excluded. Group ranks and forecasts are unavailable.",
   "cwlPromotionChance": "Estimated promotion chance",
@@ -5010,62 +5235,62 @@
   "cwlRecordedStats": "Recorded wars only",
   "cwlMissingMatchups": "{count} matchups unavailable",
   "cwlHighestLeague": "Highest league · no promotion",
-  "warOutlookWinPossible": "Výhra je stále možná",
-  "warOutlookDrawOnly": "Nanejvýš remíza",
-  "warOutlookDefeat": "Výhra už není možná",
-  "warOutlookMaximum": "Maximální možné skóre",
-  "warOutlookAssumption": "Předpokládá dokonalé zbývající útoky. Jde o matematickou hranici, ne předpověď.",
-  "warScoutTitle": "Průzkum sestavy",
-  "warScoutOpponent": "Poslední války soupeře",
-  "warScoutScope": "Aktuální sestava · stejná pravidla · až 10 předchozí války",
-  "upgradeTrackerCapturedWork": "Z poslední aktualizace",
-  "tutorialWelcomeBody": "Projděte si krátkou prohlídku ClashKingu. Kdykoli ji můžete přeskočit.",
-  "tutorialReorderBody": "Podržte kartu a přetažením změňte její umístění.",
-  "tutorialSidebarBody": "Přejetím po domovské obrazovce otevřete nabídku nebo klepněte na svůj avatar.",
-  "tutorialExploreBody": "V této nabídce otevřete Nastavení a poté Oznámení. Pokračujte a přejděte tam nyní.",
-  "tutorialRemindersBody": "Níže vyberte připomínky. Až skončíte, vraťte se na domovskou obrazovku.",
-  "tutorialResetTitle": "Obnovit průvodce",
-  "tutorialResetConfirm": "Spustit průvodce znovu při příštích návštěvách?",
-  "upgradeTrackerOngoingUpgrades": "Probíhající vylepšení",
-  "upgradeTrackerToLevel": "Na úroveň {level}",
-  "upgradeTrackerFreeSlots": "{count} volných",
-  "upgradeTrackerFreeIn": "Volné za {duration}",
-  "upgradeTrackerPetHouse": "Dům mazlíčků",
-  "upgradeTrackerNotBuilt": "Nepostaveno",
-  "upgradeTrackerExtraSlots": "{count} navíc",
-  "rankedLeagueOverTime": "Liga v čase",
-  "rankedLeaguePromotionCutoff": "Hranice postupu",
-  "rankedLeagueDemotionCutoff": "Hranice sestupu",
-  "rankedLeagueCutoffsUnavailable": "Hranice postupu a sestupu nejsou k dispozici.",
-  "rankedAutomaticDefenseSummary": "{count} obran · {points} trofejí za každou",
-  "rankedAutomaticDefenseExplanation": "Podle všech skutečných obran v tomto týdnu, zaokrouhleno dolů.",
-  "warStatusInWar": "Ve válce",
-  "warStatusNoWar": "Bez války",
-  "warNoActiveClans": "Žádné klany právě neválčí.",
-  "warNoInactiveClans": "Žádné klany mimo válku",
-  "warAllClansInWar": "Všechny vaše klany právě válčí.",
+  "warOutlookWinPossible": "Win still possible",
+  "warOutlookDrawOnly": "Draw at best",
+  "warOutlookDefeat": "No path to a win",
+  "warOutlookMaximum": "Maximum possible score",
+  "warOutlookAssumption": "Assumes perfect remaining attacks. This is a mathematical limit, not a prediction.",
+  "warScoutTitle": "Lineup scouting",
+  "warScoutOpponent": "Opponent’s recent wars",
+  "warScoutScope": "Current lineup · same rules · up to 10 previous wars",
+  "upgradeTrackerCapturedWork": "From your last update",
+  "tutorialWelcomeBody": "Take a quick tour of ClashKing. You can skip it at any time.",
+  "tutorialReorderBody": "Hold a card, then drag it to change its position.",
+  "tutorialSidebarBody": "Swipe across Home to open the menu, or tap your avatar.",
+  "tutorialExploreBody": "From this menu, open Settings, then Notifications. Continue to go there now.",
+  "tutorialRemindersBody": "Choose reminders below. When you are done, return to Home.",
+  "tutorialResetTitle": "Reset tutorials",
+  "tutorialResetConfirm": "Start the tutorials again on your next visits?",
+  "upgradeTrackerOngoingUpgrades": "Ongoing Upgrades",
+  "upgradeTrackerToLevel": "To Level {level}",
+  "upgradeTrackerFreeSlots": "{count} free",
+  "upgradeTrackerFreeIn": "Free in {duration}",
+  "upgradeTrackerPetHouse": "Pet House",
+  "upgradeTrackerNotBuilt": "Not built",
+  "upgradeTrackerExtraSlots": "{count} extra",
+  "rankedLeagueOverTime": "League over time",
+  "rankedLeaguePromotionCutoff": "Promotion cutoff",
+  "rankedLeagueDemotionCutoff": "Demotion cutoff",
+  "rankedLeagueCutoffsUnavailable": "Promotion and demotion thresholds unavailable.",
+  "rankedAutomaticDefenseSummary": "{count} defenses · {points} trophies each",
+  "rankedAutomaticDefenseExplanation": "Based on all real defenses this week, rounded down.",
+  "warStatusInWar": "In war",
+  "warStatusNoWar": "No war",
+  "warNoActiveClans": "No clans are currently in war.",
+  "warNoInactiveClans": "No clans out of war",
+  "warAllClansInWar": "All your clans are currently in war.",
   "warStatusOther": "Ostatní",
-  "warNoOtherClans": "Žádné další klany.",
-  "playerWarLifetime": "Celá historie",
-  "playerWarThScope": "Platí jen pro statistické karty, ne pro bitvy. Toto vysvětlení zobrazíte podržením tlačítka.",
-  "playerWarNoAttacks": "Zatím žádné útoky",
-  "playerWarRegularWars": "Běžná válka",
-  "warWidgetNoActiveWar": "Žádná aktivní válka",
-  "warWidgetPrivateWarLog": "Soukromý válečný deník",
-  "warWidgetChooseClan": "Vyber klan",
-  "legendPerformanceTitle": "Denní výkon",
-  "legendCompleteDays": "Úplné dny",
-  "legendPerfectDays": "Perfektní dny",
-  "legendPartialDays": "Neúplné dny",
-  "legendMissingDays": "Bez záznamů",
-  "legendInvalidDays": "Neplatné dny",
-  "legendTrophiesGained": "Získané trofeje",
-  "legendTrophiesLost": "Ztracené trofeje",
+  "warNoOtherClans": "No other clans.",
+  "playerWarLifetime": "Lifetime",
+  "playerWarThScope": "Applies only to the statistics cards, not Battles. Hold the button for this explanation.",
+  "playerWarNoAttacks": "No attacks yet",
+  "playerWarRegularWars": "Regular war",
+  "warWidgetNoActiveWar": "No active war",
+  "warWidgetPrivateWarLog": "Private war log",
+  "warWidgetChooseClan": "Choose a clan",
+  "legendPerformanceTitle": "Daily performance",
+  "legendCompleteDays": "Complete days",
+  "legendPerfectDays": "Perfect days",
+  "legendPartialDays": "Partial days",
+  "legendMissingDays": "No observations",
+  "legendInvalidDays": "Invalid days",
+  "legendTrophiesGained": "Trophies gained",
+  "legendTrophiesLost": "Trophies lost",
   "legendDistribution": "Rozložení",
-  "legendPreviousDays": "Předchozích {count} dní",
-  "legendAvailableDays": "Dostupné dny",
-  "legendCompleteOnly": "Rozložení zahrnuje dny s 8 zaznamenanými bitvami.",
-  "legendPerfectSources": "Perfektní dny podle pořadí",
+  "legendPreviousDays": "Previous {count} days",
+  "legendAvailableDays": "Days available",
+  "legendCompleteOnly": "Distribution uses days with 8 recorded battles.",
+  "legendPerfectSources": "Perfect days by rank",
   "@legendPreviousDays": {
     "placeholders": {
       "count": {
@@ -5073,15 +5298,15 @@
       }
     }
   },
-  "onboardingOverviewTitle": "Tvé účty a klany",
-  "onboardingOverviewBody": "Měj své hráče, klany a vylepšení na jednom místě.",
-  "onboardingProgressTitle": "Prohlížej žebříčky a statistiky",
-  "onboardingProgressBody": "Sleduj bitvy, porovnávej pokrok a pokračuj ve vylepšování.",
-  "onboardingRemindersTitle": "Dostávej připomínky a upozornění",
-  "onboardingRemindersBody": "Dostávej připomenutí válek a vybraná upozornění. Účty a typy upozornění si zvol v Nastavení.",
-  "onboardingReplayTitle": "Znovu zobrazit úvod",
-  "statsViewLatestData": "Zobrazit nejnovější data",
-  "statsLatestAvailableDate": "Nejnovější dostupná data: {date}",
+  "onboardingOverviewTitle": "Your accounts & clans",
+  "onboardingOverviewBody": "Keep your players, clans, and upgrades together.",
+  "onboardingProgressTitle": "View rankings and stats",
+  "onboardingProgressBody": "Follow your battles, compare your progress, and keep upgrades moving.",
+  "onboardingRemindersTitle": "Get reminders and alerts",
+  "onboardingRemindersBody": "Get war reminders and the alerts you choose. Pick your accounts and alert types in Settings.",
+  "onboardingReplayTitle": "Replay introduction",
+  "statsViewLatestData": "View latest data",
+  "statsLatestAvailableDate": "Latest available: {date}",
   "@statsLatestAvailableDate": {
     "placeholders": {
       "date": {
@@ -5089,23 +5314,23 @@
       }
     }
   },
-  "legendPerfectedDefenseDays": "Dny s dokonale prolomenou obranou",
-  "legendCompleteDayDefinition": "Započítávají se pouze dny se všemi 8 bitvami.",
+  "legendPerfectedDefenseDays": "Perfected defense days",
+  "legendCompleteDayDefinition": "Only days with all 8 battles are included.",
   "statsCommunity": "Komunita",
-  "rankedFullOffenseDays": "+320 dní",
-  "rankedFullDefenseDays": "−320 dní",
-  "rankedTrophiesByRank": "Trofeje podle pořadí",
-  "statsArmyTypes": "Typy armád",
-  "onboardingStatsBody": "Prozkoumej statistiky hráčů, sleduj své klany a zjisti, jak se mění celá hra.",
-  "onboardingWidgetsTitle": "Přidej widgety na domovskou obrazovku",
-  "onboardingWidgetsBody": "Měj skóre válek a postup vylepšení po ruce díky widgetům na domovské obrazovce.",
-  "onboardingAlertTitle": "Válka brzy skončí",
-  "onboardingAlertBody": "Je čas na tvůj poslední útok.",
-  "onboardingSetupNotifications": "Povolit oznámení",
-  "onboardingAccountsReadyBody": "Tvé propojené účty jsou připravené. Přidej další účet nebo pokračuj.",
-  "onboardingSkipAccountSetup": "Přeskočit",
-  "accountsSetupBody": "Přidej a ověř své účty Clash of Clans.",
-  "accountsMyTitle": "Moje účty",
-  "profileAvatar": "Změnit vzhled",
-  "avatarPickerTitle": "Vyber si avatara"
+  "rankedFullOffenseDays": "+320 days",
+  "rankedFullDefenseDays": "−320 days",
+  "rankedTrophiesByRank": "Trophies by rank",
+  "statsArmyTypes": "Army Types",
+  "onboardingStatsBody": "Explore player stats, follow your clans, and see how the whole game is changing.",
+  "onboardingWidgetsTitle": "Add Home Screen widgets",
+  "onboardingWidgetsBody": "Keep war scores and upgrade progress close with Home Screen widgets.",
+  "onboardingAlertTitle": "War ends soon",
+  "onboardingAlertBody": "Time for your final attack.",
+  "onboardingSetupNotifications": "Enable notifications",
+  "onboardingAccountsReadyBody": "Your linked accounts are ready. Add another account or continue.",
+  "onboardingSkipAccountSetup": "Skip",
+  "accountsSetupBody": "Add and verify your Clash of Clans accounts.",
+  "accountsMyTitle": "My Accounts",
+  "profileAvatar": "Change look",
+  "avatarPickerTitle": "Pick an avatar"
 }

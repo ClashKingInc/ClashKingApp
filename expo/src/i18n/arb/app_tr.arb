@@ -1,20 +1,20 @@
 {
-  "capitalCurrentOpponent": "Mevcut rakip",
-  "capitalRaidMedals": "Baskın Madalyaları",
-  "warReplayTitle": "Skor geçmişi",
-  "warReplayPlay": "Geçmişi oynat",
-  "warReplayPause": "Geçmişi duraklat",
-  "cwlLeading": "Önde",
-  "cwlTrailing": "Geride",
-  "cwlYourClan": "Klanın",
-  "cwlPromotionZone": "Yükselme bölgesi",
-  "cwlDemotionZone": "Düşme bölgesi",
-  "cwlNotInLineup": "Kadroda değil",
-  "esportsEloSubtitle": "Dünya takım sıralaması ve maçlar kaynak:",
-  "esportsTopTeamsMatches": "Güncel en iyi 50 takımın maçları.",
-  "esportsPartialMatches": "Bazı takımlar yenilenemedi.",
-  "settingsHideAccounts": "Hesapları gizle",
-  "settingsHideAccountsDescription": "Bağlı hesapları gizleme seçeneğini göster. Mevcut gizlilik tercihleri değişmez.",
+  "capitalCurrentOpponent": "Current opponent",
+  "capitalRaidMedals": "Raid medals",
+  "warReplayTitle": "Score history",
+  "warReplayPlay": "Play history",
+  "warReplayPause": "Pause history",
+  "cwlLeading": "Leading",
+  "cwlTrailing": "Trailing",
+  "cwlYourClan": "Your clan",
+  "cwlPromotionZone": "Promotion zone",
+  "cwlDemotionZone": "Demotion zone",
+  "cwlNotInLineup": "Not in lineup",
+  "esportsEloSubtitle": "Global team rankings and matches from",
+  "esportsTopTeamsMatches": "Matches from the current top 50 teams.",
+  "esportsPartialMatches": "Some teams could not be refreshed.",
+  "settingsHideAccounts": "Hide accounts",
+  "settingsHideAccountsDescription": "Show the option to hide linked accounts. Existing privacy choices stay unchanged.",
   "calcRocketBalloonAssumption": "1 hit + death · {damage} damage each",
   "calcKeepEquipped": "Keep one equipped",
   "calcCustomLevels": "Custom levels",
@@ -38,31 +38,31 @@
   "personalBasesEmptyBody": "Bases you post through ClashKing on Discord appear here. You can also save bases from the library.",
   "personalArmiesEmptyTitle": "Keep your armies close",
   "personalArmiesEmptyBody": "Armies you post through ClashKing on Discord appear here. Save your favourites to find them before your next attack.",
-  "homeCardOriginal": "Orijinal",
-  "homeCardTint": "Yumuşak renk",
-  "homeCardEdge": "Renkli kenarlıklar",
-  "homeCardGlow": "Yavaş parıltı",
-  "competitiveNoHistory": "Henüz turnuva yok",
-  "competitiveHistoryHint": "Takımların ve turnuva sonuçların burada görünecek.",
-  "esportsMonthlyFinals": "Aylık finaller",
-  "esportsMonthlyQualifier": "Aylık elemeler",
-  "esportsHeroSubtitle": "Dünya Şampiyonası'na giden yol",
-  "esportsViewEvent": "Etkinliği keşfet",
-  "esportsWinLoss": "{wins} galibiyet · {losses} mağlubiyet",
-  "esportsViewPlayer": "Oyuncuyu görüntüle",
-  "esportsRecentMatches": "Son maçlar",
-  "esportsHideAttacks": "Savaş ayrıntılarını gizle",
-  "esportsViewAttacks": "Savaş ayrıntılarını görüntüle",
-  "esportsPlayer": "Espor oyuncusu",
+  "homeCardOriginal": "Original",
+  "homeCardTint": "Soft color",
+  "homeCardEdge": "Colored edges",
+  "homeCardGlow": "Slow glow",
+  "competitiveNoHistory": "No tournaments yet",
+  "competitiveHistoryHint": "Your teams and tournament results will appear here.",
+  "esportsMonthlyFinals": "Monthly finals",
+  "esportsMonthlyQualifier": "Monthly qualifiers",
+  "esportsHeroSubtitle": "The road to the World Championship",
+  "esportsViewEvent": "Explore event",
+  "esportsWinLoss": "{wins} wins · {losses} losses",
+  "esportsViewPlayer": "View player",
+  "esportsRecentMatches": "Recent matches",
+  "esportsHideAttacks": "Hide battle details",
+  "esportsViewAttacks": "View battle details",
+  "esportsPlayer": "Esports player",
   "esportsBattles": "Savaşlar",
-  "esportsTriples": "Üç yıldızlı saldırılar",
-  "esportsAverageStars": "Ortalama yıldız",
+  "esportsTriples": "Triples",
+  "esportsAverageStars": "Ortalama Yıldızlar",
   "esportsDestruction": "Yıkım",
-  "esportsAccounts": "Oyun hesapları",
+  "esportsAccounts": "Game accounts",
   "esportsAttack": "Saldırı",
   "esportsDefense": "Savunma",
-  "competitiveArenaSubtitle": "Senin klanın. Senin takımın. Sıradaki mücadelen.",
-  "competitiveViewTournament": "Turnuvayı görüntüle",
+  "competitiveArenaSubtitle": "Your clan. Your team. Your next challenge.",
+  "competitiveViewTournament": "View tournament",
   "@esportsWinLoss": {
     "placeholders": {
       "wins": {
@@ -87,50 +87,50 @@
   "esportsStage": "Stage",
   "esportsStandings": "Standings",
   "esportsMatches": "Matches",
-  "esportsPoints": "Points",
+  "esportsPoints": "Puanlar",
   "esportsPlayed": "played",
   "esportsSource": "Data from Competitive Clash Network",
-  "esportsRoster": "Roster",
+  "esportsRoster": "Liste",
   "esportsSeasonPoints": "Season points",
   "esportsStageStandings": "Stage standings",
-  "competitiveCompetition": "Rekabet",
-  "competitiveWebsite": "Web sitesi",
-  "competitiveVerifiedAccounts": "Doğrulanmış hesaplar",
-  "competitiveEsports": "E-spor",
-  "competitiveTournaments": "Turnuvalar",
+  "competitiveCompetition": "Competition",
+  "competitiveWebsite": "Website",
+  "competitiveVerifiedAccounts": "Verified accounts",
+  "competitiveEsports": "eSports",
+  "competitiveTournaments": "Tournaments",
   "competitiveProfile": "Profil",
   "competitiveTeams": "Takımlar",
-  "competitiveFreeEntry": "Ücretsiz katılım",
-  "competitiveRegister": "Takımı kaydet",
-  "competitiveCheckIn": "Katılımı onayla",
-  "competitiveRules": "Kurallar",
-  "competitiveUnavailable": "Yarışma verileri kullanılamıyor. Tekrar deneyin.",
-  "competitiveRegistrationSaved": "Kayıt gönderildi",
-  "competitiveTeamHistory": "Takım geçmişi",
-  "competitiveDebutName": "İlk turnuva",
-  "competitiveDebutDescription": "Doğrulanmış hesabınızla bir turnuvaya katılın.",
-  "competitiveViewProfile": "Profili görüntüle",
+  "competitiveFreeEntry": "Free entry",
+  "competitiveRegister": "Register team",
+  "competitiveCheckIn": "Check in",
+  "competitiveRules": "Rules",
+  "competitiveUnavailable": "Competition data is unavailable. Try again.",
+  "competitiveRegistrationSaved": "Registration submitted",
+  "competitiveTeamHistory": "Team history",
+  "competitiveDebutName": "Tournament debut",
+  "competitiveDebutDescription": "Participate in a tournament with your verified account.",
+  "competitiveViewProfile": "View profile",
   "calcPinEquipment": "Keep one equipped",
-  "calcSearch": "Search",
+  "calcSearch": "Ara",
   "calcEquipmentTitle": "Equipment Compare",
   "calcDamageIntro": "Find the combinations that take a defense down.",
   "calcFarmIntro": "Plan the loot needed for your next upgrades.",
   "calcEquipmentIntro": "Compare hero loadouts, levels, and ability stats.",
   "calcComingSoon": "Coming soon",
-  "calcHero": "Hero",
+  "calcHero": "Kahraman",
   "calcHeroLevel": "Hero level",
   "calcMaxLevels": "Max levels",
   "calcEquipmentPool": "Equipment to compare",
   "calcPoolHelp": "Choose pieces and default levels. Compare every pair, then customize individual rows.",
   "calcSelectAll": "Select all",
-  "calcClear": "Clear",
+  "calcClear": "Temizlemek",
   "calcAttributes": "Attributes",
   "calcAddAttribute": "Add attribute",
-  "calcTable": "Compare",
+  "calcTable": "Karşılaştır",
   "calcProgression": "Level progression",
   "calcCompareHelp": "DPS adds the hero's base and equipment DPS. Speed bonuses and temporary effects are separate attributes; healing is not extra max HP.",
   "calcChartHelp": "Equipment levels increase together; each piece stops at its own maximum. Hero levels stay fixed. First six loadouts shown.",
-  "calcSort": "Sort by",
+  "calcSort": "Şuna göre sıralayın",
   "calcNoEquipment": "No equipment",
   "calcDuplicate": "Duplicate loadout",
   "calcRemove": "Remove loadout",
@@ -154,9 +154,9 @@
   "calcComparisonDownloaded": "Comparison image downloaded",
   "calcComparisonExportFailed": "Could not copy the comparison image. Please try again.",
   "calcEffectiveLevel": "Effective level {level}",
-  "calcTarget": "Target",
+  "calcTarget": "Hedef",
   "calcSupercharge": "Supercharge",
-  "calcNone": "None",
+  "calcNone": "Hiçbiri",
   "calcResults": "{count} combinations",
   "calcResultsHelp": "Smallest spell cost first, then fewer equipment activations. Extra sources that do not help are removed.",
   "calcNoCombinationHelp": "Try another source, a higher level, or more spell capacity.",
@@ -164,63 +164,63 @@
   "calcAlternative": "Alternative",
   "calcCombinationCost": "{housing} spell space · {equipment} equipment",
   "calcUseStack": "Use stack",
-  "homeRankingsAndStats": "Sıralamalar ve istatistikler",
-  "homeActivityRecorded": "Yalnızca kaydedilen etkinlik; geçmiş eksik olabilir.",
-  "homeWidgetsServers": "Sunucular",
-  "homeWidgetsEdit": "Ana sayfayı düzenle",
-  "homeWidgetsAdd": "Widget ekle",
-  "homeWidgetsRemove": "Widget kaldır",
-  "homeWidgetsMoveUp": "Yukarı taşı",
-  "homeWidgetsMoveDown": "Aşağı taşı",
+  "homeRankingsAndStats": "Rankings & Stats",
+  "homeActivityRecorded": "Recorded activity only; history may be incomplete.",
+  "homeWidgetsServers": "Servers",
+  "homeWidgetsEdit": "Edit Home",
+  "homeWidgetsAdd": "Add widget",
+  "homeWidgetsRemove": "Remove widget",
+  "homeWidgetsMoveUp": "Move up",
+  "homeWidgetsMoveDown": "Move down",
   "homeWidgetsSmall": "Küçük",
-  "homeWidgetsWide": "Geniş",
-  "homeWidgetsSaveError": "Ana sayfa eşitlenemedi. Yeniden düzenlemeden önce yenileyin.",
-  "homeWidgetsUnavailable": "Kayıtlı veri yok",
-  "homeWidgetsBookmarkFirst": "Önce bir oyuncuyu veya klanı yer imlerine ekleyin.",
-  "rankingsWarTripleStreak": "Savaş üç yıldız serisi",
+  "homeWidgetsWide": "Wide",
+  "homeWidgetsSaveError": "Could not sync Home. Please refresh before editing again.",
+  "homeWidgetsUnavailable": "No recorded data available",
+  "homeWidgetsBookmarkFirst": "Bookmark a player or clan first.",
+  "rankingsWarTripleStreak": "War Triple Streak",
   "rankingsWarTripleRulesTitle": "How streaks count",
   "rankingsWarTripleRulesBody": "+2 for two triples against your own Town Hall level in a regular war.\n\nA missed attack, non-triple, or different-TH target resets your streak.\n\nCWL and friendly wars don’t count. Streaks are separate for each Town Hall level.",
-  "clanLegendsRanked": "Efsaneler ve Dereceli",
-  "appIconChangeWarning": "Uygulama simgesini değiştirmek ClashKing’i kapatır. Devam edilsin mi?",
-  "upgradeTrackerUnverifiedAccount": "Bu hesap bağlı ancak doğrulanmamış. Yükseltme verilerinizi içe aktarmak için Hesapları Yönet bölümünde doğrulayın.",
-  "clanWarNotificationsTitle": "Savaş bildirimleri",
-  "clanCapitalNotificationsTitle": "Klan Başkenti bildirimleri",
-  "clanWarNotificationsBody": "Bu klanın savaş güncellemelerini alın.",
-  "clanCapitalNotificationsBody": "Bu klanın Klan Başkenti güncellemelerini alın.",
-  "notifSystemNotifications": "Sistem bildirimleri",
-  "notifSystemSettings": "Bildirim ayarlarını aç",
-  "notifSystemSettingsDescription": "Uyarıları, sesleri ve rozetleri cihaz ayarlarından yönetin.",
-  "notifSystemSettingsFailed": "Bildirim ayarları açılamadı. Lütfen cihazınızda Ayarlar'ı açın.",
-  "notifManagePlayersDescription": "Hesap bildirimlerini Oyuncular → Bağlı → Seçenekler bölümünden yönetin.",
-  "notifCustomReminders": "Özel hatırlatıcılar",
-  "notifTestType": "Bildirim türü",
-  "statsBattlelogsGroup": "Savaş kayıtları",
-  "statsGlobalStatsGroup": "Küresel istatistikler",
-  "playerOptionShowOnHomeTitle": "Hesabı Ana Sayfada Göster",
-  "playerOptionShowOnHomeSubtitle": "Bu doğrulanmış hesabı Ana Sayfa kartlarına ekleyin (en fazla 5).",
-  "playerOptionShowOnHomeVerifyFirst": "Ana Sayfada göstermek için bu hesabı doğrulayın.",
-  "playerOptionHomeInclusionFirst": "Önce Hesabı Ana Sayfada Göster seçeneğini açın.",
-  "homeIncludedAccountsLimit": "Ana Sayfada en fazla 5 hesap gösterilebilir. Önce birini kaldırın.",
-  "statsHitratesByTownHall": "Belediye Binasına göre başarı oranı",
-  "statsChartGranularity": "Grafik aralığı",
+  "clanLegendsRanked": "Legends & Ranked",
+  "appIconChangeWarning": "Changing the app icon will close ClashKing. Continue?",
+  "upgradeTrackerUnverifiedAccount": "This account is linked but not verified. Verify it in Manage Accounts to import your upgrade data.",
+  "clanWarNotificationsTitle": "War notifications",
+  "clanCapitalNotificationsTitle": "Clan Capital notifications",
+  "clanWarNotificationsBody": "Receive war updates for this clan.",
+  "clanCapitalNotificationsBody": "Receive Clan Capital updates for this clan.",
+  "notifSystemNotifications": "System notifications",
+  "notifSystemSettings": "Open notification settings",
+  "notifSystemSettingsDescription": "Manage alerts, sounds, and badges in your device settings.",
+  "notifSystemSettingsFailed": "Could not open notification settings. Please open Settings on your device.",
+  "notifManagePlayersDescription": "Manage account notifications in Players → Linked → Options.",
+  "notifCustomReminders": "Custom reminders",
+  "notifTestType": "Notification type",
+  "statsBattlelogsGroup": "Battlelogs",
+  "statsGlobalStatsGroup": "Global Stats",
+  "playerOptionShowOnHomeTitle": "Show account on Home",
+  "playerOptionShowOnHomeSubtitle": "Include this verified account in Home cards (up to 5).",
+  "playerOptionShowOnHomeVerifyFirst": "Verify this account to show it on Home.",
+  "playerOptionHomeInclusionFirst": "Turn on Show account on Home first.",
+  "homeIncludedAccountsLimit": "Home can show up to 5 accounts. Remove one first.",
+  "statsHitratesByTownHall": "Hitrates by Town Hall",
+  "statsChartGranularity": "Chart interval",
   "statsDaily": "Günlük",
   "statsWeekly": "Haftalık",
-  "playerBattlelogCumulative": "Birikimli",
-  "statsMonthly": "Aylık",
-  "statsCompareCohorts": "Grupları karşılaştır",
-  "statsAcrossCohorts": "Gruplara göre kullanım",
-  "legendsTrophyGrid": "Sezona genel bakış",
-  "legendsPopularArmyItems": "En popüler ordu öğeleri",
-  "legendsPopularTroop": "Favori",
-  "legendsHitrate": "Başarı oranı",
-  "legendsAvgOffense": "Ort. saldırı",
-  "legendsAvgDefense": "Ort. savunma",
-  "settingsClearImageCache": "Görsel önbelleğini temizle",
-  "settingsImageCacheCleared": "Görsel önbelleği temizlendi.",
-  "settingsImageCacheClearFailed": "Görsel önbelleği temizlenemedi. Lütfen tekrar deneyin.",
-  "startupCheckingUpdate": "Güncellemeler kontrol ediliyor…",
-  "startupDownloadingUpdate": "Güncelleme indiriliyor…",
-  "startupUpdateInBackground": "Arka planda güncelle",
+  "playerBattlelogCumulative": "Cumulative",
+  "statsMonthly": "Monthly",
+  "statsCompareCohorts": "Compare cohorts",
+  "statsAcrossCohorts": "Usage across cohorts",
+  "legendsTrophyGrid": "Season overview",
+  "legendsPopularArmyItems": "Most popular army items",
+  "legendsPopularTroop": "Favorite",
+  "legendsHitrate": "Hitrate",
+  "legendsAvgOffense": "Avg. Offense",
+  "legendsAvgDefense": "Avg. Defense",
+  "settingsClearImageCache": "Clear image cache",
+  "settingsImageCacheCleared": "Image cache cleared.",
+  "settingsImageCacheClearFailed": "Could not clear the image cache. Please try again.",
+  "startupCheckingUpdate": "Checking for updates…",
+  "startupDownloadingUpdate": "Downloading update…",
+  "startupUpdateInBackground": "Update in background",
   "warStatsRangeTitle": "Savaş istatistikleri aralığı",
   "warStatsRangeDescription": "İstatistiklerin sabit sayıda son savaşı mı yoksa gün cinsinden yakın bir dönemi mi kapsayacağını seç.",
   "warStatsRangeDays": "Gün",
@@ -375,17 +375,59 @@
   "notifPushEnabled": "Anlık bildirimler etkin",
   "notifReceiveNotifications": "Bildirimleri al",
   "notifTokenPreview": "Jeton: {token}",
+  "@notifTokenPreview": {
+    "placeholders": {
+      "token": {
+        "type": "String"
+      }
+    }
+  },
   "notifEnabledDeliveryDescription": "Etkin uyarılarınız bu cihaza gönderilebilir.",
   "notifDisabledAccountDescription": "Bildirimler tüm ClashKing hesabınızda kapalı.",
   "notifMaximumRemindersAdded": "En fazla sayıda hatırlatıcı eklendi",
   "notifAddReminder": "Hatırlatıcı ekle",
   "notifDurationOneHour": "1 saat",
   "notifDurationHours": "{count} saat",
+  "@notifDurationHours": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "notifDurationMinutes": "{count} dakika",
+  "@notifDurationMinutes": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "notifAddTiming": "{timing} ekle",
+  "@notifAddTiming": {
+    "placeholders": {
+      "timing": {
+        "type": "String"
+      }
+    }
+  },
   "notifTimingOneHourBefore": "1 saat önce",
   "notifTimingHoursBefore": "{count} saat önce",
+  "@notifTimingHoursBefore": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "notifTimingMinutesBefore": "{count} dakika önce",
+  "@notifTimingMinutesBefore": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "notifPushReady": "Anlık bildirimler bu cihazda hazır.",
   "notifPushPermissionRequired": "ClashKing uyarılarını almak için bildirimlere izin verin.",
   "notifPushPermissionDenied": "Bildirim izni reddedildi.",
@@ -394,12 +436,13 @@
   "notifPushUnsupported": "Anlık bildirimler bu platformda desteklenmiyor.",
   "notifPushInitializing": "Anlık bildirimler yapılandırılıyor…",
   "notificationPrimerTitle": "Bildirimler etkinleştirilsin mi?",
-  "notificationPrimerBody": "ClashKing etkinlik, duyuru, Efsane savunması ve destek güncellemeleri gönderebilir. Savaş ve Baskın Hafta Sonu hatırlatıcıları siz ayarlayana kadar kapalı kalır. Bu seçimleri Ayarlar > Bildirimler bölümünden değiştirebilirsiniz.",
+  "notificationPrimerBody": "ClashKing savaş, CWL, hesap ve proje güncellemelerini sana bildirebilir. Bunu istediğin zaman Ayarlar > Bildirimler bölümünden değiştirebilirsin.",
   "notificationPrimerNotNow": "Şimdi değil",
   "notificationPrimerAllow": "İzin ver",
+  "@@last_modified": "2024-12-23T10:00:00.000Z",
   "achievementsTitle": "Başarımlar",
   "achievementEarnedLabel": "Kazanıldı",
-  "achievementGemsEarnedRatio": "{earned} / {total} kazanıldı",
+  "achievementGemsEarnedRatio": "{earned} / {total} earned",
   "@achievementGemsEarnedRatio": {
     "placeholders": {
       "earned": {
@@ -410,7 +453,7 @@
       }
     }
   },
-  "achievementGemsAccessibility": "Başarılardan kazanılabilecek {total} mücevherin {earned} kadarı kazanıldı.",
+  "achievementGemsAccessibility": "Earned {earned} of {total} achievement gems.",
   "@achievementGemsAccessibility": {
     "placeholders": {
       "earned": {
@@ -423,6 +466,23 @@
   },
   "achievementSummary": "{earned}/{total} tamamlandı",
   "achievementEarnedCount": "Kazanıldı ×{count}",
+  "@achievementSummary": {
+    "placeholders": {
+      "earned": {
+        "type": "String"
+      },
+      "total": {
+        "type": "String"
+      }
+    }
+  },
+  "@achievementEarnedCount": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
   "achievementTownhall18Name": "Belediye Binası 18",
   "achievementTownhall18Requirement": "Belediye Binası 18'e ulaş.",
   "achievementWarWarriorName": "Savaş Savaşçısı",
@@ -431,7 +491,6 @@
   "achievementMrLegendDescription": "Efsane Ligi'nde kusursuz bir saldırı günü tamamladın.",
   "achievementDefenseDoesntMatterName": "Savunma Önemli Değil",
   "achievementDefenseDoesntMatterDescription": "Efsane Ligi'nde kusursuz bir savunma günü yaşadın.",
-  "@@last_modified": "2024-12-23T10:00:00.000Z",
   "appTitle": "ClashKing",
   "appDescription": "İstatistikleri takip etmek, klanları yönetmek ve performansı analiz etmek için nihai Clash of Clans yardımcınız.",
   "generalLoading": "Yükleniyor...",
@@ -454,8 +513,8 @@
   "postsLoadMore": "Daha fazla yükle",
   "postsCurrent": "Mevcut",
   "postsPast": "Geçmiş",
-  "postsStoryFinished": "Hikâye bitti",
-  "postsWatchAgain": "Tekrar izle",
+  "postsStoryFinished": "Story finished",
+  "postsWatchAgain": "Watch again",
   "postsStory": "Etkileşimli hikaye",
   "postsPinned": "Öne Çıkanlar",
   "generalTryAgain": "Tekrar dene",
@@ -544,7 +603,7 @@
     "description": "Filter value is not set"
   },
   "generalWarning": "Uyarı",
-  "gameHandoffDontShowAgain": "Bunu bir daha gösterme",
+  "gameHandoffDontShowAgain": "Don't show this again",
   "generalUnknown": "Bilinmeyen",
   "generalNoDataAvailable": "Veri bulunamadı.",
   "generalNoFilteredResults": "Filtrelerinize uyan hiçbir sonuç yok",
@@ -773,9 +832,9 @@
   "accountsAdd": "Hesap ekle",
   "accountsAddInstruction": "Hesabınızı eklemek için + düğmesine dokunun",
   "accountsApiToken": "Hesap API Tokeni",
-  "accountsEnterApiToken": "Oyun içindeki API jetonuyla bu hesabın sana ait olduğunu doğrula.",
+  "accountsEnterApiToken": "Hesabınızın size ait olduğunu onaylamak için lütfen hesap API jetonunu girin. Bunu Clash of Clans'ta bulabilirsiniz:",
   "accountsApiTokenLocation": "Ayarlar > Diğer Ayarlar > API Simgesi",
-  "accountsOpenMoreSettings": "API jetonunu al",
+  "accountsOpenMoreSettings": "Daha Fazla Ayarı Aç",
   "accountsCouldNotOpenClash": "Clash of Clans açılamadı. Lütfen manuel olarak açın.",
   "accountsFillAllFields": "Lütfen tüm alanları doldur.",
   "accountsErrorTagNotExists": "Girilen oyuncu etiketi mevcut değil.",
@@ -1295,8 +1354,32 @@
   "warParticipation": "Savaş Katılımı",
   "cwlParticipantOnly": "Yalnızca katılımcı",
   "warStatsRangeWarsCompact": "{number} savaş",
+  "@warStatsRangeWarsCompact": {
+    "description": "Compact clan war statistics war range label",
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
   "warStatsRangeDaysCompact": "{number} gün",
+  "@warStatsRangeDaysCompact": {
+    "description": "Compact clan war statistics day range label",
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
   "warStatsLastXDays": "Son {number} gün",
+  "@warStatsLastXDays": {
+    "description": "Clan war statistics date-range label",
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
   "warStatsCurrentMembers": "Mevcut üyeler",
   "warLeague": "Savaş/Lig",
   "warHistory": "Savaş Geçmişi",
@@ -1305,6 +1388,13 @@
   "warLogClosed": "{clan} klanının savaş günlüğü kapalı.",
   "warLogPrivate": "{clan} klanının savaş günlüğü gizli.",
   "@warLogClosed": {
+    "placeholders": {
+      "clan": {
+        "type": "String"
+      }
+    }
+  },
+  "@warLogPrivate": {
     "placeholders": {
       "clan": {
         "type": "String"
@@ -1608,7 +1698,7 @@
   "warStarsTwo": "2 yıldız",
   "warStarsThree": "3 yıldız",
   "warStarsZero": "0 Yıldız",
-  "legendHistoryZeroStars": "Sıfır yıldız",
+  "legendHistoryZeroStars": "Zero Stars",
   "warStarsBestPerformance": "En iyi performans",
   "@warStarsBestPerformance": {
     "description": "Best performance in war"
@@ -1763,7 +1853,7 @@
   "clanLeaderboardHistoryTab": "Liderlik tablosu geçmişi",
   "clanLegendHistoryTab": "Efsane geçmişi",
   "clanRecordsTab": "Rekorlar",
-  "clanRecordsChangesTab": "Rekorlar ve değişiklikler",
+  "clanRecordsChangesTab": "Records & Changes",
   "clanProfileHistoryTab": "Profil geçmişi",
   "clanProfileLevelChanged": "Klan seviyesi değişti",
   "clanProfileDescriptionChanged": "Açıklama değişti",
@@ -1805,8 +1895,8 @@
   "legendsCountryTitle": "Ülke",
   "legendsLocalRankTitle": "Yerel sıralama",
   "legendsGlobalRankTitle": "Küresel sıralama",
-  "legendsYourArmy": "Ordun",
-  "legendsArmyUsedAgainstYou": "Sana karşı kullanılan ordu",
+  "legendsYourArmy": "Your army",
+  "legendsArmyUsedAgainstYou": "Army used against you",
   "warWinsTitle": "galibiyet",
   "warLossesTitle": "kayıplar",
   "warDrawsTitle": "Beraberlik",
@@ -2051,7 +2141,7 @@
   "faqWhatCanBotDo": "ClashKing Discord botu neler yapabilir?",
   "faqWhatCanBotDoAnswer": "ClashKing Discord botu, kapsamlı takip araçları, otomatik bildirimler ve uygulamayla kusursuz entegrasyonuyla klanınızı doğrudan Discord üzerinden yönetmenize yardımcı olur. Bağlantıda kalmak ve düzenli kalmak isteyen klan liderleri ve üyeleri için tasarlanmıştır.",
   "faqInviteBotToServer": "Botu Sunucuya Davet Et",
-  "drawerInviteDiscordBot": "Botu Sunucuya Davet Et",
+  "drawerInviteDiscordBot": "Invite Discord Bot",
   "faqBotFeatureTracking": "Oyuncu ve Klan Takibi",
   "faqBotFeatureTrackingDesc": "Gerçek zamanlı güncellemelerle birden fazla klan ve oyuncu ekleyin ve izleyin",
   "faqBotFeatureWars": "Savaş Yönetimi",
@@ -2208,7 +2298,7 @@
     "description": "Defender town hall filter label"
   },
   "filtersSameTownHallOnly": "Sadece Aynı Belediye Binası",
-  "warStatsSameTownHall": "Aynı belediye binası",
+  "warStatsSameTownHall": "Same Townhall",
   "@filtersSameTownHallOnly": {
     "description": "Same town hall filter option"
   },
@@ -2862,7 +2952,7 @@
   "@settingsNotificationsTitle": {
     "description": "Settings tile: notifications title"
   },
-  "settingsNotificationsSubtitle": "Hangi uyarıları alacağınızı seçin.",
+  "settingsNotificationsSubtitle": "Uyarıları seçin ve yerel test önizlemelerini gönderin.",
   "@settingsNotificationsSubtitle": {
     "description": "Settings tile: notifications subtitle"
   },
@@ -3334,7 +3424,7 @@
   "playerBestTrophies": "En iyi kupalar",
   "clanLoadFailed": "Klan yüklenemedi.",
   "gameItemLevels": "Seviyeler",
-  "gameItemLevelCount": "{count} seviye",
+  "gameItemLevelCount": "{count, plural, one {# Level} other {# Levels}}",
   "@gameItemLevelCount": {
     "placeholders": {
       "count": {
@@ -3405,6 +3495,20 @@
   },
   "todoAllCaughtUpForNow": "Şimdilik her şey tamam",
   "timeDurationShort": "{unit, select, daysHours {{primary}g {secondary}sa} hoursMinutes {{primary}sa {secondary}dk} other {{primary}dk}}",
+  "@timeDurationShort": {
+    "description": "Compact localized duration used in countdowns",
+    "placeholders": {
+      "unit": {
+        "type": "String"
+      },
+      "primary": {
+        "type": "int"
+      },
+      "secondary": {
+        "type": "int"
+      }
+    }
+  },
   "todoEventEndsIn": "{duration} içinde biter",
   "@todoEventEndsIn": {
     "placeholders": {
@@ -3514,9 +3618,14 @@
   "statsHero": "Kahraman",
   "statsPet": "Evcil Hayvan",
   "statsEquipment": "Ekipman",
-  "statsPetCombinations": "Evcil hayvan kombinasyonları",
-  "statsEquipmentPairs": "Ekipman çiftleri",
-  "statsArmyFallback": "Ordu {id}",
+  "statsPetCombinations": "Pet combinations",
+  "statsEquipmentPairs": "Equipment pairs",
+  "statsArmyFallback": "Army {id}",
+  "@statsArmyFallback": {
+    "placeholders": {
+      "id": {}
+    }
+  },
   "statsOwningHero": "Kahramana sahip olmak",
   "statsAddItem": "Öğe ekle",
   "statsAnalyzeItems": "Öğeleri analiz edin",
@@ -3902,7 +4011,7 @@
   },
   "appIconDefault": "Varsayılan",
   "appIconChristmas": "Noel",
-  "appIconHalloween": "Cadılar Bayramı",
+  "appIconHalloween": "Halloween",
   "appIconBlackWhite": "Siyah beyaz",
   "appIconDarkMode": "Karanlık mod",
   "generalMembersCount": "{count} üye",
@@ -3960,9 +4069,9 @@
     }
   },
   "upgradeTrackerShare": "Takipçiyi paylaş",
-  "trackerPosterCopied": "Görsel kopyalandı",
-  "trackerPosterCopy": "Görseli kopyala",
-  "trackerPosterShareAll": "Üçünü de paylaş",
+  "trackerPosterCopied": "Image copied",
+  "trackerPosterCopy": "Copy image",
+  "trackerPosterShareAll": "Share all 3",
   "upgradeTrackerPasteJson": "Hesap JSON'unu yapıştır",
   "upgradeTrackerImportTitle": "Hesap verilerini içe aktar",
   "upgradeTrackerImportDescription": "Ham hesap JSON'unu yapıştır. Veriler bu cihazda kalır.",
@@ -4271,8 +4380,8 @@
   "homeActivityLeft": "ayrıldı",
   "homeActivityAClan": "bir klana",
   "statsCwlSeasonGroups": "Gruplar",
-  "statsCwlSeasonHistory": "Klan Savaşı Ligi zaman içinde",
-  "statsCwlRosterNotLineup": "Kayıtlı oyuncu dağılımı {size} yere ölçeklendi; gerçek savaş dizilimleri farklı olabilir.",
+  "statsCwlSeasonHistory": "CWL over time",
+  "statsCwlRosterNotLineup": "Registered roster mix, scaled to {size} places; actual war lineups may differ.",
   "@statsCwlRosterNotLineup": {
     "placeholders": {
       "size": {
@@ -4280,28 +4389,28 @@
       }
     }
   },
-  "statsTroopStats": "Birlik istatistikleri",
-  "statsWarSizes": "Savaş boyutları",
-  "statsMissedAttacks": "Kaçırılan saldırılar",
-  "statsCopyChart": "Grafiği kopyala",
-  "statsCompareItems": "Öğeleri karşılaştır",
-  "statsCompareItemsHint": "Karşılaştırmak için en fazla 5 öğe seçin.",
-  "statsVsOverall": "genel toplamla karşılaştırma",
-  "statsCopyChartFailed": "Grafik kopyalanamadı. Tekrar deneyin.",
-  "statsPercentagePoints": "yüzde puan",
+  "statsTroopStats": "Troop Stats",
+  "statsWarSizes": "War sizes",
+  "statsMissedAttacks": "Missed attacks",
+  "statsCopyChart": "Copy chart",
+  "statsCompareItems": "Compare items",
+  "statsCompareItemsHint": "Select up to 5 items to compare.",
+  "statsVsOverall": "vs. overall",
+  "statsCopyChartFailed": "Could not copy chart. Try again.",
+  "statsPercentagePoints": "percentage points",
   "statsMeta": "Meta",
   "statsBattle": "Savaş",
   "statsWorld": "Dünya",
   "statsHeaderSubtitle": "Savaş performansını ve takip ettiğimiz dünyayı keşfet.",
   "statsPreview": "Önizleme",
-  "statsTownHallDistribution": "Belediye Binaları",
+  "statsTownHallDistribution": "Belediye Binası dağıtımı",
   "statsBuilderHallDistribution": "İnşaat Salonu dağıtımı",
-  "statsLeagueDistribution": "Sıralamalı ligler",
+  "statsLeagueDistribution": "Sıralanmış lig dağılımı",
   "statsTrackedPlayers": "Mevcut izlenen oyuncu nüfusu",
   "statsTrackedClans": "Şu an izlenen klan nüfusu",
-  "statsCwlLeagueDistribution": "CWL ligleri",
-  "statsCapitalLeagueDistribution": "Başkent ligleri",
-  "statsTrackedLocations": "Klan Konumları",
+  "statsCwlLeagueDistribution": "CWL ligi dağıtımı",
+  "statsCapitalLeagueDistribution": "Sermaye ligi dağıtımı",
+  "statsTrackedLocations": "Takip edilen klan konumları",
   "statsLocationCountHelp": "İzlenen klanlar tarafından temsil edilen ülkeler ve konumlar.",
   "statsLeagueId": "Lig {id}",
   "@statsLeagueId": {
@@ -4379,7 +4488,7 @@
   "rankedLeagueNoBattles": "Henüz savaş kaydedilmedi.",
   "rankedLeagueGroupRanking": "Grup sıralaması",
   "rankedLeagueRankingSubtitle": "Mevcut grubun canlı sıralaması. Oyuncun vurgulanır.",
-  "rankedLeagueJumpToMyRank": "Sıraya git",
+  "rankedLeagueJumpToMyRank": "Sırama git",
   "rankedLeagueLastPeriod": "Son dönem",
   "rankedLeagueBestGroupRank": "En iyi sıra",
   "rankedLeaguePeriodHistory": "Dönem geçmişi",
@@ -4944,7 +5053,7 @@
       }
     }
   },
-  "upgradeTrackerPlanRuleNote": "Önce neyin yükseltileceğini seçmek için kategorileri sürükleyin. Satır ayarlarıyla öncelikleri paylaşabilir veya ilerleme hedefinde durabilirsiniz.",
+  "upgradeTrackerPlanRuleNote": "Numaralandırılmış katmanlar ilk önce çalıştırılır. Paylaşılan satırlar aynı katman numarasını korur ve karışımları göreceli ağırlıklardan normalleştirilir, böylece 50 + 25 %67 / %33 olur. Bir hedef, bu yüzdeye ulaştıktan sonra kategori getirisi sağlar ve daha sonra uygun kalır.",
   "upgradeTrackerPlanGoalMaxCurrentHall": "İlerlemeden önce maksimum",
   "upgradeTrackerPlanGoalRushNextHall": "Bir sonraki salona hızla ulaşın",
   "upgradeTrackerPlanGoalCatchUp": "Hızlandırılmış seviyeleri yakalayın",
@@ -5046,19 +5155,40 @@
       }
     }
   },
-  "cwlRegisteredRoster": "Kayıtlı kadro",
-  "cwlMatches": "Eşleşmeler",
-  "cwlNextMatchup": "Sonraki eşleşme",
-  "cwlOtherMatches": "Diğer eşleşmeler",
-  "cwlOutlook": "Sezon tahmini",
-  "cwlFirstPlace": "Birincilik",
-  "cwlTopTwo": "İlk iki",
-  "cwlRemainingOpponents": "Kalan rakipler",
-  "cwlWinBonusNote": "Yıldızlar, tamamlanan her galibiyet için 10 bonus yıldız içerir.",
-  "cwlEstimateNote": "Tahminler tamamlanan savaşları ve kalan rakipleri kullanır, kadro değişikliklerini dikkate almaz. Klan başına en az iki tamamlanmış savaş gerekir. Tahminler kalibre edilmemiştir; yükselme kuralları lige göre değişir.",
-  "cwlDuration": "{unit, select, hours {{count, plural, one {# saat} other {# saat}}} other {{count, plural, one {# dakika} other {# dakika}}}}",
-  "personalBasesDeleteOld": "90 günden eski düzenleri kaldır",
-  "personalBasesDeleteOldConfirm": "90 günden eski {count} kayıtlı düzen kaldırılacak. İndirme geçmişi ve paylaşılan düzenler kalacak.",
+  "@settingsWarWidgetIosReady": {
+    "placeholders": {
+      "clanName": {
+        "type": "String"
+      }
+    }
+  },
+  "@settingsWarWidgetAndroidReady": {
+    "placeholders": {
+      "clanName": {
+        "type": "String"
+      }
+    }
+  },
+  "@settingsWarWidgetPrepareFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "cwlRegisteredRoster": "Registered roster",
+  "cwlMatches": "Matchups",
+  "cwlNextMatchup": "Next matchup",
+  "cwlOtherMatches": "Other matchups",
+  "cwlOutlook": "Season outlook",
+  "cwlFirstPlace": "First place",
+  "cwlTopTwo": "Top two",
+  "cwlRemainingOpponents": "Remaining opponents",
+  "cwlWinBonusNote": "Stars include 10 bonus stars per completed win.",
+  "cwlEstimateNote": "Estimates use completed wars and remaining opponents, not lineup changes. At least two completed wars per clan are needed. These are uncalibrated estimates; promotion rules vary by league.",
+  "cwlDuration": "{unit, select, hours {{count, plural, one {# hour} other {# hours}}} other {{count, plural, one {# minute} other {# minutes}}}}",
+  "personalBasesDeleteOld": "Remove bases older than 90 days",
+  "personalBasesDeleteOldConfirm": "{count} saved bases older than 90 days will be removed. Download history and shared bases will remain.",
   "@personalBasesDeleteOldConfirm": {
     "description": "Confirms cleanup while preserving lifetime download history.",
     "placeholders": {
@@ -5067,9 +5197,9 @@
       }
     }
   },
-  "legendsAutomaticDefense": "Otomatik savunma",
-  "legendsPopularArmyItem": "En popüler ordu öğesi",
-  "legendsClanCastle": "Klan Kalesi",
+  "legendsAutomaticDefense": "Automatic defense",
+  "legendsPopularArmyItem": "Most popular army item",
+  "legendsClanCastle": "Clan Castle",
   "@cwlDuration": {
     "description": "Explicit countdown units; avoid native unit conversion.",
     "placeholders": {
@@ -5081,20 +5211,20 @@
       }
     }
   },
-  "clanNotificationRemoveConfirmation": "Bu klanın bildirimleri kapatılsın ve yer imi kaldırılsın mı?",
-  "personalBasesTab": "Bases",
+  "clanNotificationRemoveConfirmation": "Turn off this clan’s notifications and remove the bookmark?",
+  "personalBasesTab": "Üsler",
   "personalBasesDownloaded": "Downloaded",
   "personalArmyName": "Army name",
   "personalArmyNotes": "Notes",
   "personalArmyUnnamed": "Unnamed army",
   "personalArmyEdit": "Edit army",
   "personalArmyUnknownTownHall": "Unknown Town Hall",
-  "discordBotDashboard": "Discord Bot Paneli",
-  "discordAddBot": "Bot ekle",
-  "discordAddToMyDiscord": "Discord'uma ekle",
-  "discordServersWithoutBot": "ClashKing olmayan sunucular",
-  "rankingsPlayerSection": "Oyuncu Sıralamaları",
-  "rankingsClanSection": "Klan Sıralamaları",
+  "discordBotDashboard": "Discord Bot Dashboard",
+  "discordAddBot": "Add bot",
+  "discordAddToMyDiscord": "Add to My Discord",
+  "discordServersWithoutBot": "Servers without ClashKing",
+  "rankingsPlayerSection": "Player Rankings",
+  "rankingsClanSection": "Clan Rankings",
   "cwlArchiveCoverage": "{available} of {total} matchups available.",
   "cwlStandingsIncomplete": "Missing archives are excluded. Group ranks and forecasts are unavailable.",
   "cwlPromotionChance": "Estimated promotion chance",
@@ -5105,62 +5235,62 @@
   "cwlRecordedStats": "Recorded wars only",
   "cwlMissingMatchups": "{count} matchups unavailable",
   "cwlHighestLeague": "Highest league · no promotion",
-  "warOutlookWinPossible": "Galibiyet hâlâ mümkün",
-  "warOutlookDrawOnly": "En iyi ihtimalle beraberlik",
-  "warOutlookDefeat": "Galibiyet mümkün değil",
-  "warOutlookMaximum": "Mümkün olan en yüksek skor",
-  "warOutlookAssumption": "Kalan saldırıların kusursuz olduğunu varsayar. Bu bir matematiksel sınırdır, tahmin değildir.",
-  "warScoutTitle": "Kadro analizi",
-  "warScoutOpponent": "Rakibin son savaşları",
-  "warScoutScope": "Mevcut kadro · aynı kurallar · önceki en fazla 10 savaş",
-  "upgradeTrackerCapturedWork": "Son güncellemenden",
-  "tutorialWelcomeBody": "Kısa bir turla ClashKing'i keşfedin. İstediğiniz zaman atlayabilirsiniz.",
-  "tutorialReorderBody": "Bir karta basılı tutup yerini değiştirmek için sürükleyin.",
-  "tutorialSidebarBody": "Menüyü açmak için Ana Sayfa üzerinde kaydırın veya avatarınıza dokunun.",
-  "tutorialExploreBody": "Bu menüden Ayarlar'ı, ardından Bildirimler'i açın. Şimdi oraya gitmek için devam edin.",
-  "tutorialRemindersBody": "Aşağıdan hatırlatıcıları seçin. İşiniz bitince Ana Sayfa'ya dönün.",
-  "tutorialResetTitle": "Eğitimleri sıfırla",
-  "tutorialResetConfirm": "Sonraki ziyaretlerinizde eğitimler yeniden başlatılsın mı?",
-  "upgradeTrackerOngoingUpgrades": "Devam eden yükseltmeler",
-  "upgradeTrackerToLevel": "{level}. seviyeye",
-  "upgradeTrackerFreeSlots": "{count} boş",
-  "upgradeTrackerFreeIn": "{duration} sonra boş",
-  "upgradeTrackerPetHouse": "Hayvan Kulübesi",
-  "upgradeTrackerNotBuilt": "İnşa edilmedi",
-  "upgradeTrackerExtraSlots": "{count} ek",
-  "rankedLeagueOverTime": "Zaman içinde lig",
-  "rankedLeaguePromotionCutoff": "Yükselme sınırı",
-  "rankedLeagueDemotionCutoff": "Düşme sınırı",
-  "rankedLeagueCutoffsUnavailable": "Yükselme ve düşme sınırları kullanılamıyor.",
-  "rankedAutomaticDefenseSummary": "{count} savunma · her biri {points} kupa",
-  "rankedAutomaticDefenseExplanation": "Bu haftaki tüm gerçek savunmalara dayanır, aşağı yuvarlanır.",
-  "warStatusInWar": "Savaşta",
-  "warStatusNoWar": "Savaş yok",
-  "warNoActiveClans": "Şu anda savaşta olan klan yok.",
-  "warNoInactiveClans": "Savaşta olmayan klan yok",
-  "warAllClansInWar": "Tüm klanların şu anda savaşta.",
+  "warOutlookWinPossible": "Win still possible",
+  "warOutlookDrawOnly": "Draw at best",
+  "warOutlookDefeat": "No path to a win",
+  "warOutlookMaximum": "Maximum possible score",
+  "warOutlookAssumption": "Assumes perfect remaining attacks. This is a mathematical limit, not a prediction.",
+  "warScoutTitle": "Lineup scouting",
+  "warScoutOpponent": "Opponent’s recent wars",
+  "warScoutScope": "Current lineup · same rules · up to 10 previous wars",
+  "upgradeTrackerCapturedWork": "From your last update",
+  "tutorialWelcomeBody": "Take a quick tour of ClashKing. You can skip it at any time.",
+  "tutorialReorderBody": "Hold a card, then drag it to change its position.",
+  "tutorialSidebarBody": "Swipe across Home to open the menu, or tap your avatar.",
+  "tutorialExploreBody": "From this menu, open Settings, then Notifications. Continue to go there now.",
+  "tutorialRemindersBody": "Choose reminders below. When you are done, return to Home.",
+  "tutorialResetTitle": "Reset tutorials",
+  "tutorialResetConfirm": "Start the tutorials again on your next visits?",
+  "upgradeTrackerOngoingUpgrades": "Ongoing Upgrades",
+  "upgradeTrackerToLevel": "To Level {level}",
+  "upgradeTrackerFreeSlots": "{count} free",
+  "upgradeTrackerFreeIn": "Free in {duration}",
+  "upgradeTrackerPetHouse": "Pet House",
+  "upgradeTrackerNotBuilt": "Not built",
+  "upgradeTrackerExtraSlots": "{count} extra",
+  "rankedLeagueOverTime": "League over time",
+  "rankedLeaguePromotionCutoff": "Promotion cutoff",
+  "rankedLeagueDemotionCutoff": "Demotion cutoff",
+  "rankedLeagueCutoffsUnavailable": "Promotion and demotion thresholds unavailable.",
+  "rankedAutomaticDefenseSummary": "{count} defenses · {points} trophies each",
+  "rankedAutomaticDefenseExplanation": "Based on all real defenses this week, rounded down.",
+  "warStatusInWar": "In war",
+  "warStatusNoWar": "No war",
+  "warNoActiveClans": "No clans are currently in war.",
+  "warNoInactiveClans": "No clans out of war",
+  "warAllClansInWar": "All your clans are currently in war.",
   "warStatusOther": "Diğer",
-  "warNoOtherClans": "Başka klan yok.",
-  "playerWarLifetime": "Tüm zamanlar",
-  "playerWarThScope": "Yalnızca istatistik kartlarına uygulanır, savaşlara değil. Bu açıklama için düğmeyi basılı tutun.",
-  "playerWarNoAttacks": "Henüz saldırı yok",
-  "playerWarRegularWars": "Normal savaş",
-  "warWidgetNoActiveWar": "Aktif savaş yok",
-  "warWidgetPrivateWarLog": "Özel savaş günlüğü",
-  "warWidgetChooseClan": "Bir klan seç",
-  "legendPerformanceTitle": "Günlük performans",
-  "legendCompleteDays": "Tam günler",
-  "legendPerfectDays": "Kusursuz günler",
-  "legendPartialDays": "Eksik günler",
-  "legendMissingDays": "Kayıt yok",
-  "legendInvalidDays": "Geçersiz günler",
-  "legendTrophiesGained": "Kazanılan kupalar",
-  "legendTrophiesLost": "Kaybedilen kupalar",
+  "warNoOtherClans": "No other clans.",
+  "playerWarLifetime": "Lifetime",
+  "playerWarThScope": "Applies only to the statistics cards, not Battles. Hold the button for this explanation.",
+  "playerWarNoAttacks": "No attacks yet",
+  "playerWarRegularWars": "Regular war",
+  "warWidgetNoActiveWar": "No active war",
+  "warWidgetPrivateWarLog": "Private war log",
+  "warWidgetChooseClan": "Choose a clan",
+  "legendPerformanceTitle": "Daily performance",
+  "legendCompleteDays": "Complete days",
+  "legendPerfectDays": "Perfect days",
+  "legendPartialDays": "Partial days",
+  "legendMissingDays": "No observations",
+  "legendInvalidDays": "Invalid days",
+  "legendTrophiesGained": "Trophies gained",
+  "legendTrophiesLost": "Trophies lost",
   "legendDistribution": "Dağılım",
-  "legendPreviousDays": "Önceki {count} gün",
-  "legendAvailableDays": "Veri bulunan günler",
-  "legendCompleteOnly": "Dağılım, 8 savaşın kaydedildiği günleri içerir.",
-  "legendPerfectSources": "Sıralamaya göre kusursuz günler",
+  "legendPreviousDays": "Previous {count} days",
+  "legendAvailableDays": "Days available",
+  "legendCompleteOnly": "Distribution uses days with 8 recorded battles.",
+  "legendPerfectSources": "Perfect days by rank",
   "@legendPreviousDays": {
     "placeholders": {
       "count": {
@@ -5168,15 +5298,15 @@
       }
     }
   },
-  "onboardingOverviewTitle": "Hesapların ve klanların",
-  "onboardingOverviewBody": "Oyuncularını, klanlarını ve yükseltmelerini bir arada tut.",
-  "onboardingProgressTitle": "Sıralamaları ve istatistikleri gör",
-  "onboardingProgressBody": "Savaşlarını takip et, ilerlemeni karşılaştır ve yükseltmelere devam et.",
-  "onboardingRemindersTitle": "Hatırlatıcı ve bildirim al",
-  "onboardingRemindersBody": "Savaş hatırlatmalarını ve seçtiğin bildirimleri al. Ayarlar’dan hesaplarını ve bildirim türlerini seç.",
-  "onboardingReplayTitle": "Tanıtımı yeniden göster",
-  "statsViewLatestData": "En yeni verileri gör",
-  "statsLatestAvailableDate": "En son mevcut veri: {date}",
+  "onboardingOverviewTitle": "Your accounts & clans",
+  "onboardingOverviewBody": "Keep your players, clans, and upgrades together.",
+  "onboardingProgressTitle": "View rankings and stats",
+  "onboardingProgressBody": "Follow your battles, compare your progress, and keep upgrades moving.",
+  "onboardingRemindersTitle": "Get reminders and alerts",
+  "onboardingRemindersBody": "Get war reminders and the alerts you choose. Pick your accounts and alert types in Settings.",
+  "onboardingReplayTitle": "Replay introduction",
+  "statsViewLatestData": "View latest data",
+  "statsLatestAvailableDate": "Latest available: {date}",
   "@statsLatestAvailableDate": {
     "placeholders": {
       "date": {
@@ -5184,23 +5314,23 @@
       }
     }
   },
-  "legendPerfectedDefenseDays": "Savunmanın tamamen yenildiği günler",
-  "legendCompleteDayDefinition": "Yalnızca 8 savaşın tamamlandığı günler dahil edilir.",
+  "legendPerfectedDefenseDays": "Perfected defense days",
+  "legendCompleteDayDefinition": "Only days with all 8 battles are included.",
   "statsCommunity": "Topluluk",
-  "rankedFullOffenseDays": "+320 gün",
-  "rankedFullDefenseDays": "−320 gün",
-  "rankedTrophiesByRank": "Sıralamaya göre kupalar",
-  "statsArmyTypes": "Ordu türleri",
-  "onboardingStatsBody": "Oyuncu istatistiklerini incele, klanlarını takip et ve tüm oyunun nasıl değiştiğini gör.",
-  "onboardingWidgetsTitle": "Ana ekrana widget ekle",
-  "onboardingWidgetsBody": "Ana ekran widget’larıyla savaş skorlarını ve yükseltmelerin ilerleyişini takip et.",
-  "onboardingAlertTitle": "Savaş yakında bitiyor",
-  "onboardingAlertBody": "Son saldırının zamanı geldi.",
-  "onboardingSetupNotifications": "Bildirimleri etkinleştir",
-  "onboardingAccountsReadyBody": "Bağlı hesapların hazır. Başka bir hesap ekle veya devam et.",
-  "onboardingSkipAccountSetup": "Atla",
-  "accountsSetupBody": "Clash of Clans hesaplarını ekle ve doğrula.",
-  "accountsMyTitle": "Hesaplarım",
-  "profileAvatar": "Görünümü değiştir",
-  "avatarPickerTitle": "Bir avatar seç"
+  "rankedFullOffenseDays": "+320 days",
+  "rankedFullDefenseDays": "−320 days",
+  "rankedTrophiesByRank": "Trophies by rank",
+  "statsArmyTypes": "Army Types",
+  "onboardingStatsBody": "Explore player stats, follow your clans, and see how the whole game is changing.",
+  "onboardingWidgetsTitle": "Add Home Screen widgets",
+  "onboardingWidgetsBody": "Keep war scores and upgrade progress close with Home Screen widgets.",
+  "onboardingAlertTitle": "War ends soon",
+  "onboardingAlertBody": "Time for your final attack.",
+  "onboardingSetupNotifications": "Enable notifications",
+  "onboardingAccountsReadyBody": "Your linked accounts are ready. Add another account or continue.",
+  "onboardingSkipAccountSetup": "Skip",
+  "accountsSetupBody": "Add and verify your Clash of Clans accounts.",
+  "accountsMyTitle": "My Accounts",
+  "profileAvatar": "Change look",
+  "avatarPickerTitle": "Pick an avatar"
 }

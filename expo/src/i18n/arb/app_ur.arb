@@ -1,20 +1,20 @@
 {
-  "capitalCurrentOpponent": "موجودہ حریف",
-  "capitalRaidMedals": "چھاپے کے تمغے",
-  "warReplayTitle": "اسکور کی تاریخ",
-  "warReplayPlay": "تاریخ چلائیں",
-  "warReplayPause": "تاریخ روکیں",
-  "cwlLeading": "آگے",
-  "cwlTrailing": "پیچھے",
-  "cwlYourClan": "آپ کا کلین",
-  "cwlPromotionZone": "ترقی کا زون",
-  "cwlDemotionZone": "تنزلی کا زون",
-  "cwlNotInLineup": "لائن اپ میں نہیں",
-  "esportsEloSubtitle": "عالمی ٹیم رینکنگ اور میچز۔ از",
-  "esportsTopTeamsMatches": "موجودہ سرفہرست 50 ٹیموں کے میچز۔",
-  "esportsPartialMatches": "کچھ ٹیموں کا ڈیٹا تازہ نہیں کیا جا سکا۔",
-  "settingsHideAccounts": "اکاؤنٹس چھپائیں",
-  "settingsHideAccountsDescription": "منسلک اکاؤنٹس چھپانے کا اختیار دکھائیں۔ موجودہ رازداری کے انتخاب تبدیل نہیں ہوں گے۔",
+  "capitalCurrentOpponent": "Current opponent",
+  "capitalRaidMedals": "Raid medals",
+  "warReplayTitle": "Score history",
+  "warReplayPlay": "Play history",
+  "warReplayPause": "Pause history",
+  "cwlLeading": "Leading",
+  "cwlTrailing": "Trailing",
+  "cwlYourClan": "Your clan",
+  "cwlPromotionZone": "Promotion zone",
+  "cwlDemotionZone": "Demotion zone",
+  "cwlNotInLineup": "Not in lineup",
+  "esportsEloSubtitle": "Global team rankings and matches from",
+  "esportsTopTeamsMatches": "Matches from the current top 50 teams.",
+  "esportsPartialMatches": "Some teams could not be refreshed.",
+  "settingsHideAccounts": "Hide accounts",
+  "settingsHideAccountsDescription": "Show the option to hide linked accounts. Existing privacy choices stay unchanged.",
   "calcRocketBalloonAssumption": "1 hit + death · {damage} damage each",
   "calcKeepEquipped": "Keep one equipped",
   "calcCustomLevels": "Custom levels",
@@ -38,31 +38,31 @@
   "personalBasesEmptyBody": "Bases you post through ClashKing on Discord appear here. You can also save bases from the library.",
   "personalArmiesEmptyTitle": "Keep your armies close",
   "personalArmiesEmptyBody": "Armies you post through ClashKing on Discord appear here. Save your favourites to find them before your next attack.",
-  "homeCardOriginal": "اصل",
-  "homeCardTint": "ہلکا رنگ",
-  "homeCardEdge": "رنگین کنارے",
-  "homeCardGlow": "دھیمی چمک",
-  "competitiveNoHistory": "ابھی کوئی ٹورنامنٹ نہیں ہے",
-  "competitiveHistoryHint": "آپ کی ٹیمیں اور ٹورنامنٹ کے نتائج یہاں ظاہر ہوں گے۔",
-  "esportsMonthlyFinals": "ماہانہ فائنلز",
-  "esportsMonthlyQualifier": "ماہانہ کوالیفائرز",
-  "esportsHeroSubtitle": "عالمی چیمپئن شپ کی راہ",
-  "esportsViewEvent": "ایونٹ دیکھیں",
-  "esportsWinLoss": "{wins} فتوحات · {losses} شکستیں",
-  "esportsViewPlayer": "کھلاڑی دیکھیں",
-  "esportsRecentMatches": "حالیہ میچز",
-  "esportsHideAttacks": "جنگ کی تفصیلات چھپائیں",
-  "esportsViewAttacks": "جنگ کی تفصیلات دیکھیں",
-  "esportsPlayer": "ای اسپورٹس کھلاڑی",
-  "esportsBattles": "جنگیں",
-  "esportsTriples": "تین ستاروں والے حملے",
-  "esportsAverageStars": "اوسط ستارے",
+  "homeCardOriginal": "Original",
+  "homeCardTint": "Soft color",
+  "homeCardEdge": "Colored edges",
+  "homeCardGlow": "Slow glow",
+  "competitiveNoHistory": "No tournaments yet",
+  "competitiveHistoryHint": "Your teams and tournament results will appear here.",
+  "esportsMonthlyFinals": "Monthly finals",
+  "esportsMonthlyQualifier": "Monthly qualifiers",
+  "esportsHeroSubtitle": "The road to the World Championship",
+  "esportsViewEvent": "Explore event",
+  "esportsWinLoss": "{wins} wins · {losses} losses",
+  "esportsViewPlayer": "View player",
+  "esportsRecentMatches": "Recent matches",
+  "esportsHideAttacks": "Hide battle details",
+  "esportsViewAttacks": "View battle details",
+  "esportsPlayer": "Esports player",
+  "esportsBattles": "لڑائیاں",
+  "esportsTriples": "Triples",
+  "esportsAverageStars": "اوسط ستارے۔",
   "esportsDestruction": "تباہی",
-  "esportsAccounts": "گیم اکاؤنٹس",
+  "esportsAccounts": "Game accounts",
   "esportsAttack": "حملہ",
   "esportsDefense": "دفاع",
-  "competitiveArenaSubtitle": "آپ کا کلین۔ آپ کی ٹیم۔ آپ کا اگلا چیلنج۔",
-  "competitiveViewTournament": "ٹورنامنٹ دیکھیں",
+  "competitiveArenaSubtitle": "Your clan. Your team. Your next challenge.",
+  "competitiveViewTournament": "View tournament",
   "@esportsWinLoss": {
     "placeholders": {
       "wins": {
@@ -87,50 +87,50 @@
   "esportsStage": "Stage",
   "esportsStandings": "Standings",
   "esportsMatches": "Matches",
-  "esportsPoints": "Points",
+  "esportsPoints": "پوائنٹس",
   "esportsPlayed": "played",
   "esportsSource": "Data from Competitive Clash Network",
-  "esportsRoster": "Roster",
+  "esportsRoster": "روسٹر",
   "esportsSeasonPoints": "Season points",
   "esportsStageStandings": "Stage standings",
-  "competitiveCompetition": "مقابلہ",
-  "competitiveWebsite": "ویب سائٹ",
-  "competitiveVerifiedAccounts": "تصدیق شدہ اکاؤنٹس",
-  "competitiveEsports": "ای اسپورٹس",
-  "competitiveTournaments": "ٹورنامنٹس",
+  "competitiveCompetition": "Competition",
+  "competitiveWebsite": "Website",
+  "competitiveVerifiedAccounts": "Verified accounts",
+  "competitiveEsports": "eSports",
+  "competitiveTournaments": "Tournaments",
   "competitiveProfile": "پروفائل",
   "competitiveTeams": "ٹیمیں",
-  "competitiveFreeEntry": "مفت شرکت",
-  "competitiveRegister": "ٹیم رجسٹر کریں",
-  "competitiveCheckIn": "حاضری کی تصدیق کریں",
-  "competitiveRules": "قواعد",
-  "competitiveUnavailable": "مقابلے کا ڈیٹا دستیاب نہیں ہے۔ دوبارہ کوشش کریں۔",
-  "competitiveRegistrationSaved": "رجسٹریشن بھیج دی گئی",
-  "competitiveTeamHistory": "ٹیم کی تاریخ",
-  "competitiveDebutName": "پہلا ٹورنامنٹ",
-  "competitiveDebutDescription": "اپنے تصدیق شدہ اکاؤنٹ سے ٹورنامنٹ میں شرکت کریں۔",
-  "competitiveViewProfile": "پروفائل دیکھیں",
+  "competitiveFreeEntry": "Free entry",
+  "competitiveRegister": "Register team",
+  "competitiveCheckIn": "Check in",
+  "competitiveRules": "Rules",
+  "competitiveUnavailable": "Competition data is unavailable. Try again.",
+  "competitiveRegistrationSaved": "Registration submitted",
+  "competitiveTeamHistory": "Team history",
+  "competitiveDebutName": "Tournament debut",
+  "competitiveDebutDescription": "Participate in a tournament with your verified account.",
+  "competitiveViewProfile": "View profile",
   "calcPinEquipment": "Keep one equipped",
-  "calcSearch": "Search",
+  "calcSearch": "تلاش کریں",
   "calcEquipmentTitle": "Equipment Compare",
   "calcDamageIntro": "Find the combinations that take a defense down.",
   "calcFarmIntro": "Plan the loot needed for your next upgrades.",
   "calcEquipmentIntro": "Compare hero loadouts, levels, and ability stats.",
   "calcComingSoon": "Coming soon",
-  "calcHero": "Hero",
+  "calcHero": "ہیرو",
   "calcHeroLevel": "Hero level",
   "calcMaxLevels": "Max levels",
   "calcEquipmentPool": "Equipment to compare",
   "calcPoolHelp": "Choose pieces and default levels. Compare every pair, then customize individual rows.",
   "calcSelectAll": "Select all",
-  "calcClear": "Clear",
+  "calcClear": "صاف",
   "calcAttributes": "Attributes",
   "calcAddAttribute": "Add attribute",
-  "calcTable": "Compare",
+  "calcTable": "موازنہ کریں",
   "calcProgression": "Level progression",
   "calcCompareHelp": "DPS adds the hero's base and equipment DPS. Speed bonuses and temporary effects are separate attributes; healing is not extra max HP.",
   "calcChartHelp": "Equipment levels increase together; each piece stops at its own maximum. Hero levels stay fixed. First six loadouts shown.",
-  "calcSort": "Sort by",
+  "calcSort": "ترتیب دیں۔",
   "calcNoEquipment": "No equipment",
   "calcDuplicate": "Duplicate loadout",
   "calcRemove": "Remove loadout",
@@ -154,9 +154,9 @@
   "calcComparisonDownloaded": "Comparison image downloaded",
   "calcComparisonExportFailed": "Could not copy the comparison image. Please try again.",
   "calcEffectiveLevel": "Effective level {level}",
-  "calcTarget": "Target",
+  "calcTarget": "ہدف",
   "calcSupercharge": "Supercharge",
-  "calcNone": "None",
+  "calcNone": "کوئی نہیں",
   "calcResults": "{count} combinations",
   "calcResultsHelp": "Smallest spell cost first, then fewer equipment activations. Extra sources that do not help are removed.",
   "calcNoCombinationHelp": "Try another source, a higher level, or more spell capacity.",
@@ -164,63 +164,63 @@
   "calcAlternative": "Alternative",
   "calcCombinationCost": "{housing} spell space · {equipment} equipment",
   "calcUseStack": "Use stack",
-  "homeRankingsAndStats": "درجہ بندی اور اعداد و شمار",
-  "homeActivityRecorded": "صرف ریکارڈ شدہ سرگرمی؛ تاریخ نامکمل ہو سکتی ہے۔",
-  "homeWidgetsServers": "سرورز",
-  "homeWidgetsEdit": "ہوم میں ترمیم",
-  "homeWidgetsAdd": "ویجٹ شامل کریں",
-  "homeWidgetsRemove": "ویجٹ ہٹائیں",
-  "homeWidgetsMoveUp": "اوپر منتقل کریں",
-  "homeWidgetsMoveDown": "نیچے منتقل کریں",
+  "homeRankingsAndStats": "Rankings & Stats",
+  "homeActivityRecorded": "Recorded activity only; history may be incomplete.",
+  "homeWidgetsServers": "Servers",
+  "homeWidgetsEdit": "Edit Home",
+  "homeWidgetsAdd": "Add widget",
+  "homeWidgetsRemove": "Remove widget",
+  "homeWidgetsMoveUp": "Move up",
+  "homeWidgetsMoveDown": "Move down",
   "homeWidgetsSmall": "چھوٹا",
-  "homeWidgetsWide": "چوڑا",
-  "homeWidgetsSaveError": "ہوم سنک نہیں ہو سکا۔ دوبارہ ترمیم سے پہلے ریفریش کریں۔",
-  "homeWidgetsUnavailable": "کوئی ریکارڈ شدہ ڈیٹا نہیں",
-  "homeWidgetsBookmarkFirst": "پہلے کسی کھلاڑی یا کلین کو بک مارک کریں۔",
-  "rankingsWarTripleStreak": "جنگ میں تین ستاروں کا تسلسل",
+  "homeWidgetsWide": "Wide",
+  "homeWidgetsSaveError": "Could not sync Home. Please refresh before editing again.",
+  "homeWidgetsUnavailable": "No recorded data available",
+  "homeWidgetsBookmarkFirst": "Bookmark a player or clan first.",
+  "rankingsWarTripleStreak": "War Triple Streak",
   "rankingsWarTripleRulesTitle": "How streaks count",
   "rankingsWarTripleRulesBody": "+2 for two triples against your own Town Hall level in a regular war.\n\nA missed attack, non-triple, or different-TH target resets your streak.\n\nCWL and friendly wars don’t count. Streaks are separate for each Town Hall level.",
-  "clanLegendsRanked": "لیجنڈز اور رینکڈ",
-  "appIconChangeWarning": "ایپ کا آئیکن تبدیل کرنے سے ClashKing بند ہو جائے گا۔ جاری رکھیں؟",
-  "upgradeTrackerUnverifiedAccount": "یہ اکاؤنٹ منسلک ہے لیکن تصدیق شدہ نہیں۔ اپ گریڈ کا ڈیٹا درآمد کرنے کے لیے اکاؤنٹس کی انتظامیہ میں اس کی تصدیق کریں۔",
-  "clanWarNotificationsTitle": "جنگ کی اطلاعات",
-  "clanCapitalNotificationsTitle": "کلین کیپیٹل کی اطلاعات",
-  "clanWarNotificationsBody": "اس کلین کی جنگ کی تازہ ترین خبریں حاصل کریں۔",
-  "clanCapitalNotificationsBody": "اس کلین کے کلین کیپیٹل کی تازہ ترین خبریں حاصل کریں۔",
-  "notifSystemNotifications": "سسٹم اطلاعات",
-  "notifSystemSettings": "اطلاعات کی ترتیبات کھولیں",
-  "notifSystemSettingsDescription": "اپنے آلے کی ترتیبات میں الرٹس، آوازیں اور بیجز کا نظم کریں۔",
-  "notifSystemSettingsFailed": "اطلاعات کی ترتیبات نہیں کھل سکیں۔ براہ کرم اپنے آلے پر ترتیبات کھولیں۔",
-  "notifManagePlayersDescription": "کھلاڑی → منسلک → اختیارات میں اکاؤنٹ کی اطلاعات کا نظم کریں۔",
-  "notifCustomReminders": "اپنی مرضی کی یاد دہانیاں",
-  "notifTestType": "اطلاع کی قسم",
-  "statsBattlelogsGroup": "جنگی ریکارڈ",
-  "statsGlobalStatsGroup": "عالمی اعداد و شمار",
-  "playerOptionShowOnHomeTitle": "ہوم پر اکاؤنٹ دکھائیں",
-  "playerOptionShowOnHomeSubtitle": "اس تصدیق شدہ اکاؤنٹ کو ہوم کارڈز میں شامل کریں (زیادہ سے زیادہ 5)۔",
-  "playerOptionShowOnHomeVerifyFirst": "اس اکاؤنٹ کو ہوم پر دکھانے کے لیے اس کی تصدیق کریں۔",
-  "playerOptionHomeInclusionFirst": "پہلے ہوم پر اکاؤنٹ دکھائیں فعال کریں۔",
-  "homeIncludedAccountsLimit": "ہوم پر زیادہ سے زیادہ 5 اکاؤنٹس دکھائے جا سکتے ہیں۔ پہلے ایک ہٹائیں۔",
-  "statsHitratesByTownHall": "ٹاؤن ہال کے لحاظ سے کامیابی کی شرح",
-  "statsChartGranularity": "چارٹ کا وقفہ",
+  "clanLegendsRanked": "Legends & Ranked",
+  "appIconChangeWarning": "Changing the app icon will close ClashKing. Continue?",
+  "upgradeTrackerUnverifiedAccount": "This account is linked but not verified. Verify it in Manage Accounts to import your upgrade data.",
+  "clanWarNotificationsTitle": "War notifications",
+  "clanCapitalNotificationsTitle": "Clan Capital notifications",
+  "clanWarNotificationsBody": "Receive war updates for this clan.",
+  "clanCapitalNotificationsBody": "Receive Clan Capital updates for this clan.",
+  "notifSystemNotifications": "System notifications",
+  "notifSystemSettings": "Open notification settings",
+  "notifSystemSettingsDescription": "Manage alerts, sounds, and badges in your device settings.",
+  "notifSystemSettingsFailed": "Could not open notification settings. Please open Settings on your device.",
+  "notifManagePlayersDescription": "Manage account notifications in Players → Linked → Options.",
+  "notifCustomReminders": "Custom reminders",
+  "notifTestType": "Notification type",
+  "statsBattlelogsGroup": "Battlelogs",
+  "statsGlobalStatsGroup": "Global Stats",
+  "playerOptionShowOnHomeTitle": "Show account on Home",
+  "playerOptionShowOnHomeSubtitle": "Include this verified account in Home cards (up to 5).",
+  "playerOptionShowOnHomeVerifyFirst": "Verify this account to show it on Home.",
+  "playerOptionHomeInclusionFirst": "Turn on Show account on Home first.",
+  "homeIncludedAccountsLimit": "Home can show up to 5 accounts. Remove one first.",
+  "statsHitratesByTownHall": "Hitrates by Town Hall",
+  "statsChartGranularity": "Chart interval",
   "statsDaily": "روزانہ",
   "statsWeekly": "ہفتہ وار",
-  "playerBattlelogCumulative": "مجموعی",
-  "statsMonthly": "ماہانہ",
-  "statsCompareCohorts": "گروہوں کا موازنہ کریں",
-  "statsAcrossCohorts": "گروہوں میں استعمال",
-  "legendsTrophyGrid": "سیزن کا جائزہ",
-  "legendsPopularArmyItems": "مقبول ترین فوجی اکائیاں",
-  "legendsPopularTroop": "پسندیدہ",
-  "legendsHitrate": "کامیابی کی شرح",
-  "legendsAvgOffense": "اوسط حملہ",
-  "legendsAvgDefense": "اوسط دفاع",
-  "settingsClearImageCache": "تصاویر کی کیش صاف کریں",
-  "settingsImageCacheCleared": "تصاویر کی کیش صاف کر دی گئی۔",
-  "settingsImageCacheClearFailed": "تصاویر کی کیش صاف نہیں ہو سکی۔ دوبارہ کوشش کریں۔",
-  "startupCheckingUpdate": "اپ ڈیٹس کی جانچ ہو رہی ہے…",
-  "startupDownloadingUpdate": "اپ ڈیٹ ڈاؤن لوڈ ہو رہی ہے…",
-  "startupUpdateInBackground": "پس منظر میں اپ ڈیٹ کریں",
+  "playerBattlelogCumulative": "Cumulative",
+  "statsMonthly": "Monthly",
+  "statsCompareCohorts": "Compare cohorts",
+  "statsAcrossCohorts": "Usage across cohorts",
+  "legendsTrophyGrid": "Season overview",
+  "legendsPopularArmyItems": "Most popular army items",
+  "legendsPopularTroop": "Favorite",
+  "legendsHitrate": "Hitrate",
+  "legendsAvgOffense": "Avg. Offense",
+  "legendsAvgDefense": "Avg. Defense",
+  "settingsClearImageCache": "Clear image cache",
+  "settingsImageCacheCleared": "Image cache cleared.",
+  "settingsImageCacheClearFailed": "Could not clear the image cache. Please try again.",
+  "startupCheckingUpdate": "Checking for updates…",
+  "startupDownloadingUpdate": "Downloading update…",
+  "startupUpdateInBackground": "Update in background",
   "warStatsRangeTitle": "جنگ کے اعداد و شمار کی حد",
   "warStatsRangeDescription": "منتخب کریں کہ اعداد و شمار حالیہ جنگوں کی مقررہ تعداد یا دنوں کی حالیہ مدت پر مشتمل ہوں۔",
   "warStatsRangeDays": "دن",
@@ -375,17 +375,59 @@
   "notifPushEnabled": "پش اطلاعات فعال ہیں",
   "notifReceiveNotifications": "اطلاعات وصول کریں",
   "notifTokenPreview": "ٹوکن: {token}",
+  "@notifTokenPreview": {
+    "placeholders": {
+      "token": {
+        "type": "String"
+      }
+    }
+  },
   "notifEnabledDeliveryDescription": "آپ کے فعال انتباہات اس آلے پر بھیجے جا سکتے ہیں۔",
   "notifDisabledAccountDescription": "آپ کے پورے ClashKing اکاؤنٹ پر اطلاعات بند ہیں۔",
   "notifMaximumRemindersAdded": "یاد دہانیوں کی زیادہ سے زیادہ تعداد شامل ہو گئی",
   "notifAddReminder": "یاد دہانی شامل کریں",
   "notifDurationOneHour": "1 گھنٹہ",
   "notifDurationHours": "{count} گھنٹے",
+  "@notifDurationHours": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "notifDurationMinutes": "{count} منٹ",
+  "@notifDurationMinutes": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "notifAddTiming": "{timing} شامل کریں",
+  "@notifAddTiming": {
+    "placeholders": {
+      "timing": {
+        "type": "String"
+      }
+    }
+  },
   "notifTimingOneHourBefore": "1 گھنٹہ پہلے",
   "notifTimingHoursBefore": "{count} گھنٹے پہلے",
+  "@notifTimingHoursBefore": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "notifTimingMinutesBefore": "{count} منٹ پہلے",
+  "@notifTimingMinutesBefore": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "notifPushReady": "پش اطلاعات اس آلے پر تیار ہیں۔",
   "notifPushPermissionRequired": "ClashKing انتباہات کے لیے اطلاعات کی اجازت دیں۔",
   "notifPushPermissionDenied": "اطلاعات کی اجازت مسترد کر دی گئی۔",
@@ -394,12 +436,13 @@
   "notifPushUnsupported": "اس پلیٹ فارم پر پش اطلاعات معاون نہیں ہیں۔",
   "notifPushInitializing": "پش اطلاعات ترتیب دی جا رہی ہیں…",
   "notificationPrimerTitle": "اطلاعات فعال کریں؟",
-  "notificationPrimerBody": "ClashKing ایونٹس، اعلانات، لیجنڈ دفاع اور معاونت کی تازہ خبریں بھیج سکتا ہے۔ جنگ اور ریڈ ویک اینڈ کی یاد دہانیاں تب تک بند رہتی ہیں جب تک آپ انہیں ترتیب نہیں دیتے۔ آپ یہ انتخاب ترتیبات > اطلاعات میں بدل سکتے ہیں۔",
+  "notificationPrimerBody": "ClashKing آپ کو جنگ، CWL، اکاؤنٹ اور پروجیکٹ کی اپ ڈیٹس کے بارے میں مطلع کر سکتا ہے۔ آپ اسے کسی بھی وقت ترتیبات > اطلاعات میں تبدیل کر سکتے ہیں۔",
   "notificationPrimerNotNow": "ابھی نہیں",
   "notificationPrimerAllow": "اجازت دیں",
+  "@@last_modified": "2024-12-23T10:00:00.000Z",
   "achievementsTitle": "کامیابیاں",
   "achievementEarnedLabel": "حاصل کردہ",
-  "achievementGemsEarnedRatio": "{earned} / {total} حاصل کیے",
+  "achievementGemsEarnedRatio": "{earned} / {total} earned",
   "@achievementGemsEarnedRatio": {
     "placeholders": {
       "earned": {
@@ -410,7 +453,7 @@
       }
     }
   },
-  "achievementGemsAccessibility": "کامیابیوں کے کل {total} میں سے {earned} جواہرات حاصل کیے۔",
+  "achievementGemsAccessibility": "Earned {earned} of {total} achievement gems.",
   "@achievementGemsAccessibility": {
     "placeholders": {
       "earned": {
@@ -423,6 +466,23 @@
   },
   "achievementSummary": "{earned}/{total} مکمل",
   "achievementEarnedCount": "حاصل کردہ ×{count}",
+  "@achievementSummary": {
+    "placeholders": {
+      "earned": {
+        "type": "String"
+      },
+      "total": {
+        "type": "String"
+      }
+    }
+  },
+  "@achievementEarnedCount": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
   "achievementTownhall18Name": "ٹاؤن ہال 18",
   "achievementTownhall18Requirement": "ٹاؤن ہال 18 تک پہنچیں۔",
   "achievementWarWarriorName": "وار واریئر",
@@ -431,7 +491,6 @@
   "achievementMrLegendDescription": "لیجنڈ لیگ میں بے عیب حملوں کا دن مکمل کیا۔",
   "achievementDefenseDoesntMatterName": "دفاع سے فرق نہیں پڑتا",
   "achievementDefenseDoesntMatterDescription": "لیجنڈ لیگ میں کامل دفاعی دن برداشت کیا۔",
-  "@@last_modified": "2024-12-23T10:00:00.000Z",
   "appTitle": "ClashKing",
   "appDescription": "شماریات کی ٹریکنگ، کلینز کے انتظام اور کارکردگی کے تجزیے کے لیے آپ کا حتمی Clash of Clans ساتھی۔",
   "generalLoading": "لوڈ ہو رہا ہے...",
@@ -454,8 +513,8 @@
   "postsLoadMore": "مزید لوڈ کریں",
   "postsCurrent": "موجودہ",
   "postsPast": "سابقہ",
-  "postsStoryFinished": "اسٹوری ختم ہو گئی",
-  "postsWatchAgain": "دوبارہ دیکھیں",
+  "postsStoryFinished": "Story finished",
+  "postsWatchAgain": "Watch again",
   "postsStory": "انٹرایکٹو کہانی",
   "postsPinned": "نمایاں",
   "generalTryAgain": "دوبارہ کوشش کریں",
@@ -544,7 +603,7 @@
     "description": "Filter value is not set"
   },
   "generalWarning": "وارننگ",
-  "gameHandoffDontShowAgain": "یہ دوبارہ نہ دکھائیں",
+  "gameHandoffDontShowAgain": "Don't show this again",
   "generalUnknown": "نامعلوم",
   "generalNoDataAvailable": "کوئی ڈیٹا دستیاب نہیں ہے.",
   "generalNoFilteredResults": "آپ کے فلٹرز سے کوئی نتیجہ نہیں ملا",
@@ -773,9 +832,9 @@
   "accountsAdd": "اکاؤنٹ شامل کریں۔",
   "accountsAddInstruction": "اپنا اکاؤنٹ شامل کرنے کے لیے + بٹن دبائیں",
   "accountsApiToken": "اکاؤنٹ API ٹوکن",
-  "accountsEnterApiToken": "گیم میں موجود API ٹوکن سے تصدیق کریں کہ یہ اکاؤنٹ آپ کا ہے۔",
+  "accountsEnterApiToken": "براہ کرم اکاؤنٹ API ٹوکن درج کریں تاکہ تصدیق ہو سکے کہ یہ آپ کا ہے۔ آپ اسے Clash of Clans میں تلاش کر سکتے ہیں:",
   "accountsApiTokenLocation": "ترتیبات > مزید ترتیبات > API ٹوکن",
-  "accountsOpenMoreSettings": "API ٹوکن حاصل کریں",
+  "accountsOpenMoreSettings": "More Settings کھولیں",
   "accountsCouldNotOpenClash": "Clash of Clans نہیں کھل سکا۔ براہ کرم اسے خود کھولیں۔",
   "accountsFillAllFields": "براہ کرم تمام فیلڈز بھریں۔",
   "accountsErrorTagNotExists": "درج کردہ پلیئر ٹیگ موجود نہیں ہے.",
@@ -1295,8 +1354,32 @@
   "warParticipation": "جنگ میں شرکت",
   "cwlParticipantOnly": "صرف شریک",
   "warStatsRangeWarsCompact": "{number} جنگیں",
+  "@warStatsRangeWarsCompact": {
+    "description": "Compact clan war statistics war range label",
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
   "warStatsRangeDaysCompact": "{number} دن",
+  "@warStatsRangeDaysCompact": {
+    "description": "Compact clan war statistics day range label",
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
   "warStatsLastXDays": "گزشتہ {number} دن",
+  "@warStatsLastXDays": {
+    "description": "Clan war statistics date-range label",
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
   "warStatsCurrentMembers": "موجودہ اراکین",
   "warLeague": "جنگ/لیگ",
   "warHistory": "جنگ کی تاریخ",
@@ -1305,6 +1388,13 @@
   "warLogClosed": "{clan} کا جنگی لاگ بند ہے۔",
   "warLogPrivate": "{clan} کا وار لاگ نجی ہے۔",
   "@warLogClosed": {
+    "placeholders": {
+      "clan": {
+        "type": "String"
+      }
+    }
+  },
+  "@warLogPrivate": {
     "placeholders": {
       "clan": {
         "type": "String"
@@ -1608,7 +1698,7 @@
   "warStarsTwo": "2 ستارے",
   "warStarsThree": "3 ستارے",
   "warStarsZero": "0 ستارہ",
-  "legendHistoryZeroStars": "صفر ستارے",
+  "legendHistoryZeroStars": "Zero Stars",
   "warStarsBestPerformance": "بہترین کارکردگی",
   "@warStarsBestPerformance": {
     "description": "Best performance in war"
@@ -1763,7 +1853,7 @@
   "clanLeaderboardHistoryTab": "لیڈر بورڈ کی تاریخ",
   "clanLegendHistoryTab": "لیجنڈ کی تاریخ",
   "clanRecordsTab": "ریکارڈز",
-  "clanRecordsChangesTab": "ریکارڈز اور تبدیلیاں",
+  "clanRecordsChangesTab": "Records & Changes",
   "clanProfileHistoryTab": "پروفائل کی تاریخ",
   "clanProfileLevelChanged": "کلین لیول تبدیل ہوا",
   "clanProfileDescriptionChanged": "تفصیل تبدیل ہوئی",
@@ -1805,8 +1895,8 @@
   "legendsCountryTitle": "ملک",
   "legendsLocalRankTitle": "مقامی درجہ",
   "legendsGlobalRankTitle": "عالمی درجہ بندی",
-  "legendsYourArmy": "آپ کی فوج",
-  "legendsArmyUsedAgainstYou": "آپ کے خلاف استعمال ہونے والی فوج",
+  "legendsYourArmy": "Your army",
+  "legendsArmyUsedAgainstYou": "Army used against you",
   "warWinsTitle": "جیتتا ہے۔",
   "warLossesTitle": "نقصانات",
   "warDrawsTitle": "ڈرا کرتا ہے۔",
@@ -2051,7 +2141,7 @@
   "faqWhatCanBotDo": "ClashKing Discord بوٹ کیا کر سکتا ہے؟",
   "faqWhatCanBotDoAnswer": "ClashKing Discord بوٹ جامع ٹریکنگ ٹولز، خودکار نوٹیفکیشنز اور اس ایپ کے ساتھ ہموار انضمام کے ذریعے آپ کو اپنا کلین براہ راست Discord سے مینیج کرنے میں مدد دیتا ہے۔ یہ کلین لیڈرز اور اراکین کے لیے بنایا گیا ہے جو منظم اور رابطے میں رہنا چاہتے ہیں:",
   "faqInviteBotToServer": "بوٹ کو سرور میں مدعو کریں",
-  "drawerInviteDiscordBot": "بوٹ کو سرور میں مدعو کریں",
+  "drawerInviteDiscordBot": "Invite Discord Bot",
   "faqBotFeatureTracking": "کھلاڑی اور کلین ٹریکنگ",
   "faqBotFeatureTrackingDesc": "ریئل ٹائم اپ ڈیٹس کے ساتھ متعدد کلینز اور کھلاڑی شامل اور مانیٹر کریں",
   "faqBotFeatureWars": "وار مینجمنٹ",
@@ -2208,7 +2298,7 @@
     "description": "Defender town hall filter label"
   },
   "filtersSameTownHallOnly": "صرف ایک ہی ٹاؤن ہال",
-  "warStatsSameTownHall": "ایک جیسا ٹاؤن ہال",
+  "warStatsSameTownHall": "Same Townhall",
   "@filtersSameTownHallOnly": {
     "description": "Same town hall filter option"
   },
@@ -2862,7 +2952,7 @@
   "@settingsNotificationsTitle": {
     "description": "Settings tile: notifications title"
   },
-  "settingsNotificationsSubtitle": "منتخب کریں کہ آپ کون سے الرٹس وصول کریں۔",
+  "settingsNotificationsSubtitle": "انتباہات کا انتخاب کریں اور مقامی ٹیسٹ کے مناظر بھیجیں۔",
   "@settingsNotificationsSubtitle": {
     "description": "Settings tile: notifications subtitle"
   },
@@ -3334,7 +3424,7 @@
   "playerBestTrophies": "بہترین ٹرافیاں",
   "clanLoadFailed": "کلین لوڈ کرنے میں ناکامی۔",
   "gameItemLevels": "لیولز",
-  "gameItemLevelCount": "{count, plural, one {# لیول} other {# لیولز}}",
+  "gameItemLevelCount": "{count, plural, one {# Level} other {# Levels}}",
   "@gameItemLevelCount": {
     "placeholders": {
       "count": {
@@ -3405,6 +3495,20 @@
   },
   "todoAllCaughtUpForNow": "ابھی سب مکمل ہے",
   "timeDurationShort": "{unit, select, daysHours {{primary}د {secondary}گھ} hoursMinutes {{primary}گھ {secondary}م} other {{primary}م}}",
+  "@timeDurationShort": {
+    "description": "Compact localized duration used in countdowns",
+    "placeholders": {
+      "unit": {
+        "type": "String"
+      },
+      "primary": {
+        "type": "int"
+      },
+      "secondary": {
+        "type": "int"
+      }
+    }
+  },
   "todoEventEndsIn": "{duration} میں ختم",
   "@todoEventEndsIn": {
     "placeholders": {
@@ -3514,9 +3618,14 @@
   "statsHero": "ہیرو",
   "statsPet": "پالتو",
   "statsEquipment": "سازوسامان",
-  "statsPetCombinations": "پالتو جانوروں کے مجموعے",
-  "statsEquipmentPairs": "سازوسامان کے جوڑے",
-  "statsArmyFallback": "فوج {id}",
+  "statsPetCombinations": "Pet combinations",
+  "statsEquipmentPairs": "Equipment pairs",
+  "statsArmyFallback": "Army {id}",
+  "@statsArmyFallback": {
+    "placeholders": {
+      "id": {}
+    }
+  },
   "statsOwningHero": "مالک ہیرو",
   "statsAddItem": "آئٹم شامل کریں",
   "statsAnalyzeItems": "آئٹمز کا تجزیہ کریں۔",
@@ -3902,7 +4011,7 @@
   },
   "appIconDefault": "ڈیفالٹ",
   "appIconChristmas": "کرسمس",
-  "appIconHalloween": "ہالووین",
+  "appIconHalloween": "Halloween",
   "appIconBlackWhite": "سیاہ و سفید",
   "appIconDarkMode": "ڈارک موڈ",
   "generalMembersCount": "{count} ارکان",
@@ -3960,9 +4069,9 @@
     }
   },
   "upgradeTrackerShare": "ٹریکر شیئر کریں",
-  "trackerPosterCopied": "تصویر کاپی ہو گئی",
-  "trackerPosterCopy": "تصویر کاپی کریں",
-  "trackerPosterShareAll": "تینوں شیئر کریں",
+  "trackerPosterCopied": "Image copied",
+  "trackerPosterCopy": "Copy image",
+  "trackerPosterShareAll": "Share all 3",
   "upgradeTrackerPasteJson": "اکاؤنٹ JSON چسپاں کریں",
   "upgradeTrackerImportTitle": "اکاؤنٹ ڈیٹا درآمد کریں",
   "upgradeTrackerImportDescription": "خام اکاؤنٹ JSON چسپاں کریں۔ یہ اسی آلے پر رہتا ہے۔",
@@ -4271,8 +4380,8 @@
   "homeActivityLeft": "چھوڑ گیا",
   "homeActivityAClan": "ایک کلین",
   "statsCwlSeasonGroups": "گروپس",
-  "statsCwlSeasonHistory": "وقت کے ساتھ قبیلہ جنگ لیگ",
-  "statsCwlRosterNotLineup": "رجسٹرڈ کھلاڑیوں کی تقسیم کو {size} جگہوں کے مطابق دکھایا گیا ہے؛ اصل جنگی ٹیم مختلف ہو سکتی ہے۔",
+  "statsCwlSeasonHistory": "CWL over time",
+  "statsCwlRosterNotLineup": "Registered roster mix, scaled to {size} places; actual war lineups may differ.",
   "@statsCwlRosterNotLineup": {
     "placeholders": {
       "size": {
@@ -4280,28 +4389,28 @@
       }
     }
   },
-  "statsTroopStats": "فوجیوں کے اعداد و شمار",
-  "statsWarSizes": "جنگوں کے سائز",
-  "statsMissedAttacks": "چھوٹ جانے والے حملے",
-  "statsCopyChart": "چارٹ کاپی کریں",
-  "statsCompareItems": "آئٹمز کا موازنہ کریں",
-  "statsCompareItemsHint": "موازنے کے لیے زیادہ سے زیادہ 5 آئٹمز منتخب کریں۔",
-  "statsVsOverall": "مجموعی اعداد سے موازنہ",
-  "statsCopyChartFailed": "چارٹ کاپی نہیں ہو سکا۔ دوبارہ کوشش کریں۔",
-  "statsPercentagePoints": "فیصد پوائنٹس",
+  "statsTroopStats": "Troop Stats",
+  "statsWarSizes": "War sizes",
+  "statsMissedAttacks": "Missed attacks",
+  "statsCopyChart": "Copy chart",
+  "statsCompareItems": "Compare items",
+  "statsCompareItemsHint": "Select up to 5 items to compare.",
+  "statsVsOverall": "vs. overall",
+  "statsCopyChartFailed": "Could not copy chart. Try again.",
+  "statsPercentagePoints": "percentage points",
   "statsMeta": "میٹا",
   "statsBattle": "جنگ",
   "statsWorld": "دنیا",
   "statsHeaderSubtitle": "جنگی کارکردگی اور ہماری ٹریک کردہ دنیا دریافت کریں۔",
   "statsPreview": "پیش نظارہ",
-  "statsTownHallDistribution": "ٹاؤن ہال",
+  "statsTownHallDistribution": "ٹاؤن ہال کی تقسیم",
   "statsBuilderHallDistribution": "بلڈر ہال کی تقسیم",
-  "statsLeagueDistribution": "درجہ بندی والی لیگز",
+  "statsLeagueDistribution": "درجہ بندی شدہ لیگ کی تقسیم",
   "statsTrackedPlayers": "موجودہ ٹریک کردہ کھلاڑی کی آبادی",
   "statsTrackedClans": "موجودہ ٹریک شدہ قبیلہ کی آبادی",
-  "statsCwlLeagueDistribution": "CWL لیگز",
-  "statsCapitalLeagueDistribution": "کیپٹل لیگز",
-  "statsTrackedLocations": "کلین کے مقامات",
+  "statsCwlLeagueDistribution": "CWL لیگ کی تقسیم",
+  "statsCapitalLeagueDistribution": "کیپٹل لیگ کی تقسیم",
+  "statsTrackedLocations": "ٹریک شدہ قبیلے کے مقامات",
   "statsLocationCountHelp": "ممالک اور مقامات جن کی نمائندگی ٹریک شدہ قبیلوں کے ذریعے کی جاتی ہے۔",
   "statsLeagueId": "لیگ {id}",
   "@statsLeagueId": {
@@ -4379,7 +4488,7 @@
   "rankedLeagueNoBattles": "ابھی کوئی لڑائی ریکارڈ نہیں ہوئی۔",
   "rankedLeagueGroupRanking": "گروپ درجہ بندی",
   "rankedLeagueRankingSubtitle": "موجودہ گروپ کی براہ راست درجہ بندی۔ آپ کا پلیئر نمایاں ہے۔",
-  "rankedLeagueJumpToMyRank": "رینک پر جائیں",
+  "rankedLeagueJumpToMyRank": "میرے رینک پر جائیں",
   "rankedLeagueLastPeriod": "پچھلی مدت",
   "rankedLeagueBestGroupRank": "بہترین رینک",
   "rankedLeaguePeriodHistory": "مدت کی تاریخ",
@@ -4944,7 +5053,7 @@
       }
     }
   },
-  "upgradeTrackerPlanRuleNote": "پہلے کیا اپ گریڈ ہو یہ طے کرنے کے لیے زمرے کھینچیں۔ قطار کی ترتیبات سے ترجیح مشترک کریں یا پیش رفت کے ہدف پر رکیں۔",
+  "upgradeTrackerPlanRuleNote": "نمبر والے درجے پہلے چلتے ہیں۔ مشترکہ قطاریں ایک ہی درجے کا نمبر رکھتی ہیں، اور ان کے اختلاط کو رشتہ دار وزن سے معمول بنایا جاتا ہے، لہذا 50 + 25 67% / 33% بن جاتا ہے۔ ایک ہدف اس فیصد تک پہنچنے کے بعد زمرہ کی پیداوار دیتا ہے جبکہ یہ بعد میں اہل رہتا ہے۔",
   "upgradeTrackerPlanGoalMaxCurrentHall": "آگے بڑھنے سے پہلے زیادہ سے زیادہ",
   "upgradeTrackerPlanGoalRushNextHall": "جلدی سے اگلے ہال میں پہنچو",
   "upgradeTrackerPlanGoalCatchUp": "جلدی کی سطح کو پکڑو",
@@ -5046,19 +5155,40 @@
       }
     }
   },
-  "cwlRegisteredRoster": "رجسٹرڈ فہرست",
-  "cwlMatches": "مقابلے",
-  "cwlNextMatchup": "اگلا مقابلہ",
-  "cwlOtherMatches": "دیگر مقابلے",
-  "cwlOutlook": "سیزن کا اندازہ",
-  "cwlFirstPlace": "پہلی پوزیشن",
-  "cwlTopTwo": "پہلی دو پوزیشنیں",
-  "cwlRemainingOpponents": "باقی مخالفین",
-  "cwlWinBonusNote": "ہر مکمل جیت کے 10 بونس ستارے شامل ہیں۔",
-  "cwlEstimateNote": "اندازے مکمل جنگوں اور باقی مخالفین پر مبنی ہیں، ٹیم کی تبدیلیوں پر نہیں۔ ہر کلین کی کم از کم دو جنگیں مکمل ہونی چاہئیں۔ یہ غیر مصدقہ اندازے ہیں؛ ترقی کے اصول لیگ کے لحاظ سے مختلف ہوتے ہیں۔",
-  "cwlDuration": "{unit, select, hours {{count, plural, one {# گھنٹہ} other {# گھنٹے}}} other {{count, plural, one {# منٹ} other {# منٹ}}}}",
-  "personalBasesDeleteOld": "90 دن سے پرانے بیس ہٹائیں",
-  "personalBasesDeleteOldConfirm": "90 دن سے پرانے {count} محفوظ بیس ہٹا دیے جائیں گے۔ ڈاؤن لوڈ ہسٹری اور شیئر کیے گئے بیس برقرار رہیں گے۔",
+  "@settingsWarWidgetIosReady": {
+    "placeholders": {
+      "clanName": {
+        "type": "String"
+      }
+    }
+  },
+  "@settingsWarWidgetAndroidReady": {
+    "placeholders": {
+      "clanName": {
+        "type": "String"
+      }
+    }
+  },
+  "@settingsWarWidgetPrepareFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "cwlRegisteredRoster": "Registered roster",
+  "cwlMatches": "Matchups",
+  "cwlNextMatchup": "Next matchup",
+  "cwlOtherMatches": "Other matchups",
+  "cwlOutlook": "Season outlook",
+  "cwlFirstPlace": "First place",
+  "cwlTopTwo": "Top two",
+  "cwlRemainingOpponents": "Remaining opponents",
+  "cwlWinBonusNote": "Stars include 10 bonus stars per completed win.",
+  "cwlEstimateNote": "Estimates use completed wars and remaining opponents, not lineup changes. At least two completed wars per clan are needed. These are uncalibrated estimates; promotion rules vary by league.",
+  "cwlDuration": "{unit, select, hours {{count, plural, one {# hour} other {# hours}}} other {{count, plural, one {# minute} other {# minutes}}}}",
+  "personalBasesDeleteOld": "Remove bases older than 90 days",
+  "personalBasesDeleteOldConfirm": "{count} saved bases older than 90 days will be removed. Download history and shared bases will remain.",
   "@personalBasesDeleteOldConfirm": {
     "description": "Confirms cleanup while preserving lifetime download history.",
     "placeholders": {
@@ -5067,9 +5197,9 @@
       }
     }
   },
-  "legendsAutomaticDefense": "خودکار دفاع",
-  "legendsPopularArmyItem": "سب سے مقبول فوجی آئٹم",
-  "legendsClanCastle": "قبیلے کا قلعہ",
+  "legendsAutomaticDefense": "Automatic defense",
+  "legendsPopularArmyItem": "Most popular army item",
+  "legendsClanCastle": "Clan Castle",
   "@cwlDuration": {
     "description": "Explicit countdown units; avoid native unit conversion.",
     "placeholders": {
@@ -5081,20 +5211,20 @@
       }
     }
   },
-  "clanNotificationRemoveConfirmation": "اس کلین کی اطلاعات بند کرکے بُک مارک ہٹا دیں؟",
-  "personalBasesTab": "Bases",
+  "clanNotificationRemoveConfirmation": "Turn off this clan’s notifications and remove the bookmark?",
+  "personalBasesTab": "بیسز",
   "personalBasesDownloaded": "Downloaded",
   "personalArmyName": "Army name",
   "personalArmyNotes": "Notes",
   "personalArmyUnnamed": "Unnamed army",
   "personalArmyEdit": "Edit army",
   "personalArmyUnknownTownHall": "Unknown Town Hall",
-  "discordBotDashboard": "Discord بوٹ ڈیش بورڈ",
-  "discordAddBot": "بوٹ شامل کریں",
-  "discordAddToMyDiscord": "میرے Discord میں شامل کریں",
-  "discordServersWithoutBot": "ClashKing کے بغیر سرورز",
-  "rankingsPlayerSection": "کھلاڑیوں کی درجہ بندی",
-  "rankingsClanSection": "کلین کی درجہ بندی",
+  "discordBotDashboard": "Discord Bot Dashboard",
+  "discordAddBot": "Add bot",
+  "discordAddToMyDiscord": "Add to My Discord",
+  "discordServersWithoutBot": "Servers without ClashKing",
+  "rankingsPlayerSection": "Player Rankings",
+  "rankingsClanSection": "Clan Rankings",
   "cwlArchiveCoverage": "{available} of {total} matchups available.",
   "cwlStandingsIncomplete": "Missing archives are excluded. Group ranks and forecasts are unavailable.",
   "cwlPromotionChance": "Estimated promotion chance",
@@ -5105,62 +5235,62 @@
   "cwlRecordedStats": "Recorded wars only",
   "cwlMissingMatchups": "{count} matchups unavailable",
   "cwlHighestLeague": "Highest league · no promotion",
-  "warOutlookWinPossible": "جیت اب بھی ممکن ہے",
-  "warOutlookDrawOnly": "زیادہ سے زیادہ برابری",
-  "warOutlookDefeat": "جیت ممکن نہیں",
-  "warOutlookMaximum": "زیادہ سے زیادہ ممکنہ اسکور",
-  "warOutlookAssumption": "باقی حملوں کو کامل فرض کرتا ہے۔ یہ ریاضیاتی حد ہے، پیش گوئی نہیں۔",
-  "warScoutTitle": "لائن اپ کا تجزیہ",
-  "warScoutOpponent": "حریف کی حالیہ جنگیں",
-  "warScoutScope": "موجودہ لائن اپ · یکساں اصول · زیادہ سے زیادہ 10 پچھلی جنگیں",
-  "upgradeTrackerCapturedWork": "آپ کی آخری اپ ڈیٹ سے",
-  "tutorialWelcomeBody": "ClashKing کا مختصر تعارف دیکھیں۔ آپ اسے کسی بھی وقت چھوڑ سکتے ہیں۔",
-  "tutorialReorderBody": "کارڈ کو دبا کر رکھیں، پھر اس کی جگہ بدلنے کے لیے گھسیٹیں۔",
-  "tutorialSidebarBody": "مینو کھولنے کے لیے ہوم اسکرین پر سوائپ کریں یا اپنے اوتار پر ٹیپ کریں۔",
-  "tutorialExploreBody": "اس مینو سے ترتیبات اور پھر اطلاعات کھولیں۔ ابھی وہاں جانے کے لیے آگے بڑھیں۔",
-  "tutorialRemindersBody": "نیچے یاد دہانیاں منتخب کریں۔ مکمل ہونے پر ہوم پر واپس جائیں۔",
-  "tutorialResetTitle": "سبق دوبارہ ترتیب دیں",
-  "tutorialResetConfirm": "اگلی بار آنے پر سبق دوبارہ شروع کریں؟",
-  "upgradeTrackerOngoingUpgrades": "جاری اپ گریڈز",
-  "upgradeTrackerToLevel": "لیول {level} تک",
-  "upgradeTrackerFreeSlots": "{count} خالی",
-  "upgradeTrackerFreeIn": "{duration} میں خالی",
-  "upgradeTrackerPetHouse": "پالتو جانوروں کا گھر",
-  "upgradeTrackerNotBuilt": "تعمیر نہیں ہوا",
-  "upgradeTrackerExtraSlots": "{count} اضافی",
-  "rankedLeagueOverTime": "وقت کے ساتھ لیگ",
-  "rankedLeaguePromotionCutoff": "ترقی کی حد",
-  "rankedLeagueDemotionCutoff": "تنزلی کی حد",
-  "rankedLeagueCutoffsUnavailable": "ترقی اور تنزلی کی حدیں دستیاب نہیں ہیں۔",
-  "rankedAutomaticDefenseSummary": "{count} دفاع · ہر ایک کے {points} ٹرافیز",
-  "rankedAutomaticDefenseExplanation": "اس ہفتے کے تمام حقیقی دفاع کی بنیاد پر، نیچے کی طرف مکمل عدد۔",
-  "warStatusInWar": "جنگ میں",
-  "warStatusNoWar": "کوئی جنگ نہیں",
-  "warNoActiveClans": "فی الحال کوئی کلین جنگ میں نہیں ہے۔",
-  "warNoInactiveClans": "جنگ سے باہر کوئی کلین نہیں",
-  "warAllClansInWar": "آپ کے تمام کلین فی الحال جنگ میں ہیں۔",
+  "warOutlookWinPossible": "Win still possible",
+  "warOutlookDrawOnly": "Draw at best",
+  "warOutlookDefeat": "No path to a win",
+  "warOutlookMaximum": "Maximum possible score",
+  "warOutlookAssumption": "Assumes perfect remaining attacks. This is a mathematical limit, not a prediction.",
+  "warScoutTitle": "Lineup scouting",
+  "warScoutOpponent": "Opponent’s recent wars",
+  "warScoutScope": "Current lineup · same rules · up to 10 previous wars",
+  "upgradeTrackerCapturedWork": "From your last update",
+  "tutorialWelcomeBody": "Take a quick tour of ClashKing. You can skip it at any time.",
+  "tutorialReorderBody": "Hold a card, then drag it to change its position.",
+  "tutorialSidebarBody": "Swipe across Home to open the menu, or tap your avatar.",
+  "tutorialExploreBody": "From this menu, open Settings, then Notifications. Continue to go there now.",
+  "tutorialRemindersBody": "Choose reminders below. When you are done, return to Home.",
+  "tutorialResetTitle": "Reset tutorials",
+  "tutorialResetConfirm": "Start the tutorials again on your next visits?",
+  "upgradeTrackerOngoingUpgrades": "Ongoing Upgrades",
+  "upgradeTrackerToLevel": "To Level {level}",
+  "upgradeTrackerFreeSlots": "{count} free",
+  "upgradeTrackerFreeIn": "Free in {duration}",
+  "upgradeTrackerPetHouse": "Pet House",
+  "upgradeTrackerNotBuilt": "Not built",
+  "upgradeTrackerExtraSlots": "{count} extra",
+  "rankedLeagueOverTime": "League over time",
+  "rankedLeaguePromotionCutoff": "Promotion cutoff",
+  "rankedLeagueDemotionCutoff": "Demotion cutoff",
+  "rankedLeagueCutoffsUnavailable": "Promotion and demotion thresholds unavailable.",
+  "rankedAutomaticDefenseSummary": "{count} defenses · {points} trophies each",
+  "rankedAutomaticDefenseExplanation": "Based on all real defenses this week, rounded down.",
+  "warStatusInWar": "In war",
+  "warStatusNoWar": "No war",
+  "warNoActiveClans": "No clans are currently in war.",
+  "warNoInactiveClans": "No clans out of war",
+  "warAllClansInWar": "All your clans are currently in war.",
   "warStatusOther": "دیگر",
-  "warNoOtherClans": "کوئی دوسرا کلین موجود نہیں۔",
-  "playerWarLifetime": "مکمل تاریخ",
-  "playerWarThScope": "صرف اعداد و شمار کے کارڈز پر لاگو ہوتا ہے، لڑائیوں پر نہیں۔ یہ وضاحت دیکھنے کے لیے بٹن دبائے رکھیں۔",
-  "playerWarNoAttacks": "ابھی تک کوئی حملے نہیں",
-  "playerWarRegularWars": "عام جنگ",
-  "warWidgetNoActiveWar": "کوئی فعال جنگ نہیں",
-  "warWidgetPrivateWarLog": "نجی جنگی لاگ",
-  "warWidgetChooseClan": "کلین منتخب کریں",
-  "legendPerformanceTitle": "روزانہ کارکردگی",
-  "legendCompleteDays": "مکمل دن",
-  "legendPerfectDays": "بے عیب دن",
-  "legendPartialDays": "نامکمل دن",
-  "legendMissingDays": "کوئی ریکارڈ نہیں",
-  "legendInvalidDays": "غیر درست دن",
-  "legendTrophiesGained": "حاصل کردہ ٹرافیاں",
-  "legendTrophiesLost": "کھوئی ہوئی ٹرافیاں",
+  "warNoOtherClans": "No other clans.",
+  "playerWarLifetime": "Lifetime",
+  "playerWarThScope": "Applies only to the statistics cards, not Battles. Hold the button for this explanation.",
+  "playerWarNoAttacks": "No attacks yet",
+  "playerWarRegularWars": "Regular war",
+  "warWidgetNoActiveWar": "No active war",
+  "warWidgetPrivateWarLog": "Private war log",
+  "warWidgetChooseClan": "Choose a clan",
+  "legendPerformanceTitle": "Daily performance",
+  "legendCompleteDays": "Complete days",
+  "legendPerfectDays": "Perfect days",
+  "legendPartialDays": "Partial days",
+  "legendMissingDays": "No observations",
+  "legendInvalidDays": "Invalid days",
+  "legendTrophiesGained": "Trophies gained",
+  "legendTrophiesLost": "Trophies lost",
   "legendDistribution": "تقسیم",
-  "legendPreviousDays": "گزشتہ {count} دن",
-  "legendAvailableDays": "دستیاب دن",
-  "legendCompleteOnly": "تقسیم میں وہ دن شامل ہیں جن میں 8 لڑائیاں ریکارڈ ہوئیں۔",
-  "legendPerfectSources": "درجہ بندی کے مطابق بے عیب دن",
+  "legendPreviousDays": "Previous {count} days",
+  "legendAvailableDays": "Days available",
+  "legendCompleteOnly": "Distribution uses days with 8 recorded battles.",
+  "legendPerfectSources": "Perfect days by rank",
   "@legendPreviousDays": {
     "placeholders": {
       "count": {
@@ -5168,15 +5298,15 @@
       }
     }
   },
-  "onboardingOverviewTitle": "آپ کے اکاؤنٹس اور کلینز",
-  "onboardingOverviewBody": "اپنے کھلاڑیوں، کلینز اور اپ گریڈز کو ایک جگہ رکھیں۔",
-  "onboardingProgressTitle": "درجہ بندی اور اعدادوشمار دیکھیں",
-  "onboardingProgressBody": "لڑائیوں پر نظر رکھیں، پیش رفت کا موازنہ کریں اور اپ گریڈ جاری رکھیں۔",
-  "onboardingRemindersTitle": "یاددہانیاں اور اطلاعات پائیں",
-  "onboardingRemindersBody": "جنگ کی یاد دہانیاں اور اپنی پسند کی اطلاعات حاصل کریں۔ ترتیبات میں اکاؤنٹس اور اطلاعات کی اقسام منتخب کریں۔",
-  "onboardingReplayTitle": "تعارف دوبارہ دیکھیں",
-  "statsViewLatestData": "تازہ ترین ڈیٹا دیکھیں",
-  "statsLatestAvailableDate": "تازہ ترین دستیاب ڈیٹا: {date}",
+  "onboardingOverviewTitle": "Your accounts & clans",
+  "onboardingOverviewBody": "Keep your players, clans, and upgrades together.",
+  "onboardingProgressTitle": "View rankings and stats",
+  "onboardingProgressBody": "Follow your battles, compare your progress, and keep upgrades moving.",
+  "onboardingRemindersTitle": "Get reminders and alerts",
+  "onboardingRemindersBody": "Get war reminders and the alerts you choose. Pick your accounts and alert types in Settings.",
+  "onboardingReplayTitle": "Replay introduction",
+  "statsViewLatestData": "View latest data",
+  "statsLatestAvailableDate": "Latest available: {date}",
   "@statsLatestAvailableDate": {
     "placeholders": {
       "date": {
@@ -5184,23 +5314,23 @@
       }
     }
   },
-  "legendPerfectedDefenseDays": "مکمل طور پر شکست خوردہ دفاع کے دن",
-  "legendCompleteDayDefinition": "صرف وہ دن شامل ہیں جن میں تمام 8 لڑائیاں ہوئی ہوں۔",
+  "legendPerfectedDefenseDays": "Perfected defense days",
+  "legendCompleteDayDefinition": "Only days with all 8 battles are included.",
   "statsCommunity": "کمیونٹی",
-  "rankedFullOffenseDays": "+320 دن",
-  "rankedFullDefenseDays": "−320 دن",
-  "rankedTrophiesByRank": "درجے کے مطابق ٹرافیاں",
-  "statsArmyTypes": "فوج کی اقسام",
-  "onboardingStatsBody": "کھلاڑیوں کے اعدادوشمار دیکھیں، اپنے کلینز کی خبر رکھیں اور جانیں کہ پورا گیم کیسے بدل رہا ہے۔",
-  "onboardingWidgetsTitle": "ہوم اسکرین پر ویجٹس شامل کریں",
-  "onboardingWidgetsBody": "ہوم اسکرین ویجٹس سے جنگ کے اسکور اور اپ گریڈ کی پیش رفت پر نظر رکھیں۔",
-  "onboardingAlertTitle": "جنگ جلد ختم ہوگی",
-  "onboardingAlertBody": "آپ کے آخری حملے کا وقت ہے۔",
-  "onboardingSetupNotifications": "اطلاعات فعال کریں",
-  "onboardingAccountsReadyBody": "آپ کے لنک شدہ اکاؤنٹس تیار ہیں۔ ایک اور اکاؤنٹ شامل کریں یا آگے بڑھیں۔",
-  "onboardingSkipAccountSetup": "چھوڑیں",
-  "accountsSetupBody": "اپنے Clash of Clans اکاؤنٹس شامل کریں اور ان کی تصدیق کریں۔",
-  "accountsMyTitle": "میرے اکاؤنٹس",
-  "profileAvatar": "شکل بدلیں",
-  "avatarPickerTitle": "ایک اوتار چنیں"
+  "rankedFullOffenseDays": "+320 days",
+  "rankedFullDefenseDays": "−320 days",
+  "rankedTrophiesByRank": "Trophies by rank",
+  "statsArmyTypes": "Army Types",
+  "onboardingStatsBody": "Explore player stats, follow your clans, and see how the whole game is changing.",
+  "onboardingWidgetsTitle": "Add Home Screen widgets",
+  "onboardingWidgetsBody": "Keep war scores and upgrade progress close with Home Screen widgets.",
+  "onboardingAlertTitle": "War ends soon",
+  "onboardingAlertBody": "Time for your final attack.",
+  "onboardingSetupNotifications": "Enable notifications",
+  "onboardingAccountsReadyBody": "Your linked accounts are ready. Add another account or continue.",
+  "onboardingSkipAccountSetup": "Skip",
+  "accountsSetupBody": "Add and verify your Clash of Clans accounts.",
+  "accountsMyTitle": "My Accounts",
+  "profileAvatar": "Change look",
+  "avatarPickerTitle": "Pick an avatar"
 }
