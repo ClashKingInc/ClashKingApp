@@ -3804,6 +3804,7 @@
     }
   },
   "appIconDefault": "Oletus",
+  "appIconWhiteMode": "Valkoinen tila",
   "appIconChristmas": "Joulu",
   "appIconHalloween": "Halloween",
   "appIconBlackWhite": "Mustavalkoinen",

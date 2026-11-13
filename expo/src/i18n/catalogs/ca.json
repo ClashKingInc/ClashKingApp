@@ -1753,6 +1753,7 @@
   "notifUpgradeCompleteBody": "El nivell {level} ha acabat per a {player}. Millora completada.",
   "clanSearchLoadFailed": "No s'han pogut carregar les dades del clan: {error}",
   "appIconDefault": "Per defecte",
+  "appIconWhiteMode": "Mode blanc",
   "appIconChristmas": "Nadal",
   "appIconHalloween": "Halloween",
   "appIconBlackWhite": "Negre i blanc",

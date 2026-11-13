@@ -1753,6 +1753,7 @@
   "notifUpgradeCompleteBody": "Рівень {level} завершено для {player}. Покращення виконано.",
   "clanSearchLoadFailed": "Не вдалося завантажити дані клану: {error}",
   "appIconDefault": "Стандартна",
+  "appIconWhiteMode": "Білий режим",
   "appIconChristmas": "Різдвяна",
   "appIconHalloween": "Гелловін",
   "appIconBlackWhite": "Чорно-біла",

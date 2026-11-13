@@ -1753,6 +1753,7 @@
   "notifUpgradeCompleteBody": "Level {level} finished for {player}. Upgrade complete.",
   "clanSearchLoadFailed": "Failed to load clan data: {error}",
   "appIconDefault": "Default",
+  "appIconWhiteMode": "White Mode",
   "appIconChristmas": "Christmas",
   "appIconHalloween": "Halloween",
   "appIconBlackWhite": "Black & White",

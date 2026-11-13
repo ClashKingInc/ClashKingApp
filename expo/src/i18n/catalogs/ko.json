@@ -1753,6 +1753,7 @@
   "notifUpgradeCompleteBody": "{player}의 레벨 {level}이 완료되었습니다. 업그레이드 완료.",
   "clanSearchLoadFailed": "클랜 데이터를 불러오지 못했습니다: {error}",
   "appIconDefault": "기본",
+  "appIconWhiteMode": "화이트 모드",
   "appIconChristmas": "크리스마스",
   "appIconHalloween": "할로윈",
   "appIconBlackWhite": "흑백",

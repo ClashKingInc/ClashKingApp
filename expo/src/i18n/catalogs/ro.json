@@ -1753,6 +1753,7 @@
   "notifUpgradeCompleteBody": "Nivelul {level} s-a finalizat pentru {player}. Îmbunătățire completă.",
   "clanSearchLoadFailed": "Nu s-au putut încărca datele clanului: {error}",
   "appIconDefault": "Implicit",
+  "appIconWhiteMode": "Mod alb",
   "appIconChristmas": "Crăciun",
   "appIconHalloween": "Halloween",
   "appIconBlackWhite": "Alb-negru",

@@ -1753,6 +1753,7 @@
   "notifUpgradeCompleteBody": "اكتمل المستوى {level} للاعب {player}. انتهت الترقية.",
   "clanSearchLoadFailed": "فشل تحميل بيانات القبيلة: {error}",
   "appIconDefault": "افتراضي",
+  "appIconWhiteMode": "الوضع الأبيض",
   "appIconChristmas": "عيد الميلاد",
   "appIconHalloween": "هالوين",
   "appIconBlackWhite": "أبيض وأسود",

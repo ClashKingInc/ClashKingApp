@@ -1753,6 +1753,7 @@
   "notifUpgradeCompleteBody": "Poziom {level} ukończony dla {player}. Ulepszenie zakończone.",
   "clanSearchLoadFailed": "Nie udało się załadować danych klanu: {error}",
   "appIconDefault": "Domyślna",
+  "appIconWhiteMode": "Tryb biały",
   "appIconChristmas": "Świąteczna",
   "appIconHalloween": "Halloween",
   "appIconBlackWhite": "Czarno-biała",

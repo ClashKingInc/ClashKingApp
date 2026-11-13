@@ -35,6 +35,14 @@ const ANDROID_LAUNCHER_ALIASES = [
     enabled: true,
   },
   {
+    iconName: 'AppIconWhite',
+    aliasName: '.MainActivityWhite',
+    resourceName: 'app_icon_white',
+    sourcePath: './assets/clashking/icons/app_icon_white_android.png',
+    adaptive: true,
+    enabled: false,
+  },
+  {
     iconName: 'AppIconHalloween',
     aliasName: '.MainActivityHalloween',
     resourceName: 'app_icon_halloween',
@@ -145,6 +153,7 @@ function validateLegacyWidgetContract(contract) {
   }
   const expectedIconOptions = [
     ['default', null, 'assets/icons/app_icon_ios_default.png'],
+    ['white_mode', 'AppIconWhite', 'assets/icons/app_icon_white.png'],
     ['halloween', 'AppIconHalloween', 'assets/icons/app_icon_halloween.png'],
     ['christmas', 'AppIconChristmas', 'assets/icons/app_icon_christmas.png'],
     ['black_white', 'AppIconBlackWhite', 'assets/icons/app_icon_black_white.png'],

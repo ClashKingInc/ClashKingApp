@@ -3804,6 +3804,7 @@
     }
   },
   "appIconDefault": "Standaard",
+  "appIconWhiteMode": "Witte modus",
   "appIconChristmas": "Kerst",
   "appIconHalloween": "Halloween",
   "appIconBlackWhite": "Zwart-wit",

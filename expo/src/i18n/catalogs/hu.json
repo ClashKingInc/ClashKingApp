@@ -1753,6 +1753,7 @@
   "notifUpgradeCompleteBody": "A(z) {level}. szint elkészült {player} számára. Fejlesztés kész.",
   "clanSearchLoadFailed": "Nem sikerült betölteni a klánadatokat: {error}",
   "appIconDefault": "Alapértelmezett",
+  "appIconWhiteMode": "Fehér mód",
   "appIconChristmas": "Karácsony",
   "appIconHalloween": "Halloween",
   "appIconBlackWhite": "Fekete-fehér",

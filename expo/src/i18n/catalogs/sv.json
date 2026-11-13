@@ -1753,6 +1753,7 @@
   "notifUpgradeCompleteBody": "Nivå {level} klar för {player}. Uppgradering slutförd.",
   "clanSearchLoadFailed": "Kunde inte läsa in klandata: {error}",
   "appIconDefault": "Standard",
+  "appIconWhiteMode": "Vitt läge",
   "appIconChristmas": "Jul",
   "appIconHalloween": "Halloween",
   "appIconBlackWhite": "Svartvitt",

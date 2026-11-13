@@ -1753,6 +1753,7 @@
   "notifUpgradeCompleteBody": "{player}のレベル{level}が完了しました。アップグレード完了。",
   "clanSearchLoadFailed": "クランデータの読み込みに失敗しました: {error}",
   "appIconDefault": "デフォルト",
+  "appIconWhiteMode": "ホワイトモード",
   "appIconChristmas": "クリスマス",
   "appIconHalloween": "ハロウィン",
   "appIconBlackWhite": "白黒",

@@ -1753,6 +1753,7 @@
   "notifUpgradeCompleteBody": "Niveau {level} voltooid voor {player}. Upgrade voltooid.",
   "clanSearchLoadFailed": "Kan clangegevens niet laden: {error}",
   "appIconDefault": "Standaard",
+  "appIconWhiteMode": "Witte modus",
   "appIconChristmas": "Kerst",
   "appIconHalloween": "Halloween",
   "appIconBlackWhite": "Zwart-wit",

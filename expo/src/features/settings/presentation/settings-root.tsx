@@ -288,13 +288,15 @@ export function SettingsRoot({
     label:
       option.labelKey === 'default'
         ? t('appIconDefault')
-        : option.labelKey === 'halloween'
-          ? t('appIconHalloween')
-          : option.labelKey === 'christmas'
-            ? t('appIconChristmas')
-            : option.labelKey === 'black_white'
-              ? t('appIconBlackWhite')
-              : t('appIconDarkMode'),
+        : option.labelKey === 'white_mode'
+          ? t('appIconWhiteMode')
+          : option.labelKey === 'halloween'
+            ? t('appIconHalloween')
+            : option.labelKey === 'christmas'
+              ? t('appIconChristmas')
+              : option.labelKey === 'black_white'
+                ? t('appIconBlackWhite')
+                : t('appIconDarkMode'),
     previewSource: appIconPreview(option.iconName),
   }));
 
@@ -339,6 +341,9 @@ export function SettingsRoot({
 }
 
 function appIconPreview(iconName: string | null) {
+  if (iconName === 'AppIconWhite') {
+    return require('../../../../assets/clashking/icons/app_icon_white.png');
+  }
   if (iconName === 'AppIconHalloween') {
     return require('../../../../assets/clashking/icons/app_icon_halloween.png');
   }
