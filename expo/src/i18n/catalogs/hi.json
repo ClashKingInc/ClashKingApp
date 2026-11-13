@@ -1753,6 +1753,7 @@
   "notifUpgradeCompleteBody": "{player} के लिए स्तर {level} पूरा हुआ। अपग्रेड पूरा।",
   "clanSearchLoadFailed": "क्लैन डेटा लोड करने में विफल: {error}",
   "appIconDefault": "डिफ़ॉल्ट",
+  "appIconWhiteMode": "सफ़ेद मोड",
   "appIconChristmas": "क्रिसमस",
   "appIconHalloween": "हैलोवीन",
   "appIconBlackWhite": "काला और सफ़ेद",

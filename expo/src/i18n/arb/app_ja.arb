@@ -3899,6 +3899,7 @@
     }
   },
   "appIconDefault": "デフォルト",
+  "appIconWhiteMode": "ホワイトモード",
   "appIconChristmas": "クリスマス",
   "appIconHalloween": "ハロウィン",
   "appIconBlackWhite": "白黒",

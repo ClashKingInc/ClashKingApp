@@ -1753,6 +1753,7 @@
   "notifUpgradeCompleteBody": "Úroveň {level} dokončena pro {player}. Vylepšení hotovo.",
   "clanSearchLoadFailed": "Nepodařilo se načíst data klanu: {error}",
   "appIconDefault": "Výchozí",
+  "appIconWhiteMode": "Bílý režim",
   "appIconChristmas": "Vánoční",
   "appIconHalloween": "Halloween",
   "appIconBlackWhite": "Černobílá",

@@ -1753,6 +1753,7 @@
   "notifUpgradeCompleteBody": "רמה {level} הסתיימה עבור {player}. השדרוג הושלם.",
   "clanSearchLoadFailed": "טעינת נתוני הקלאן נכשלה: {error}",
   "appIconDefault": "ברירת מחדל",
+  "appIconWhiteMode": "מצב לבן",
   "appIconChristmas": "חג המולד",
   "appIconHalloween": "ליל כל הקדושים",
   "appIconBlackWhite": "שחור-לבן",

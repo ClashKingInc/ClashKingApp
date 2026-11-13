@@ -1753,6 +1753,7 @@
   "notifUpgradeCompleteBody": "{player} کے لیے سطح {level} مکمل ہو گئی۔ اپ گریڈ مکمل۔",
   "clanSearchLoadFailed": "کلین ڈیٹا لوڈ کرنے میں ناکام: {error}",
   "appIconDefault": "ڈیفالٹ",
+  "appIconWhiteMode": "سفید موڈ",
   "appIconChristmas": "کرسمس",
   "appIconHalloween": "ہالووین",
   "appIconBlackWhite": "سیاہ و سفید",

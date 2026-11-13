@@ -3899,6 +3899,7 @@
     }
   },
   "appIconDefault": "По умолчанию",
+  "appIconWhiteMode": "Белый режим",
   "appIconChristmas": "Рождество",
   "appIconHalloween": "Хэллоуин",
   "appIconBlackWhite": "Чёрно-белая",

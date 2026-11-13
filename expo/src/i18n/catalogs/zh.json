@@ -1753,6 +1753,7 @@
   "notifUpgradeCompleteBody": "{player} 的等级 {level} 已完成。升级完成。",
   "clanSearchLoadFailed": "加载部落数据失败：{error}",
   "appIconDefault": "默认",
+  "appIconWhiteMode": "白色模式",
   "appIconChristmas": "圣诞节",
   "appIconHalloween": "万圣节",
   "appIconBlackWhite": "黑白",

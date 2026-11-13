@@ -1753,6 +1753,7 @@
   "notifUpgradeCompleteBody": "{player} için seviye {level} tamamlandı. Yükseltme bitti.",
   "clanSearchLoadFailed": "Klan verileri yüklenemedi: {error}",
   "appIconDefault": "Varsayılan",
+  "appIconWhiteMode": "Beyaz mod",
   "appIconChristmas": "Noel",
   "appIconHalloween": "Cadılar Bayramı",
   "appIconBlackWhite": "Siyah beyaz",

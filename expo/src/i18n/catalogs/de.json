@@ -1753,6 +1753,7 @@
   "notifUpgradeCompleteBody": "Level {level} für {player} abgeschlossen. Verbesserung fertig.",
   "clanSearchLoadFailed": "Clandaten konnten nicht geladen werden: {error}",
   "appIconDefault": "Standard",
+  "appIconWhiteMode": "Weißer Modus",
   "appIconChristmas": "Weihnachten",
   "appIconHalloween": "Halloween",
   "appIconBlackWhite": "Schwarz-Weiß",

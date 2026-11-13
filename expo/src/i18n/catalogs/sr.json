@@ -1753,6 +1753,7 @@
   "notifUpgradeCompleteBody": "Nivo {level} je završen za {player}. Nadogradnja završena.",
   "clanSearchLoadFailed": "Učitavanje podataka klana nije uspelo: {error}",
   "appIconDefault": "Podrazumevano",
+  "appIconWhiteMode": "Beli režim",
   "appIconChristmas": "Božić",
   "appIconHalloween": "Ноћ вештица",
   "appIconBlackWhite": "Crno-belo",

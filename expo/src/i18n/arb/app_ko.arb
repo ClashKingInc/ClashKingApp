@@ -3899,6 +3899,7 @@
     }
   },
   "appIconDefault": "기본",
+  "appIconWhiteMode": "화이트 모드",
   "appIconChristmas": "크리스마스",
   "appIconHalloween": "할로윈",
   "appIconBlackWhite": "흑백",
