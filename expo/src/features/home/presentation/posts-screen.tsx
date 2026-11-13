@@ -151,7 +151,8 @@ export function PostsScreen({ service, onBack, initialPostId }: PostsScreenProps
       const current = await service.getAnnouncement(id);
       if (!current || !(await openAnnouncement(current))) {
         setStoryError(true);
-        if (!current) setStories((items) => items.filter((item) => item.id !== id));
+        // The service also returns null for transport failures. Keep the cached row
+        // so a temporary outage does not erase a story the user can retry.
       }
     } catch {
       setStoryError(true);
