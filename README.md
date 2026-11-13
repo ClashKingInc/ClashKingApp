@@ -197,9 +197,10 @@ route manifest and must serve association JSON rather than the old web app shell
 
 The landing build includes a Cloudflare Pages advanced worker for `/posts/*`
 and `/share/posts/*`. Shared links use `/share/posts/:id`, outside the native
-iOS/Android association paths, so the post opens in the browser. The top banner
-offers explicit app opening and the existing store links; iOS also gets its
-Smart App Banner when `CK_IOS_STORE_URL` is configured.
+iOS/Android association paths, so the post opens in the browser. The footer
+provides compact iOS and Android download links. There is no custom
+app-opening header or disclaimer on a post page; iOS retains its native Smart
+App Banner when `CK_IOS_STORE_URL` is configured.
 
 The worker reads the public announcement endpoint without credentials and
 returns `no-store` responses so withdrawn posts are checked again. Articles use

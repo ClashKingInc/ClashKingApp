@@ -23,12 +23,17 @@ const post = await response.text();
 assert.equal((post.match(/property="og:title"/g) ?? []).length, 1);
 assert.equal((post.match(/property="og:description"/g) ?? []).length, 1);
 assert(post.includes(`https://app.clashk.ing/share/posts/${postId}`));
-assert(post.includes(`href="clashking:///posts/${postId}"`));
+assert(!post.includes('href="clashking:'));
 assert(!post.includes('must-not-leak'));
 const shared = await fetch(`${origin}/share/posts/${encodeURIComponent(postId)}`);
 assert.equal(shared.status, 200);
 const sharedHtml = await shared.text();
-assert(sharedHtml.includes('class="app-banner"'));
+assert(!sharedHtml.includes('class="app-banner"'));
+assert(sharedHtml.includes('<footer class="downloads">'));
+assert(sharedHtml.includes('class="download"'));
+assert(!sharedHtml.includes('app-argument='));
+assert(!sharedHtml.includes('Fan Content Policy'));
+assert(!sharedHtml.includes('href="clashking:'));
 assert(!sharedHtml.includes('/landing/open-app.js'));
 assert(sharedHtml.includes('name="twitter:image"'));
 if (process.env.CK_EXPECTED_POST_IMAGE_URL) {
@@ -57,7 +62,6 @@ if (sharedHtml.includes('id="story"')) {
     assert(localized.includes(`<html lang="${locale}"`));
     assert(localized.includes(catalog.postsStoryFinished));
     assert(localized.includes(catalog.postsWatchAgain));
-    assert(localized.includes(catalog.generalOpen));
     if (locale === 'ar') assert(localized.includes('dir="rtl"'));
   }
 }
@@ -70,7 +74,8 @@ if (process.env.CK_LANDING_E2E_ARTICLE_ID) {
   assert(html.includes('<article>'));
   assert(!html.includes('id="story"'));
   assert(!html.includes('/landing/open-app.js'));
-  assert(html.includes('class="app-banner"'));
+  assert(!html.includes('class="app-banner"'));
+  assert(html.includes('<footer class="downloads">'));
 }
 const missing = await fetch(`${origin}/posts/nonexistent`);
 assert.equal(missing.status, 404);
@@ -81,6 +86,16 @@ const head = await fetch(`${origin}/posts/${postId}`, { method: 'HEAD' });
 assert.equal(head.status, 200);
 assert.equal(await head.text(), '');
 assert.equal((await fetch(`${origin}/.well-known/apple-app-site-association`)).status, 200);
+for (const file of ['town-hall-19.webp', 'stars-snacks.webp']) {
+  const response = await fetch(`${origin}/landing/story-covers/${file}`);
+  assert.equal(response.status, 200);
+  assert.match(response.headers.get('content-type'), /^image\/webp/);
+  const actual = Buffer.from(await response.arrayBuffer());
+  const expected = await readFile(
+    new URL(`../../public/landing/story-covers/${file}`, import.meta.url),
+  );
+  assert(actual.equals(expected));
+}
 console.log(
   'PASS: local Pages root, stores, web post, canonical/image metadata, sandboxed story, unavailable/invalid post, method, HEAD, association file',
 );
