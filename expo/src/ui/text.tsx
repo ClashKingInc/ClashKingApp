@@ -1,4 +1,5 @@
-import { Animated, Platform, StyleSheet, type TextProps } from 'react-native';
+import { Children, Fragment, cloneElement, isValidElement, type ReactNode } from 'react';
+import { Animated, Platform, StyleSheet, Text, type TextProps } from 'react-native';
 
 import { ckTypography, type CKTextRole } from './tokens';
 import { useCKTheme } from './theme';
@@ -31,7 +32,14 @@ export type CKTextProps = Omit<TextProps, 'role'> & {
   skeleton?: boolean;
 };
 
-export function CKText({ role = 'body', muted = false, skeleton, style, ...props }: CKTextProps) {
+export function CKText({
+  role = 'body',
+  muted = false,
+  skeleton,
+  style,
+  children,
+  ...props
+}: CKTextProps) {
   const theme = useCKTheme();
   const tablet = useTabletTypography();
   const explicitSize = StyleSheet.flatten(style)?.fontSize !== undefined;
@@ -59,10 +67,40 @@ export function CKText({ role = 'body', muted = false, skeleton, style, ...props
           backgroundColor: theme.surfaceContainerHighest,
           borderRadius: 4,
           textShadowColor: 'transparent',
+          textDecorationLine: 'none',
           opacity: appearance.opacity,
         },
       ]}
       {...props}
-    />
+    >
+      {loading ? concealNestedText(children, theme.surfaceContainerHighest) : children}
+    </Animated.Text>
   );
+}
+
+// Nested Text styles override their parent on Android. Mask each nested span,
+// including raw Text, without removing glyphs: their metrics preserve wrapping
+// and card height. Explicit skeleton={false} labels bypass this path entirely.
+function concealNestedText(children: ReactNode, fill: string): ReactNode {
+  return Children.map(children, (child) => {
+    if (!isValidElement<TextProps & { skeleton?: boolean }>(child)) return child;
+    if (child.props.skeleton === false) return child;
+    const children = concealNestedText(child.props.children, fill);
+    if (child.type === Fragment) return cloneElement(child, { children });
+    // Never impose text styles on arbitrary components (icons, layout or
+    // custom renderers). Their own CKText descendants read the same context.
+    if (child.type !== Text && child.type !== Animated.Text && child.type !== CKText) return child;
+    return cloneElement(child, {
+      style: [
+        child.props.style,
+        {
+          color: Platform.OS === 'android' ? fill : 'transparent',
+          textShadowColor: 'transparent',
+          textDecorationLine: 'none',
+          backgroundColor: 'transparent',
+        },
+      ],
+      children,
+    });
+  });
 }

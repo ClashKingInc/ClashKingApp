@@ -44,6 +44,7 @@ export async function prepareAppLanding() {
         output.replace("'../../navigation/route-manifest'", "'./route-manifest.js'"),
     );
   }
+  return stores;
 }
 
 if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url))

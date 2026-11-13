@@ -3,8 +3,8 @@
   "main": "expo-router/entry",
   "version": "1.0.0",
   "dependencies": {
-    "@clashking/api-client": "file:vendor/clashking-api-client-0.1.0-rc.81.tgz",
-    "@clashking/api-contracts": "file:vendor/clashking-api-contracts-0.1.0-rc.81.tgz",
+    "@clashking/api-client": "file:vendor/clashking-api-client-0.1.0-rc.90.tgz",
+    "@clashking/api-contracts": "file:vendor/clashking-api-contracts-0.1.0-rc.90.tgz",
     "@clashking/clash-contract": "https://github.com/ClashKingInc/ClashTestingAPI/releases/download/v1.1.3/clashking-clash-contract-1.1.3.tgz",
     "@clashking/native": "file:./modules/clashking-native",
     "@expo/ui": "~58.0.27",

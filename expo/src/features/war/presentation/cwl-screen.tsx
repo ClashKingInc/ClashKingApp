@@ -181,6 +181,7 @@ export function CwlScreen({
               refreshing={refreshing}
               onRefresh={onRefresh}
               tintColor={theme.onSurface}
+              progressViewOffset={insets.top}
             />
           ) : undefined
         }
@@ -231,7 +232,9 @@ export function CwlScreen({
         <View
           style={[
             styles.tabs,
-            { backgroundColor: theme.background },
+            // The sticky child pins at scroll-view y=0, independently of the hero.
+            // Reserve the status-bar inset here too so tabs remain touchable.
+            { backgroundColor: theme.background, paddingTop: insets.top },
             layout.isExpanded && { maxWidth: layout.contentMaxWidth },
           ]}
         >

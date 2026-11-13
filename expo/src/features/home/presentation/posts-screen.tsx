@@ -7,6 +7,7 @@ import {
   ChevronRight,
   CloudOff,
   FileText,
+  Play,
   RefreshCw,
 } from 'lucide-react-native';
 import { useCallback, useEffect, useRef, useState } from 'react';
@@ -29,6 +30,7 @@ import {
   PressableSurface,
   ResponsiveGrid,
   SkeletonContent,
+  Skeleton,
   centeredContentPadding,
   ckBreakpoints,
   ckRadius,
@@ -51,6 +53,11 @@ export function PostsScreen({ service, onBack, initialPostId }: PostsScreenProps
   const { width: windowWidth } = useWindowDimensions();
   const layout = useAdaptiveLayout();
   const [contentWidth, setContentWidth] = useState(windowWidth);
+  const [stories, setStories] = useState<readonly AppAnnouncement[]>([]);
+  const [storiesLoading, setStoriesLoading] = useState(false);
+  const [openingStory, setOpeningStory] = useState<string>();
+  const openingStoryRef = useRef(false);
+  const [storyError, setStoryError] = useState(false);
   const [posts, setPosts] = useState<readonly AppAnnouncement[]>([]);
   const [loading, setLoading] = useState(false);
   const [hasMore, setHasMore] = useState(true);
@@ -80,25 +87,28 @@ export function PostsScreen({ service, onBack, initialPostId }: PostsScreenProps
       const offset = reset ? 0 : nextOffset;
       if (reset) {
         setPosts([]);
+        setStories([]);
+        setStoriesLoading(true);
+        setStoryError(false);
+        // Stories have their own server-filtered cursor. Article density must
+        // not determine which of the five latest updates can be replayed.
+        void service
+          .getPublishedPosts(5, 0, 'story')
+          .then((page) => {
+            if (requestGeneration === generation.current)
+              setStories(page.items.filter((item) => item.isStory));
+          })
+          .catch(() => {
+            if (requestGeneration === generation.current) setStoryError(true);
+          })
+          .finally(() => {
+            if (requestGeneration === generation.current) setStoriesLoading(false);
+          });
         setNextOffset(0);
         setHasMore(true);
       }
       try {
-        let cursor = offset;
-        let page = await service.getPublishedPosts(20, cursor);
-        // The public feed contains stories too. Advance past story-only pages so an
-        // archive visitor sees articles without having to repeatedly tap Load more.
-        for (
-          let skipped = 0;
-          skipped < 10 &&
-          page.items.every((item) => item.isStory) &&
-          page.hasMore &&
-          page.nextOffset > cursor;
-          skipped += 1
-        ) {
-          cursor = page.nextOffset;
-          page = await service.getPublishedPosts(20, cursor);
-        }
+        const page = await service.getPublishedPosts(20, offset, 'article');
         if (requestGeneration !== generation.current) return;
         const articles = page.items.filter((item) => !item.isStory);
         setPosts((current) => (reset ? articles : [...current, ...articles]));
@@ -124,11 +134,33 @@ export function PostsScreen({ service, onBack, initialPostId }: PostsScreenProps
     let active = true;
     void service.getAnnouncement(initialPostId).then((post) => {
       if (active && post) void openAnnouncement(post, () => active);
+      else if (active) setStoryError(true);
     });
     return () => {
       active = false;
     };
   }, [initialPostId, openAnnouncement, service]);
+
+  const replayStory = async (id: string) => {
+    if (openingStoryRef.current) return;
+    openingStoryRef.current = true;
+    setOpeningStory(id);
+    setStoryError(false);
+    try {
+      // Revalidate public availability before replaying cached HTML.
+      const current = await service.getAnnouncement(id);
+      if (!current || !(await openAnnouncement(current))) {
+        setStoryError(true);
+        // The service also returns null for transport failures. Keep the cached row
+        // so a temporary outage does not erase a story the user can retry.
+      }
+    } catch {
+      setStoryError(true);
+    } finally {
+      openingStoryRef.current = false;
+      setOpeningStory(undefined);
+    }
+  };
 
   const contents =
     posts.length === 0 && loading ? (
@@ -238,6 +270,66 @@ export function PostsScreen({ service, onBack, initialPostId }: PostsScreenProps
           <RefreshControl refreshing={loading && posts.length > 0} onRefresh={() => load(true)} />
         }
       >
+        {storiesLoading && stories.length === 0 ? (
+          <View
+            style={styles.storyRow}
+            accessibilityLabel={t('generalLoading')}
+            accessibilityRole="progressbar"
+          >
+            {[0, 1, 2].map((key) => (
+              <Skeleton key={key} height={62} width={62} radius={31} />
+            ))}
+          </View>
+        ) : null}
+        {stories.length > 0 ? (
+          <ScrollView
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            contentContainerStyle={[styles.storyRow, isRtl && styles.rowRtl]}
+          >
+            {stories.map((story) => (
+              <Pressable
+                key={story.id}
+                accessibilityRole="button"
+                accessibilityLabel={story.title}
+                accessibilityState={{ disabled: !!openingStory, busy: openingStory === story.id }}
+                disabled={!!openingStory}
+                onPress={() => void replayStory(story.id)}
+                style={({ pressed }) => [styles.storyCircle, pressed && styles.pressed]}
+              >
+                <View
+                  style={[
+                    styles.storyImage,
+                    { borderColor: theme.primary, backgroundColor: theme.surfaceContainerHighest },
+                  ]}
+                >
+                  {story.bannerImageUrl ? (
+                    <MobileWebImage
+                      imageUrl={story.bannerImageUrl}
+                      contentFit="cover"
+                      style={styles.storyArtwork}
+                    />
+                  ) : (
+                    <Play size={24} color={theme.onSurface} />
+                  )}
+                </View>
+                <CKText role="labelSmall" numberOfLines={2} style={styles.storyTitle}>
+                  {story.title}
+                </CKText>
+              </Pressable>
+            ))}
+          </ScrollView>
+        ) : null}
+        {storyError ? (
+          <CKText
+            accessibilityRole="alert"
+            muted
+            role="bodySmall"
+            style={{ marginBottom: ckSpacing.md }}
+          >
+            {t('postsLoadFailed')}
+          </CKText>
+        ) : null}
         <View style={styles.archive}>{contents}</View>
       </ScrollView>
       {presentation}
@@ -256,7 +348,6 @@ function PostArchiveCard({
 }) {
   const { t, isRtl } = useI18n();
   const theme = useCKTheme();
-  const layout = useAdaptiveLayout();
   const hasImage = Boolean(post.bannerImageUrl);
   const dateLabel = post.publishedAt
     ? new Intl.DateTimeFormat(intlLocale, { dateStyle: 'medium' }).format(post.publishedAt)
@@ -269,41 +360,37 @@ function PostArchiveCard({
       accessibilityRole="button"
       onPress={onOpen}
       radius={ckRadius.chip}
-      style={styles.card}
+      style={[styles.card, isRtl && styles.rowRtl]}
     >
       {hasImage ? (
         <MobileWebImage
           contentFit="cover"
           imageUrl={post.bannerImageUrl!}
-          style={[
-            styles.cardImage,
-            layout.isExpanded && { height: 228 },
-            { backgroundColor: theme.surfaceContainerHighest },
-          ]}
+          style={[styles.cardImage, { backgroundColor: theme.surfaceContainerHighest }]}
           testID="post-archive-image"
           transition={160}
         />
       ) : null}
-      <View style={[styles.cardCopy, { paddingTop: hasImage ? 14 : 16 }]}>
+      <View style={styles.cardCopy}>
         <View testID="post-card-title-row" style={[styles.cardTitleRow, isRtl && styles.rowRtl]}>
           <CKText
             numberOfLines={2}
-            role="titleLarge"
+            role="rowTitle"
             style={[styles.cardTitle, isRtl && styles.rtlText]}
           >
             {post.title}
           </CKText>
           {isRtl ? (
-            <ChevronLeft color={theme.onSurfaceVariant} size={30} />
+            <ChevronLeft color={theme.onSurfaceVariant} size={20} />
           ) : (
-            <ChevronRight color={theme.onSurfaceVariant} size={30} />
+            <ChevronRight color={theme.onSurfaceVariant} size={20} />
           )}
         </View>
         {dateLabel ? <PostDateLabel label={dateLabel} /> : null}
         {post.subtitle ? (
           <CKText
             muted
-            numberOfLines={hasImage ? 2 : 3}
+            numberOfLines={2}
             role="bodyMedium"
             style={[styles.cardSubtitle, isRtl && styles.rtlText]}
           >
@@ -383,6 +470,19 @@ function PostSkeletonCard({ showImage }: { showImage: boolean }) {
 }
 
 const styles = StyleSheet.create({
+  storyRow: { flexDirection: 'row', gap: 12, paddingBottom: 20 },
+  storyCircle: { width: 68, alignItems: 'center', gap: 6 },
+  storyImage: {
+    width: 62,
+    height: 62,
+    borderRadius: 31,
+    borderWidth: 2,
+    padding: 3,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  storyArtwork: { width: 52, height: 52, borderRadius: 26 },
+  storyTitle: { textAlign: 'center' },
   safe: { flex: 1 },
   header: {
     minHeight: 52,
@@ -395,11 +495,11 @@ const styles = StyleSheet.create({
   content: { paddingTop: ckSpacing.lg },
   archive: { gap: ckSpacing.lg },
   list: { gap: 14 },
-  card: { width: '100%' },
-  cardImage: { width: '100%', height: 188 },
-  cardCopy: { paddingHorizontal: 14, paddingBottom: 16, gap: 10 },
+  card: { width: '100%', flexDirection: 'row', alignItems: 'flex-start', gap: 12, padding: 14 },
+  cardImage: { width: 68, height: 68, borderRadius: 12 },
+  cardCopy: { flex: 1, minWidth: 0, gap: 7 },
   cardTitleRow: { flexDirection: 'row', alignItems: 'flex-start', gap: 12 },
-  cardTitle: { flex: 1, fontWeight: '700', lineHeight: 27 },
+  cardTitle: { flex: 1, fontWeight: '700', lineHeight: 23 },
   cardSubtitle: { lineHeight: 19 },
   labels: { flexDirection: 'row', flexWrap: 'wrap', gap: 8, marginTop: 4 },
   rowRtl: { flexDirection: 'row-reverse' },
