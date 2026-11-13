@@ -21,9 +21,38 @@ assert.equal(response.headers.get('cache-control'), 'no-store');
 const post = await response.text();
 assert.equal((post.match(/property="og:title"/g) ?? []).length, 1);
 assert.equal((post.match(/property="og:description"/g) ?? []).length, 1);
-assert(post.includes(`https://app.clashk.ing/posts/${postId}`));
+assert(post.includes(`https://app.clashk.ing/share/posts/${postId}`));
 assert(post.includes(`href="clashking:///posts/${postId}"`));
 assert(!post.includes('must-not-leak'));
+const shared = await fetch(`${origin}/share/posts/${encodeURIComponent(postId)}`);
+assert.equal(shared.status, 200);
+const sharedHtml = await shared.text();
+assert(sharedHtml.includes('class="app-banner"'));
+assert(!sharedHtml.includes('/landing/open-app.js'));
+assert(sharedHtml.includes('name="twitter:image"'));
+if (process.env.CK_EXPECTED_POST_IMAGE_URL) {
+  assert(
+    sharedHtml.includes(`property="og:image" content="${process.env.CK_EXPECTED_POST_IMAGE_URL}"`),
+  );
+}
+if (sharedHtml.includes('id="story"')) {
+  assert(sharedHtml.includes('sandbox="allow-scripts"'));
+  const story = await fetch(`${origin}/share/posts/${encodeURIComponent(postId)}/story`);
+  assert.equal(story.status, 200);
+  assert.match(story.headers.get('content-security-policy'), /sandbox allow-scripts/);
+  const html = await story.text();
+  assert(html.includes('__clashkingStoryContentFit'));
+  assert(html.includes('parent.postMessage'));
+}
+if (process.env.CK_LANDING_E2E_ARTICLE_ID) {
+  const article = await fetch(`${origin}/share/posts/${encodeURIComponent(process.env.CK_LANDING_E2E_ARTICLE_ID)}`);
+  assert.equal(article.status, 200);
+  const html = await article.text();
+  assert(html.includes('<article>'));
+  assert(!html.includes('id="story"'));
+  assert(!html.includes('/landing/open-app.js'));
+  assert(html.includes('class="app-banner"'));
+}
 const missing = await fetch(`${origin}/posts/nonexistent`);
 assert.equal(missing.status, 404);
 assert((await missing.text()).includes('name="robots" content="noindex"'));
@@ -34,5 +63,5 @@ assert.equal(head.status, 200);
 assert.equal(await head.text(), '');
 assert.equal((await fetch(`${origin}/.well-known/apple-app-site-association`)).status, 200);
 console.log(
-  'PASS: local Pages root, stores, published post, canonical metadata, unavailable/invalid post, method, HEAD, association file',
+  'PASS: local Pages root, stores, web post, canonical/image metadata, sandboxed story, unavailable/invalid post, method, HEAD, association file',
 );

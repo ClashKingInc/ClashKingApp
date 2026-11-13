@@ -31,6 +31,11 @@ export async function prepareAppLanding() {
   for (const [source, target] of [
     ['src/navigation/route-manifest.ts', 'route-manifest.js'],
     ['src/core/deep-links/app-link.ts', 'app-link.js'],
+    ['src/features/home/data/announcement-content.ts', 'announcement-content.js'],
+    [
+      'src/features/home/presentation/announcement-webview-contract.ts',
+      'announcement-webview-contract.js',
+    ],
   ]) {
     const input = await readFile(join(root, source), 'utf8');
     const output = ts.transpileModule(input, {

@@ -40,10 +40,26 @@ for (const [name, id] of [
     )
     .replace(`id="store-${id}-status">Coming soon`, `id="store-${id}-status">Download the app`);
 }
-await cp(join(root, 'public/landing/post-preview-worker.js'), join(output, '_worker.js'));
+// Inline the tiny portable modules: Pages advanced mode ships one Worker,
+// while native stories and web stories retain the same fitting contract.
+const worker = await readFile(join(root, 'public/landing/post-preview-worker.js'), 'utf8');
+const renderer = (
+  await readFile(join(root, 'public/landing/announcement-content.js'), 'utf8')
+).replaceAll('export ', '');
+const storyContract = (
+  await readFile(join(root, 'public/landing/announcement-webview-contract.js'), 'utf8')
+).replaceAll('export ', '');
+await writeFile(
+  join(output, '_worker.js'),
+  renderer +
+    '\n' +
+    storyContract +
+    '\n' +
+    worker.replace('/* CK_STORE_LINKS */ {}', JSON.stringify(stores)),
+);
 await writeFile(
   join(output, '_routes.json'),
-  JSON.stringify({ version: 1, include: ['/posts/*'], exclude: [] }),
+  JSON.stringify({ version: 1, include: ['/posts/*', '/share/posts/*'], exclude: [] }),
 );
 await writeFile(join(output, 'index.html'), html);
 await writeFile(join(output, '404.html'), html);

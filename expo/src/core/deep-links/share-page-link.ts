@@ -5,7 +5,10 @@ import { appLinkPath, type AppLink } from './app-link';
 const PUBLIC_APP_ORIGIN = 'https://app.clashk.ing';
 
 export function sharePageUrl(link: AppLink): string {
-  return `${PUBLIC_APP_ORIGIN}${appLinkPath(link)}`;
+  // /share is deliberately outside iOS and Android's native link paths.
+  // A shared post opens its web reader; opening the app is an explicit action.
+  const webReader = link.kind === 'page' && link.page === 'posts' && link.params?.postId;
+  return `${PUBLIC_APP_ORIGIN}${webReader ? '/share' : ''}${appLinkPath(link)}`;
 }
 
 export async function sharePageLink(link: AppLink, title: string): Promise<void> {

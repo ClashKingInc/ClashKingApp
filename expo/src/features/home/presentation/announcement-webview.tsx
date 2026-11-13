@@ -78,6 +78,9 @@ export function AnnouncementWebView({
         allowUniversalAccessFromFileURLs={false}
         allowingReadAccessToURL={isTrustedLocalStory ? (fileUri ?? undefined) : undefined}
         scalesPageToFit={isTrustedLocalStory ? false : undefined}
+        // A story is artwork laid out on a fixed canvas, not a reflowing article.
+        // Android's system text scale must not enlarge its text independently.
+        textZoom={isTrustedLocalStory ? 100 : undefined}
         setBuiltInZoomControls={!isTrustedLocalStory}
         setDisplayZoomControls={false}
         bounces={!isTrustedLocalStory}
@@ -115,7 +118,7 @@ export function AnnouncementWebView({
             body={t('generalTryAgain')}
             actionLabel={t('generalRetry')}
             onAction={() => {
-                setFailedSource(null);
+              setFailedSource(null);
               setProgress(0);
               webView.current?.reload();
             }}
