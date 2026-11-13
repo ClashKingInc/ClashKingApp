@@ -235,20 +235,81 @@
   "upgradeTrackerCompletionDetails": "Village completion details",
   "upgradeTrackerCustomSoundtrack": "Custom soundtrack",
   "upgradeTrackerGoldPassPercent": "{percent}% Gold Pass",
+  "@upgradeTrackerGoldPassPercent": {
+    "placeholders": {
+      "percent": {
+        "type": "int"
+      }
+    }
+  },
   "upgradeTrackerGroupSummary": "{group} summary",
+  "@upgradeTrackerGroupSummary": {
+    "placeholders": {
+      "group": {
+        "type": "String"
+      }
+    }
+  },
   "upgradeTrackerGuardians": "Guardians",
   "upgradeTrackerHelpers": "Helpers",
   "upgradeTrackerHouseParts": "House parts",
   "upgradeTrackerIdleBuilders": "{count, plural, one {# idle builder} other {# idle builders}}",
+  "@upgradeTrackerIdleBuilders": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "upgradeTrackerInProgress": "In progress",
   "upgradeTrackerItemSemanticLabel": "{item}, level {currentLevel} of {targetLevel}{count, plural, =1 {} other {, # buildings}}",
+  "@upgradeTrackerItemSemanticLabel": {
+    "placeholders": {
+      "item": {
+        "type": "String"
+      },
+      "currentLevel": {
+        "type": "int"
+      },
+      "targetLevel": {
+        "type": "int"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "upgradeTrackerItemsOwned": "{count} owned",
+  "@upgradeTrackerItemsOwned": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "upgradeTrackerLane": "Lane",
   "upgradeTrackerLevelTransition": "Level {from} → {to}",
+  "@upgradeTrackerLevelTransition": {
+    "placeholders": {
+      "from": {
+        "type": "int"
+      },
+      "to": {
+        "type": "int"
+      }
+    }
+  },
   "upgradeTrackerLootNow": "Loot now",
   "upgradeTrackerLootOutlook": "Loot outlook",
   "upgradeTrackerMusic": "Music",
   "upgradeTrackerNextDays": "Next {count, plural, one {# day} other {# days}}",
+  "@upgradeTrackerNextDays": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "upgradeTrackerNextPeriod": "Next period",
   "upgradeTrackerNoGoldPass": "No Gold Pass",
   "upgradeTrackerNoMatchingUpgrades": "No matching upgrades",
@@ -259,12 +320,46 @@
   "upgradeTrackerPassReward": "Pass reward",
   "upgradeTrackerPauseSoundtrack": "Pause soundtrack",
   "upgradeTrackerPeriodCount": "Period {current} / {total}",
+  "@upgradeTrackerPeriodCount": {
+    "placeholders": {
+      "current": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
   "upgradeTrackerPlaySoundtrack": "Play soundtrack",
   "upgradeTrackerPreviousPeriod": "Previous period",
   "upgradeTrackerResourceAmount": "{resource}, {amount}",
+  "@upgradeTrackerResourceAmount": {
+    "placeholders": {
+      "resource": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
   "upgradeTrackerSceneries": "Sceneries",
   "upgradeTrackerScheduledLane": "Scheduled #{lane}",
+  "@upgradeTrackerScheduledLane": {
+    "placeholders": {
+      "lane": {
+        "type": "int"
+      }
+    }
+  },
   "upgradeTrackerShareProgress": "{village} progress",
+  "@upgradeTrackerShareProgress": {
+    "placeholders": {
+      "village": {
+        "type": "String"
+      }
+    }
+  },
   "upgradeTrackerSize": "Size",
   "upgradeTrackerSortLongest": "Longest first",
   "upgradeTrackerSortName": "Name A–Z",
@@ -280,17 +375,59 @@
   "notifPushEnabled": "Push enabled",
   "notifReceiveNotifications": "Receive notifications",
   "notifTokenPreview": "Token: {token}",
+  "@notifTokenPreview": {
+    "placeholders": {
+      "token": {
+        "type": "String"
+      }
+    }
+  },
   "notifEnabledDeliveryDescription": "Your enabled alerts can be delivered to this device.",
   "notifDisabledAccountDescription": "Notifications are turned off across your ClashKing account.",
   "notifMaximumRemindersAdded": "Maximum reminders added",
   "notifAddReminder": "Add reminder",
   "notifDurationOneHour": "1 hour",
   "notifDurationHours": "{count} hours",
+  "@notifDurationHours": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "notifDurationMinutes": "{count} minutes",
+  "@notifDurationMinutes": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "notifAddTiming": "Add {timing}",
+  "@notifAddTiming": {
+    "placeholders": {
+      "timing": {
+        "type": "String"
+      }
+    }
+  },
   "notifTimingOneHourBefore": "1 hour before",
   "notifTimingHoursBefore": "{count} hours before",
+  "@notifTimingHoursBefore": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "notifTimingMinutesBefore": "{count} minutes before",
+  "@notifTimingMinutesBefore": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "notifPushReady": "Push notifications are ready on this device.",
   "notifPushPermissionRequired": "Allow notifications to receive ClashKing alerts.",
   "notifPushPermissionDenied": "Notification permission was denied.",
@@ -302,6 +439,7 @@
   "notificationPrimerBody": "ClashKing can send event, announcement, Legend defense, and support updates. War and Raid Weekend reminders stay off until you set them up. You can change these choices in Settings > Notifications.",
   "notificationPrimerNotNow": "Not now",
   "notificationPrimerAllow": "Allow",
+  "@@last_modified": "2024-12-23T10:00:00.000Z",
   "achievementsTitle": "Achievements",
   "achievementEarnedLabel": "Earned",
   "achievementGemsEarnedRatio": "{earned} / {total} earned",
@@ -328,6 +466,23 @@
   },
   "achievementSummary": "{earned}/{total} completed",
   "achievementEarnedCount": "Earned ×{count}",
+  "@achievementSummary": {
+    "placeholders": {
+      "earned": {
+        "type": "String"
+      },
+      "total": {
+        "type": "String"
+      }
+    }
+  },
+  "@achievementEarnedCount": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
   "achievementTownhall18Name": "Townhall 18",
   "achievementTownhall18Requirement": "Reach Town Hall 18.",
   "achievementWarWarriorName": "War Warrior",
@@ -336,7 +491,6 @@
   "achievementMrLegendDescription": "Completed a flawless Legend League attack day.",
   "achievementDefenseDoesntMatterName": "Defense Doesn’t Matter",
   "achievementDefenseDoesntMatterDescription": "Survived a perfect Legend League defense day.",
-  "@@last_modified": "2024-12-23T10:00:00.000Z",
   "appTitle": "ClashKing",
   "appDescription": "Your ultimate Clash of Clans companion for tracking stats, managing clans, and analyzing performance.",
   "generalLoading": "Loading...",
@@ -978,7 +1132,7 @@
       }
     }
   },
-  "legendsTitle": "Legend League",
+  "legendsTitle": "Inaccurate data?",
   "legendsNotInLeague": "Not in Legend League",
   "legendsNoDataToday": "You're not in Legend League, but past seasons are available.",
   "legendsStartDescription": "You started the day with {trophies} trophies.",
@@ -1200,8 +1354,32 @@
   "warParticipation": "War Participation",
   "cwlParticipantOnly": "Participant Only",
   "warStatsRangeWarsCompact": "{number} wars",
+  "@warStatsRangeWarsCompact": {
+    "description": "Compact clan war statistics war range label",
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
   "warStatsRangeDaysCompact": "{number} days",
+  "@warStatsRangeDaysCompact": {
+    "description": "Compact clan war statistics day range label",
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
   "warStatsLastXDays": "Last {number} days",
+  "@warStatsLastXDays": {
+    "description": "Clan war statistics date-range label",
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
   "warStatsCurrentMembers": "Current members",
   "warLeague": "War/League",
   "warHistory": "War History",
@@ -1210,6 +1388,13 @@
   "warLogClosed": "{clan}'s war log is closed.",
   "warLogPrivate": "{clan} has a private war log.",
   "@warLogClosed": {
+    "placeholders": {
+      "clan": {
+        "type": "String"
+      }
+    }
+  },
+  "@warLogPrivate": {
     "placeholders": {
       "clan": {
         "type": "String"
@@ -3310,6 +3495,20 @@
   },
   "todoAllCaughtUpForNow": "All caught up for now",
   "timeDurationShort": "{unit, select, daysHours {{primary}d {secondary}h} hoursMinutes {{primary}h {secondary}m} other {{primary}m}}",
+  "@timeDurationShort": {
+    "description": "Compact localized duration used in countdowns",
+    "placeholders": {
+      "unit": {
+        "type": "String"
+      },
+      "primary": {
+        "type": "int"
+      },
+      "secondary": {
+        "type": "int"
+      }
+    }
+  },
   "todoEventEndsIn": "Ends in {duration}",
   "@todoEventEndsIn": {
     "placeholders": {
@@ -3422,6 +3621,11 @@
   "statsPetCombinations": "Pet combinations",
   "statsEquipmentPairs": "Equipment pairs",
   "statsArmyFallback": "Army {id}",
+  "@statsArmyFallback": {
+    "placeholders": {
+      "id": {}
+    }
+  },
   "statsOwningHero": "Owning hero",
   "statsAddItem": "Add item",
   "statsAnalyzeItems": "Analyze items",
@@ -4948,6 +5152,27 @@
     "placeholders": {
       "townHallLevel": {
         "type": "int"
+      }
+    }
+  },
+  "@settingsWarWidgetIosReady": {
+    "placeholders": {
+      "clanName": {
+        "type": "String"
+      }
+    }
+  },
+  "@settingsWarWidgetAndroidReady": {
+    "placeholders": {
+      "clanName": {
+        "type": "String"
+      }
+    }
+  },
+  "@settingsWarWidgetPrepareFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
       }
     }
   },
