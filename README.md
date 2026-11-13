@@ -178,6 +178,15 @@ OAuth application and OTA endpoint explicitly. Both native jobs run
 The native baseline marker is published only after both native jobs succeed.
 The Admin dashboard selects compatible OTA releases; it does not sign them.
 
+The Expo PR check runs full online Doctor checks against the candidate and the
+published native baseline when the candidate has SDK patch recommendations.
+It accepts only the same patch recommendations with matching native fingerprints
+and native package sources. Update the baseline checkout in `pr_checks.yaml`
+and the version, source SHA and public marker fingerprints in
+`compare-ota-expo-health.mjs` when a new native baseline is published. This
+comparison does not replace the release plan's certificate-bound fingerprint
+check against the authenticated native marker.
+
 The app-link landing deploys to the existing `clashkingapp` Cloudflare Pages
 project at `app.clashk.ing`. Configure `CK_ANDROID_STORE_URL`, `CK_IOS_STORE_URL`
 and `CK_ANDROID_APP_LINKS_SHA256` as repository variables. The Android fingerprint

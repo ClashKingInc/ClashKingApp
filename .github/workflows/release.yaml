@@ -130,7 +130,7 @@ jobs:
             }
             echo "Resuming existing release $TAG after an incomplete run."
           else
-            gh release create "$TAG" --repo "$GITHUB_REPOSITORY" --target "$SHA" --title "ClashKing $VERSION" --notes "$NOTES" --draft
+            gh release create "$TAG" --repo "$GITHUB_REPOSITORY" --target "$SHA" --title "$TAG" --notes "$NOTES" --draft
           fi
 
   native-android:
