@@ -1,7 +1,13 @@
+import { Share2, Copy } from 'lucide-react-native';
+import * as Clipboard from 'expo-clipboard';
+import { useI18n } from '../../../i18n';
+import { appLinkPath } from '../../../core/deep-links/app-link';
 import { useAdaptiveLayout } from '../../../ui/adaptive-layout';
 import { modalOrientations } from '../../../ui/modal-orientations';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import {
+  Alert,
+  Share,
   Animated,
   Easing,
   Modal,
@@ -13,7 +19,14 @@ import {
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-import { Skeleton, ckMotion, ckRadius, colorWithAlpha, useCKAccessibility } from '../../../ui';
+import {
+  HeaderIconButton,
+  Skeleton,
+  ckMotion,
+  ckRadius,
+  colorWithAlpha,
+  useCKAccessibility,
+} from '../../../ui';
 import type { AppAnnouncement } from '../data';
 import { AnnouncementWebView } from './announcement-webview';
 import { parseAnnouncementStoryMessage } from './announcement-webview-contract';
@@ -29,6 +42,35 @@ export function AnnouncementStoryModal({
   preparedUri: string;
   onFinish: (result: AnnouncementStoryResult) => void;
 }) {
+  const { t } = useI18n();
+  const sharing = useRef(false);
+  const sharedUrl =
+    'https://app.clashk.ing' +
+    appLinkPath({ kind: 'page', page: 'posts', params: { postId: announcement.id } });
+  const copyLink = async () => {
+    try {
+      await Clipboard.setStringAsync(sharedUrl);
+      Alert.alert(t('generalCopiedToClipboard'));
+    } catch {
+      Alert.alert(t('generalError'));
+    }
+  };
+  const share = async () => {
+    if (sharing.current) return;
+    sharing.current = true;
+    try {
+      // Keep the viewer mounted: sharing must not reset the current story.
+      await Share.share(
+        Platform.OS === 'ios'
+          ? { url: sharedUrl, title: announcement.title }
+          : { message: sharedUrl, title: announcement.title },
+      );
+    } catch {
+      await copyLink();
+    } finally {
+      sharing.current = false;
+    }
+  };
   const { width, height } = useWindowDimensions();
   const layout = useAdaptiveLayout();
   const insets = useSafeAreaInsets();
@@ -63,7 +105,7 @@ export function AnnouncementStoryModal({
     Math.min(
       layout.isExpanded ? 760 : 560,
       (layout.isExpanded ? layout.width : width) - 24,
-      (layout.isExpanded ? layout.height : height) - insets.top - insets.bottom - 24,
+      (layout.isExpanded ? layout.height : height) - insets.top - insets.bottom - 84,
     ),
   );
 
@@ -159,12 +201,27 @@ export function AnnouncementStoryModal({
             </View>
           ) : null}
         </Animated.View>
+        <View style={styles.shareActions}>
+          <HeaderIconButton
+            label={t('gameAssetsShare')}
+            onPress={() => void share()}
+            icon={<Share2 color="#fff" size={22} />}
+            glass={false}
+          />
+          <HeaderIconButton
+            label={t('gameAssetsCopyUrl')}
+            onPress={() => void copyLink()}
+            icon={<Copy color="#fff" size={20} />}
+            glass={false}
+          />
+        </View>
       </View>
     </Modal>
   );
 }
 
 const styles = StyleSheet.create({
+  shareActions: { flexDirection: 'row', gap: 8, marginTop: 8 },
   overlay: {
     flex: 1,
     alignItems: 'center',
