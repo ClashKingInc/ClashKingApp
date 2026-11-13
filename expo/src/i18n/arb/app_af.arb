@@ -1,20 +1,20 @@
 {
-  "capitalCurrentOpponent": "Huidige teenstander",
-  "capitalRaidMedals": "Aanvalmedaljes",
-  "warReplayTitle": "Tellinggeskiedenis",
-  "warReplayPlay": "Speel geskiedenis",
-  "warReplayPause": "Onderbreek geskiedenis",
-  "cwlLeading": "Voor",
-  "cwlTrailing": "Agter",
-  "cwlYourClan": "Jou clan",
-  "cwlPromotionZone": "Promosiesone",
-  "cwlDemotionZone": "Relegasiesone",
-  "cwlNotInLineup": "Nie in die opstelling nie",
-  "esportsEloSubtitle": "Wêreldwye spanranglys en wedstryde van",
-  "esportsTopTeamsMatches": "Wedstryde van die huidige top 50 spanne.",
-  "esportsPartialMatches": "Sommige spanne kon nie opgedateer word nie.",
-  "settingsHideAccounts": "Versteek rekeninge",
-  "settingsHideAccountsDescription": "Wys die opsie om gekoppelde rekeninge te versteek. Bestaande privaatheidskeuses bly onveranderd.",
+  "capitalCurrentOpponent": "Current opponent",
+  "capitalRaidMedals": "Raid medals",
+  "warReplayTitle": "Score history",
+  "warReplayPlay": "Play history",
+  "warReplayPause": "Pause history",
+  "cwlLeading": "Leading",
+  "cwlTrailing": "Trailing",
+  "cwlYourClan": "Your clan",
+  "cwlPromotionZone": "Promotion zone",
+  "cwlDemotionZone": "Demotion zone",
+  "cwlNotInLineup": "Not in lineup",
+  "esportsEloSubtitle": "Global team rankings and matches from",
+  "esportsTopTeamsMatches": "Matches from the current top 50 teams.",
+  "esportsPartialMatches": "Some teams could not be refreshed.",
+  "settingsHideAccounts": "Hide accounts",
+  "settingsHideAccountsDescription": "Show the option to hide linked accounts. Existing privacy choices stay unchanged.",
   "calcRocketBalloonAssumption": "1 hit + death · {damage} damage each",
   "calcKeepEquipped": "Keep one equipped",
   "calcCustomLevels": "Custom levels",
@@ -38,31 +38,31 @@
   "personalBasesEmptyBody": "Bases you post through ClashKing on Discord appear here. You can also save bases from the library.",
   "personalArmiesEmptyTitle": "Keep your armies close",
   "personalArmiesEmptyBody": "Armies you post through ClashKing on Discord appear here. Save your favourites to find them before your next attack.",
-  "homeCardOriginal": "Oorspronklik",
-  "homeCardTint": "Sagte kleur",
-  "homeCardEdge": "Gekleurde rande",
-  "homeCardGlow": "Stadige gloed",
-  "competitiveNoHistory": "Nog geen toernooie nie",
-  "competitiveHistoryHint": "Jou spanne en toernooiuitslae sal hier verskyn.",
-  "esportsMonthlyFinals": "Maandelikse eindronde",
-  "esportsMonthlyQualifier": "Maandelikse kwalifiseerders",
-  "esportsHeroSubtitle": "Die pad na die Wêreldkampioenskap",
-  "esportsViewEvent": "Verken geleentheid",
-  "esportsWinLoss": "{wins} oorwinnings · {losses} nederlae",
-  "esportsViewPlayer": "Bekyk speler",
-  "esportsRecentMatches": "Onlangse wedstryde",
-  "esportsHideAttacks": "Versteek gevegbesonderhede",
-  "esportsViewAttacks": "Bekyk gevegbesonderhede",
-  "esportsPlayer": "E-sportspeler",
+  "homeCardOriginal": "Original",
+  "homeCardTint": "Soft color",
+  "homeCardEdge": "Colored edges",
+  "homeCardGlow": "Slow glow",
+  "competitiveNoHistory": "No tournaments yet",
+  "competitiveHistoryHint": "Your teams and tournament results will appear here.",
+  "esportsMonthlyFinals": "Monthly finals",
+  "esportsMonthlyQualifier": "Monthly qualifiers",
+  "esportsHeroSubtitle": "The road to the World Championship",
+  "esportsViewEvent": "Explore event",
+  "esportsWinLoss": "{wins} wins · {losses} losses",
+  "esportsViewPlayer": "View player",
+  "esportsRecentMatches": "Recent matches",
+  "esportsHideAttacks": "Hide battle details",
+  "esportsViewAttacks": "View battle details",
+  "esportsPlayer": "Esports player",
   "esportsBattles": "Gevegte",
-  "esportsTriples": "Driester-aanvalle",
+  "esportsTriples": "Triples",
   "esportsAverageStars": "Gemiddelde sterre",
   "esportsDestruction": "Vernietiging",
-  "esportsAccounts": "Spelrekeninge",
+  "esportsAccounts": "Game accounts",
   "esportsAttack": "Aanval",
   "esportsDefense": "Verdediging",
-  "competitiveArenaSubtitle": "Jou clan. Jou span. Jou volgende uitdaging.",
-  "competitiveViewTournament": "Bekyk toernooi",
+  "competitiveArenaSubtitle": "Your clan. Your team. Your next challenge.",
+  "competitiveViewTournament": "View tournament",
   "@esportsWinLoss": {
     "placeholders": {
       "wins": {
@@ -87,50 +87,50 @@
   "esportsStage": "Stage",
   "esportsStandings": "Standings",
   "esportsMatches": "Matches",
-  "esportsPoints": "Points",
+  "esportsPoints": "Punte",
   "esportsPlayed": "played",
   "esportsSource": "Data from Competitive Clash Network",
-  "esportsRoster": "Roster",
+  "esportsRoster": "spanlys",
   "esportsSeasonPoints": "Season points",
   "esportsStageStandings": "Stage standings",
-  "competitiveCompetition": "Kompetisie",
-  "competitiveWebsite": "Webwerf",
-  "competitiveVerifiedAccounts": "Geverifieerde rekeninge",
-  "competitiveEsports": "eSport",
-  "competitiveTournaments": "Toernooie",
+  "competitiveCompetition": "Competition",
+  "competitiveWebsite": "Website",
+  "competitiveVerifiedAccounts": "Verified accounts",
+  "competitiveEsports": "eSports",
+  "competitiveTournaments": "Tournaments",
   "competitiveProfile": "Profiel",
   "competitiveTeams": "Spanne",
-  "competitiveFreeEntry": "Gratis deelname",
-  "competitiveRegister": "Registreer span",
-  "competitiveCheckIn": "Meld aan",
-  "competitiveRules": "Reëls",
-  "competitiveUnavailable": "Kompetisiedata is nie beskikbaar nie. Probeer weer.",
-  "competitiveRegistrationSaved": "Registrasie ingedien",
-  "competitiveTeamHistory": "Spangeskiedenis",
-  "competitiveDebutName": "Toernooidebuut",
-  "competitiveDebutDescription": "Neem met jou geverifieerde rekening aan 'n toernooi deel.",
-  "competitiveViewProfile": "Bekyk profiel",
+  "competitiveFreeEntry": "Free entry",
+  "competitiveRegister": "Register team",
+  "competitiveCheckIn": "Check in",
+  "competitiveRules": "Rules",
+  "competitiveUnavailable": "Competition data is unavailable. Try again.",
+  "competitiveRegistrationSaved": "Registration submitted",
+  "competitiveTeamHistory": "Team history",
+  "competitiveDebutName": "Tournament debut",
+  "competitiveDebutDescription": "Participate in a tournament with your verified account.",
+  "competitiveViewProfile": "View profile",
   "calcPinEquipment": "Keep one equipped",
-  "calcSearch": "Search",
+  "calcSearch": "Soek",
   "calcEquipmentTitle": "Equipment Compare",
   "calcDamageIntro": "Find the combinations that take a defense down.",
   "calcFarmIntro": "Plan the loot needed for your next upgrades.",
   "calcEquipmentIntro": "Compare hero loadouts, levels, and ability stats.",
   "calcComingSoon": "Coming soon",
-  "calcHero": "Hero",
+  "calcHero": "Held",
   "calcHeroLevel": "Hero level",
   "calcMaxLevels": "Max levels",
   "calcEquipmentPool": "Equipment to compare",
   "calcPoolHelp": "Choose pieces and default levels. Compare every pair, then customize individual rows.",
   "calcSelectAll": "Select all",
-  "calcClear": "Clear",
+  "calcClear": "Duidelik",
   "calcAttributes": "Attributes",
   "calcAddAttribute": "Add attribute",
-  "calcTable": "Compare",
+  "calcTable": "Vergelyk",
   "calcProgression": "Level progression",
   "calcCompareHelp": "DPS adds the hero's base and equipment DPS. Speed bonuses and temporary effects are separate attributes; healing is not extra max HP.",
   "calcChartHelp": "Equipment levels increase together; each piece stops at its own maximum. Hero levels stay fixed. First six loadouts shown.",
-  "calcSort": "Sort by",
+  "calcSort": "Sorteer volgens",
   "calcNoEquipment": "No equipment",
   "calcDuplicate": "Duplicate loadout",
   "calcRemove": "Remove loadout",
@@ -154,9 +154,9 @@
   "calcComparisonDownloaded": "Comparison image downloaded",
   "calcComparisonExportFailed": "Could not copy the comparison image. Please try again.",
   "calcEffectiveLevel": "Effective level {level}",
-  "calcTarget": "Target",
+  "calcTarget": "Doel",
   "calcSupercharge": "Supercharge",
-  "calcNone": "None",
+  "calcNone": "geen",
   "calcResults": "{count} combinations",
   "calcResultsHelp": "Smallest spell cost first, then fewer equipment activations. Extra sources that do not help are removed.",
   "calcNoCombinationHelp": "Try another source, a higher level, or more spell capacity.",
@@ -164,63 +164,63 @@
   "calcAlternative": "Alternative",
   "calcCombinationCost": "{housing} spell space · {equipment} equipment",
   "calcUseStack": "Use stack",
-  "homeRankingsAndStats": "Ranglyste en statistiek",
-  "homeActivityRecorded": "Slegs aangetekende aktiwiteit; geskiedenis kan onvolledig wees.",
-  "homeWidgetsServers": "Bedieners",
-  "homeWidgetsEdit": "Wysig Tuis",
-  "homeWidgetsAdd": "Voeg legstuk by",
-  "homeWidgetsRemove": "Verwyder legstuk",
-  "homeWidgetsMoveUp": "Skuif op",
-  "homeWidgetsMoveDown": "Skuif af",
+  "homeRankingsAndStats": "Rankings & Stats",
+  "homeActivityRecorded": "Recorded activity only; history may be incomplete.",
+  "homeWidgetsServers": "Servers",
+  "homeWidgetsEdit": "Edit Home",
+  "homeWidgetsAdd": "Add widget",
+  "homeWidgetsRemove": "Remove widget",
+  "homeWidgetsMoveUp": "Move up",
+  "homeWidgetsMoveDown": "Move down",
   "homeWidgetsSmall": "Klein",
-  "homeWidgetsWide": "Wyd",
-  "homeWidgetsSaveError": "Kon Tuis nie sinchroniseer nie. Verfris voor jy weer wysig.",
-  "homeWidgetsUnavailable": "Geen aangetekende data beskikbaar nie",
-  "homeWidgetsBookmarkFirst": "Boekmerk eers ’n speler of stam.",
-  "rankingsWarTripleStreak": "Oorlog-driesterreeks",
+  "homeWidgetsWide": "Wide",
+  "homeWidgetsSaveError": "Could not sync Home. Please refresh before editing again.",
+  "homeWidgetsUnavailable": "No recorded data available",
+  "homeWidgetsBookmarkFirst": "Bookmark a player or clan first.",
+  "rankingsWarTripleStreak": "War Triple Streak",
   "rankingsWarTripleRulesTitle": "How streaks count",
   "rankingsWarTripleRulesBody": "+2 for two triples against your own Town Hall level in a regular war.\n\nA missed attack, non-triple, or different-TH target resets your streak.\n\nCWL and friendly wars don’t count. Streaks are separate for each Town Hall level.",
-  "clanLegendsRanked": "Legendes en gerangskik",
-  "appIconChangeWarning": "As jy die toepassingsikoon verander, sal ClashKing sluit. Gaan voort?",
-  "upgradeTrackerUnverifiedAccount": "Hierdie rekening is gekoppel maar nie geverifieer nie. Verifieer dit in Bestuur rekeninge om jou opgraderingsdata in te voer.",
-  "clanWarNotificationsTitle": "Oorlogkennisgewings",
-  "clanCapitalNotificationsTitle": "Stamhoofstadkennisgewings",
-  "clanWarNotificationsBody": "Ontvang oorlogopdaterings vir hierdie stam.",
-  "clanCapitalNotificationsBody": "Ontvang stamhoofstadopdaterings vir hierdie stam.",
-  "notifSystemNotifications": "Stelselkennisgewings",
-  "notifSystemSettings": "Maak kennisgewinginstellings oop",
-  "notifSystemSettingsDescription": "Bestuur waarskuwings, klanke en kentekens in jou toestelinstellings.",
-  "notifSystemSettingsFailed": "Kon nie kennisgewinginstellings oopmaak nie. Maak Instellings op jou toestel oop.",
-  "notifManagePlayersDescription": "Bestuur rekeningkennisgewings by Spelers → Gekoppel → Opsies.",
-  "notifCustomReminders": "Pasgemaakte herinnerings",
-  "notifTestType": "Kennisgewingtipe",
-  "statsBattlelogsGroup": "Gevegslogboeke",
-  "statsGlobalStatsGroup": "Wêreldwye statistieke",
-  "playerOptionShowOnHomeTitle": "Wys rekening op Tuis",
-  "playerOptionShowOnHomeSubtitle": "Sluit hierdie geverifieerde rekening by Tuis-kaarte in (tot 5).",
-  "playerOptionShowOnHomeVerifyFirst": "Verifieer hierdie rekening om dit op Tuis te wys.",
-  "playerOptionHomeInclusionFirst": "Skakel eers Wys rekening op Tuis aan.",
-  "homeIncludedAccountsLimit": "Tuis kan tot 5 rekeninge wys. Verwyder eers een.",
-  "statsHitratesByTownHall": "Trefkoerse per Stadsaal",
-  "statsChartGranularity": "Grafiekinterval",
-  "statsDaily": "Daagliks",
+  "clanLegendsRanked": "Legends & Ranked",
+  "appIconChangeWarning": "Changing the app icon will close ClashKing. Continue?",
+  "upgradeTrackerUnverifiedAccount": "This account is linked but not verified. Verify it in Manage Accounts to import your upgrade data.",
+  "clanWarNotificationsTitle": "War notifications",
+  "clanCapitalNotificationsTitle": "Clan Capital notifications",
+  "clanWarNotificationsBody": "Receive war updates for this clan.",
+  "clanCapitalNotificationsBody": "Receive Clan Capital updates for this clan.",
+  "notifSystemNotifications": "System notifications",
+  "notifSystemSettings": "Open notification settings",
+  "notifSystemSettingsDescription": "Manage alerts, sounds, and badges in your device settings.",
+  "notifSystemSettingsFailed": "Could not open notification settings. Please open Settings on your device.",
+  "notifManagePlayersDescription": "Manage account notifications in Players → Linked → Options.",
+  "notifCustomReminders": "Custom reminders",
+  "notifTestType": "Notification type",
+  "statsBattlelogsGroup": "Battlelogs",
+  "statsGlobalStatsGroup": "Global Stats",
+  "playerOptionShowOnHomeTitle": "Show account on Home",
+  "playerOptionShowOnHomeSubtitle": "Include this verified account in Home cards (up to 5).",
+  "playerOptionShowOnHomeVerifyFirst": "Verify this account to show it on Home.",
+  "playerOptionHomeInclusionFirst": "Turn on Show account on Home first.",
+  "homeIncludedAccountsLimit": "Home can show up to 5 accounts. Remove one first.",
+  "statsHitratesByTownHall": "Hitrates by Town Hall",
+  "statsChartGranularity": "Chart interval",
+  "statsDaily": "daagliks",
   "statsWeekly": "Weekliks",
-  "playerBattlelogCumulative": "Kumulatief",
-  "statsMonthly": "Maandeliks",
-  "statsCompareCohorts": "Vergelyk groepe",
-  "statsAcrossCohorts": "Gebruik oor groepe",
-  "legendsTrophyGrid": "Seisoenoorsig",
-  "legendsPopularArmyItems": "Gewildste weermagitems",
-  "legendsPopularTroop": "Gunsteling",
-  "legendsHitrate": "Trefkoers",
-  "legendsAvgOffense": "Gem. aanval",
-  "legendsAvgDefense": "Gem. verdediging",
-  "settingsClearImageCache": "Maak beeldkas skoon",
-  "settingsImageCacheCleared": "Beeldkas is skoongemaak.",
-  "settingsImageCacheClearFailed": "Kon nie die beeldkas skoonmaak nie. Probeer asseblief weer.",
-  "startupCheckingUpdate": "Soek tans opdaterings…",
-  "startupDownloadingUpdate": "Laai opdatering af…",
-  "startupUpdateInBackground": "Werk op in die agtergrond",
+  "playerBattlelogCumulative": "Cumulative",
+  "statsMonthly": "Monthly",
+  "statsCompareCohorts": "Compare cohorts",
+  "statsAcrossCohorts": "Usage across cohorts",
+  "legendsTrophyGrid": "Season overview",
+  "legendsPopularArmyItems": "Most popular army items",
+  "legendsPopularTroop": "Favorite",
+  "legendsHitrate": "Hitrate",
+  "legendsAvgOffense": "Avg. Offense",
+  "legendsAvgDefense": "Avg. Defense",
+  "settingsClearImageCache": "Clear image cache",
+  "settingsImageCacheCleared": "Image cache cleared.",
+  "settingsImageCacheClearFailed": "Could not clear the image cache. Please try again.",
+  "startupCheckingUpdate": "Checking for updates…",
+  "startupDownloadingUpdate": "Downloading update…",
+  "startupUpdateInBackground": "Update in background",
   "warStatsRangeTitle": "Oorlogstatistiekreeks",
   "warStatsRangeDescription": "Kies of die statistieke 'n vaste aantal onlangse oorloë of 'n onlangse tydperk in dae dek.",
   "warStatsRangeDays": "Dae",
@@ -235,20 +235,81 @@
   "upgradeTrackerCompletionDetails": "Besonderhede van dorpvordering",
   "upgradeTrackerCustomSoundtrack": "Pasgemaakte klankbaan",
   "upgradeTrackerGoldPassPercent": "{percent}% Goue Pas",
+  "@upgradeTrackerGoldPassPercent": {
+    "placeholders": {
+      "percent": {
+        "type": "int"
+      }
+    }
+  },
   "upgradeTrackerGroupSummary": "Opsomming van {group}",
+  "@upgradeTrackerGroupSummary": {
+    "placeholders": {
+      "group": {
+        "type": "String"
+      }
+    }
+  },
   "upgradeTrackerGuardians": "Bewakers",
   "upgradeTrackerHelpers": "Helpers",
   "upgradeTrackerHouseParts": "Huisdele",
-  "upgradeTrackerIdleBuilders": "{count} ledige bouers",
+  "upgradeTrackerIdleBuilders": "{count, plural, one {# idle builder} other {# idle builders}}",
+  "@upgradeTrackerIdleBuilders": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "upgradeTrackerInProgress": "Besig",
-  "upgradeTrackerItemSemanticLabel": "{item}, vlak {currentLevel} van {targetLevel}, {count} geboue",
+  "upgradeTrackerItemSemanticLabel": "{item}, level {currentLevel} of {targetLevel}{count, plural, =1 {} other {, # buildings}}",
+  "@upgradeTrackerItemSemanticLabel": {
+    "placeholders": {
+      "item": {
+        "type": "String"
+      },
+      "currentLevel": {
+        "type": "int"
+      },
+      "targetLevel": {
+        "type": "int"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "upgradeTrackerItemsOwned": "{count} besit",
+  "@upgradeTrackerItemsOwned": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "upgradeTrackerLane": "Tou",
   "upgradeTrackerLevelTransition": "Vlak {from} → {to}",
+  "@upgradeTrackerLevelTransition": {
+    "placeholders": {
+      "from": {
+        "type": "int"
+      },
+      "to": {
+        "type": "int"
+      }
+    }
+  },
   "upgradeTrackerLootNow": "Buit nou",
   "upgradeTrackerLootOutlook": "Buitvooruitsig",
   "upgradeTrackerMusic": "Musiek",
-  "upgradeTrackerNextDays": "Volgende {count} dae",
+  "upgradeTrackerNextDays": "Next {count, plural, one {# day} other {# days}}",
+  "@upgradeTrackerNextDays": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "upgradeTrackerNextPeriod": "Volgende tydperk",
   "upgradeTrackerNoGoldPass": "Geen Goue Pas",
   "upgradeTrackerNoMatchingUpgrades": "Geen ooreenstemmende opgraderings nie",
@@ -259,12 +320,46 @@
   "upgradeTrackerPassReward": "Pasbeloning",
   "upgradeTrackerPauseSoundtrack": "Onderbreek klankbaan",
   "upgradeTrackerPeriodCount": "Tydperk {current} / {total}",
+  "@upgradeTrackerPeriodCount": {
+    "placeholders": {
+      "current": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
   "upgradeTrackerPlaySoundtrack": "Speel klankbaan",
   "upgradeTrackerPreviousPeriod": "Vorige tydperk",
   "upgradeTrackerResourceAmount": "{resource}, {amount}",
+  "@upgradeTrackerResourceAmount": {
+    "placeholders": {
+      "resource": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
   "upgradeTrackerSceneries": "Landskappe",
   "upgradeTrackerScheduledLane": "Geskeduleer nr. {lane}",
+  "@upgradeTrackerScheduledLane": {
+    "placeholders": {
+      "lane": {
+        "type": "int"
+      }
+    }
+  },
   "upgradeTrackerShareProgress": "Vordering van {village}",
+  "@upgradeTrackerShareProgress": {
+    "placeholders": {
+      "village": {
+        "type": "String"
+      }
+    }
+  },
   "upgradeTrackerSize": "Grootte",
   "upgradeTrackerSortLongest": "Langste eerste",
   "upgradeTrackerSortName": "Naam A–Z",
@@ -280,17 +375,59 @@
   "notifPushEnabled": "Stootkennisgewings geaktiveer",
   "notifReceiveNotifications": "Ontvang kennisgewings",
   "notifTokenPreview": "Teken: {token}",
+  "@notifTokenPreview": {
+    "placeholders": {
+      "token": {
+        "type": "String"
+      }
+    }
+  },
   "notifEnabledDeliveryDescription": "Jou geaktiveerde waarskuwings kan na hierdie toestel gestuur word.",
   "notifDisabledAccountDescription": "Kennisgewings is vir jou hele ClashKing-rekening afgeskakel.",
   "notifMaximumRemindersAdded": "Maksimum aantal herinnerings bygevoeg",
   "notifAddReminder": "Voeg herinnering by",
   "notifDurationOneHour": "1 uur",
   "notifDurationHours": "{count} uur",
+  "@notifDurationHours": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "notifDurationMinutes": "{count} minute",
+  "@notifDurationMinutes": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "notifAddTiming": "Voeg {timing} by",
+  "@notifAddTiming": {
+    "placeholders": {
+      "timing": {
+        "type": "String"
+      }
+    }
+  },
   "notifTimingOneHourBefore": "1 uur voor",
   "notifTimingHoursBefore": "{count} uur voor",
+  "@notifTimingHoursBefore": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "notifTimingMinutesBefore": "{count} minute voor",
+  "@notifTimingMinutesBefore": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "notifPushReady": "Stootkennisgewings is gereed op hierdie toestel.",
   "notifPushPermissionRequired": "Laat kennisgewings toe om ClashKing-waarskuwings te ontvang.",
   "notifPushPermissionDenied": "Toestemming vir kennisgewings is geweier.",
@@ -299,12 +436,13 @@
   "notifPushUnsupported": "Stootkennisgewings word nie op hierdie platform ondersteun nie.",
   "notifPushInitializing": "Stootkennisgewings word opgestel…",
   "notificationPrimerTitle": "Aktiveer kennisgewings?",
-  "notificationPrimerBody": "ClashKing kan opdaterings oor gebeure, aankondigings, Legende-verdedigings en ondersteuning stuur. Oorlog- en Strooptognaweek-herinnerings bly af totdat jy dit opstel. Jy kan hierdie keuses onder Instellings > Kennisgewings verander.",
+  "notificationPrimerBody": "ClashKing kan jou in kennis stel van oorlog-, CWL-, rekening- en projekopdaterings. Jy kan dit enige tyd verander onder Instellings > Kennisgewings.",
   "notificationPrimerNotNow": "Nie nou nie",
   "notificationPrimerAllow": "Laat toe",
+  "@@last_modified": "2024-12-23T10:00:00.000Z",
   "achievementsTitle": "Prestasies",
   "achievementEarnedLabel": "Verdien",
-  "achievementGemsEarnedRatio": "{earned} / {total} verdien",
+  "achievementGemsEarnedRatio": "{earned} / {total} earned",
   "@achievementGemsEarnedRatio": {
     "placeholders": {
       "earned": {
@@ -315,7 +453,7 @@
       }
     }
   },
-  "achievementGemsAccessibility": "Het {earned} van {total} prestasie-edelstene verdien.",
+  "achievementGemsAccessibility": "Earned {earned} of {total} achievement gems.",
   "@achievementGemsAccessibility": {
     "placeholders": {
       "earned": {
@@ -328,6 +466,23 @@
   },
   "achievementSummary": "{earned}/{total} voltooi",
   "achievementEarnedCount": "Verdien ×{count}",
+  "@achievementSummary": {
+    "placeholders": {
+      "earned": {
+        "type": "String"
+      },
+      "total": {
+        "type": "String"
+      }
+    }
+  },
+  "@achievementEarnedCount": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
   "achievementTownhall18Name": "Stadsaal 18",
   "achievementTownhall18Requirement": "Bereik Stadsaal 18.",
   "achievementWarWarriorName": "Oorlogstryder",
@@ -336,7 +491,6 @@
   "achievementMrLegendDescription": "Het 'n foutlose Legendeliga-aanvalsdag voltooi.",
   "achievementDefenseDoesntMatterName": "Verdediging Maak Nie Saak Nie",
   "achievementDefenseDoesntMatterDescription": "Het 'n perfekte Legendeliga-verdedigingsdag deurstaan.",
-  "@@last_modified": "2024-12-23T10:00:00.000Z",
   "appTitle": "ClashKing",
   "appDescription": "Jou uiteindelike Clash of Clans metgesel vir die navolg van statistieke, bestuur van klans, en analisering van prestasie.",
   "generalLoading": "Laai...",
@@ -359,8 +513,8 @@
   "postsLoadMore": "Laai meer",
   "postsCurrent": "Huidig",
   "postsPast": "Vorige",
-  "postsStoryFinished": "Storie klaar",
-  "postsWatchAgain": "Kyk weer",
+  "postsStoryFinished": "Story finished",
+  "postsWatchAgain": "Watch again",
   "postsStory": "Interaktiewe verhaal",
   "postsPinned": "Uitgelig",
   "generalTryAgain": "Probeer weer",
@@ -449,7 +603,7 @@
     "description": "Filter value is not set"
   },
   "generalWarning": "Waarskuwing",
-  "gameHandoffDontShowAgain": "Moenie dit weer wys nie",
+  "gameHandoffDontShowAgain": "Don't show this again",
   "generalUnknown": "Onbekend",
   "generalNoDataAvailable": "Geen data beskikbaar nie.",
   "generalNoFilteredResults": "Geen resultate pas by jou filters nie",
@@ -678,9 +832,9 @@
   "accountsAdd": "Voeg rekening by",
   "accountsAddInstruction": "Tik die +-knoppie om jou rekening by te voeg",
   "accountsApiToken": "Rekening API Sleutel",
-  "accountsEnterApiToken": "Bevestig dat hierdie rekening joune is met die API-teken in die spel.",
+  "accountsEnterApiToken": "Voer asseblief die rekening se API-teken in om te bevestig dat dit joune is. Jy kan dit in Clash of Clans vind:",
   "accountsApiTokenLocation": "Instellings > Meer instellings > API-teken",
-  "accountsOpenMoreSettings": "Kry API-teken",
+  "accountsOpenMoreSettings": "Maak Meer instellings oop",
   "accountsCouldNotOpenClash": "Kon Clash of Clans nie oopmaak nie. Maak dit asseblief handmatig oop.",
   "accountsFillAllFields": "Vul asseblief alle velde in.",
   "accountsErrorTagNotExists": "Die speler etiket wat ingevoer is bestaan nie.",
@@ -1200,8 +1354,32 @@
   "warParticipation": "Oorlogsdeelname",
   "cwlParticipantOnly": "Slegs deelnemer",
   "warStatsRangeWarsCompact": "{number} oorloë",
+  "@warStatsRangeWarsCompact": {
+    "description": "Compact clan war statistics war range label",
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
   "warStatsRangeDaysCompact": "{number} dae",
+  "@warStatsRangeDaysCompact": {
+    "description": "Compact clan war statistics day range label",
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
   "warStatsLastXDays": "Laaste {number} dae",
+  "@warStatsLastXDays": {
+    "description": "Clan war statistics date-range label",
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
   "warStatsCurrentMembers": "Huidige lede",
   "warLeague": "Oorlog/Liga",
   "warHistory": "Oorlogsgeskiedenis",
@@ -1210,6 +1388,13 @@
   "warLogClosed": "{clan} se oorlogslog is gesluit.",
   "warLogPrivate": "{clan} het 'n private oorlogslog.",
   "@warLogClosed": {
+    "placeholders": {
+      "clan": {
+        "type": "String"
+      }
+    }
+  },
+  "@warLogPrivate": {
     "placeholders": {
       "clan": {
         "type": "String"
@@ -1513,7 +1698,7 @@
   "warStarsTwo": "2 sterre",
   "warStarsThree": "3 sterre",
   "warStarsZero": "0 sterre",
-  "legendHistoryZeroStars": "Nul sterre",
+  "legendHistoryZeroStars": "Zero Stars",
   "warStarsBestPerformance": "Beste prestasie",
   "@warStarsBestPerformance": {
     "description": "Best performance in war"
@@ -1668,7 +1853,7 @@
   "clanLeaderboardHistoryTab": "Ranglysgeskiedenis",
   "clanLegendHistoryTab": "Legende-geskiedenis",
   "clanRecordsTab": "Rekords",
-  "clanRecordsChangesTab": "Rekords en veranderings",
+  "clanRecordsChangesTab": "Records & Changes",
   "clanProfileHistoryTab": "Profielgeskiedenis",
   "clanProfileLevelChanged": "Clanvlak verander",
   "clanProfileDescriptionChanged": "Beskrywing verander",
@@ -1710,8 +1895,8 @@
   "legendsCountryTitle": "Land",
   "legendsLocalRankTitle": "Plaaslike rang",
   "legendsGlobalRankTitle": "Globale rangorde",
-  "legendsYourArmy": "Jou leër",
-  "legendsArmyUsedAgainstYou": "Leër wat teen jou gebruik is",
+  "legendsYourArmy": "Your army",
+  "legendsArmyUsedAgainstYou": "Army used against you",
   "warWinsTitle": "Wen",
   "warLossesTitle": "Verliese",
   "warDrawsTitle": "Tekens",
@@ -1956,7 +2141,7 @@
   "faqWhatCanBotDo": "Wat kan die ClashKing Discord-bot doen?",
   "faqWhatCanBotDoAnswer": "Die ClashKing Discord-bot help jou om jou stam direk vanaf Discord te bestuur met omvattende opsporingsgereedskap, outomatiese kennisgewings en naatlose integrasie met hierdie app. Dit is ontwerp vir stamleiers en lede wat verbind en georganiseerd wil bly:",
   "faqInviteBotToServer": "Nooi bot na bediener",
-  "drawerInviteDiscordBot": "Nooi bot na bediener",
+  "drawerInviteDiscordBot": "Invite Discord Bot",
   "faqBotFeatureTracking": "Speler- en stamopsporing",
   "faqBotFeatureTrackingDesc": "Voeg verskeie stamme en spelers by en monitor hulle met intydse opdaterings",
   "faqBotFeatureWars": "Oorlogsbestuur",
@@ -2113,7 +2298,7 @@
     "description": "Defender town hall filter label"
   },
   "filtersSameTownHallOnly": "Net dieselfde stadsaal",
-  "warStatsSameTownHall": "Dieselfde stadsaal",
+  "warStatsSameTownHall": "Same Townhall",
   "@filtersSameTownHallOnly": {
     "description": "Same town hall filter option"
   },
@@ -2767,7 +2952,7 @@
   "@settingsNotificationsTitle": {
     "description": "Settings tile: notifications title"
   },
-  "settingsNotificationsSubtitle": "Kies watter waarskuwings jy ontvang.",
+  "settingsNotificationsSubtitle": "Kies waarskuwings en stuur plaaslike toetsvoorskoue.",
   "@settingsNotificationsSubtitle": {
     "description": "Settings tile: notifications subtitle"
   },
@@ -3239,7 +3424,7 @@
   "playerBestTrophies": "Beste trofeë",
   "clanLoadFailed": "Kon stam nie laai nie.",
   "gameItemLevels": "Vlakke",
-  "gameItemLevelCount": "{count, plural, one {# vlak} other {# vlakke}}",
+  "gameItemLevelCount": "{count, plural, one {# Level} other {# Levels}}",
   "@gameItemLevelCount": {
     "placeholders": {
       "count": {
@@ -3310,6 +3495,20 @@
   },
   "todoAllCaughtUpForNow": "Alles vir eers op datum",
   "timeDurationShort": "{unit, select, daysHours {{primary}d {secondary}u} hoursMinutes {{primary}u {secondary}m} other {{primary}m}}",
+  "@timeDurationShort": {
+    "description": "Compact localized duration used in countdowns",
+    "placeholders": {
+      "unit": {
+        "type": "String"
+      },
+      "primary": {
+        "type": "int"
+      },
+      "secondary": {
+        "type": "int"
+      }
+    }
+  },
   "todoEventEndsIn": "Eindig oor {duration}",
   "@todoEventEndsIn": {
     "placeholders": {
@@ -3419,9 +3618,14 @@
   "statsHero": "Held",
   "statsPet": "Troeteldier",
   "statsEquipment": "Toerusting",
-  "statsPetCombinations": "Troeteldierkombinasies",
-  "statsEquipmentPairs": "Toerustingpare",
-  "statsArmyFallback": "Leër {id}",
+  "statsPetCombinations": "Pet combinations",
+  "statsEquipmentPairs": "Equipment pairs",
+  "statsArmyFallback": "Army {id}",
+  "@statsArmyFallback": {
+    "placeholders": {
+      "id": {}
+    }
+  },
   "statsOwningHero": "Besit held",
   "statsAddItem": "Voeg item by",
   "statsAnalyzeItems": "Ontleed items",
@@ -3865,9 +4069,9 @@
     }
   },
   "upgradeTrackerShare": "Deel naspoorder",
-  "trackerPosterCopied": "Prent gekopieer",
-  "trackerPosterCopy": "Kopieer prent",
-  "trackerPosterShareAll": "Deel al 3",
+  "trackerPosterCopied": "Image copied",
+  "trackerPosterCopy": "Copy image",
+  "trackerPosterShareAll": "Share all 3",
   "upgradeTrackerPasteJson": "Plak rekening-JSON",
   "upgradeTrackerImportTitle": "Voer rekeningdata in",
   "upgradeTrackerImportDescription": "Plak die rou rekening-JSON. Dit bly op hierdie toestel.",
@@ -4176,8 +4380,8 @@
   "homeActivityLeft": "het vertrek",
   "homeActivityAClan": "'n stam",
   "statsCwlSeasonGroups": "Groepe",
-  "statsCwlSeasonHistory": "CWL oor tyd",
-  "statsCwlRosterNotLineup": "Geregistreerde spanverspreiding, afgeskaal na {size} plekke; werklike oorlogspanne kan verskil.",
+  "statsCwlSeasonHistory": "CWL over time",
+  "statsCwlRosterNotLineup": "Registered roster mix, scaled to {size} places; actual war lineups may differ.",
   "@statsCwlRosterNotLineup": {
     "placeholders": {
       "size": {
@@ -4185,28 +4389,28 @@
       }
     }
   },
-  "statsTroopStats": "Troepstatistieke",
-  "statsWarSizes": "Oorlogsgroottes",
-  "statsMissedAttacks": "Gemiste aanvalle",
-  "statsCopyChart": "Kopieer grafiek",
-  "statsCompareItems": "Vergelyk items",
-  "statsCompareItemsHint": "Kies tot 5 items om te vergelyk.",
-  "statsVsOverall": "teenoor algeheel",
-  "statsCopyChartFailed": "Kon nie grafiek kopieer nie. Probeer weer.",
-  "statsPercentagePoints": "persentasiepunte",
+  "statsTroopStats": "Troop Stats",
+  "statsWarSizes": "War sizes",
+  "statsMissedAttacks": "Missed attacks",
+  "statsCopyChart": "Copy chart",
+  "statsCompareItems": "Compare items",
+  "statsCompareItemsHint": "Select up to 5 items to compare.",
+  "statsVsOverall": "vs. overall",
+  "statsCopyChartFailed": "Could not copy chart. Try again.",
+  "statsPercentagePoints": "percentage points",
   "statsMeta": "Metaspel",
   "statsBattle": "Slag",
   "statsWorld": "Wêreld",
   "statsHeaderSubtitle": "Verken gevegsprestasie en die wêreld wat ons naspoor.",
   "statsPreview": "Voorskou",
-  "statsTownHallDistribution": "Stadsale",
+  "statsTownHallDistribution": "Stadsaalverspreiding",
   "statsBuilderHallDistribution": "Bouersaalverspreiding",
-  "statsLeagueDistribution": "Gerangskikte ligas",
+  "statsLeagueDistribution": "Gerangskik liga verspreiding",
   "statsTrackedPlayers": "Huidige nagespoorde spelerpopulasie",
   "statsTrackedClans": "Huidige nagespoorde stambevolking",
-  "statsCwlLeagueDistribution": "CWL-ligas",
-  "statsCapitalLeagueDistribution": "Hoofstadligas",
-  "statsTrackedLocations": "Clanliggings",
+  "statsCwlLeagueDistribution": "CWL-liga verspreiding",
+  "statsCapitalLeagueDistribution": "Kapitaalliga verspreiding",
+  "statsTrackedLocations": "Nagespoor clan-liggings",
   "statsLocationCountHelp": "Lande en liggings verteenwoordig deur nagespoorde stamme.",
   "statsLeagueId": "Liga {id}",
   "@statsLeagueId": {
@@ -4284,7 +4488,7 @@
   "rankedLeagueNoBattles": "Nog geen geveg aangeteken nie.",
   "rankedLeagueGroupRanking": "Groepranglys",
   "rankedLeagueRankingSubtitle": "Regstreekse stand vir die huidige groep. Jou speler is uitgelig.",
-  "rankedLeagueJumpToMyRank": "Spring na posisie",
+  "rankedLeagueJumpToMyRank": "Spring na my posisie",
   "rankedLeagueLastPeriod": "Vorige tydperk",
   "rankedLeagueBestGroupRank": "Beste posisie",
   "rankedLeaguePeriodHistory": "Tydperkgeskiedenis",
@@ -4849,7 +5053,7 @@
       }
     }
   },
-  "upgradeTrackerPlanRuleNote": "Sleep kategorieë om te kies wat eerste opgradeer. Ryinstellings laat kategorieë ’n prioriteit deel of by ’n voltooiingsteiken stop.",
+  "upgradeTrackerPlanRuleNote": "Genommerde vlakke loop eerste. Gedeelde rye hou dieselfde vlaknommer, en hul mengsel word genormaliseer vanaf die relatiewe gewigte, dus word 50 + 25 67% / 33%. 'n Teiken maak 'n kategorie-opbrengs nadat dit daardie persentasie bereik het terwyl dit later in aanmerking kom.",
   "upgradeTrackerPlanGoalMaxCurrentHall": "Maksimum voor vorder",
   "upgradeTrackerPlanGoalRushNextHall": "Bereik vinnig die volgende saal",
   "upgradeTrackerPlanGoalCatchUp": "Haal gejaagde vlakke in",
@@ -4951,19 +5155,40 @@
       }
     }
   },
-  "cwlRegisteredRoster": "Geregistreerde spanlys",
-  "cwlMatches": "Wedstryde",
-  "cwlNextMatchup": "Volgende wedstryd",
-  "cwlOtherMatches": "Ander wedstryde",
-  "cwlOutlook": "Seisoenvooruitsig",
-  "cwlFirstPlace": "Eerste plek",
-  "cwlTopTwo": "Top twee",
-  "cwlRemainingOpponents": "Oorblywende teenstanders",
-  "cwlWinBonusNote": "Sterre sluit 10 bonussterre per voltooide oorwinning in.",
-  "cwlEstimateNote": "Ramings gebruik voltooide oorloë en oorblywende teenstanders, nie spanveranderings nie. Minstens twee voltooide oorloë per stam word vereis. Dit is ongekalibreerde ramings; promosiereëls verskil per liga.",
-  "cwlDuration": "{unit, select, hours {{count, plural, one {# uur} other {# uur}}} other {{count, plural, one {# minuut} other {# minute}}}}",
-  "personalBasesDeleteOld": "Verwyder basisse ouer as 90 dae",
-  "personalBasesDeleteOldConfirm": "{count} gestoorde basisse ouer as 90 dae sal verwyder word. Aflaaigeskiedenis en gedeelde basisse sal behoue bly.",
+  "@settingsWarWidgetIosReady": {
+    "placeholders": {
+      "clanName": {
+        "type": "String"
+      }
+    }
+  },
+  "@settingsWarWidgetAndroidReady": {
+    "placeholders": {
+      "clanName": {
+        "type": "String"
+      }
+    }
+  },
+  "@settingsWarWidgetPrepareFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "cwlRegisteredRoster": "Registered roster",
+  "cwlMatches": "Matchups",
+  "cwlNextMatchup": "Next matchup",
+  "cwlOtherMatches": "Other matchups",
+  "cwlOutlook": "Season outlook",
+  "cwlFirstPlace": "First place",
+  "cwlTopTwo": "Top two",
+  "cwlRemainingOpponents": "Remaining opponents",
+  "cwlWinBonusNote": "Stars include 10 bonus stars per completed win.",
+  "cwlEstimateNote": "Estimates use completed wars and remaining opponents, not lineup changes. At least two completed wars per clan are needed. These are uncalibrated estimates; promotion rules vary by league.",
+  "cwlDuration": "{unit, select, hours {{count, plural, one {# hour} other {# hours}}} other {{count, plural, one {# minute} other {# minutes}}}}",
+  "personalBasesDeleteOld": "Remove bases older than 90 days",
+  "personalBasesDeleteOldConfirm": "{count} saved bases older than 90 days will be removed. Download history and shared bases will remain.",
   "@personalBasesDeleteOldConfirm": {
     "description": "Confirms cleanup while preserving lifetime download history.",
     "placeholders": {
@@ -4972,9 +5197,9 @@
       }
     }
   },
-  "legendsAutomaticDefense": "Outomatiese verdediging",
-  "legendsPopularArmyItem": "Gewildste leëritem",
-  "legendsClanCastle": "Stamslot",
+  "legendsAutomaticDefense": "Automatic defense",
+  "legendsPopularArmyItem": "Most popular army item",
+  "legendsClanCastle": "Clan Castle",
   "@cwlDuration": {
     "description": "Explicit countdown units; avoid native unit conversion.",
     "placeholders": {
@@ -4986,20 +5211,20 @@
       }
     }
   },
-  "clanNotificationRemoveConfirmation": "Skakel hierdie clan se kennisgewings af en verwyder die boekmerk?",
-  "personalBasesTab": "Bases",
+  "clanNotificationRemoveConfirmation": "Turn off this clan’s notifications and remove the bookmark?",
+  "personalBasesTab": "Basisse",
   "personalBasesDownloaded": "Downloaded",
   "personalArmyName": "Army name",
   "personalArmyNotes": "Notes",
   "personalArmyUnnamed": "Unnamed army",
   "personalArmyEdit": "Edit army",
   "personalArmyUnknownTownHall": "Unknown Town Hall",
-  "discordBotDashboard": "Discord-botkontrolepaneel",
-  "discordAddBot": "Voeg bot by",
-  "discordAddToMyDiscord": "Voeg by my Discord",
-  "discordServersWithoutBot": "Bedieners sonder ClashKing",
-  "rankingsPlayerSection": "Spelerranglyste",
-  "rankingsClanSection": "Stamranglyste",
+  "discordBotDashboard": "Discord Bot Dashboard",
+  "discordAddBot": "Add bot",
+  "discordAddToMyDiscord": "Add to My Discord",
+  "discordServersWithoutBot": "Servers without ClashKing",
+  "rankingsPlayerSection": "Player Rankings",
+  "rankingsClanSection": "Clan Rankings",
   "cwlArchiveCoverage": "{available} of {total} matchups available.",
   "cwlStandingsIncomplete": "Missing archives are excluded. Group ranks and forecasts are unavailable.",
   "cwlPromotionChance": "Estimated promotion chance",
@@ -5010,62 +5235,62 @@
   "cwlRecordedStats": "Recorded wars only",
   "cwlMissingMatchups": "{count} matchups unavailable",
   "cwlHighestLeague": "Highest league · no promotion",
-  "warOutlookWinPossible": "Oorwinning steeds moontlik",
-  "warOutlookDrawOnly": "Gelykop op sy beste",
-  "warOutlookDefeat": "Geen pad na oorwinning",
-  "warOutlookMaximum": "Maksimum moontlike telling",
-  "warOutlookAssumption": "Veronderstel perfekte oorblywende aanvalle. Dit is ’n wiskundige limiet, nie ’n voorspelling nie.",
-  "warScoutTitle": "Spanverkenning",
-  "warScoutOpponent": "Teenstander se onlangse oorloë",
-  "warScoutScope": "Huidige span · dieselfde reëls · tot 10 vorige oorloë",
-  "upgradeTrackerCapturedWork": "Van jou laaste opdatering",
-  "tutorialWelcomeBody": "Neem ’n kort toer deur ClashKing. Jy kan dit enige tyd oorslaan.",
-  "tutorialReorderBody": "Hou ’n kaart ingedruk en sleep dit na ’n ander plek.",
-  "tutorialSidebarBody": "Vee oor Tuis om die kieslys oop te maak, of tik op jou avatar.",
-  "tutorialExploreBody": "Maak Instellings en dan Kennisgewings in hierdie kieslys oop. Gaan voort om nou daarheen te gaan.",
-  "tutorialRemindersBody": "Kies jou herinneringe hieronder. Keer terug na Tuis wanneer jy klaar is.",
-  "tutorialResetTitle": "Stel tutoriale terug",
-  "tutorialResetConfirm": "Begin die tutoriale weer met jou volgende besoeke?",
-  "upgradeTrackerOngoingUpgrades": "Opgraderings aan die gang",
-  "upgradeTrackerToLevel": "Na vlak {level}",
-  "upgradeTrackerFreeSlots": "{count} vry",
-  "upgradeTrackerFreeIn": "Vry oor {duration}",
-  "upgradeTrackerPetHouse": "Troeteldierhuis",
-  "upgradeTrackerNotBuilt": "Nie gebou nie",
-  "upgradeTrackerExtraSlots": "{count} ekstra",
-  "rankedLeagueOverTime": "Liga oor tyd",
-  "rankedLeaguePromotionCutoff": "Promosiegrens",
-  "rankedLeagueDemotionCutoff": "Relegasiegrens",
-  "rankedLeagueCutoffsUnavailable": "Promosie- en relegasiegrense is nie beskikbaar nie.",
-  "rankedAutomaticDefenseSummary": "{count} verdedigings · {points} trofeë elk",
-  "rankedAutomaticDefenseExplanation": "Gebaseer op alle werklike verdedigings hierdie week, na onder afgerond.",
-  "warStatusInWar": "In oorlog",
-  "warStatusNoWar": "Geen oorlog",
-  "warNoActiveClans": "Geen clans is tans in oorlog nie.",
-  "warNoInactiveClans": "Geen clans buite oorlog nie",
-  "warAllClansInWar": "Al jou clans is tans in oorlog.",
+  "warOutlookWinPossible": "Win still possible",
+  "warOutlookDrawOnly": "Draw at best",
+  "warOutlookDefeat": "No path to a win",
+  "warOutlookMaximum": "Maximum possible score",
+  "warOutlookAssumption": "Assumes perfect remaining attacks. This is a mathematical limit, not a prediction.",
+  "warScoutTitle": "Lineup scouting",
+  "warScoutOpponent": "Opponent’s recent wars",
+  "warScoutScope": "Current lineup · same rules · up to 10 previous wars",
+  "upgradeTrackerCapturedWork": "From your last update",
+  "tutorialWelcomeBody": "Take a quick tour of ClashKing. You can skip it at any time.",
+  "tutorialReorderBody": "Hold a card, then drag it to change its position.",
+  "tutorialSidebarBody": "Swipe across Home to open the menu, or tap your avatar.",
+  "tutorialExploreBody": "From this menu, open Settings, then Notifications. Continue to go there now.",
+  "tutorialRemindersBody": "Choose reminders below. When you are done, return to Home.",
+  "tutorialResetTitle": "Reset tutorials",
+  "tutorialResetConfirm": "Start the tutorials again on your next visits?",
+  "upgradeTrackerOngoingUpgrades": "Ongoing Upgrades",
+  "upgradeTrackerToLevel": "To Level {level}",
+  "upgradeTrackerFreeSlots": "{count} free",
+  "upgradeTrackerFreeIn": "Free in {duration}",
+  "upgradeTrackerPetHouse": "Pet House",
+  "upgradeTrackerNotBuilt": "Not built",
+  "upgradeTrackerExtraSlots": "{count} extra",
+  "rankedLeagueOverTime": "League over time",
+  "rankedLeaguePromotionCutoff": "Promotion cutoff",
+  "rankedLeagueDemotionCutoff": "Demotion cutoff",
+  "rankedLeagueCutoffsUnavailable": "Promotion and demotion thresholds unavailable.",
+  "rankedAutomaticDefenseSummary": "{count} defenses · {points} trophies each",
+  "rankedAutomaticDefenseExplanation": "Based on all real defenses this week, rounded down.",
+  "warStatusInWar": "In war",
+  "warStatusNoWar": "No war",
+  "warNoActiveClans": "No clans are currently in war.",
+  "warNoInactiveClans": "No clans out of war",
+  "warAllClansInWar": "All your clans are currently in war.",
   "warStatusOther": "Ander",
-  "warNoOtherClans": "Geen ander clans nie.",
-  "playerWarLifetime": "Lewenslank",
-  "playerWarThScope": "Pas net op die statistiekkaarte toe, nie op Gevegte nie. Hou die knoppie in vir hierdie verduideliking.",
-  "playerWarNoAttacks": "Nog geen aanvalle nie",
-  "playerWarRegularWars": "Gewone oorlog",
-  "warWidgetNoActiveWar": "Geen aktiewe oorlog",
-  "warWidgetPrivateWarLog": "Privaat oorlogslogboek",
-  "warWidgetChooseClan": "Kies ’n stam",
-  "legendPerformanceTitle": "Daaglikse prestasie",
-  "legendCompleteDays": "Volledige dae",
-  "legendPerfectDays": "Perfekte dae",
-  "legendPartialDays": "Gedeeltelike dae",
-  "legendMissingDays": "Geen waarnemings",
-  "legendInvalidDays": "Ongeldige dae",
-  "legendTrophiesGained": "Trofeë verdien",
-  "legendTrophiesLost": "Trofeë verloor",
-  "legendDistribution": "Verspreiding",
-  "legendPreviousDays": "Vorige {count} dae",
-  "legendAvailableDays": "Beskikbare dae",
-  "legendCompleteOnly": "Die verspreiding gebruik dae met 8 aangetekende gevegte.",
-  "legendPerfectSources": "Perfekte dae volgens rang",
+  "warNoOtherClans": "No other clans.",
+  "playerWarLifetime": "Lifetime",
+  "playerWarThScope": "Applies only to the statistics cards, not Battles. Hold the button for this explanation.",
+  "playerWarNoAttacks": "No attacks yet",
+  "playerWarRegularWars": "Regular war",
+  "warWidgetNoActiveWar": "No active war",
+  "warWidgetPrivateWarLog": "Private war log",
+  "warWidgetChooseClan": "Choose a clan",
+  "legendPerformanceTitle": "Daily performance",
+  "legendCompleteDays": "Complete days",
+  "legendPerfectDays": "Perfect days",
+  "legendPartialDays": "Partial days",
+  "legendMissingDays": "No observations",
+  "legendInvalidDays": "Invalid days",
+  "legendTrophiesGained": "Trophies gained",
+  "legendTrophiesLost": "Trophies lost",
+  "legendDistribution": "Verdeling",
+  "legendPreviousDays": "Previous {count} days",
+  "legendAvailableDays": "Days available",
+  "legendCompleteOnly": "Distribution uses days with 8 recorded battles.",
+  "legendPerfectSources": "Perfect days by rank",
   "@legendPreviousDays": {
     "placeholders": {
       "count": {
@@ -5073,15 +5298,15 @@
       }
     }
   },
-  "onboardingOverviewTitle": "Jou rekeninge en clans",
-  "onboardingOverviewBody": "Hou jou spelers, clans en opgraderings bymekaar.",
-  "onboardingProgressTitle": "Bekyk ranglyste en statistieke",
-  "onboardingProgressBody": "Volg jou gevegte, vergelyk jou vordering en hou opgraderings aan die gang.",
-  "onboardingRemindersTitle": "Kry herinnerings en kennisgewings",
-  "onboardingRemindersBody": "Kry oorlogherinnerings en die waarskuwings wat jy kies. Kies jou rekeninge en waarskuwingsoorte in Instellings.",
-  "onboardingReplayTitle": "Speel inleiding weer",
-  "statsViewLatestData": "Bekyk jongste data",
-  "statsLatestAvailableDate": "Jongste beskikbaar: {date}",
+  "onboardingOverviewTitle": "Your accounts & clans",
+  "onboardingOverviewBody": "Keep your players, clans, and upgrades together.",
+  "onboardingProgressTitle": "View rankings and stats",
+  "onboardingProgressBody": "Follow your battles, compare your progress, and keep upgrades moving.",
+  "onboardingRemindersTitle": "Get reminders and alerts",
+  "onboardingRemindersBody": "Get war reminders and the alerts you choose. Pick your accounts and alert types in Settings.",
+  "onboardingReplayTitle": "Replay introduction",
+  "statsViewLatestData": "View latest data",
+  "statsLatestAvailableDate": "Latest available: {date}",
   "@statsLatestAvailableDate": {
     "placeholders": {
       "date": {
@@ -5089,23 +5314,23 @@
       }
     }
   },
-  "legendPerfectedDefenseDays": "Dae met volmaakte aanvalle teen jou verdediging",
-  "legendCompleteDayDefinition": "Slegs dae met al 8 gevegte word ingesluit.",
+  "legendPerfectedDefenseDays": "Perfected defense days",
+  "legendCompleteDayDefinition": "Only days with all 8 battles are included.",
   "statsCommunity": "Gemeenskap",
-  "rankedFullOffenseDays": "+320 dae",
-  "rankedFullDefenseDays": "−320 dae",
-  "rankedTrophiesByRank": "Trofeë volgens rang",
-  "statsArmyTypes": "Weermagtipes",
-  "onboardingStatsBody": "Verken spelerstatistieke, volg jou clans en sien hoe die hele spel verander.",
-  "onboardingWidgetsTitle": "Voeg tuisskermlegstukke by",
-  "onboardingWidgetsBody": "Hou oorlogtellings en opgraderingsvordering byderhand met tuisskermlegstukke.",
-  "onboardingAlertTitle": "Die oorlog eindig binnekort",
-  "onboardingAlertBody": "Tyd vir jou laaste aanval.",
-  "onboardingSetupNotifications": "Aktiveer kennisgewings",
-  "onboardingAccountsReadyBody": "Jou gekoppelde rekeninge is gereed. Voeg nog ’n rekening by of gaan voort.",
-  "onboardingSkipAccountSetup": "Slaan oor",
-  "accountsSetupBody": "Voeg jou Clash of Clans-rekeninge by en verifieer hulle.",
-  "accountsMyTitle": "My rekeninge",
-  "profileAvatar": "Verander voorkoms",
-  "avatarPickerTitle": "Kies ’n avatar"
+  "rankedFullOffenseDays": "+320 days",
+  "rankedFullDefenseDays": "−320 days",
+  "rankedTrophiesByRank": "Trophies by rank",
+  "statsArmyTypes": "Army Types",
+  "onboardingStatsBody": "Explore player stats, follow your clans, and see how the whole game is changing.",
+  "onboardingWidgetsTitle": "Add Home Screen widgets",
+  "onboardingWidgetsBody": "Keep war scores and upgrade progress close with Home Screen widgets.",
+  "onboardingAlertTitle": "War ends soon",
+  "onboardingAlertBody": "Time for your final attack.",
+  "onboardingSetupNotifications": "Enable notifications",
+  "onboardingAccountsReadyBody": "Your linked accounts are ready. Add another account or continue.",
+  "onboardingSkipAccountSetup": "Skip",
+  "accountsSetupBody": "Add and verify your Clash of Clans accounts.",
+  "accountsMyTitle": "My Accounts",
+  "profileAvatar": "Change look",
+  "avatarPickerTitle": "Pick an avatar"
 }
