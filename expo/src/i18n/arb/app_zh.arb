@@ -1,20 +1,20 @@
 {
-  "capitalCurrentOpponent": "当前对手",
-  "capitalRaidMedals": "突袭奖章",
-  "warReplayTitle": "比分历史",
-  "warReplayPlay": "播放历史",
-  "warReplayPause": "暂停历史",
-  "cwlLeading": "领先",
-  "cwlTrailing": "落后",
-  "cwlYourClan": "你的部落",
-  "cwlPromotionZone": "晋级区",
-  "cwlDemotionZone": "降级区",
-  "cwlNotInLineup": "未上场",
-  "esportsEloSubtitle": "全球战队排名和比赛 来自",
-  "esportsTopTeamsMatches": "当前排名前50支战队的比赛。",
-  "esportsPartialMatches": "部分战队的数据未能刷新。",
-  "settingsHideAccounts": "隐藏账号",
-  "settingsHideAccountsDescription": "显示隐藏已关联账号的选项。现有隐私设置保持不变。",
+  "capitalCurrentOpponent": "Current opponent",
+  "capitalRaidMedals": "Raid medals",
+  "warReplayTitle": "Score history",
+  "warReplayPlay": "Play history",
+  "warReplayPause": "Pause history",
+  "cwlLeading": "Leading",
+  "cwlTrailing": "Trailing",
+  "cwlYourClan": "Your clan",
+  "cwlPromotionZone": "Promotion zone",
+  "cwlDemotionZone": "Demotion zone",
+  "cwlNotInLineup": "Not in lineup",
+  "esportsEloSubtitle": "Global team rankings and matches from",
+  "esportsTopTeamsMatches": "Matches from the current top 50 teams.",
+  "esportsPartialMatches": "Some teams could not be refreshed.",
+  "settingsHideAccounts": "Hide accounts",
+  "settingsHideAccountsDescription": "Show the option to hide linked accounts. Existing privacy choices stay unchanged.",
   "calcRocketBalloonAssumption": "1 hit + death · {damage} damage each",
   "calcKeepEquipped": "Keep one equipped",
   "calcCustomLevels": "Custom levels",
@@ -38,31 +38,31 @@
   "personalBasesEmptyBody": "Bases you post through ClashKing on Discord appear here. You can also save bases from the library.",
   "personalArmiesEmptyTitle": "Keep your armies close",
   "personalArmiesEmptyBody": "Armies you post through ClashKing on Discord appear here. Save your favourites to find them before your next attack.",
-  "homeCardOriginal": "原始样式",
-  "homeCardTint": "柔和色彩",
-  "homeCardEdge": "彩色边框",
-  "homeCardGlow": "缓慢光晕",
-  "competitiveNoHistory": "暂无锦标赛",
-  "competitiveHistoryHint": "你的战队和锦标赛成绩将显示在这里。",
-  "esportsMonthlyFinals": "月度决赛",
-  "esportsMonthlyQualifier": "月度资格赛",
-  "esportsHeroSubtitle": "通往世界锦标赛之路",
-  "esportsViewEvent": "探索赛事",
-  "esportsWinLoss": "{wins}胜 · {losses}负",
-  "esportsViewPlayer": "查看玩家",
-  "esportsRecentMatches": "近期比赛",
-  "esportsHideAttacks": "隐藏战斗详情",
-  "esportsViewAttacks": "查看战斗详情",
-  "esportsPlayer": "电竞选手",
+  "homeCardOriginal": "Original",
+  "homeCardTint": "Soft color",
+  "homeCardEdge": "Colored edges",
+  "homeCardGlow": "Slow glow",
+  "competitiveNoHistory": "No tournaments yet",
+  "competitiveHistoryHint": "Your teams and tournament results will appear here.",
+  "esportsMonthlyFinals": "Monthly finals",
+  "esportsMonthlyQualifier": "Monthly qualifiers",
+  "esportsHeroSubtitle": "The road to the World Championship",
+  "esportsViewEvent": "Explore event",
+  "esportsWinLoss": "{wins} wins · {losses} losses",
+  "esportsViewPlayer": "View player",
+  "esportsRecentMatches": "Recent matches",
+  "esportsHideAttacks": "Hide battle details",
+  "esportsViewAttacks": "View battle details",
+  "esportsPlayer": "Esports player",
   "esportsBattles": "战斗",
-  "esportsTriples": "三星进攻",
-  "esportsAverageStars": "平均星数",
+  "esportsTriples": "Triples",
+  "esportsAverageStars": "平均胜利之星",
   "esportsDestruction": "摧毁率",
-  "esportsAccounts": "游戏账号",
+  "esportsAccounts": "Game accounts",
   "esportsAttack": "进攻",
-  "esportsDefense": "防守",
-  "competitiveArenaSubtitle": "你的部落。你的战队。你的下一场挑战。",
-  "competitiveViewTournament": "查看锦标赛",
+  "esportsDefense": "防御",
+  "competitiveArenaSubtitle": "Your clan. Your team. Your next challenge.",
+  "competitiveViewTournament": "View tournament",
   "@esportsWinLoss": {
     "placeholders": {
       "wins": {
@@ -87,50 +87,50 @@
   "esportsStage": "Stage",
   "esportsStandings": "Standings",
   "esportsMatches": "Matches",
-  "esportsPoints": "Points",
+  "esportsPoints": "积分",
   "esportsPlayed": "played",
   "esportsSource": "Data from Competitive Clash Network",
-  "esportsRoster": "Roster",
+  "esportsRoster": "阵容",
   "esportsSeasonPoints": "Season points",
   "esportsStageStandings": "Stage standings",
-  "competitiveCompetition": "赛事",
-  "competitiveWebsite": "网站",
-  "competitiveVerifiedAccounts": "已验证账号",
-  "competitiveEsports": "电子竞技",
-  "competitiveTournaments": "锦标赛",
-  "competitiveProfile": "个人资料",
-  "competitiveTeams": "队伍",
-  "competitiveFreeEntry": "免费参赛",
-  "competitiveRegister": "注册队伍",
-  "competitiveCheckIn": "确认参赛",
-  "competitiveRules": "规则",
-  "competitiveUnavailable": "赛事数据暂不可用，请重试。",
-  "competitiveRegistrationSaved": "已提交报名",
-  "competitiveTeamHistory": "队伍历史",
-  "competitiveDebutName": "锦标赛首秀",
-  "competitiveDebutDescription": "使用已验证账号参加一场锦标赛。",
-  "competitiveViewProfile": "查看资料",
+  "competitiveCompetition": "Competition",
+  "competitiveWebsite": "Website",
+  "competitiveVerifiedAccounts": "Verified accounts",
+  "competitiveEsports": "eSports",
+  "competitiveTournaments": "Tournaments",
+  "competitiveProfile": "资料",
+  "competitiveTeams": "部落",
+  "competitiveFreeEntry": "Free entry",
+  "competitiveRegister": "Register team",
+  "competitiveCheckIn": "Check in",
+  "competitiveRules": "Rules",
+  "competitiveUnavailable": "Competition data is unavailable. Try again.",
+  "competitiveRegistrationSaved": "Registration submitted",
+  "competitiveTeamHistory": "Team history",
+  "competitiveDebutName": "Tournament debut",
+  "competitiveDebutDescription": "Participate in a tournament with your verified account.",
+  "competitiveViewProfile": "View profile",
   "calcPinEquipment": "Keep one equipped",
-  "calcSearch": "Search",
+  "calcSearch": "搜索",
   "calcEquipmentTitle": "Equipment Compare",
   "calcDamageIntro": "Find the combinations that take a defense down.",
   "calcFarmIntro": "Plan the loot needed for your next upgrades.",
   "calcEquipmentIntro": "Compare hero loadouts, levels, and ability stats.",
   "calcComingSoon": "Coming soon",
-  "calcHero": "Hero",
+  "calcHero": "英雄",
   "calcHeroLevel": "Hero level",
   "calcMaxLevels": "Max levels",
   "calcEquipmentPool": "Equipment to compare",
   "calcPoolHelp": "Choose pieces and default levels. Compare every pair, then customize individual rows.",
   "calcSelectAll": "Select all",
-  "calcClear": "Clear",
+  "calcClear": "清除",
   "calcAttributes": "Attributes",
   "calcAddAttribute": "Add attribute",
-  "calcTable": "Compare",
+  "calcTable": "比较",
   "calcProgression": "Level progression",
   "calcCompareHelp": "DPS adds the hero's base and equipment DPS. Speed bonuses and temporary effects are separate attributes; healing is not extra max HP.",
   "calcChartHelp": "Equipment levels increase together; each piece stops at its own maximum. Hero levels stay fixed. First six loadouts shown.",
-  "calcSort": "Sort by",
+  "calcSort": "排序方式",
   "calcNoEquipment": "No equipment",
   "calcDuplicate": "Duplicate loadout",
   "calcRemove": "Remove loadout",
@@ -154,9 +154,9 @@
   "calcComparisonDownloaded": "Comparison image downloaded",
   "calcComparisonExportFailed": "Could not copy the comparison image. Please try again.",
   "calcEffectiveLevel": "Effective level {level}",
-  "calcTarget": "Target",
+  "calcTarget": "目标",
   "calcSupercharge": "Supercharge",
-  "calcNone": "None",
+  "calcNone": "无",
   "calcResults": "{count} combinations",
   "calcResultsHelp": "Smallest spell cost first, then fewer equipment activations. Extra sources that do not help are removed.",
   "calcNoCombinationHelp": "Try another source, a higher level, or more spell capacity.",
@@ -164,63 +164,63 @@
   "calcAlternative": "Alternative",
   "calcCombinationCost": "{housing} spell space · {equipment} equipment",
   "calcUseStack": "Use stack",
-  "homeRankingsAndStats": "排行榜与统计",
-  "homeActivityRecorded": "仅显示已记录的活动；历史记录可能不完整。",
-  "homeWidgetsServers": "服务器",
-  "homeWidgetsEdit": "编辑首页",
-  "homeWidgetsAdd": "添加小组件",
-  "homeWidgetsRemove": "移除小组件",
-  "homeWidgetsMoveUp": "上移",
-  "homeWidgetsMoveDown": "下移",
-  "homeWidgetsSmall": "小型",
-  "homeWidgetsWide": "宽型",
-  "homeWidgetsSaveError": "无法同步首页。请刷新后再编辑。",
-  "homeWidgetsUnavailable": "暂无已记录数据",
-  "homeWidgetsBookmarkFirst": "请先收藏玩家或部落。",
-  "rankingsWarTripleStreak": "部落战三星连胜",
+  "homeRankingsAndStats": "Rankings & Stats",
+  "homeActivityRecorded": "Recorded activity only; history may be incomplete.",
+  "homeWidgetsServers": "Servers",
+  "homeWidgetsEdit": "Edit Home",
+  "homeWidgetsAdd": "Add widget",
+  "homeWidgetsRemove": "Remove widget",
+  "homeWidgetsMoveUp": "Move up",
+  "homeWidgetsMoveDown": "Move down",
+  "homeWidgetsSmall": "小",
+  "homeWidgetsWide": "Wide",
+  "homeWidgetsSaveError": "Could not sync Home. Please refresh before editing again.",
+  "homeWidgetsUnavailable": "No recorded data available",
+  "homeWidgetsBookmarkFirst": "Bookmark a player or clan first.",
+  "rankingsWarTripleStreak": "War Triple Streak",
   "rankingsWarTripleRulesTitle": "How streaks count",
   "rankingsWarTripleRulesBody": "+2 for two triples against your own Town Hall level in a regular war.\n\nA missed attack, non-triple, or different-TH target resets your streak.\n\nCWL and friendly wars don’t count. Streaks are separate for each Town Hall level.",
-  "clanLegendsRanked": "传奇与排位",
-  "appIconChangeWarning": "更改应用图标将关闭ClashKing。是否继续？",
-  "upgradeTrackerUnverifiedAccount": "此账号已关联但尚未验证。请在账号管理中验证后再导入升级数据。",
-  "clanWarNotificationsTitle": "部落对战通知",
-  "clanCapitalNotificationsTitle": "部落都城通知",
-  "clanWarNotificationsBody": "接收此部落的对战动态。",
-  "clanCapitalNotificationsBody": "接收此部落的部落都城动态。",
-  "notifSystemNotifications": "系统通知",
-  "notifSystemSettings": "打开通知设置",
-  "notifSystemSettingsDescription": "在设备设置中管理提醒、声音和角标。",
-  "notifSystemSettingsFailed": "无法打开通知设置。请在设备上打开“设置”。",
-  "notifManagePlayersDescription": "在玩家 → 已关联 → 选项中管理账号通知。",
-  "notifCustomReminders": "自定义提醒",
-  "notifTestType": "通知类型",
-  "statsBattlelogsGroup": "战斗日志",
-  "statsGlobalStatsGroup": "全球统计",
-  "playerOptionShowOnHomeTitle": "在主页显示账号",
-  "playerOptionShowOnHomeSubtitle": "将此已验证账号加入主页卡片（最多 5 个）。",
-  "playerOptionShowOnHomeVerifyFirst": "验证此账号后才能在主页显示。",
-  "playerOptionHomeInclusionFirst": "请先开启“在主页显示账号”。",
-  "homeIncludedAccountsLimit": "主页最多可显示 5 个账号。请先移除一个。",
-  "statsHitratesByTownHall": "按大本营查看成功率",
-  "statsChartGranularity": "图表间隔",
-  "statsDaily": "每日",
+  "clanLegendsRanked": "Legends & Ranked",
+  "appIconChangeWarning": "Changing the app icon will close ClashKing. Continue?",
+  "upgradeTrackerUnverifiedAccount": "This account is linked but not verified. Verify it in Manage Accounts to import your upgrade data.",
+  "clanWarNotificationsTitle": "War notifications",
+  "clanCapitalNotificationsTitle": "Clan Capital notifications",
+  "clanWarNotificationsBody": "Receive war updates for this clan.",
+  "clanCapitalNotificationsBody": "Receive Clan Capital updates for this clan.",
+  "notifSystemNotifications": "System notifications",
+  "notifSystemSettings": "Open notification settings",
+  "notifSystemSettingsDescription": "Manage alerts, sounds, and badges in your device settings.",
+  "notifSystemSettingsFailed": "Could not open notification settings. Please open Settings on your device.",
+  "notifManagePlayersDescription": "Manage account notifications in Players → Linked → Options.",
+  "notifCustomReminders": "Custom reminders",
+  "notifTestType": "Notification type",
+  "statsBattlelogsGroup": "Battlelogs",
+  "statsGlobalStatsGroup": "Global Stats",
+  "playerOptionShowOnHomeTitle": "Show account on Home",
+  "playerOptionShowOnHomeSubtitle": "Include this verified account in Home cards (up to 5).",
+  "playerOptionShowOnHomeVerifyFirst": "Verify this account to show it on Home.",
+  "playerOptionHomeInclusionFirst": "Turn on Show account on Home first.",
+  "homeIncludedAccountsLimit": "Home can show up to 5 accounts. Remove one first.",
+  "statsHitratesByTownHall": "Hitrates by Town Hall",
+  "statsChartGranularity": "Chart interval",
+  "statsDaily": "每天",
   "statsWeekly": "每周",
-  "playerBattlelogCumulative": "累计",
-  "statsMonthly": "每月",
-  "statsCompareCohorts": "比较群组",
-  "statsAcrossCohorts": "各群组使用率",
-  "legendsTrophyGrid": "赛季概览",
-  "legendsPopularArmyItems": "最热门的军队配置",
-  "legendsPopularTroop": "最爱",
-  "legendsHitrate": "成功率",
-  "legendsAvgOffense": "平均进攻",
-  "legendsAvgDefense": "平均防守",
-  "settingsClearImageCache": "清除图片缓存",
-  "settingsImageCacheCleared": "图片缓存已清除。",
-  "settingsImageCacheClearFailed": "无法清除图片缓存。请重试。",
-  "startupCheckingUpdate": "正在检查更新…",
-  "startupDownloadingUpdate": "正在下载更新…",
-  "startupUpdateInBackground": "在后台更新",
+  "playerBattlelogCumulative": "Cumulative",
+  "statsMonthly": "Monthly",
+  "statsCompareCohorts": "Compare cohorts",
+  "statsAcrossCohorts": "Usage across cohorts",
+  "legendsTrophyGrid": "Season overview",
+  "legendsPopularArmyItems": "Most popular army items",
+  "legendsPopularTroop": "Favorite",
+  "legendsHitrate": "Hitrate",
+  "legendsAvgOffense": "Avg. Offense",
+  "legendsAvgDefense": "Avg. Defense",
+  "settingsClearImageCache": "Clear image cache",
+  "settingsImageCacheCleared": "Image cache cleared.",
+  "settingsImageCacheClearFailed": "Could not clear the image cache. Please try again.",
+  "startupCheckingUpdate": "Checking for updates…",
+  "startupDownloadingUpdate": "Downloading update…",
+  "startupUpdateInBackground": "Update in background",
   "warStatsRangeTitle": "部落战统计范围",
   "warStatsRangeDescription": "选择统计固定场数的近期部落战，或按天数统计近期时段。",
   "warStatsRangeDays": "天数",
@@ -375,17 +375,59 @@
   "notifPushEnabled": "推送通知已开启",
   "notifReceiveNotifications": "接收通知",
   "notifTokenPreview": "令牌：{token}",
+  "@notifTokenPreview": {
+    "placeholders": {
+      "token": {
+        "type": "String"
+      }
+    }
+  },
   "notifEnabledDeliveryDescription": "已启用的提醒可以发送到此设备。",
   "notifDisabledAccountDescription": "你的整个 ClashKing 账户已关闭通知。",
   "notifMaximumRemindersAdded": "已添加最大数量的提醒",
   "notifAddReminder": "添加提醒",
   "notifDurationOneHour": "1 小时",
   "notifDurationHours": "{count} 小时",
+  "@notifDurationHours": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "notifDurationMinutes": "{count} 分钟",
+  "@notifDurationMinutes": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "notifAddTiming": "添加{timing}",
+  "@notifAddTiming": {
+    "placeholders": {
+      "timing": {
+        "type": "String"
+      }
+    }
+  },
   "notifTimingOneHourBefore": "提前 1 小时",
   "notifTimingHoursBefore": "提前 {count} 小时",
+  "@notifTimingHoursBefore": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "notifTimingMinutesBefore": "提前 {count} 分钟",
+  "@notifTimingMinutesBefore": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "notifPushReady": "此设备已可接收推送通知。",
   "notifPushPermissionRequired": "请允许通知以接收 ClashKing 提醒。",
   "notifPushPermissionDenied": "通知权限被拒绝。",
@@ -394,12 +436,13 @@
   "notifPushUnsupported": "此平台不支持推送通知。",
   "notifPushInitializing": "正在配置推送通知…",
   "notificationPrimerTitle": "开启通知？",
-  "notificationPrimerBody": "ClashKing 可以发送活动、公告、传奇联赛防守和支持方面的更新。部落战和突袭周末提醒会保持关闭，直到你主动设置。你可以在“设置”>“通知”中更改这些选择。",
+  "notificationPrimerBody": "ClashKing 可以向你发送部落战、CWL、账号和项目更新通知。你可以随时在“设置”>“通知”中更改此选项。",
   "notificationPrimerNotNow": "暂不",
   "notificationPrimerAllow": "允许",
+  "@@last_modified": "2024-12-23T10:00:00.000Z",
   "achievementsTitle": "成就",
   "achievementEarnedLabel": "获得次数",
-  "achievementGemsEarnedRatio": "已获得 {earned} / {total}",
+  "achievementGemsEarnedRatio": "{earned} / {total} earned",
   "@achievementGemsEarnedRatio": {
     "placeholders": {
       "earned": {
@@ -410,7 +453,7 @@
       }
     }
   },
-  "achievementGemsAccessibility": "已获得成就宝石 {earned} 个，共 {total} 个。",
+  "achievementGemsAccessibility": "Earned {earned} of {total} achievement gems.",
   "@achievementGemsAccessibility": {
     "placeholders": {
       "earned": {
@@ -423,6 +466,23 @@
   },
   "achievementSummary": "{earned}/{total} 已完成",
   "achievementEarnedCount": "获得次数 ×{count}",
+  "@achievementSummary": {
+    "placeholders": {
+      "earned": {
+        "type": "String"
+      },
+      "total": {
+        "type": "String"
+      }
+    }
+  },
+  "@achievementEarnedCount": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
   "achievementTownhall18Name": "18级大本营",
   "achievementTownhall18Requirement": "达到18级大本营。",
   "achievementWarWarriorName": "部落战勇士",
@@ -431,7 +491,6 @@
   "achievementMrLegendDescription": "在传奇杯联赛中完成完美进攻日。",
   "achievementDefenseDoesntMatterName": "防守无所谓",
   "achievementDefenseDoesntMatterDescription": "在传奇杯联赛中经历完美防守日。",
-  "@@last_modified": "2024-12-23T10:00:00.000Z",
   "appTitle": "ClashKing",
   "appDescription": "您的终极部落冲突伴侣，用于追踪统计数据、管理部落和分析性能。",
   "generalLoading": "加载中...",
@@ -454,8 +513,8 @@
   "postsLoadMore": "加载更多",
   "postsCurrent": "当前",
   "postsPast": "往期",
-  "postsStoryFinished": "快拍已结束",
-  "postsWatchAgain": "再看一次",
+  "postsStoryFinished": "Story finished",
+  "postsWatchAgain": "Watch again",
   "postsStory": "互动故事",
   "postsPinned": "精选",
   "generalTryAgain": "再试一次",
@@ -544,7 +603,7 @@
     "description": "Filter value is not set"
   },
   "generalWarning": "警告",
-  "gameHandoffDontShowAgain": "不再显示",
+  "gameHandoffDontShowAgain": "Don't show this again",
   "generalUnknown": "未知",
   "generalNoDataAvailable": "没有可用数据",
   "generalNoFilteredResults": "没有符合筛选条件的结果",
@@ -773,9 +832,9 @@
   "accountsAdd": "添加账户",
   "accountsAddInstruction": "点击 + 按钮添加你的账号",
   "accountsApiToken": "帐户 API 令牌",
-  "accountsEnterApiToken": "使用游戏内的 API 令牌确认此账号属于你。",
+  "accountsEnterApiToken": "请输入账号 API 令牌以确认它属于你。你可以在《部落冲突》中找到它：",
   "accountsApiTokenLocation": "设置 > 更多设置 > API 令牌",
-  "accountsOpenMoreSettings": "获取 API 令牌",
+  "accountsOpenMoreSettings": "打开更多设置",
   "accountsCouldNotOpenClash": "无法打开《部落冲突》。请手动打开。",
   "accountsFillAllFields": "请填写所有字段。",
   "accountsErrorTagNotExists": "输入的村庄标签不存在。",
@@ -1295,8 +1354,32 @@
   "warParticipation": "参战",
   "cwlParticipantOnly": "仅参与",
   "warStatsRangeWarsCompact": "{number}场战争",
+  "@warStatsRangeWarsCompact": {
+    "description": "Compact clan war statistics war range label",
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
   "warStatsRangeDaysCompact": "{number}天",
+  "@warStatsRangeDaysCompact": {
+    "description": "Compact clan war statistics day range label",
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
   "warStatsLastXDays": "最近 {number} 天",
+  "@warStatsLastXDays": {
+    "description": "Clan war statistics date-range label",
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
   "warStatsCurrentMembers": "当前成员",
   "warLeague": "部落战/联赛",
   "warHistory": "部落对战历史",
@@ -1305,6 +1388,13 @@
   "warLogClosed": "{clan} 的部落战日志已关闭。",
   "warLogPrivate": "{clan} 的部落对战日志为私密。",
   "@warLogClosed": {
+    "placeholders": {
+      "clan": {
+        "type": "String"
+      }
+    }
+  },
+  "@warLogPrivate": {
     "placeholders": {
       "clan": {
         "type": "String"
@@ -1608,7 +1698,7 @@
   "warStarsTwo": "2 胜利之星",
   "warStarsThree": "3 胜利之星",
   "warStarsZero": "0 星",
-  "legendHistoryZeroStars": "零星",
+  "legendHistoryZeroStars": "Zero Stars",
   "warStarsBestPerformance": "最佳表现",
   "@warStarsBestPerformance": {
     "description": "Best performance in war"
@@ -1763,7 +1853,7 @@
   "clanLeaderboardHistoryTab": "排行榜历史",
   "clanLegendHistoryTab": "传奇联赛历史",
   "clanRecordsTab": "纪录",
-  "clanRecordsChangesTab": "记录与变更",
+  "clanRecordsChangesTab": "Records & Changes",
   "clanProfileHistoryTab": "资料历史",
   "clanProfileLevelChanged": "部落等级已更改",
   "clanProfileDescriptionChanged": "描述已更改",
@@ -1805,8 +1895,8 @@
   "legendsCountryTitle": "国家",
   "legendsLocalRankTitle": "当地排名",
   "legendsGlobalRankTitle": "全球排名",
-  "legendsYourArmy": "你的军队",
-  "legendsArmyUsedAgainstYou": "用于攻击你的军队",
+  "legendsYourArmy": "Your army",
+  "legendsArmyUsedAgainstYou": "Army used against you",
   "warWinsTitle": "胜利",
   "warLossesTitle": "损失",
   "warDrawsTitle": "抽奖",
@@ -2051,7 +2141,7 @@
   "faqWhatCanBotDo": "ClashKing Discord 机器人可以做什么？",
   "faqWhatCanBotDoAnswer": "ClashKing Discord 机器人可通过全面的追踪工具、自动通知以及与本应用的无缝集成，帮助你直接在 Discord 中管理部落。它专为想保持联系和组织有序的部落首领与成员设计：",
   "faqInviteBotToServer": "邀请机器人到服务器",
-  "drawerInviteDiscordBot": "邀请机器人到服务器",
+  "drawerInviteDiscordBot": "Invite Discord Bot",
   "faqBotFeatureTracking": "玩家和部落追踪",
   "faqBotFeatureTrackingDesc": "添加并监控多个部落和玩家，获取实时更新",
   "faqBotFeatureWars": "部落战管理",
@@ -2208,7 +2298,7 @@
     "description": "Defender town hall filter label"
   },
   "filtersSameTownHallOnly": "仅相同大本营",
-  "warStatsSameTownHall": "相同大本营",
+  "warStatsSameTownHall": "Same Townhall",
   "@filtersSameTownHallOnly": {
     "description": "Same town hall filter option"
   },
@@ -2862,7 +2952,7 @@
   "@settingsNotificationsTitle": {
     "description": "Settings tile: notifications title"
   },
-  "settingsNotificationsSubtitle": "选择你想接收的提醒。",
+  "settingsNotificationsSubtitle": "选择警报并发送本地测试预览。",
   "@settingsNotificationsSubtitle": {
     "description": "Settings tile: notifications subtitle"
   },
@@ -2931,7 +3021,7 @@
   "@searchTabPlayers": {
     "description": "Search mode tab: players"
   },
-  "searchTabClans": "部落",
+  "searchTabClans": "氏族",
   "@searchTabClans": {
     "description": "Search mode tab: clans"
   },
@@ -3334,7 +3424,7 @@
   "playerBestTrophies": "最高奖杯",
   "clanLoadFailed": "加载部落失败。",
   "gameItemLevels": "等级",
-  "gameItemLevelCount": "{count} 级",
+  "gameItemLevelCount": "{count, plural, one {# Level} other {# Levels}}",
   "@gameItemLevelCount": {
     "placeholders": {
       "count": {
@@ -3405,6 +3495,20 @@
   },
   "todoAllCaughtUpForNow": "目前都完成了",
   "timeDurationShort": "{unit, select, daysHours {{primary}天{secondary}小时} hoursMinutes {{primary}小时{secondary}分钟} other {{primary}分钟}}",
+  "@timeDurationShort": {
+    "description": "Compact localized duration used in countdowns",
+    "placeholders": {
+      "unit": {
+        "type": "String"
+      },
+      "primary": {
+        "type": "int"
+      },
+      "secondary": {
+        "type": "int"
+      }
+    }
+  },
   "todoEventEndsIn": "将在 {duration} 后结束",
   "@todoEventEndsIn": {
     "placeholders": {
@@ -3514,9 +3618,14 @@
   "statsHero": "英雄",
   "statsPet": "宠物",
   "statsEquipment": "装备",
-  "statsPetCombinations": "宠物组合",
-  "statsEquipmentPairs": "装备搭配",
-  "statsArmyFallback": "军队 {id}",
+  "statsPetCombinations": "Pet combinations",
+  "statsEquipmentPairs": "Equipment pairs",
+  "statsArmyFallback": "Army {id}",
+  "@statsArmyFallback": {
+    "placeholders": {
+      "id": {}
+    }
+  },
   "statsOwningHero": "拥有英雄",
   "statsAddItem": "添加物品",
   "statsAnalyzeItems": "分析物品",
@@ -3902,7 +4011,7 @@
   },
   "appIconDefault": "默认",
   "appIconChristmas": "圣诞节",
-  "appIconHalloween": "万圣节",
+  "appIconHalloween": "Halloween",
   "appIconBlackWhite": "黑白",
   "appIconDarkMode": "深色模式",
   "generalMembersCount": "{count} 名成员",
@@ -3960,9 +4069,9 @@
     }
   },
   "upgradeTrackerShare": "分享追踪器",
-  "trackerPosterCopied": "图片已复制",
-  "trackerPosterCopy": "复制图片",
-  "trackerPosterShareAll": "分享全部3张",
+  "trackerPosterCopied": "Image copied",
+  "trackerPosterCopy": "Copy image",
+  "trackerPosterShareAll": "Share all 3",
   "upgradeTrackerPasteJson": "粘贴账号 JSON",
   "upgradeTrackerImportTitle": "导入账号数据",
   "upgradeTrackerImportDescription": "粘贴原始账号 JSON，数据仅保留在本设备。",
@@ -4270,9 +4379,9 @@
   "homeActivityJoined": "加入",
   "homeActivityLeft": "离开",
   "homeActivityAClan": "一个部落",
-  "statsCwlSeasonGroups": "小组",
-  "statsCwlSeasonHistory": "部落对战联赛趋势",
-  "statsCwlRosterNotLineup": "将报名成员比例折算为 {size} 个位置；实际参战阵容可能不同。",
+  "statsCwlSeasonGroups": "分组",
+  "statsCwlSeasonHistory": "CWL over time",
+  "statsCwlRosterNotLineup": "Registered roster mix, scaled to {size} places; actual war lineups may differ.",
   "@statsCwlRosterNotLineup": {
     "placeholders": {
       "size": {
@@ -4280,28 +4389,28 @@
       }
     }
   },
-  "statsTroopStats": "兵种统计",
-  "statsWarSizes": "对战规模",
-  "statsMissedAttacks": "未使用的进攻",
-  "statsCopyChart": "复制图表",
-  "statsCompareItems": "比较项目",
-  "statsCompareItemsHint": "最多选择 5 个项目进行比较。",
-  "statsVsOverall": "与整体相比",
-  "statsCopyChartFailed": "无法复制图表。请重试。",
-  "statsPercentagePoints": "个百分点",
+  "statsTroopStats": "Troop Stats",
+  "statsWarSizes": "War sizes",
+  "statsMissedAttacks": "Missed attacks",
+  "statsCopyChart": "Copy chart",
+  "statsCompareItems": "Compare items",
+  "statsCompareItemsHint": "Select up to 5 items to compare.",
+  "statsVsOverall": "vs. overall",
+  "statsCopyChartFailed": "Could not copy chart. Try again.",
+  "statsPercentagePoints": "percentage points",
   "statsMeta": "元数据",
   "statsBattle": "战斗",
   "statsWorld": "世界",
   "statsHeaderSubtitle": "探索对战表现与我们所追踪的世界。",
   "statsPreview": "预览",
-  "statsTownHallDistribution": "市政厅",
+  "statsTownHallDistribution": "市政厅分布",
   "statsBuilderHallDistribution": "建造者大厅分布",
-  "statsLeagueDistribution": "排名联赛",
+  "statsLeagueDistribution": "排名联赛分布",
   "statsTrackedPlayers": "当前追踪玩家人数",
   "statsTrackedClans": "当前追踪的氏族人口",
-  "statsCwlLeagueDistribution": "CWL联赛",
-  "statsCapitalLeagueDistribution": "首都联赛",
-  "statsTrackedLocations": "部落位置",
+  "statsCwlLeagueDistribution": "CWL联赛分布",
+  "statsCapitalLeagueDistribution": "首都联赛分布",
+  "statsTrackedLocations": "追踪部落位置",
   "statsLocationCountHelp": "追踪部落代表的国家和地区。",
   "statsLeagueId": "联盟 {id}",
   "@statsLeagueId": {
@@ -4379,7 +4488,7 @@
   "rankedLeagueNoBattles": "暂无对战记录。",
   "rankedLeagueGroupRanking": "小组排名",
   "rankedLeagueRankingSubtitle": "当前小组的实时排名。你的玩家已高亮。",
-  "rankedLeagueJumpToMyRank": "跳转到排名",
+  "rankedLeagueJumpToMyRank": "跳转到我的排名",
   "rankedLeagueLastPeriod": "上一周期",
   "rankedLeagueBestGroupRank": "最佳小组排名",
   "rankedLeaguePeriodHistory": "周期历史",
@@ -4944,7 +5053,7 @@
       }
     }
   },
-  "upgradeTrackerPlanRuleNote": "拖动类别以选择升级顺序。行设置可让类别共享优先级，或在达到进度目标时暂停。",
+  "upgradeTrackerPlanRuleNote": "编号层首先运行。共享行保持相同的层数，并且它们的组合根据相对权重进行标准化，因此 50 + 25 变为 67% / 33%。目标在达到该百分比后会产生类别收益，并在以后保持合格状态。",
   "upgradeTrackerPlanGoalMaxCurrentHall": "前进前最大",
   "upgradeTrackerPlanGoalRushNextHall": "快速到达下一个大厅",
   "upgradeTrackerPlanGoalCatchUp": "赶上匆忙的水平",
@@ -5046,19 +5155,40 @@
       }
     }
   },
-  "cwlRegisteredRoster": "已报名阵容",
-  "cwlMatches": "对战",
-  "cwlNextMatchup": "下一场对战",
-  "cwlOtherMatches": "其他对战",
-  "cwlOutlook": "赛季展望",
-  "cwlFirstPlace": "第一名",
-  "cwlTopTwo": "前两名",
-  "cwlRemainingOpponents": "剩余对手",
-  "cwlWinBonusNote": "星数包含每场已结束的胜利所获的10颗奖励星。",
-  "cwlEstimateNote": "估计基于已结束的对战和剩余对手，不考虑阵容变化。每个部落至少需要完成两场对战。这些估计未经校准；晋级规则因联赛而异。",
-  "cwlDuration": "{unit, select, hours {{count, plural, one {# 小时} other {# 小时}}} other {{count, plural, one {# 分钟} other {# 分钟}}}}",
-  "personalBasesDeleteOld": "移除超过 90 天的阵型",
-  "personalBasesDeleteOldConfirm": "将移除 {count} 个保存超过 90 天的阵型。下载历史和共享阵型将保留。",
+  "@settingsWarWidgetIosReady": {
+    "placeholders": {
+      "clanName": {
+        "type": "String"
+      }
+    }
+  },
+  "@settingsWarWidgetAndroidReady": {
+    "placeholders": {
+      "clanName": {
+        "type": "String"
+      }
+    }
+  },
+  "@settingsWarWidgetPrepareFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "cwlRegisteredRoster": "Registered roster",
+  "cwlMatches": "Matchups",
+  "cwlNextMatchup": "Next matchup",
+  "cwlOtherMatches": "Other matchups",
+  "cwlOutlook": "Season outlook",
+  "cwlFirstPlace": "First place",
+  "cwlTopTwo": "Top two",
+  "cwlRemainingOpponents": "Remaining opponents",
+  "cwlWinBonusNote": "Stars include 10 bonus stars per completed win.",
+  "cwlEstimateNote": "Estimates use completed wars and remaining opponents, not lineup changes. At least two completed wars per clan are needed. These are uncalibrated estimates; promotion rules vary by league.",
+  "cwlDuration": "{unit, select, hours {{count, plural, one {# hour} other {# hours}}} other {{count, plural, one {# minute} other {# minutes}}}}",
+  "personalBasesDeleteOld": "Remove bases older than 90 days",
+  "personalBasesDeleteOldConfirm": "{count} saved bases older than 90 days will be removed. Download history and shared bases will remain.",
   "@personalBasesDeleteOldConfirm": {
     "description": "Confirms cleanup while preserving lifetime download history.",
     "placeholders": {
@@ -5067,9 +5197,9 @@
       }
     }
   },
-  "legendsAutomaticDefense": "自动防守",
-  "legendsPopularArmyItem": "最常用的军队单位",
-  "legendsClanCastle": "部落城堡",
+  "legendsAutomaticDefense": "Automatic defense",
+  "legendsPopularArmyItem": "Most popular army item",
+  "legendsClanCastle": "Clan Castle",
   "@cwlDuration": {
     "description": "Explicit countdown units; avoid native unit conversion.",
     "placeholders": {
@@ -5081,20 +5211,20 @@
       }
     }
   },
-  "clanNotificationRemoveConfirmation": "关闭此部落的通知并移除书签？",
-  "personalBasesTab": "Bases",
+  "clanNotificationRemoveConfirmation": "Turn off this clan’s notifications and remove the bookmark?",
+  "personalBasesTab": "基地",
   "personalBasesDownloaded": "Downloaded",
   "personalArmyName": "Army name",
   "personalArmyNotes": "Notes",
   "personalArmyUnnamed": "Unnamed army",
   "personalArmyEdit": "Edit army",
   "personalArmyUnknownTownHall": "Unknown Town Hall",
-  "discordBotDashboard": "Discord 机器人控制面板",
-  "discordAddBot": "添加机器人",
-  "discordAddToMyDiscord": "添加到我的 Discord",
-  "discordServersWithoutBot": "未添加 ClashKing 的服务器",
-  "rankingsPlayerSection": "玩家排行榜",
-  "rankingsClanSection": "部落排行榜",
+  "discordBotDashboard": "Discord Bot Dashboard",
+  "discordAddBot": "Add bot",
+  "discordAddToMyDiscord": "Add to My Discord",
+  "discordServersWithoutBot": "Servers without ClashKing",
+  "rankingsPlayerSection": "Player Rankings",
+  "rankingsClanSection": "Clan Rankings",
   "cwlArchiveCoverage": "{available} of {total} matchups available.",
   "cwlStandingsIncomplete": "Missing archives are excluded. Group ranks and forecasts are unavailable.",
   "cwlPromotionChance": "Estimated promotion chance",
@@ -5105,62 +5235,62 @@
   "cwlRecordedStats": "Recorded wars only",
   "cwlMissingMatchups": "{count} matchups unavailable",
   "cwlHighestLeague": "Highest league · no promotion",
-  "warOutlookWinPossible": "仍有获胜可能",
-  "warOutlookDrawOnly": "最好只能平局",
-  "warOutlookDefeat": "已无法获胜",
-  "warOutlookMaximum": "最高可能得分",
-  "warOutlookAssumption": "假设剩余进攻全部完美。这是数学上限，而非预测。",
-  "warScoutTitle": "阵容分析",
-  "warScoutOpponent": "对手近期部落对战",
-  "warScoutScope": "当前阵容 · 相同规则 · 最多10场此前对战",
-  "upgradeTrackerCapturedWork": "来自上次更新",
-  "tutorialWelcomeBody": "快速了解ClashKing。您可以随时跳过导览。",
-  "tutorialReorderBody": "长按卡片，然后拖动即可调整位置。",
-  "tutorialSidebarBody": "在主页上滑动或点按头像即可打开菜单。",
-  "tutorialExploreBody": "从此菜单打开设置，然后选择通知。点击继续即可前往。",
-  "tutorialRemindersBody": "在下方选择提醒。完成后返回主页。",
-  "tutorialResetTitle": "重置教程",
-  "tutorialResetConfirm": "是否在下次访问时重新开始教程？",
-  "upgradeTrackerOngoingUpgrades": "正在进行的升级",
-  "upgradeTrackerToLevel": "升至{level}级",
-  "upgradeTrackerFreeSlots": "{count}个空位",
-  "upgradeTrackerFreeIn": "{duration}后空闲",
-  "upgradeTrackerPetHouse": "战宠小屋",
-  "upgradeTrackerNotBuilt": "未建造",
-  "upgradeTrackerExtraSlots": "额外{count}个",
-  "rankedLeagueOverTime": "联赛变化",
-  "rankedLeaguePromotionCutoff": "晋级线",
-  "rankedLeagueDemotionCutoff": "降级线",
-  "rankedLeagueCutoffsUnavailable": "暂无晋级和降级门槛信息。",
-  "rankedAutomaticDefenseSummary": "{count}次防守 · 每次{points}奖杯",
-  "rankedAutomaticDefenseExplanation": "根据本周所有实际防守的平均值，向下取整。",
-  "warStatusInWar": "战争中",
-  "warStatusNoWar": "无战争",
-  "warNoActiveClans": "目前没有部落正在进行部落战。",
-  "warNoInactiveClans": "没有未参战的部落",
-  "warAllClansInWar": "你的所有部落目前都在进行部落战。",
+  "warOutlookWinPossible": "Win still possible",
+  "warOutlookDrawOnly": "Draw at best",
+  "warOutlookDefeat": "No path to a win",
+  "warOutlookMaximum": "Maximum possible score",
+  "warOutlookAssumption": "Assumes perfect remaining attacks. This is a mathematical limit, not a prediction.",
+  "warScoutTitle": "Lineup scouting",
+  "warScoutOpponent": "Opponent’s recent wars",
+  "warScoutScope": "Current lineup · same rules · up to 10 previous wars",
+  "upgradeTrackerCapturedWork": "From your last update",
+  "tutorialWelcomeBody": "Take a quick tour of ClashKing. You can skip it at any time.",
+  "tutorialReorderBody": "Hold a card, then drag it to change its position.",
+  "tutorialSidebarBody": "Swipe across Home to open the menu, or tap your avatar.",
+  "tutorialExploreBody": "From this menu, open Settings, then Notifications. Continue to go there now.",
+  "tutorialRemindersBody": "Choose reminders below. When you are done, return to Home.",
+  "tutorialResetTitle": "Reset tutorials",
+  "tutorialResetConfirm": "Start the tutorials again on your next visits?",
+  "upgradeTrackerOngoingUpgrades": "Ongoing Upgrades",
+  "upgradeTrackerToLevel": "To Level {level}",
+  "upgradeTrackerFreeSlots": "{count} free",
+  "upgradeTrackerFreeIn": "Free in {duration}",
+  "upgradeTrackerPetHouse": "Pet House",
+  "upgradeTrackerNotBuilt": "Not built",
+  "upgradeTrackerExtraSlots": "{count} extra",
+  "rankedLeagueOverTime": "League over time",
+  "rankedLeaguePromotionCutoff": "Promotion cutoff",
+  "rankedLeagueDemotionCutoff": "Demotion cutoff",
+  "rankedLeagueCutoffsUnavailable": "Promotion and demotion thresholds unavailable.",
+  "rankedAutomaticDefenseSummary": "{count} defenses · {points} trophies each",
+  "rankedAutomaticDefenseExplanation": "Based on all real defenses this week, rounded down.",
+  "warStatusInWar": "In war",
+  "warStatusNoWar": "No war",
+  "warNoActiveClans": "No clans are currently in war.",
+  "warNoInactiveClans": "No clans out of war",
+  "warAllClansInWar": "All your clans are currently in war.",
   "warStatusOther": "其他",
-  "warNoOtherClans": "没有其他部落。",
-  "playerWarLifetime": "全部历史",
-  "playerWarThScope": "仅适用于统计卡片，不影响战斗列表。长按按钮可查看此说明。",
-  "playerWarNoAttacks": "暂无进攻",
-  "playerWarRegularWars": "普通部落战",
-  "warWidgetNoActiveWar": "没有进行中的部落对战",
-  "warWidgetPrivateWarLog": "对战日志不公开",
-  "warWidgetChooseClan": "选择部落",
-  "legendPerformanceTitle": "每日表现",
-  "legendCompleteDays": "完整天数",
-  "legendPerfectDays": "完美天数",
-  "legendPartialDays": "记录不完整的天数",
-  "legendMissingDays": "无记录",
-  "legendInvalidDays": "无效天数",
-  "legendTrophiesGained": "获得奖杯",
-  "legendTrophiesLost": "损失奖杯",
+  "warNoOtherClans": "No other clans.",
+  "playerWarLifetime": "Lifetime",
+  "playerWarThScope": "Applies only to the statistics cards, not Battles. Hold the button for this explanation.",
+  "playerWarNoAttacks": "No attacks yet",
+  "playerWarRegularWars": "Regular war",
+  "warWidgetNoActiveWar": "No active war",
+  "warWidgetPrivateWarLog": "Private war log",
+  "warWidgetChooseClan": "Choose a clan",
+  "legendPerformanceTitle": "Daily performance",
+  "legendCompleteDays": "Complete days",
+  "legendPerfectDays": "Perfect days",
+  "legendPartialDays": "Partial days",
+  "legendMissingDays": "No observations",
+  "legendInvalidDays": "Invalid days",
+  "legendTrophiesGained": "Trophies gained",
+  "legendTrophiesLost": "Trophies lost",
   "legendDistribution": "分布",
-  "legendPreviousDays": "此前 {count} 天",
-  "legendAvailableDays": "有数据的天数",
-  "legendCompleteOnly": "分布仅统计记录了8场战斗的日期。",
-  "legendPerfectSources": "按排名区间统计完美天数",
+  "legendPreviousDays": "Previous {count} days",
+  "legendAvailableDays": "Days available",
+  "legendCompleteOnly": "Distribution uses days with 8 recorded battles.",
+  "legendPerfectSources": "Perfect days by rank",
   "@legendPreviousDays": {
     "placeholders": {
       "count": {
@@ -5168,15 +5298,15 @@
       }
     }
   },
-  "onboardingOverviewTitle": "你的账号与部落",
-  "onboardingOverviewBody": "在同一个地方关注玩家、部落和升级进度。",
-  "onboardingProgressTitle": "查看排名与统计",
-  "onboardingProgressBody": "回顾对战、比较进度，继续升级。",
-  "onboardingRemindersTitle": "接收提醒与通知",
-  "onboardingRemindersBody": "接收部落战提醒和你选择的通知。在设置中选择账号和通知类型。",
-  "onboardingReplayTitle": "重新查看介绍",
-  "statsViewLatestData": "查看最新数据",
-  "statsLatestAvailableDate": "最新可用数据：{date}",
+  "onboardingOverviewTitle": "Your accounts & clans",
+  "onboardingOverviewBody": "Keep your players, clans, and upgrades together.",
+  "onboardingProgressTitle": "View rankings and stats",
+  "onboardingProgressBody": "Follow your battles, compare your progress, and keep upgrades moving.",
+  "onboardingRemindersTitle": "Get reminders and alerts",
+  "onboardingRemindersBody": "Get war reminders and the alerts you choose. Pick your accounts and alert types in Settings.",
+  "onboardingReplayTitle": "Replay introduction",
+  "statsViewLatestData": "View latest data",
+  "statsLatestAvailableDate": "Latest available: {date}",
   "@statsLatestAvailableDate": {
     "placeholders": {
       "date": {
@@ -5184,23 +5314,23 @@
       }
     }
   },
-  "legendPerfectedDefenseDays": "防守被全三星的天数",
-  "legendCompleteDayDefinition": "仅包含完整记录8场对战的日期。",
+  "legendPerfectedDefenseDays": "Perfected defense days",
+  "legendCompleteDayDefinition": "Only days with all 8 battles are included.",
   "statsCommunity": "社区",
-  "rankedFullOffenseDays": "+320 天",
-  "rankedFullDefenseDays": "−320 天",
-  "rankedTrophiesByRank": "按排名显示奖杯",
-  "statsArmyTypes": "军队类型",
-  "onboardingStatsBody": "探索玩家数据，关注部落动态，了解整个游戏的变化。",
-  "onboardingWidgetsTitle": "添加主屏幕小组件",
-  "onboardingWidgetsBody": "通过主屏幕小组件，随时查看部落战比分和升级进度。",
-  "onboardingAlertTitle": "部落战即将结束",
-  "onboardingAlertBody": "该发起最后一次进攻了。",
-  "onboardingSetupNotifications": "启用通知",
-  "onboardingAccountsReadyBody": "已关联的账号已准备就绪。你可以添加其他账号或继续。",
-  "onboardingSkipAccountSetup": "跳过",
-  "accountsSetupBody": "添加并验证你的《部落冲突》账号。",
-  "accountsMyTitle": "我的账号",
-  "profileAvatar": "更换形象",
-  "avatarPickerTitle": "选择头像"
+  "rankedFullOffenseDays": "+320 days",
+  "rankedFullDefenseDays": "−320 days",
+  "rankedTrophiesByRank": "Trophies by rank",
+  "statsArmyTypes": "Army Types",
+  "onboardingStatsBody": "Explore player stats, follow your clans, and see how the whole game is changing.",
+  "onboardingWidgetsTitle": "Add Home Screen widgets",
+  "onboardingWidgetsBody": "Keep war scores and upgrade progress close with Home Screen widgets.",
+  "onboardingAlertTitle": "War ends soon",
+  "onboardingAlertBody": "Time for your final attack.",
+  "onboardingSetupNotifications": "Enable notifications",
+  "onboardingAccountsReadyBody": "Your linked accounts are ready. Add another account or continue.",
+  "onboardingSkipAccountSetup": "Skip",
+  "accountsSetupBody": "Add and verify your Clash of Clans accounts.",
+  "accountsMyTitle": "My Accounts",
+  "profileAvatar": "Change look",
+  "avatarPickerTitle": "Pick an avatar"
 }
