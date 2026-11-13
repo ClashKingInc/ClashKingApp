@@ -1,20 +1,20 @@
 {
-  "capitalCurrentOpponent": "現在の対戦相手",
-  "capitalRaidMedals": "襲撃メダル",
-  "warReplayTitle": "スコアの推移",
-  "warReplayPlay": "履歴を再生",
-  "warReplayPause": "履歴を一時停止",
-  "cwlLeading": "リード中",
-  "cwlTrailing": "ビハインド",
-  "cwlYourClan": "自分のクラン",
-  "cwlPromotionZone": "昇格圏",
-  "cwlDemotionZone": "降格圏",
-  "cwlNotInLineup": "編成外",
-  "esportsEloSubtitle": "世界のチームランキングと試合 提供:",
-  "esportsTopTeamsMatches": "現在の上位50チームの試合。",
-  "esportsPartialMatches": "一部のチームの情報を更新できませんでした。",
-  "settingsHideAccounts": "アカウントを非表示",
-  "settingsHideAccountsDescription": "連携済みアカウントを非表示にする設定を表示します。既存のプライバシー設定は変更されません。",
+  "capitalCurrentOpponent": "Current opponent",
+  "capitalRaidMedals": "Raid medals",
+  "warReplayTitle": "Score history",
+  "warReplayPlay": "Play history",
+  "warReplayPause": "Pause history",
+  "cwlLeading": "Leading",
+  "cwlTrailing": "Trailing",
+  "cwlYourClan": "Your clan",
+  "cwlPromotionZone": "Promotion zone",
+  "cwlDemotionZone": "Demotion zone",
+  "cwlNotInLineup": "Not in lineup",
+  "esportsEloSubtitle": "Global team rankings and matches from",
+  "esportsTopTeamsMatches": "Matches from the current top 50 teams.",
+  "esportsPartialMatches": "Some teams could not be refreshed.",
+  "settingsHideAccounts": "Hide accounts",
+  "settingsHideAccountsDescription": "Show the option to hide linked accounts. Existing privacy choices stay unchanged.",
   "calcRocketBalloonAssumption": "1 hit + death · {damage} damage each",
   "calcKeepEquipped": "Keep one equipped",
   "calcCustomLevels": "Custom levels",
@@ -38,31 +38,31 @@
   "personalBasesEmptyBody": "Bases you post through ClashKing on Discord appear here. You can also save bases from the library.",
   "personalArmiesEmptyTitle": "Keep your armies close",
   "personalArmiesEmptyBody": "Armies you post through ClashKing on Discord appear here. Save your favourites to find them before your next attack.",
-  "homeCardOriginal": "オリジナル",
-  "homeCardTint": "淡い色",
-  "homeCardEdge": "カラフルな縁取り",
-  "homeCardGlow": "ゆっくり光る",
-  "competitiveNoHistory": "トーナメントはまだありません",
-  "competitiveHistoryHint": "あなたのチームとトーナメントの結果がここに表示されます。",
-  "esportsMonthlyFinals": "マンスリー決勝",
-  "esportsMonthlyQualifier": "マンスリー予選",
-  "esportsHeroSubtitle": "世界選手権への道",
-  "esportsViewEvent": "大会を見る",
-  "esportsWinLoss": "{wins}勝 · {losses}敗",
-  "esportsViewPlayer": "プレイヤーを見る",
-  "esportsRecentMatches": "最近の試合",
-  "esportsHideAttacks": "バトルの詳細を非表示",
-  "esportsViewAttacks": "バトルの詳細を見る",
-  "esportsPlayer": "eスポーツ選手",
+  "homeCardOriginal": "Original",
+  "homeCardTint": "Soft color",
+  "homeCardEdge": "Colored edges",
+  "homeCardGlow": "Slow glow",
+  "competitiveNoHistory": "No tournaments yet",
+  "competitiveHistoryHint": "Your teams and tournament results will appear here.",
+  "esportsMonthlyFinals": "Monthly finals",
+  "esportsMonthlyQualifier": "Monthly qualifiers",
+  "esportsHeroSubtitle": "The road to the World Championship",
+  "esportsViewEvent": "Explore event",
+  "esportsWinLoss": "{wins} wins · {losses} losses",
+  "esportsViewPlayer": "View player",
+  "esportsRecentMatches": "Recent matches",
+  "esportsHideAttacks": "Hide battle details",
+  "esportsViewAttacks": "View battle details",
+  "esportsPlayer": "Esports player",
   "esportsBattles": "バトル",
-  "esportsTriples": "全壊攻撃",
-  "esportsAverageStars": "平均スター数",
-  "esportsDestruction": "破壊率",
-  "esportsAccounts": "ゲームアカウント",
+  "esportsTriples": "Triples",
+  "esportsAverageStars": "平均星数",
+  "esportsDestruction": "破壊",
+  "esportsAccounts": "Game accounts",
   "esportsAttack": "攻撃",
   "esportsDefense": "防衛",
-  "competitiveArenaSubtitle": "あなたのクラン。あなたのチーム。次なる挑戦。",
-  "competitiveViewTournament": "トーナメントを見る",
+  "competitiveArenaSubtitle": "Your clan. Your team. Your next challenge.",
+  "competitiveViewTournament": "View tournament",
   "@esportsWinLoss": {
     "placeholders": {
       "wins": {
@@ -87,50 +87,50 @@
   "esportsStage": "Stage",
   "esportsStandings": "Standings",
   "esportsMatches": "Matches",
-  "esportsPoints": "Points",
+  "esportsPoints": "ポイント",
   "esportsPlayed": "played",
   "esportsSource": "Data from Competitive Clash Network",
-  "esportsRoster": "Roster",
+  "esportsRoster": "ロスター",
   "esportsSeasonPoints": "Season points",
   "esportsStageStandings": "Stage standings",
-  "competitiveCompetition": "大会",
-  "competitiveWebsite": "ウェブサイト",
-  "competitiveVerifiedAccounts": "認証済みアカウント",
-  "competitiveEsports": "eスポーツ",
-  "competitiveTournaments": "トーナメント",
+  "competitiveCompetition": "Competition",
+  "competitiveWebsite": "Website",
+  "competitiveVerifiedAccounts": "Verified accounts",
+  "competitiveEsports": "eSports",
+  "competitiveTournaments": "Tournaments",
   "competitiveProfile": "プロフィール",
   "competitiveTeams": "チーム",
-  "competitiveFreeEntry": "参加無料",
-  "competitiveRegister": "チームを登録",
-  "competitiveCheckIn": "参加を確認",
-  "competitiveRules": "ルール",
-  "competitiveUnavailable": "大会データを取得できません。もう一度お試しください。",
-  "competitiveRegistrationSaved": "登録を送信しました",
-  "competitiveTeamHistory": "チーム履歴",
-  "competitiveDebutName": "トーナメントデビュー",
-  "competitiveDebutDescription": "認証済みアカウントでトーナメントに参加する。",
-  "competitiveViewProfile": "プロフィールを見る",
+  "competitiveFreeEntry": "Free entry",
+  "competitiveRegister": "Register team",
+  "competitiveCheckIn": "Check in",
+  "competitiveRules": "Rules",
+  "competitiveUnavailable": "Competition data is unavailable. Try again.",
+  "competitiveRegistrationSaved": "Registration submitted",
+  "competitiveTeamHistory": "Team history",
+  "competitiveDebutName": "Tournament debut",
+  "competitiveDebutDescription": "Participate in a tournament with your verified account.",
+  "competitiveViewProfile": "View profile",
   "calcPinEquipment": "Keep one equipped",
-  "calcSearch": "Search",
+  "calcSearch": "検索",
   "calcEquipmentTitle": "Equipment Compare",
   "calcDamageIntro": "Find the combinations that take a defense down.",
   "calcFarmIntro": "Plan the loot needed for your next upgrades.",
   "calcEquipmentIntro": "Compare hero loadouts, levels, and ability stats.",
   "calcComingSoon": "Coming soon",
-  "calcHero": "Hero",
+  "calcHero": "ヒーロー",
   "calcHeroLevel": "Hero level",
   "calcMaxLevels": "Max levels",
   "calcEquipmentPool": "Equipment to compare",
   "calcPoolHelp": "Choose pieces and default levels. Compare every pair, then customize individual rows.",
   "calcSelectAll": "Select all",
-  "calcClear": "Clear",
+  "calcClear": "クリア",
   "calcAttributes": "Attributes",
   "calcAddAttribute": "Add attribute",
-  "calcTable": "Compare",
+  "calcTable": "比較",
   "calcProgression": "Level progression",
   "calcCompareHelp": "DPS adds the hero's base and equipment DPS. Speed bonuses and temporary effects are separate attributes; healing is not extra max HP.",
   "calcChartHelp": "Equipment levels increase together; each piece stops at its own maximum. Hero levels stay fixed. First six loadouts shown.",
-  "calcSort": "Sort by",
+  "calcSort": "並べ替え",
   "calcNoEquipment": "No equipment",
   "calcDuplicate": "Duplicate loadout",
   "calcRemove": "Remove loadout",
@@ -154,9 +154,9 @@
   "calcComparisonDownloaded": "Comparison image downloaded",
   "calcComparisonExportFailed": "Could not copy the comparison image. Please try again.",
   "calcEffectiveLevel": "Effective level {level}",
-  "calcTarget": "Target",
+  "calcTarget": "対象",
   "calcSupercharge": "Supercharge",
-  "calcNone": "None",
+  "calcNone": "なし",
   "calcResults": "{count} combinations",
   "calcResultsHelp": "Smallest spell cost first, then fewer equipment activations. Extra sources that do not help are removed.",
   "calcNoCombinationHelp": "Try another source, a higher level, or more spell capacity.",
@@ -164,63 +164,63 @@
   "calcAlternative": "Alternative",
   "calcCombinationCost": "{housing} spell space · {equipment} equipment",
   "calcUseStack": "Use stack",
-  "homeRankingsAndStats": "ランキングと統計",
-  "homeActivityRecorded": "記録されたアクティビティのみ。履歴が不完全な場合があります。",
-  "homeWidgetsServers": "サーバー",
-  "homeWidgetsEdit": "ホームを編集",
-  "homeWidgetsAdd": "ウィジェットを追加",
-  "homeWidgetsRemove": "ウィジェットを削除",
-  "homeWidgetsMoveUp": "上へ移動",
-  "homeWidgetsMoveDown": "下へ移動",
+  "homeRankingsAndStats": "Rankings & Stats",
+  "homeActivityRecorded": "Recorded activity only; history may be incomplete.",
+  "homeWidgetsServers": "Servers",
+  "homeWidgetsEdit": "Edit Home",
+  "homeWidgetsAdd": "Add widget",
+  "homeWidgetsRemove": "Remove widget",
+  "homeWidgetsMoveUp": "Move up",
+  "homeWidgetsMoveDown": "Move down",
   "homeWidgetsSmall": "小",
-  "homeWidgetsWide": "横長",
-  "homeWidgetsSaveError": "ホームを同期できませんでした。再編集の前に更新してください。",
-  "homeWidgetsUnavailable": "記録されたデータがありません",
-  "homeWidgetsBookmarkFirst": "先にプレイヤーかクランをブックマークしてください。",
-  "rankingsWarTripleStreak": "対戦全壊連続記録",
+  "homeWidgetsWide": "Wide",
+  "homeWidgetsSaveError": "Could not sync Home. Please refresh before editing again.",
+  "homeWidgetsUnavailable": "No recorded data available",
+  "homeWidgetsBookmarkFirst": "Bookmark a player or clan first.",
+  "rankingsWarTripleStreak": "War Triple Streak",
   "rankingsWarTripleRulesTitle": "How streaks count",
   "rankingsWarTripleRulesBody": "+2 for two triples against your own Town Hall level in a regular war.\n\nA missed attack, non-triple, or different-TH target resets your streak.\n\nCWL and friendly wars don’t count. Streaks are separate for each Town Hall level.",
-  "clanLegendsRanked": "レジェンド＆ランク戦",
-  "appIconChangeWarning": "アプリアイコンを変更するとClashKingが終了します。続行しますか？",
-  "upgradeTrackerUnverifiedAccount": "このアカウントは連携済みですが未認証です。アップグレードデータをインポートするには、アカウント管理で認証してください。",
-  "clanWarNotificationsTitle": "対戦の通知",
-  "clanCapitalNotificationsTitle": "クランの都の通知",
-  "clanWarNotificationsBody": "このクランの対戦情報を受け取ります。",
-  "clanCapitalNotificationsBody": "このクランの都の最新情報を受け取ります。",
-  "notifSystemNotifications": "システム通知",
-  "notifSystemSettings": "通知設定を開く",
-  "notifSystemSettingsDescription": "端末の設定で通知、音、バッジを管理します。",
-  "notifSystemSettingsFailed": "通知設定を開けませんでした。端末の設定を開いてください。",
-  "notifManagePlayersDescription": "プレイヤー → 連携済み → オプションでアカウント通知を管理します。",
-  "notifCustomReminders": "カスタムリマインダー",
-  "notifTestType": "通知の種類",
-  "statsBattlelogsGroup": "戦闘ログ",
-  "statsGlobalStatsGroup": "世界統計",
-  "playerOptionShowOnHomeTitle": "ホームにアカウントを表示",
-  "playerOptionShowOnHomeSubtitle": "この認証済みアカウントをホームのカードに表示します（最大5件）。",
-  "playerOptionShowOnHomeVerifyFirst": "ホームに表示するには、このアカウントを認証してください。",
-  "playerOptionHomeInclusionFirst": "先に「ホームにアカウントを表示」をオンにしてください。",
-  "homeIncludedAccountsLimit": "ホームに表示できるアカウントは最大5件です。先に1件削除してください。",
-  "statsHitratesByTownHall": "タウンホール別成功率",
-  "statsChartGranularity": "グラフの間隔",
-  "statsDaily": "日ごと",
-  "statsWeekly": "週ごと",
-  "playerBattlelogCumulative": "累計",
-  "statsMonthly": "月ごと",
-  "statsCompareCohorts": "グループを比較",
-  "statsAcrossCohorts": "グループ別使用率",
-  "legendsTrophyGrid": "シーズン概要",
-  "legendsPopularArmyItems": "人気の軍隊アイテム",
-  "legendsPopularTroop": "お気に入り",
-  "legendsHitrate": "成功率",
-  "legendsAvgOffense": "平均攻撃",
-  "legendsAvgDefense": "平均防衛",
-  "settingsClearImageCache": "画像キャッシュを消去",
-  "settingsImageCacheCleared": "画像キャッシュを消去しました。",
-  "settingsImageCacheClearFailed": "画像キャッシュを消去できませんでした。もう一度お試しください。",
-  "startupCheckingUpdate": "アップデートを確認中…",
-  "startupDownloadingUpdate": "アップデートをダウンロード中…",
-  "startupUpdateInBackground": "バックグラウンドで更新",
+  "clanLegendsRanked": "Legends & Ranked",
+  "appIconChangeWarning": "Changing the app icon will close ClashKing. Continue?",
+  "upgradeTrackerUnverifiedAccount": "This account is linked but not verified. Verify it in Manage Accounts to import your upgrade data.",
+  "clanWarNotificationsTitle": "War notifications",
+  "clanCapitalNotificationsTitle": "Clan Capital notifications",
+  "clanWarNotificationsBody": "Receive war updates for this clan.",
+  "clanCapitalNotificationsBody": "Receive Clan Capital updates for this clan.",
+  "notifSystemNotifications": "System notifications",
+  "notifSystemSettings": "Open notification settings",
+  "notifSystemSettingsDescription": "Manage alerts, sounds, and badges in your device settings.",
+  "notifSystemSettingsFailed": "Could not open notification settings. Please open Settings on your device.",
+  "notifManagePlayersDescription": "Manage account notifications in Players → Linked → Options.",
+  "notifCustomReminders": "Custom reminders",
+  "notifTestType": "Notification type",
+  "statsBattlelogsGroup": "Battlelogs",
+  "statsGlobalStatsGroup": "Global Stats",
+  "playerOptionShowOnHomeTitle": "Show account on Home",
+  "playerOptionShowOnHomeSubtitle": "Include this verified account in Home cards (up to 5).",
+  "playerOptionShowOnHomeVerifyFirst": "Verify this account to show it on Home.",
+  "playerOptionHomeInclusionFirst": "Turn on Show account on Home first.",
+  "homeIncludedAccountsLimit": "Home can show up to 5 accounts. Remove one first.",
+  "statsHitratesByTownHall": "Hitrates by Town Hall",
+  "statsChartGranularity": "Chart interval",
+  "statsDaily": "毎日",
+  "statsWeekly": "週間",
+  "playerBattlelogCumulative": "Cumulative",
+  "statsMonthly": "Monthly",
+  "statsCompareCohorts": "Compare cohorts",
+  "statsAcrossCohorts": "Usage across cohorts",
+  "legendsTrophyGrid": "Season overview",
+  "legendsPopularArmyItems": "Most popular army items",
+  "legendsPopularTroop": "Favorite",
+  "legendsHitrate": "Hitrate",
+  "legendsAvgOffense": "Avg. Offense",
+  "legendsAvgDefense": "Avg. Defense",
+  "settingsClearImageCache": "Clear image cache",
+  "settingsImageCacheCleared": "Image cache cleared.",
+  "settingsImageCacheClearFailed": "Could not clear the image cache. Please try again.",
+  "startupCheckingUpdate": "Checking for updates…",
+  "startupDownloadingUpdate": "Downloading update…",
+  "startupUpdateInBackground": "Update in background",
   "warStatsRangeTitle": "対戦統計の範囲",
   "warStatsRangeDescription": "直近の対戦を一定数含めるか、直近の期間を日数で指定するかを選択します。",
   "warStatsRangeDays": "日数",
@@ -375,17 +375,59 @@
   "notifPushEnabled": "プッシュ通知は有効です",
   "notifReceiveNotifications": "通知を受け取る",
   "notifTokenPreview": "トークン：{token}",
+  "@notifTokenPreview": {
+    "placeholders": {
+      "token": {
+        "type": "String"
+      }
+    }
+  },
   "notifEnabledDeliveryDescription": "有効にしたアラートをこの端末に配信できます。",
   "notifDisabledAccountDescription": "ClashKingアカウント全体で通知がオフになっています。",
   "notifMaximumRemindersAdded": "追加できるリマインダーの上限に達しました",
   "notifAddReminder": "リマインダーを追加",
   "notifDurationOneHour": "1時間",
   "notifDurationHours": "{count}時間",
+  "@notifDurationHours": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "notifDurationMinutes": "{count}分",
+  "@notifDurationMinutes": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "notifAddTiming": "{timing}を追加",
+  "@notifAddTiming": {
+    "placeholders": {
+      "timing": {
+        "type": "String"
+      }
+    }
+  },
   "notifTimingOneHourBefore": "1時間前",
   "notifTimingHoursBefore": "{count}時間前",
+  "@notifTimingHoursBefore": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "notifTimingMinutesBefore": "{count}分前",
+  "@notifTimingMinutesBefore": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "notifPushReady": "この端末でプッシュ通知を利用できます。",
   "notifPushPermissionRequired": "ClashKingのアラートを受け取るには通知を許可してください。",
   "notifPushPermissionDenied": "通知の許可が拒否されました。",
@@ -394,12 +436,13 @@
   "notifPushUnsupported": "このプラットフォームではプッシュ通知に対応していません。",
   "notifPushInitializing": "プッシュ通知を設定しています…",
   "notificationPrimerTitle": "通知を有効にしますか？",
-  "notificationPrimerBody": "ClashKing はイベント、お知らせ、レジェンドリーグの防衛、サポートに関する更新を送信できます。対戦と週末襲撃のリマインダーは設定するまでオフのままです。設定 > 通知で変更できます。",
+  "notificationPrimerBody": "ClashKing から、対戦、CWL、アカウント、プロジェクトの更新情報を通知できます。この設定はいつでも「設定」>「通知」で変更できます。",
   "notificationPrimerNotNow": "後で",
   "notificationPrimerAllow": "許可",
+  "@@last_modified": "2024-12-23T10:00:00.000Z",
   "achievementsTitle": "実績",
   "achievementEarnedLabel": "獲得回数",
-  "achievementGemsEarnedRatio": "{earned} / {total} 獲得",
+  "achievementGemsEarnedRatio": "{earned} / {total} earned",
   "@achievementGemsEarnedRatio": {
     "placeholders": {
       "earned": {
@@ -410,7 +453,7 @@
       }
     }
   },
-  "achievementGemsAccessibility": "実績のエメラルドを{total}個中{earned}個獲得しました。",
+  "achievementGemsAccessibility": "Earned {earned} of {total} achievement gems.",
   "@achievementGemsAccessibility": {
     "placeholders": {
       "earned": {
@@ -423,6 +466,23 @@
   },
   "achievementSummary": "{earned}/{total} 完了",
   "achievementEarnedCount": "獲得回数 ×{count}",
+  "@achievementSummary": {
+    "placeholders": {
+      "earned": {
+        "type": "String"
+      },
+      "total": {
+        "type": "String"
+      }
+    }
+  },
+  "@achievementEarnedCount": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
   "achievementTownhall18Name": "タウンホール18",
   "achievementTownhall18Requirement": "タウンホール18に到達する。",
   "achievementWarWarriorName": "ウォーウォリアー",
@@ -431,7 +491,6 @@
   "achievementMrLegendDescription": "レジェンドリーグで完璧な攻撃日を達成しました。",
   "achievementDefenseDoesntMatterName": "防衛なんて関係ない",
   "achievementDefenseDoesntMatterDescription": "レジェンドリーグで完璧な防衛日を経験しました。",
-  "@@last_modified": "2024-12-23T10:00:00.000Z",
   "appTitle": "ClashKing",
   "appDescription": "統計の追跡、クランの管理、パフォーマンスの分析のためのあなたの究極のClash of Clansコンパニオン。",
   "generalLoading": "読み込み中...",
@@ -454,8 +513,8 @@
   "postsLoadMore": "さらに読み込む",
   "postsCurrent": "現在",
   "postsPast": "過去",
-  "postsStoryFinished": "ストーリーが終了しました",
-  "postsWatchAgain": "もう一度見る",
+  "postsStoryFinished": "Story finished",
+  "postsWatchAgain": "Watch again",
   "postsStory": "インタラクティブストーリー",
   "postsPinned": "注目",
   "generalTryAgain": "もう一度試す",
@@ -544,7 +603,7 @@
     "description": "Filter value is not set"
   },
   "generalWarning": "警告",
-  "gameHandoffDontShowAgain": "今後表示しない",
+  "gameHandoffDontShowAgain": "Don't show this again",
   "generalUnknown": "不明",
   "generalNoDataAvailable": "利用可能なデータがありません。",
   "generalNoFilteredResults": "フィルターに一致する結果がありません",
@@ -773,9 +832,9 @@
   "accountsAdd": "アカウントを追加",
   "accountsAddInstruction": "+ ボタンをタップしてアカウントを追加してください",
   "accountsApiToken": "アカウントAPIトークン",
-  "accountsEnterApiToken": "ゲーム内のAPIトークンで、このアカウントの所有権を確認してください。",
+  "accountsEnterApiToken": "本人確認のため、アカウントAPIトークンを入力してください。Clash of Clans内で確認できます:",
   "accountsApiTokenLocation": "設定 > その他の設定 > APIトークン",
-  "accountsOpenMoreSettings": "APIトークンを取得",
+  "accountsOpenMoreSettings": "その他の設定を開く",
   "accountsCouldNotOpenClash": "Clash of Clansを開けませんでした。手動で開いてください。",
   "accountsFillAllFields": "すべての項目を入力してください。",
   "accountsErrorTagNotExists": "入力されたプレイヤータグは存在しません。",
@@ -1295,8 +1354,32 @@
   "warParticipation": "対戦参加",
   "cwlParticipantOnly": "参加のみ",
   "warStatsRangeWarsCompact": "{number}回の対戦",
+  "@warStatsRangeWarsCompact": {
+    "description": "Compact clan war statistics war range label",
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
   "warStatsRangeDaysCompact": "{number}日",
+  "@warStatsRangeDaysCompact": {
+    "description": "Compact clan war statistics day range label",
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
   "warStatsLastXDays": "過去{number}日",
+  "@warStatsLastXDays": {
+    "description": "Clan war statistics date-range label",
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
   "warStatsCurrentMembers": "現在のメンバー",
   "warLeague": "対戦/リーグ",
   "warHistory": "対戦履歴",
@@ -1305,6 +1388,13 @@
   "warLogClosed": "{clan}の対戦ログは非公開です。",
   "warLogPrivate": "{clan}の対戦ログは非公開です。",
   "@warLogClosed": {
+    "placeholders": {
+      "clan": {
+        "type": "String"
+      }
+    }
+  },
+  "@warLogPrivate": {
     "placeholders": {
       "clan": {
         "type": "String"
@@ -1608,7 +1698,7 @@
   "warStarsTwo": "星2個",
   "warStarsThree": "星3個",
   "warStarsZero": "星0個",
-  "legendHistoryZeroStars": "星ゼロ",
+  "legendHistoryZeroStars": "Zero Stars",
   "warStarsBestPerformance": "最高成績",
   "@warStarsBestPerformance": {
     "description": "Best performance in war"
@@ -1763,7 +1853,7 @@
   "clanLeaderboardHistoryTab": "リーダーボード履歴",
   "clanLegendHistoryTab": "レジェンド履歴",
   "clanRecordsTab": "記録",
-  "clanRecordsChangesTab": "記録と変更",
+  "clanRecordsChangesTab": "Records & Changes",
   "clanProfileHistoryTab": "プロフィール履歴",
   "clanProfileLevelChanged": "クランレベルが変更されました",
   "clanProfileDescriptionChanged": "説明が変更されました",
@@ -1805,8 +1895,8 @@
   "legendsCountryTitle": "国",
   "legendsLocalRankTitle": "ローカルランク",
   "legendsGlobalRankTitle": "グローバルランク",
-  "legendsYourArmy": "自分の編成",
-  "legendsArmyUsedAgainstYou": "相手が使用した編成",
+  "legendsYourArmy": "Your army",
+  "legendsArmyUsedAgainstYou": "Army used against you",
   "warWinsTitle": "勝利",
   "warLossesTitle": "損失",
   "warDrawsTitle": "ドロー",
@@ -2051,7 +2141,7 @@
   "faqWhatCanBotDo": "ClashKing Discordボットでは何ができますか？",
   "faqWhatCanBotDoAnswer": "ClashKing Discordボットは、包括的な追跡ツール、自動通知、このアプリとのシームレスな連携により、Discordから直接クラン管理を支援します。つながりを保ち、整理したいクランリーダーとメンバー向けに設計されています:",
   "faqInviteBotToServer": "ボットをサーバーに招待",
-  "drawerInviteDiscordBot": "ボットをサーバーに招待",
+  "drawerInviteDiscordBot": "Invite Discord Bot",
   "faqBotFeatureTracking": "プレイヤーとクランの追跡",
   "faqBotFeatureTrackingDesc": "複数のクランやプレイヤーを追加し、リアルタイム更新で監視します",
   "faqBotFeatureWars": "対戦管理",
@@ -2208,7 +2298,7 @@
     "description": "Defender town hall filter label"
   },
   "filtersSameTownHallOnly": "同じタウンホールのみ",
-  "warStatsSameTownHall": "同じタウンホール",
+  "warStatsSameTownHall": "Same Townhall",
   "@filtersSameTownHallOnly": {
     "description": "Same town hall filter option"
   },
@@ -2862,7 +2952,7 @@
   "@settingsNotificationsTitle": {
     "description": "Settings tile: notifications title"
   },
-  "settingsNotificationsSubtitle": "受け取る通知を選択します。",
+  "settingsNotificationsSubtitle": "アラートを選択し、ローカル テスト プレビューを送信します。",
   "@settingsNotificationsSubtitle": {
     "description": "Settings tile: notifications subtitle"
   },
@@ -3334,7 +3424,7 @@
   "playerBestTrophies": "最高トロフィー",
   "clanLoadFailed": "クランの読み込みに失敗しました。",
   "gameItemLevels": "レベル",
-  "gameItemLevelCount": "{count} レベル",
+  "gameItemLevelCount": "{count, plural, one {# Level} other {# Levels}}",
   "@gameItemLevelCount": {
     "placeholders": {
       "count": {
@@ -3405,6 +3495,20 @@
   },
   "todoAllCaughtUpForNow": "今のところすべて完了",
   "timeDurationShort": "{unit, select, daysHours {{primary}日{secondary}時間} hoursMinutes {{primary}時間{secondary}分} other {{primary}分}}",
+  "@timeDurationShort": {
+    "description": "Compact localized duration used in countdowns",
+    "placeholders": {
+      "unit": {
+        "type": "String"
+      },
+      "primary": {
+        "type": "int"
+      },
+      "secondary": {
+        "type": "int"
+      }
+    }
+  },
   "todoEventEndsIn": "{duration}後に終了",
   "@todoEventEndsIn": {
     "placeholders": {
@@ -3514,9 +3618,14 @@
   "statsHero": "ヒーロー",
   "statsPet": "ペット",
   "statsEquipment": "装備",
-  "statsPetCombinations": "ペットの組み合わせ",
-  "statsEquipmentPairs": "装備の組み合わせ",
-  "statsArmyFallback": "編成 {id}",
+  "statsPetCombinations": "Pet combinations",
+  "statsEquipmentPairs": "Equipment pairs",
+  "statsArmyFallback": "Army {id}",
+  "@statsArmyFallback": {
+    "placeholders": {
+      "id": {}
+    }
+  },
   "statsOwningHero": "所有するヒーロー",
   "statsAddItem": "アイテムを追加",
   "statsAnalyzeItems": "アイテムを分析",
@@ -3902,7 +4011,7 @@
   },
   "appIconDefault": "デフォルト",
   "appIconChristmas": "クリスマス",
-  "appIconHalloween": "ハロウィン",
+  "appIconHalloween": "Halloween",
   "appIconBlackWhite": "白黒",
   "appIconDarkMode": "ダークモード",
   "generalMembersCount": "{count}人のメンバー",
@@ -3960,9 +4069,9 @@
     }
   },
   "upgradeTrackerShare": "トラッカーを共有",
-  "trackerPosterCopied": "画像をコピーしました",
-  "trackerPosterCopy": "画像をコピー",
-  "trackerPosterShareAll": "3枚すべて共有",
+  "trackerPosterCopied": "Image copied",
+  "trackerPosterCopy": "Copy image",
+  "trackerPosterShareAll": "Share all 3",
   "upgradeTrackerPasteJson": "アカウントJSONを貼り付け",
   "upgradeTrackerImportTitle": "アカウントデータをインポート",
   "upgradeTrackerImportDescription": "アカウントの生JSONを貼り付けます。データはこの端末に保存されます。",
@@ -4271,8 +4380,8 @@
   "homeActivityLeft": "脱退",
   "homeActivityAClan": "クラン",
   "statsCwlSeasonGroups": "グループ",
-  "statsCwlSeasonHistory": "クラン対戦リーグの推移",
-  "statsCwlRosterNotLineup": "登録メンバーの割合を{size}枠に換算しています。実際の対戦編成とは異なる場合があります。",
+  "statsCwlSeasonHistory": "CWL over time",
+  "statsCwlRosterNotLineup": "Registered roster mix, scaled to {size} places; actual war lineups may differ.",
   "@statsCwlRosterNotLineup": {
     "placeholders": {
       "size": {
@@ -4280,28 +4389,28 @@
       }
     }
   },
-  "statsTroopStats": "ユニット統計",
-  "statsWarSizes": "対戦規模",
-  "statsMissedAttacks": "未使用の攻撃",
-  "statsCopyChart": "グラフをコピー",
-  "statsCompareItems": "項目を比較",
-  "statsCompareItemsHint": "比較する項目を最大5つ選択してください。",
-  "statsVsOverall": "全体との比較",
-  "statsCopyChartFailed": "グラフをコピーできませんでした。もう一度お試しください。",
-  "statsPercentagePoints": "パーセンテージポイント",
+  "statsTroopStats": "Troop Stats",
+  "statsWarSizes": "War sizes",
+  "statsMissedAttacks": "Missed attacks",
+  "statsCopyChart": "Copy chart",
+  "statsCompareItems": "Compare items",
+  "statsCompareItemsHint": "Select up to 5 items to compare.",
+  "statsVsOverall": "vs. overall",
+  "statsCopyChartFailed": "Could not copy chart. Try again.",
+  "statsPercentagePoints": "percentage points",
   "statsMeta": "メタ",
   "statsBattle": "戦闘",
   "statsWorld": "世界",
   "statsHeaderSubtitle": "戦闘成績と追跡中の世界を確認します。",
   "statsPreview": "プレビュー",
-  "statsTownHallDistribution": "タウンホール",
+  "statsTownHallDistribution": "タウン ホールの分布",
   "statsBuilderHallDistribution": "ビルダーホールの分布",
-  "statsLeagueDistribution": "ランクリーグ",
+  "statsLeagueDistribution": "ランク付けされたリーグ分布",
   "statsTrackedPlayers": "現在追跡されているプレイヤー人口",
   "statsTrackedClans": "現在追跡されているクラン人口",
-  "statsCwlLeagueDistribution": "CWLリーグ",
-  "statsCapitalLeagueDistribution": "キャピタルリーグ",
-  "statsTrackedLocations": "クランの所在地",
+  "statsCwlLeagueDistribution": "CWL リーグの分布",
+  "statsCapitalLeagueDistribution": "キャピタルリーグの分布",
+  "statsTrackedLocations": "追跡されているクランの場所",
   "statsLocationCountHelp": "追跡対象クランによって代表される国と場所。",
   "statsLeagueId": "リーグ {id}",
   "@statsLeagueId": {
@@ -4379,7 +4488,7 @@
   "rankedLeagueNoBattles": "戦闘はまだ記録されていません。",
   "rankedLeagueGroupRanking": "グループランキング",
   "rankedLeagueRankingSubtitle": "現在のグループのリアルタイム順位です。あなたのプレイヤーが強調表示されます。",
-  "rankedLeagueJumpToMyRank": "順位へ移動",
+  "rankedLeagueJumpToMyRank": "自分の順位へ移動",
   "rankedLeagueLastPeriod": "前回の期間",
   "rankedLeagueBestGroupRank": "最高順位",
   "rankedLeaguePeriodHistory": "期間履歴",
@@ -4944,7 +5053,7 @@
       }
     }
   },
-  "upgradeTrackerPlanRuleNote": "カテゴリをドラッグしてアップグレードの優先順を決めます。行の設定で優先度を共有したり、達成率の目標で一時停止したりできます。",
+  "upgradeTrackerPlanRuleNote": "番号付きの層が最初に実行されます。共有行は同じ階層番号を維持し、その混合は相対的な重みから正規化されるため、50 + 25 は 67% / 33% になります。ターゲットは、そのパーセンテージに達した後にカテゴリの収益を上げますが、その後も資格を維持します。",
   "upgradeTrackerPlanGoalMaxCurrentHall": "進む前にマックスにする",
   "upgradeTrackerPlanGoalRushNextHall": "早く次のホールに着いてね",
   "upgradeTrackerPlanGoalCatchUp": "急ぐレベルに追いつく",
@@ -5046,19 +5155,40 @@
       }
     }
   },
-  "cwlRegisteredRoster": "登録メンバー",
-  "cwlMatches": "対戦",
-  "cwlNextMatchup": "次の対戦",
-  "cwlOtherMatches": "その他の対戦",
-  "cwlOutlook": "シーズンの見通し",
-  "cwlFirstPlace": "1位",
-  "cwlTopTwo": "上位2位",
-  "cwlRemainingOpponents": "残りの対戦相手",
-  "cwlWinBonusNote": "終了した対戦での勝利ごとにボーナスの星10個を含みます。",
-  "cwlEstimateNote": "推定は終了した対戦と残りの相手に基づき、編成変更は考慮しません。各クランに最低2回の終了した対戦が必要です。精度の検証はされていません。昇格ルールはリーグごとに異なります。",
-  "cwlDuration": "{unit, select, hours {{count, plural, one {# 時間} other {# 時間}}} other {{count, plural, one {# 分} other {# 分}}}}",
-  "personalBasesDeleteOld": "90日より古い配置を削除",
-  "personalBasesDeleteOldConfirm": "90日より古い保存済み配置を{count}件削除します。ダウンロード履歴と共有配置は残ります。",
+  "@settingsWarWidgetIosReady": {
+    "placeholders": {
+      "clanName": {
+        "type": "String"
+      }
+    }
+  },
+  "@settingsWarWidgetAndroidReady": {
+    "placeholders": {
+      "clanName": {
+        "type": "String"
+      }
+    }
+  },
+  "@settingsWarWidgetPrepareFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "cwlRegisteredRoster": "Registered roster",
+  "cwlMatches": "Matchups",
+  "cwlNextMatchup": "Next matchup",
+  "cwlOtherMatches": "Other matchups",
+  "cwlOutlook": "Season outlook",
+  "cwlFirstPlace": "First place",
+  "cwlTopTwo": "Top two",
+  "cwlRemainingOpponents": "Remaining opponents",
+  "cwlWinBonusNote": "Stars include 10 bonus stars per completed win.",
+  "cwlEstimateNote": "Estimates use completed wars and remaining opponents, not lineup changes. At least two completed wars per clan are needed. These are uncalibrated estimates; promotion rules vary by league.",
+  "cwlDuration": "{unit, select, hours {{count, plural, one {# hour} other {# hours}}} other {{count, plural, one {# minute} other {# minutes}}}}",
+  "personalBasesDeleteOld": "Remove bases older than 90 days",
+  "personalBasesDeleteOldConfirm": "{count} saved bases older than 90 days will be removed. Download history and shared bases will remain.",
   "@personalBasesDeleteOldConfirm": {
     "description": "Confirms cleanup while preserving lifetime download history.",
     "placeholders": {
@@ -5067,9 +5197,9 @@
       }
     }
   },
-  "legendsAutomaticDefense": "自動防衛",
-  "legendsPopularArmyItem": "最も使用されたユニット",
-  "legendsClanCastle": "クランの城",
+  "legendsAutomaticDefense": "Automatic defense",
+  "legendsPopularArmyItem": "Most popular army item",
+  "legendsClanCastle": "Clan Castle",
   "@cwlDuration": {
     "description": "Explicit countdown units; avoid native unit conversion.",
     "placeholders": {
@@ -5081,20 +5211,20 @@
       }
     }
   },
-  "clanNotificationRemoveConfirmation": "このクランの通知をオフにしてブックマークを削除しますか？",
-  "personalBasesTab": "Bases",
+  "clanNotificationRemoveConfirmation": "Turn off this clan’s notifications and remove the bookmark?",
+  "personalBasesTab": "拠点",
   "personalBasesDownloaded": "Downloaded",
   "personalArmyName": "Army name",
   "personalArmyNotes": "Notes",
   "personalArmyUnnamed": "Unnamed army",
   "personalArmyEdit": "Edit army",
   "personalArmyUnknownTownHall": "Unknown Town Hall",
-  "discordBotDashboard": "Discordボット管理画面",
-  "discordAddBot": "ボットを追加",
-  "discordAddToMyDiscord": "自分のDiscordに追加",
-  "discordServersWithoutBot": "ClashKing未導入のサーバー",
-  "rankingsPlayerSection": "プレイヤーランキング",
-  "rankingsClanSection": "クランランキング",
+  "discordBotDashboard": "Discord Bot Dashboard",
+  "discordAddBot": "Add bot",
+  "discordAddToMyDiscord": "Add to My Discord",
+  "discordServersWithoutBot": "Servers without ClashKing",
+  "rankingsPlayerSection": "Player Rankings",
+  "rankingsClanSection": "Clan Rankings",
   "cwlArchiveCoverage": "{available} of {total} matchups available.",
   "cwlStandingsIncomplete": "Missing archives are excluded. Group ranks and forecasts are unavailable.",
   "cwlPromotionChance": "Estimated promotion chance",
@@ -5105,62 +5235,62 @@
   "cwlRecordedStats": "Recorded wars only",
   "cwlMissingMatchups": "{count} matchups unavailable",
   "cwlHighestLeague": "Highest league · no promotion",
-  "warOutlookWinPossible": "まだ勝利可能",
-  "warOutlookDrawOnly": "最高でも引き分け",
-  "warOutlookDefeat": "勝利は不可能",
-  "warOutlookMaximum": "獲得可能な最高スコア",
-  "warOutlookAssumption": "残りの攻撃がすべて完璧な場合の数学的な上限です。予測ではありません。",
-  "warScoutTitle": "編成の分析",
-  "warScoutOpponent": "相手の直近のクラン対戦",
-  "warScoutScope": "現在の編成 · 同じルール · 過去最大10戦",
-  "upgradeTrackerCapturedWork": "前回の更新時の情報",
-  "tutorialWelcomeBody": "ClashKingの簡単なツアーを始めましょう。いつでもスキップできます。",
-  "tutorialReorderBody": "カードを長押ししてドラッグすると、位置を変更できます。",
-  "tutorialSidebarBody": "ホーム画面をスワイプするか、アバターをタップするとメニューが開きます。",
-  "tutorialExploreBody": "このメニューから「設定」、次に「通知」を開きます。続行すると今すぐ移動します。",
-  "tutorialRemindersBody": "下でリマインダーを選び、終わったらホームに戻りましょう。",
-  "tutorialResetTitle": "チュートリアルをリセット",
-  "tutorialResetConfirm": "次回のアクセス時にチュートリアルを再開しますか？",
-  "upgradeTrackerOngoingUpgrades": "進行中のアップグレード",
-  "upgradeTrackerToLevel": "レベル{level}へ",
-  "upgradeTrackerFreeSlots": "空き{count}枠",
-  "upgradeTrackerFreeIn": "{duration}後に空き",
-  "upgradeTrackerPetHouse": "ペット小屋",
-  "upgradeTrackerNotBuilt": "未建設",
-  "upgradeTrackerExtraSlots": "追加{count}枠",
-  "rankedLeagueOverTime": "リーグの推移",
-  "rankedLeaguePromotionCutoff": "昇格ライン",
-  "rankedLeagueDemotionCutoff": "降格ライン",
-  "rankedLeagueCutoffsUnavailable": "昇格・降格ラインを取得できません。",
-  "rankedAutomaticDefenseSummary": "防衛{count}回 · 各{points}トロフィー",
-  "rankedAutomaticDefenseExplanation": "今週のすべての実際の防衛の平均（切り捨て）です。",
-  "warStatusInWar": "対戦中",
-  "warStatusNoWar": "対戦なし",
-  "warNoActiveClans": "現在対戦中のクランはありません。",
-  "warNoInactiveClans": "対戦していないクランはありません",
-  "warAllClansInWar": "すべてのクランが現在対戦中です。",
+  "warOutlookWinPossible": "Win still possible",
+  "warOutlookDrawOnly": "Draw at best",
+  "warOutlookDefeat": "No path to a win",
+  "warOutlookMaximum": "Maximum possible score",
+  "warOutlookAssumption": "Assumes perfect remaining attacks. This is a mathematical limit, not a prediction.",
+  "warScoutTitle": "Lineup scouting",
+  "warScoutOpponent": "Opponent’s recent wars",
+  "warScoutScope": "Current lineup · same rules · up to 10 previous wars",
+  "upgradeTrackerCapturedWork": "From your last update",
+  "tutorialWelcomeBody": "Take a quick tour of ClashKing. You can skip it at any time.",
+  "tutorialReorderBody": "Hold a card, then drag it to change its position.",
+  "tutorialSidebarBody": "Swipe across Home to open the menu, or tap your avatar.",
+  "tutorialExploreBody": "From this menu, open Settings, then Notifications. Continue to go there now.",
+  "tutorialRemindersBody": "Choose reminders below. When you are done, return to Home.",
+  "tutorialResetTitle": "Reset tutorials",
+  "tutorialResetConfirm": "Start the tutorials again on your next visits?",
+  "upgradeTrackerOngoingUpgrades": "Ongoing Upgrades",
+  "upgradeTrackerToLevel": "To Level {level}",
+  "upgradeTrackerFreeSlots": "{count} free",
+  "upgradeTrackerFreeIn": "Free in {duration}",
+  "upgradeTrackerPetHouse": "Pet House",
+  "upgradeTrackerNotBuilt": "Not built",
+  "upgradeTrackerExtraSlots": "{count} extra",
+  "rankedLeagueOverTime": "League over time",
+  "rankedLeaguePromotionCutoff": "Promotion cutoff",
+  "rankedLeagueDemotionCutoff": "Demotion cutoff",
+  "rankedLeagueCutoffsUnavailable": "Promotion and demotion thresholds unavailable.",
+  "rankedAutomaticDefenseSummary": "{count} defenses · {points} trophies each",
+  "rankedAutomaticDefenseExplanation": "Based on all real defenses this week, rounded down.",
+  "warStatusInWar": "In war",
+  "warStatusNoWar": "No war",
+  "warNoActiveClans": "No clans are currently in war.",
+  "warNoInactiveClans": "No clans out of war",
+  "warAllClansInWar": "All your clans are currently in war.",
   "warStatusOther": "その他",
-  "warNoOtherClans": "他のクランはありません。",
-  "playerWarLifetime": "全期間",
-  "playerWarThScope": "統計カードにのみ適用され、バトルには適用されません。ボタンを長押しすると、この説明を表示できます。",
-  "playerWarNoAttacks": "まだ攻撃がありません",
-  "playerWarRegularWars": "通常対戦",
-  "warWidgetNoActiveWar": "進行中の対戦なし",
-  "warWidgetPrivateWarLog": "対戦ログは非公開です",
-  "warWidgetChooseClan": "クランを選択",
-  "legendPerformanceTitle": "日別成績",
-  "legendCompleteDays": "全戦記録済みの日",
-  "legendPerfectDays": "パーフェクトの日",
-  "legendPartialDays": "一部記録済みの日",
-  "legendMissingDays": "記録なし",
-  "legendInvalidDays": "無効な日",
-  "legendTrophiesGained": "獲得トロフィー",
-  "legendTrophiesLost": "失ったトロフィー",
+  "warNoOtherClans": "No other clans.",
+  "playerWarLifetime": "Lifetime",
+  "playerWarThScope": "Applies only to the statistics cards, not Battles. Hold the button for this explanation.",
+  "playerWarNoAttacks": "No attacks yet",
+  "playerWarRegularWars": "Regular war",
+  "warWidgetNoActiveWar": "No active war",
+  "warWidgetPrivateWarLog": "Private war log",
+  "warWidgetChooseClan": "Choose a clan",
+  "legendPerformanceTitle": "Daily performance",
+  "legendCompleteDays": "Complete days",
+  "legendPerfectDays": "Perfect days",
+  "legendPartialDays": "Partial days",
+  "legendMissingDays": "No observations",
+  "legendInvalidDays": "Invalid days",
+  "legendTrophiesGained": "Trophies gained",
+  "legendTrophiesLost": "Trophies lost",
   "legendDistribution": "分布",
-  "legendPreviousDays": "直前の{count}日間",
-  "legendAvailableDays": "データのある日数",
-  "legendCompleteOnly": "8戦すべてが記録された日を集計しています。",
-  "legendPerfectSources": "順位帯別のパーフェクト日数",
+  "legendPreviousDays": "Previous {count} days",
+  "legendAvailableDays": "Days available",
+  "legendCompleteOnly": "Distribution uses days with 8 recorded battles.",
+  "legendPerfectSources": "Perfect days by rank",
   "@legendPreviousDays": {
     "placeholders": {
       "count": {
@@ -5168,15 +5298,15 @@
       }
     }
   },
-  "onboardingOverviewTitle": "アカウントとクラン",
-  "onboardingOverviewBody": "プレイヤー、クラン、アップグレードをまとめてチェック。",
-  "onboardingProgressTitle": "ランキングと統計を見る",
-  "onboardingProgressBody": "対戦を振り返り、進み具合を比べて、アップグレードを続けよう。",
-  "onboardingRemindersTitle": "リマインダーと通知を受け取る",
-  "onboardingRemindersBody": "対戦リマインダーや必要な通知を受け取れます。設定でアカウントと通知の種類を選べます。",
-  "onboardingReplayTitle": "紹介をもう一度見る",
-  "statsViewLatestData": "最新のデータを見る",
-  "statsLatestAvailableDate": "最新のデータ：{date}",
+  "onboardingOverviewTitle": "Your accounts & clans",
+  "onboardingOverviewBody": "Keep your players, clans, and upgrades together.",
+  "onboardingProgressTitle": "View rankings and stats",
+  "onboardingProgressBody": "Follow your battles, compare your progress, and keep upgrades moving.",
+  "onboardingRemindersTitle": "Get reminders and alerts",
+  "onboardingRemindersBody": "Get war reminders and the alerts you choose. Pick your accounts and alert types in Settings.",
+  "onboardingReplayTitle": "Replay introduction",
+  "statsViewLatestData": "View latest data",
+  "statsLatestAvailableDate": "Latest available: {date}",
   "@statsLatestAvailableDate": {
     "placeholders": {
       "date": {
@@ -5184,23 +5314,23 @@
       }
     }
   },
-  "legendPerfectedDefenseDays": "防衛で全敗した日数",
-  "legendCompleteDayDefinition": "8回すべての対戦が記録された日のみを含みます。",
+  "legendPerfectedDefenseDays": "Perfected defense days",
+  "legendCompleteDayDefinition": "Only days with all 8 battles are included.",
   "statsCommunity": "コミュニティ",
-  "rankedFullOffenseDays": "+320 の日数",
-  "rankedFullDefenseDays": "−320 の日数",
-  "rankedTrophiesByRank": "順位別トロフィー",
-  "statsArmyTypes": "編成タイプ",
-  "onboardingStatsBody": "プレイヤーの統計やクランの動向を確認し、ゲーム全体の変化を見てみよう。",
-  "onboardingWidgetsTitle": "ホーム画面にウィジェットを追加",
-  "onboardingWidgetsBody": "ホーム画面のウィジェットで、対戦スコアやアップグレードの進み具合をチェック。",
-  "onboardingAlertTitle": "まもなく対戦終了",
-  "onboardingAlertBody": "最後の攻撃をお忘れなく。",
-  "onboardingSetupNotifications": "通知を有効にする",
-  "onboardingAccountsReadyBody": "連携済みのアカウントを利用できます。別のアカウントを追加するか、次へ進んでください。",
-  "onboardingSkipAccountSetup": "スキップ",
-  "accountsSetupBody": "Clash of Clansのアカウントを追加し、所有権を確認しましょう。",
-  "accountsMyTitle": "マイアカウント",
-  "profileAvatar": "見た目を変更",
-  "avatarPickerTitle": "アバターを選ぼう"
+  "rankedFullOffenseDays": "+320 days",
+  "rankedFullDefenseDays": "−320 days",
+  "rankedTrophiesByRank": "Trophies by rank",
+  "statsArmyTypes": "Army Types",
+  "onboardingStatsBody": "Explore player stats, follow your clans, and see how the whole game is changing.",
+  "onboardingWidgetsTitle": "Add Home Screen widgets",
+  "onboardingWidgetsBody": "Keep war scores and upgrade progress close with Home Screen widgets.",
+  "onboardingAlertTitle": "War ends soon",
+  "onboardingAlertBody": "Time for your final attack.",
+  "onboardingSetupNotifications": "Enable notifications",
+  "onboardingAccountsReadyBody": "Your linked accounts are ready. Add another account or continue.",
+  "onboardingSkipAccountSetup": "Skip",
+  "accountsSetupBody": "Add and verify your Clash of Clans accounts.",
+  "accountsMyTitle": "My Accounts",
+  "profileAvatar": "Change look",
+  "avatarPickerTitle": "Pick an avatar"
 }
