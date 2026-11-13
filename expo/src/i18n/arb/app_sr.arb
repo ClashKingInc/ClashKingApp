@@ -1,20 +1,20 @@
 {
-  "capitalCurrentOpponent": "Тренутни противник",
-  "capitalRaidMedals": "Медаље за нападе",
-  "warReplayTitle": "Историја резултата",
-  "warReplayPlay": "Пусти историју",
-  "warReplayPause": "Паузирај историју",
-  "cwlLeading": "У вођству",
-  "cwlTrailing": "У заостатку",
-  "cwlYourClan": "Твој клан",
-  "cwlPromotionZone": "Зона пласмана",
-  "cwlDemotionZone": "Зона испадања",
-  "cwlNotInLineup": "Ван поставе",
-  "esportsEloSubtitle": "Светска ранг-листа тимова и мечеви од",
-  "esportsTopTeamsMatches": "Мечеви тренутно најбољих 50 тимова.",
-  "esportsPartialMatches": "Није могуће освежити неке тимове.",
-  "settingsHideAccounts": "Сакриј налоге",
-  "settingsHideAccountsDescription": "Прикажи опцију за скривање повезаних налога. Постојећа подешавања приватности остају непромењена.",
+  "capitalCurrentOpponent": "Current opponent",
+  "capitalRaidMedals": "Raid medals",
+  "warReplayTitle": "Score history",
+  "warReplayPlay": "Play history",
+  "warReplayPause": "Pause history",
+  "cwlLeading": "Leading",
+  "cwlTrailing": "Trailing",
+  "cwlYourClan": "Your clan",
+  "cwlPromotionZone": "Promotion zone",
+  "cwlDemotionZone": "Demotion zone",
+  "cwlNotInLineup": "Not in lineup",
+  "esportsEloSubtitle": "Global team rankings and matches from",
+  "esportsTopTeamsMatches": "Matches from the current top 50 teams.",
+  "esportsPartialMatches": "Some teams could not be refreshed.",
+  "settingsHideAccounts": "Hide accounts",
+  "settingsHideAccountsDescription": "Show the option to hide linked accounts. Existing privacy choices stay unchanged.",
   "calcRocketBalloonAssumption": "1 hit + death · {damage} damage each",
   "calcKeepEquipped": "Keep one equipped",
   "calcCustomLevels": "Custom levels",
@@ -38,31 +38,31 @@
   "personalBasesEmptyBody": "Bases you post through ClashKing on Discord appear here. You can also save bases from the library.",
   "personalArmiesEmptyTitle": "Keep your armies close",
   "personalArmiesEmptyBody": "Armies you post through ClashKing on Discord appear here. Save your favourites to find them before your next attack.",
-  "homeCardOriginal": "Originalno",
-  "homeCardTint": "Blaga boja",
-  "homeCardEdge": "Ivice u boji",
-  "homeCardGlow": "Spori sjaj",
-  "competitiveNoHistory": "Још нема турнира",
-  "competitiveHistoryHint": "Твоји тимови и резултати турнира ће се појавити овде.",
-  "esportsMonthlyFinals": "Месечна финала",
-  "esportsMonthlyQualifier": "Месечне квалификације",
-  "esportsHeroSubtitle": "Пут до Светског првенства",
-  "esportsViewEvent": "Истражи догађај",
-  "esportsWinLoss": "Победе: {wins} · Порази: {losses}",
-  "esportsViewPlayer": "Прикажи играча",
-  "esportsRecentMatches": "Недавни мечеви",
-  "esportsHideAttacks": "Сакриј детаље битке",
-  "esportsViewAttacks": "Прикажи детаље битке",
-  "esportsPlayer": "Еспорт играч",
-  "esportsBattles": "Битке",
-  "esportsTriples": "Напади са три звездице",
-  "esportsAverageStars": "Просек звездица",
-  "esportsDestruction": "Уништење",
-  "esportsAccounts": "Налози у игри",
+  "homeCardOriginal": "Original",
+  "homeCardTint": "Soft color",
+  "homeCardEdge": "Colored edges",
+  "homeCardGlow": "Slow glow",
+  "competitiveNoHistory": "No tournaments yet",
+  "competitiveHistoryHint": "Your teams and tournament results will appear here.",
+  "esportsMonthlyFinals": "Monthly finals",
+  "esportsMonthlyQualifier": "Monthly qualifiers",
+  "esportsHeroSubtitle": "The road to the World Championship",
+  "esportsViewEvent": "Explore event",
+  "esportsWinLoss": "{wins} wins · {losses} losses",
+  "esportsViewPlayer": "View player",
+  "esportsRecentMatches": "Recent matches",
+  "esportsHideAttacks": "Hide battle details",
+  "esportsViewAttacks": "View battle details",
+  "esportsPlayer": "Esports player",
+  "esportsBattles": "Bitke",
+  "esportsTriples": "Triples",
+  "esportsAverageStars": "Prosečne zvezdice",
+  "esportsDestruction": "Uništenje",
+  "esportsAccounts": "Game accounts",
   "esportsAttack": "Напад",
   "esportsDefense": "Одбрана",
-  "competitiveArenaSubtitle": "Твој клан. Твој тим. Твој следећи изазов.",
-  "competitiveViewTournament": "Прикажи турнир",
+  "competitiveArenaSubtitle": "Your clan. Your team. Your next challenge.",
+  "competitiveViewTournament": "View tournament",
   "@esportsWinLoss": {
     "placeholders": {
       "wins": {
@@ -87,50 +87,50 @@
   "esportsStage": "Stage",
   "esportsStandings": "Standings",
   "esportsMatches": "Matches",
-  "esportsPoints": "Points",
+  "esportsPoints": "Поени",
   "esportsPlayed": "played",
   "esportsSource": "Data from Competitive Clash Network",
-  "esportsRoster": "Roster",
+  "esportsRoster": "Sastav",
   "esportsSeasonPoints": "Season points",
   "esportsStageStandings": "Stage standings",
-  "competitiveCompetition": "Такмичење",
-  "competitiveWebsite": "Веб-сајт",
-  "competitiveVerifiedAccounts": "Потврђени налози",
-  "competitiveEsports": "Е-спорт",
-  "competitiveTournaments": "Турнири",
-  "competitiveProfile": "Профил",
-  "competitiveTeams": "Тимови",
-  "competitiveFreeEntry": "Бесплатно учешће",
-  "competitiveRegister": "Пријави тим",
-  "competitiveCheckIn": "Потврди учешће",
-  "competitiveRules": "Правила",
-  "competitiveUnavailable": "Подаци о такмичењу нису доступни. Покушајте поново.",
-  "competitiveRegistrationSaved": "Пријава је послата",
-  "competitiveTeamHistory": "Историја тима",
-  "competitiveDebutName": "Турнирски деби",
-  "competitiveDebutDescription": "Учествујте на турниру са својим потврђеним налогом.",
-  "competitiveViewProfile": "Погледај профил",
+  "competitiveCompetition": "Competition",
+  "competitiveWebsite": "Website",
+  "competitiveVerifiedAccounts": "Verified accounts",
+  "competitiveEsports": "eSports",
+  "competitiveTournaments": "Tournaments",
+  "competitiveProfile": "Profil",
+  "competitiveTeams": "Timovi",
+  "competitiveFreeEntry": "Free entry",
+  "competitiveRegister": "Register team",
+  "competitiveCheckIn": "Check in",
+  "competitiveRules": "Rules",
+  "competitiveUnavailable": "Competition data is unavailable. Try again.",
+  "competitiveRegistrationSaved": "Registration submitted",
+  "competitiveTeamHistory": "Team history",
+  "competitiveDebutName": "Tournament debut",
+  "competitiveDebutDescription": "Participate in a tournament with your verified account.",
+  "competitiveViewProfile": "View profile",
   "calcPinEquipment": "Keep one equipped",
-  "calcSearch": "Search",
+  "calcSearch": "Pretraži",
   "calcEquipmentTitle": "Equipment Compare",
   "calcDamageIntro": "Find the combinations that take a defense down.",
   "calcFarmIntro": "Plan the loot needed for your next upgrades.",
   "calcEquipmentIntro": "Compare hero loadouts, levels, and ability stats.",
   "calcComingSoon": "Coming soon",
-  "calcHero": "Hero",
+  "calcHero": "Heroj",
   "calcHeroLevel": "Hero level",
   "calcMaxLevels": "Max levels",
   "calcEquipmentPool": "Equipment to compare",
   "calcPoolHelp": "Choose pieces and default levels. Compare every pair, then customize individual rows.",
   "calcSelectAll": "Select all",
-  "calcClear": "Clear",
+  "calcClear": "Јасно",
   "calcAttributes": "Attributes",
   "calcAddAttribute": "Add attribute",
-  "calcTable": "Compare",
+  "calcTable": "Uporedi",
   "calcProgression": "Level progression",
   "calcCompareHelp": "DPS adds the hero's base and equipment DPS. Speed bonuses and temporary effects are separate attributes; healing is not extra max HP.",
   "calcChartHelp": "Equipment levels increase together; each piece stops at its own maximum. Hero levels stay fixed. First six loadouts shown.",
-  "calcSort": "Sort by",
+  "calcSort": "Сортирај по",
   "calcNoEquipment": "No equipment",
   "calcDuplicate": "Duplicate loadout",
   "calcRemove": "Remove loadout",
@@ -154,9 +154,9 @@
   "calcComparisonDownloaded": "Comparison image downloaded",
   "calcComparisonExportFailed": "Could not copy the comparison image. Please try again.",
   "calcEffectiveLevel": "Effective level {level}",
-  "calcTarget": "Target",
+  "calcTarget": "Cilj",
   "calcSupercharge": "Supercharge",
-  "calcNone": "None",
+  "calcNone": "Nijedno",
   "calcResults": "{count} combinations",
   "calcResultsHelp": "Smallest spell cost first, then fewer equipment activations. Extra sources that do not help are removed.",
   "calcNoCombinationHelp": "Try another source, a higher level, or more spell capacity.",
@@ -164,63 +164,63 @@
   "calcAlternative": "Alternative",
   "calcCombinationCost": "{housing} spell space · {equipment} equipment",
   "calcUseStack": "Use stack",
-  "homeRankingsAndStats": "Ранг-листе и статистика",
-  "homeActivityRecorded": "Само забележене активности; историја може бити непотпуна.",
-  "homeWidgetsServers": "Сервери",
-  "homeWidgetsEdit": "Уреди почетну",
-  "homeWidgetsAdd": "Додај виџет",
-  "homeWidgetsRemove": "Уклони виџет",
-  "homeWidgetsMoveUp": "Помери горе",
-  "homeWidgetsMoveDown": "Помери доле",
-  "homeWidgetsSmall": "Мали",
-  "homeWidgetsWide": "Широки",
-  "homeWidgetsSaveError": "Почетна није синхронизована. Освежите пре поновног уређивања.",
-  "homeWidgetsUnavailable": "Нема забележених података",
-  "homeWidgetsBookmarkFirst": "Прво додајте играча или клан у обележиваче.",
-  "rankingsWarTripleStreak": "Низ три звездице у рату",
+  "homeRankingsAndStats": "Rankings & Stats",
+  "homeActivityRecorded": "Recorded activity only; history may be incomplete.",
+  "homeWidgetsServers": "Servers",
+  "homeWidgetsEdit": "Edit Home",
+  "homeWidgetsAdd": "Add widget",
+  "homeWidgetsRemove": "Remove widget",
+  "homeWidgetsMoveUp": "Move up",
+  "homeWidgetsMoveDown": "Move down",
+  "homeWidgetsSmall": "Malo",
+  "homeWidgetsWide": "Wide",
+  "homeWidgetsSaveError": "Could not sync Home. Please refresh before editing again.",
+  "homeWidgetsUnavailable": "No recorded data available",
+  "homeWidgetsBookmarkFirst": "Bookmark a player or clan first.",
+  "rankingsWarTripleStreak": "War Triple Streak",
   "rankingsWarTripleRulesTitle": "How streaks count",
   "rankingsWarTripleRulesBody": "+2 for two triples against your own Town Hall level in a regular war.\n\nA missed attack, non-triple, or different-TH target resets your streak.\n\nCWL and friendly wars don’t count. Streaks are separate for each Town Hall level.",
-  "clanLegendsRanked": "Легенде и рангирано",
-  "appIconChangeWarning": "Промена иконе ће затворити ClashKing. Наставити?",
-  "upgradeTrackerUnverifiedAccount": "Овај налог је повезан, али није потврђен. Потврдите га у управљању налозима да бисте увезли податке о надоградњама.",
-  "clanWarNotificationsTitle": "Обавештења о рату",
-  "clanCapitalNotificationsTitle": "Обавештења о престоници клана",
-  "clanWarNotificationsBody": "Примајте новости о ратовима овог клана.",
-  "clanCapitalNotificationsBody": "Примајте новости о престоници овог клана.",
-  "notifSystemNotifications": "Системска обавештења",
-  "notifSystemSettings": "Отвори подешавања обавештења",
-  "notifSystemSettingsDescription": "Управљај упозорењима, звуковима и значкама у подешавањима уређаја.",
-  "notifSystemSettingsFailed": "Није могуће отворити подешавања обавештења. Отвори Подешавања на уређају.",
-  "notifManagePlayersDescription": "Управљај обавештењима налога у Играчи → Повезани → Опције.",
-  "notifCustomReminders": "Прилагођени подсетници",
-  "notifTestType": "Врста обавештења",
-  "statsBattlelogsGroup": "Борбени дневници",
-  "statsGlobalStatsGroup": "Глобална статистика",
-  "playerOptionShowOnHomeTitle": "Прикажи налог на почетној",
-  "playerOptionShowOnHomeSubtitle": "Укључи овај потврђени налог у картице на почетној страници (до 5).",
-  "playerOptionShowOnHomeVerifyFirst": "Потврди овај налог да би се приказивао на почетној страници.",
-  "playerOptionHomeInclusionFirst": "Прво укључи Прикажи налог на почетној.",
-  "homeIncludedAccountsLimit": "На почетној страници може бити до 5 налога. Прво уклони један.",
-  "statsHitratesByTownHall": "Успешност по градским већницама",
-  "statsChartGranularity": "Интервал графикона",
-  "statsDaily": "Дневно",
-  "statsWeekly": "Недељно",
-  "playerBattlelogCumulative": "Кумулативно",
-  "statsMonthly": "Месечно",
-  "statsCompareCohorts": "Упореди групе",
-  "statsAcrossCohorts": "Употреба по групама",
-  "legendsTrophyGrid": "Преглед сезоне",
-  "legendsPopularArmyItems": "Најпопуларнији елементи војске",
-  "legendsPopularTroop": "Омиљена",
-  "legendsHitrate": "Успешност",
-  "legendsAvgOffense": "Прос. напад",
-  "legendsAvgDefense": "Прос. одбрана",
-  "settingsClearImageCache": "Обриши кеш слика",
-  "settingsImageCacheCleared": "Кеш слика је обрисан.",
-  "settingsImageCacheClearFailed": "Није могуће обрисати кеш слика. Покушај поново.",
-  "startupCheckingUpdate": "Провера ажурирања…",
-  "startupDownloadingUpdate": "Преузимање ажурирања…",
-  "startupUpdateInBackground": "Ажурирај у позадини",
+  "clanLegendsRanked": "Legends & Ranked",
+  "appIconChangeWarning": "Changing the app icon will close ClashKing. Continue?",
+  "upgradeTrackerUnverifiedAccount": "This account is linked but not verified. Verify it in Manage Accounts to import your upgrade data.",
+  "clanWarNotificationsTitle": "War notifications",
+  "clanCapitalNotificationsTitle": "Clan Capital notifications",
+  "clanWarNotificationsBody": "Receive war updates for this clan.",
+  "clanCapitalNotificationsBody": "Receive Clan Capital updates for this clan.",
+  "notifSystemNotifications": "System notifications",
+  "notifSystemSettings": "Open notification settings",
+  "notifSystemSettingsDescription": "Manage alerts, sounds, and badges in your device settings.",
+  "notifSystemSettingsFailed": "Could not open notification settings. Please open Settings on your device.",
+  "notifManagePlayersDescription": "Manage account notifications in Players → Linked → Options.",
+  "notifCustomReminders": "Custom reminders",
+  "notifTestType": "Notification type",
+  "statsBattlelogsGroup": "Battlelogs",
+  "statsGlobalStatsGroup": "Global Stats",
+  "playerOptionShowOnHomeTitle": "Show account on Home",
+  "playerOptionShowOnHomeSubtitle": "Include this verified account in Home cards (up to 5).",
+  "playerOptionShowOnHomeVerifyFirst": "Verify this account to show it on Home.",
+  "playerOptionHomeInclusionFirst": "Turn on Show account on Home first.",
+  "homeIncludedAccountsLimit": "Home can show up to 5 accounts. Remove one first.",
+  "statsHitratesByTownHall": "Hitrates by Town Hall",
+  "statsChartGranularity": "Chart interval",
+  "statsDaily": "Svakodnevno",
+  "statsWeekly": "Nedeljno",
+  "playerBattlelogCumulative": "Cumulative",
+  "statsMonthly": "Monthly",
+  "statsCompareCohorts": "Compare cohorts",
+  "statsAcrossCohorts": "Usage across cohorts",
+  "legendsTrophyGrid": "Season overview",
+  "legendsPopularArmyItems": "Most popular army items",
+  "legendsPopularTroop": "Favorite",
+  "legendsHitrate": "Hitrate",
+  "legendsAvgOffense": "Avg. Offense",
+  "legendsAvgDefense": "Avg. Defense",
+  "settingsClearImageCache": "Clear image cache",
+  "settingsImageCacheCleared": "Image cache cleared.",
+  "settingsImageCacheClearFailed": "Could not clear the image cache. Please try again.",
+  "startupCheckingUpdate": "Checking for updates…",
+  "startupDownloadingUpdate": "Downloading update…",
+  "startupUpdateInBackground": "Update in background",
   "warStatsRangeTitle": "Опсег ратне статистике",
   "warStatsRangeDescription": "Изаберите да ли статистика обухвата одређени број недавних ратова или недавни период у данима.",
   "warStatsRangeDays": "Дани",
@@ -375,17 +375,59 @@
   "notifPushEnabled": "Пуш обавештења су укључена",
   "notifReceiveNotifications": "Примај обавештења",
   "notifTokenPreview": "Токен: {token}",
+  "@notifTokenPreview": {
+    "placeholders": {
+      "token": {
+        "type": "String"
+      }
+    }
+  },
   "notifEnabledDeliveryDescription": "Укључена упозорења могу да се шаљу на овај уређај.",
   "notifDisabledAccountDescription": "Обавештења су искључена за цео ClashKing налог.",
   "notifMaximumRemindersAdded": "Додат је максималан број подсетника",
   "notifAddReminder": "Додај подсетник",
   "notifDurationOneHour": "1 сат",
   "notifDurationHours": "{count} сати",
+  "@notifDurationHours": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "notifDurationMinutes": "{count} минута",
+  "@notifDurationMinutes": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "notifAddTiming": "Додај {timing}",
+  "@notifAddTiming": {
+    "placeholders": {
+      "timing": {
+        "type": "String"
+      }
+    }
+  },
   "notifTimingOneHourBefore": "1 сат раније",
   "notifTimingHoursBefore": "{count} сати раније",
+  "@notifTimingHoursBefore": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "notifTimingMinutesBefore": "{count} минута раније",
+  "@notifTimingMinutesBefore": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "notifPushReady": "Пуш обавештења су спремна на овом уређају.",
   "notifPushPermissionRequired": "Дозволите обавештења да бисте примали ClashKing упозорења.",
   "notifPushPermissionDenied": "Дозвола за обавештења је одбијена.",
@@ -394,12 +436,13 @@
   "notifPushUnsupported": "Пуш обавештења нису подржана на овој платформи.",
   "notifPushInitializing": "Подешавање пуш обавештења…",
   "notificationPrimerTitle": "Омогућити обавештења?",
-  "notificationPrimerBody": "ClashKing може слати новости о догађајима, најавама, одбранама Легенд лиге и подршци. Подсетници за ратове и викенде рација остају искључени док их не подесиш. Ове изборе можеш променити у Подешавања > Обавештења.",
+  "notificationPrimerBody": "ClashKing може да вас обавести о новостима за ратове, CWL, налог и пројекте. Ово можете да промените у било ком тренутку у Подешавања > Обавештења.",
   "notificationPrimerNotNow": "Не сада",
   "notificationPrimerAllow": "Дозволи",
+  "@@last_modified": "2024-12-23T10:00:00.000Z",
   "achievementsTitle": "Достигнућа",
   "achievementEarnedLabel": "Освојено",
-  "achievementGemsEarnedRatio": "Освојено {earned} / {total}",
+  "achievementGemsEarnedRatio": "{earned} / {total} earned",
   "@achievementGemsEarnedRatio": {
     "placeholders": {
       "earned": {
@@ -410,7 +453,7 @@
       }
     }
   },
-  "achievementGemsAccessibility": "Освојено је {earned} од {total} драгуља за достигнућа.",
+  "achievementGemsAccessibility": "Earned {earned} of {total} achievement gems.",
   "@achievementGemsAccessibility": {
     "placeholders": {
       "earned": {
@@ -423,6 +466,23 @@
   },
   "achievementSummary": "{earned}/{total} završeno",
   "achievementEarnedCount": "Освојено ×{count}",
+  "@achievementSummary": {
+    "placeholders": {
+      "earned": {
+        "type": "String"
+      },
+      "total": {
+        "type": "String"
+      }
+    }
+  },
+  "@achievementEarnedCount": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
   "achievementTownhall18Name": "Градска кућа 18",
   "achievementTownhall18Requirement": "Достигните градску кућу 18.",
   "achievementWarWarriorName": "Ратни ратник",
@@ -431,7 +491,6 @@
   "achievementMrLegendDescription": "Завршили сте беспрекоран дан напада у Лиги легенди.",
   "achievementDefenseDoesntMatterName": "Одбрана није важна",
   "achievementDefenseDoesntMatterDescription": "Издржали сте савршен дан одбране у Лиги легенди.",
-  "@@last_modified": "2024-12-23T10:00:00.000Z",
   "appTitle": "ClashKing",
   "appDescription": "Vaš najbolji Clash of Clans saputnik za praćenje statistika, upravljanje klanova i analizu performansi.",
   "generalLoading": "Učitava...",
@@ -454,8 +513,8 @@
   "postsLoadMore": "Учитај још",
   "postsCurrent": "Актуелно",
   "postsPast": "Претходно",
-  "postsStoryFinished": "Прича је завршена",
-  "postsWatchAgain": "Погледај поново",
+  "postsStoryFinished": "Story finished",
+  "postsWatchAgain": "Watch again",
   "postsStory": "Интерактивна прича",
   "postsPinned": "Истакнуто",
   "generalTryAgain": "Pokušaj ponovo",
@@ -544,7 +603,7 @@
     "description": "Filter value is not set"
   },
   "generalWarning": "Upozorenje",
-  "gameHandoffDontShowAgain": "Ne prikazuj ponovo",
+  "gameHandoffDontShowAgain": "Don't show this again",
   "generalUnknown": "Nepoznato",
   "generalNoDataAvailable": "Nema dostupnih podataka.",
   "generalNoFilteredResults": "Nema rezultata koji odgovaraju vašim filterima",
@@ -773,9 +832,9 @@
   "accountsAdd": "Dodaj nalog",
   "accountsAddInstruction": "Dodirnite dugme + da dodate svoj nalog",
   "accountsApiToken": "API token naloga",
-  "accountsEnterApiToken": "Потврди да је налог твој помоћу његовог API токена из игре.",
+  "accountsEnterApiToken": "Unesite API token naloga da potvrdite da je vaš. Možete ga pronaći u Clash of Clans:",
   "accountsApiTokenLocation": "Podešavanja > Još podešavanja > API token",
-  "accountsOpenMoreSettings": "Преузми API токен",
+  "accountsOpenMoreSettings": "Otvori još podešavanja",
   "accountsCouldNotOpenClash": "Nije moguće otvoriti Clash of Clans. Otvorite ga ručno.",
   "accountsFillAllFields": "Popunite sva polja.",
   "accountsErrorTagNotExists": "Uneta oznaka igrača ne postoji.",
@@ -1295,8 +1354,32 @@
   "warParticipation": "Učešće u ratu",
   "cwlParticipantOnly": "Samo učesnik",
   "warStatsRangeWarsCompact": "{number} ratova",
+  "@warStatsRangeWarsCompact": {
+    "description": "Compact clan war statistics war range label",
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
   "warStatsRangeDaysCompact": "{number} dana",
+  "@warStatsRangeDaysCompact": {
+    "description": "Compact clan war statistics day range label",
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
   "warStatsLastXDays": "Poslednjih {number} dana",
+  "@warStatsLastXDays": {
+    "description": "Clan war statistics date-range label",
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
   "warStatsCurrentMembers": "Trenutni članovi",
   "warLeague": "Rat/Liga",
   "warHistory": "Istorija ratova",
@@ -1305,6 +1388,13 @@
   "warLogClosed": "Ратни дневник клана {clan} је затворен.",
   "warLogPrivate": "{clan} има приватан ратни дневник.",
   "@warLogClosed": {
+    "placeholders": {
+      "clan": {
+        "type": "String"
+      }
+    }
+  },
+  "@warLogPrivate": {
     "placeholders": {
       "clan": {
         "type": "String"
@@ -1608,7 +1698,7 @@
   "warStarsTwo": "2 zvezdice",
   "warStarsThree": "3 zvezdice",
   "warStarsZero": "0 zvezdica",
-  "legendHistoryZeroStars": "Nula zvezdica",
+  "legendHistoryZeroStars": "Zero Stars",
   "warStarsBestPerformance": "Najbolji učinak",
   "@warStarsBestPerformance": {
     "description": "Best performance in war"
@@ -1763,7 +1853,7 @@
   "clanLeaderboardHistoryTab": "Историја ранг-листе",
   "clanLegendHistoryTab": "Историја Легенде",
   "clanRecordsTab": "Рекорди",
-  "clanRecordsChangesTab": "Рекорди и промене",
+  "clanRecordsChangesTab": "Records & Changes",
   "clanProfileHistoryTab": "Историја профила",
   "clanProfileLevelChanged": "Ниво клана је промењен",
   "clanProfileDescriptionChanged": "Опис је промењен",
@@ -1805,8 +1895,8 @@
   "legendsCountryTitle": "Држава",
   "legendsLocalRankTitle": "Локални ранг",
   "legendsGlobalRankTitle": "Глобални ранг",
-  "legendsYourArmy": "Tvoja vojska",
-  "legendsArmyUsedAgainstYou": "Vojska korišćena protiv tebe",
+  "legendsYourArmy": "Your army",
+  "legendsArmyUsedAgainstYou": "Army used against you",
   "warWinsTitle": "Побеђује",
   "warLossesTitle": "Губици",
   "warDrawsTitle": "Дравс",
@@ -2051,7 +2141,7 @@
   "faqWhatCanBotDo": "Šta ClashKing Discord bot može da radi?",
   "faqWhatCanBotDoAnswer": "ClashKing Discord bot vam pomaže da upravljate klanom direktno iz Discorda pomoću sveobuhvatnih alata za praćenje, automatskih obaveštenja i besprekorne integracije sa ovom aplikacijom. Namenjen je vođama i članovima klanova koji žele da ostanu povezani i organizovani:",
   "faqInviteBotToServer": "Pozovi bota na server",
-  "drawerInviteDiscordBot": "Pozovi bota na server",
+  "drawerInviteDiscordBot": "Invite Discord Bot",
   "faqBotFeatureTracking": "Praćenje igrača i klanova",
   "faqBotFeatureTrackingDesc": "Dodajte i pratite više klanova i igrača uz ažuriranja u realnom vremenu",
   "faqBotFeatureWars": "Upravljanje ratovima",
@@ -2208,7 +2298,7 @@
     "description": "Defender town hall filter label"
   },
   "filtersSameTownHallOnly": "Samo ista Gradska većnica",
-  "warStatsSameTownHall": "Иста градска кућа",
+  "warStatsSameTownHall": "Same Townhall",
   "@filtersSameTownHallOnly": {
     "description": "Same town hall filter option"
   },
@@ -2862,7 +2952,7 @@
   "@settingsNotificationsTitle": {
     "description": "Settings tile: notifications title"
   },
-  "settingsNotificationsSubtitle": "Изабери која упозорења добијаш.",
+  "settingsNotificationsSubtitle": "Одаберите упозорења и пошаљите локалне прегледе тестова.",
   "@settingsNotificationsSubtitle": {
     "description": "Settings tile: notifications subtitle"
   },
@@ -3334,7 +3424,7 @@
   "playerBestTrophies": "Najbolji trofeji",
   "clanLoadFailed": "Učitavanje klana nije uspelo.",
   "gameItemLevels": "Nivoi",
-  "gameItemLevelCount": "{count, plural, one {# nivo} few {# nivoa} other {# nivoa}}",
+  "gameItemLevelCount": "{count, plural, one {# Level} other {# Levels}}",
   "@gameItemLevelCount": {
     "placeholders": {
       "count": {
@@ -3405,6 +3495,20 @@
   },
   "todoAllCaughtUpForNow": "Za sada je sve završeno",
   "timeDurationShort": "{unit, select, daysHours {{primary}д {secondary}ч} hoursMinutes {{primary}ч {secondary}мин} other {{primary}мин}}",
+  "@timeDurationShort": {
+    "description": "Compact localized duration used in countdowns",
+    "placeholders": {
+      "unit": {
+        "type": "String"
+      },
+      "primary": {
+        "type": "int"
+      },
+      "secondary": {
+        "type": "int"
+      }
+    }
+  },
   "todoEventEndsIn": "Završava se za {duration}",
   "@todoEventEndsIn": {
     "placeholders": {
@@ -3514,9 +3618,14 @@
   "statsHero": "Херо",
   "statsPet": "Пет",
   "statsEquipment": "Опрема",
-  "statsPetCombinations": "Комбинације љубимаца",
-  "statsEquipmentPairs": "Парови опреме",
-  "statsArmyFallback": "Војска {id}",
+  "statsPetCombinations": "Pet combinations",
+  "statsEquipmentPairs": "Equipment pairs",
+  "statsArmyFallback": "Army {id}",
+  "@statsArmyFallback": {
+    "placeholders": {
+      "id": {}
+    }
+  },
   "statsOwningHero": "Поседовање хероја",
   "statsAddItem": "Додајте ставку",
   "statsAnalyzeItems": "Анализирајте ставке",
@@ -3902,7 +4011,7 @@
   },
   "appIconDefault": "Podrazumevano",
   "appIconChristmas": "Božić",
-  "appIconHalloween": "Ноћ вештица",
+  "appIconHalloween": "Halloween",
   "appIconBlackWhite": "Crno-belo",
   "appIconDarkMode": "Tamni režim",
   "generalMembersCount": "{count} članova",
@@ -3960,9 +4069,9 @@
     }
   },
   "upgradeTrackerShare": "Подели праћење",
-  "trackerPosterCopied": "Слика је копирана",
-  "trackerPosterCopy": "Копирај слику",
-  "trackerPosterShareAll": "Подели све 3",
+  "trackerPosterCopied": "Image copied",
+  "trackerPosterCopy": "Copy image",
+  "trackerPosterShareAll": "Share all 3",
   "upgradeTrackerPasteJson": "Налепи JSON налога",
   "upgradeTrackerImportTitle": "Увези податке налога",
   "upgradeTrackerImportDescription": "Налепите необрађени JSON налога. Остаје на овом уређају.",
@@ -4270,9 +4379,9 @@
   "homeActivityJoined": "се придружио/ла",
   "homeActivityLeft": "је напустио/ла",
   "homeActivityAClan": "клану",
-  "statsCwlSeasonGroups": "Групе",
-  "statsCwlSeasonHistory": "Лига кланских ратова током времена",
-  "statsCwlRosterNotLineup": "Удео пријављених играча прерачунат на {size} места; стварни ратни састав може да се разликује.",
+  "statsCwlSeasonGroups": "Grupe",
+  "statsCwlSeasonHistory": "CWL over time",
+  "statsCwlRosterNotLineup": "Registered roster mix, scaled to {size} places; actual war lineups may differ.",
   "@statsCwlRosterNotLineup": {
     "placeholders": {
       "size": {
@@ -4280,28 +4389,28 @@
       }
     }
   },
-  "statsTroopStats": "Статистика трупа",
-  "statsWarSizes": "Величине ратова",
-  "statsMissedAttacks": "Пропуштени напади",
-  "statsCopyChart": "Копирај графикон",
-  "statsCompareItems": "Упореди ставке",
-  "statsCompareItemsHint": "Изаберите до 5 ставки за поређење.",
-  "statsVsOverall": "у односу на укупно",
-  "statsCopyChartFailed": "Графикон није могуће копирати. Покушајте поново.",
-  "statsPercentagePoints": "процентних поена",
+  "statsTroopStats": "Troop Stats",
+  "statsWarSizes": "War sizes",
+  "statsMissedAttacks": "Missed attacks",
+  "statsCopyChart": "Copy chart",
+  "statsCompareItems": "Compare items",
+  "statsCompareItemsHint": "Select up to 5 items to compare.",
+  "statsVsOverall": "vs. overall",
+  "statsCopyChartFailed": "Could not copy chart. Try again.",
+  "statsPercentagePoints": "percentage points",
   "statsMeta": "Мета",
   "statsBattle": "Баттле",
   "statsWorld": "Свет",
   "statsHeaderSubtitle": "Истражите борбени учинак и свет који пратимо.",
   "statsPreview": "Преглед",
-  "statsTownHallDistribution": "Градске куће",
+  "statsTownHallDistribution": "Дистрибуција градске куће",
   "statsBuilderHallDistribution": "Дистрибуција дворане за изградњу",
-  "statsLeagueDistribution": "Рангиране лиге",
+  "statsLeagueDistribution": "Распоредна дистрибуција лиге",
   "statsTrackedPlayers": "Тренутна праћена популација играча",
   "statsTrackedClans": "Тренутна праћена популација кланова",
-  "statsCwlLeagueDistribution": "CWL лиге",
-  "statsCapitalLeagueDistribution": "Лиге престонице",
-  "statsTrackedLocations": "Локације кланова",
+  "statsCwlLeagueDistribution": "ЦВЛ лига дистрибуција",
+  "statsCapitalLeagueDistribution": "Дистрибуција у лиги капитала",
+  "statsTrackedLocations": "Праћене локације кланова",
   "statsLocationCountHelp": "Земље и локације представљене праћеним клановима.",
   "statsLeagueId": "Лига {id}",
   "@statsLeagueId": {
@@ -4379,7 +4488,7 @@
   "rankedLeagueNoBattles": "Још нема забележених битака.",
   "rankedLeagueGroupRanking": "Пласман групе",
   "rankedLeagueRankingSubtitle": "Пласман уживо за актуелну групу. Ваш играч је истакнут.",
-  "rankedLeagueJumpToMyRank": "Иди на пласман",
+  "rankedLeagueJumpToMyRank": "Иди на мој пласман",
   "rankedLeagueLastPeriod": "Претходни период",
   "rankedLeagueBestGroupRank": "Најбољи пласман",
   "rankedLeaguePeriodHistory": "Историја периода",
@@ -4944,7 +5053,7 @@
       }
     }
   },
-  "upgradeTrackerPlanRuleNote": "Превуците категорије да одредите редослед надоградњи. Подешавања реда омогућавају заједнички приоритет или заустављање на циљном напретку.",
+  "upgradeTrackerPlanRuleNote": "Нумерисани нивои покрећу први. Заједнички редови задржавају исти број нивоа, а њихова мешавина је нормализована из релативних тежина, тако да 50 + 25 постаје 67% / 33%. Циљ даје категорију принос након што достигне тај проценат док остаје квалификован касније.",
   "upgradeTrackerPlanGoalMaxCurrentHall": "Макс пре напредовања",
   "upgradeTrackerPlanGoalRushNextHall": "Брзо дођите до следеће сале",
   "upgradeTrackerPlanGoalCatchUp": "Достигните убрзане нивое",
@@ -5046,19 +5155,40 @@
       }
     }
   },
-  "cwlRegisteredRoster": "Пријављени састав",
-  "cwlMatches": "Мечеви",
-  "cwlNextMatchup": "Следећи меч",
-  "cwlOtherMatches": "Остали мечеви",
-  "cwlOutlook": "Изгледи за сезону",
-  "cwlFirstPlace": "Прво место",
-  "cwlTopTwo": "Прва два",
-  "cwlRemainingOpponents": "Преостали противници",
-  "cwlWinBonusNote": "Звезде укључују 10 бонус звезда за сваку завршену победу.",
-  "cwlEstimateNote": "Процене користе завршене ратове и преостале противнике, не промене састава. Потребна су бар два завршена рата по клану. Процене нису калибрисане; правила напредовања зависе од лиге.",
-  "cwlDuration": "{unit, select, hours {{count, plural, one {# сат} few {# сата} other {# сати}}} other {{count, plural, one {# минут} few {# минута} other {# минута}}}}",
-  "personalBasesDeleteOld": "Уклони базе старије од 90 дана",
-  "personalBasesDeleteOldConfirm": "Биће уклоњено {count} сачуваних база старијих од 90 дана. Историја преузимања и дељене базе ће остати.",
+  "@settingsWarWidgetIosReady": {
+    "placeholders": {
+      "clanName": {
+        "type": "String"
+      }
+    }
+  },
+  "@settingsWarWidgetAndroidReady": {
+    "placeholders": {
+      "clanName": {
+        "type": "String"
+      }
+    }
+  },
+  "@settingsWarWidgetPrepareFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "cwlRegisteredRoster": "Registered roster",
+  "cwlMatches": "Matchups",
+  "cwlNextMatchup": "Next matchup",
+  "cwlOtherMatches": "Other matchups",
+  "cwlOutlook": "Season outlook",
+  "cwlFirstPlace": "First place",
+  "cwlTopTwo": "Top two",
+  "cwlRemainingOpponents": "Remaining opponents",
+  "cwlWinBonusNote": "Stars include 10 bonus stars per completed win.",
+  "cwlEstimateNote": "Estimates use completed wars and remaining opponents, not lineup changes. At least two completed wars per clan are needed. These are uncalibrated estimates; promotion rules vary by league.",
+  "cwlDuration": "{unit, select, hours {{count, plural, one {# hour} other {# hours}}} other {{count, plural, one {# minute} other {# minutes}}}}",
+  "personalBasesDeleteOld": "Remove bases older than 90 days",
+  "personalBasesDeleteOldConfirm": "{count} saved bases older than 90 days will be removed. Download history and shared bases will remain.",
   "@personalBasesDeleteOldConfirm": {
     "description": "Confirms cleanup while preserving lifetime download history.",
     "placeholders": {
@@ -5067,9 +5197,9 @@
       }
     }
   },
-  "legendsAutomaticDefense": "Аутоматска одбрана",
-  "legendsPopularArmyItem": "Најпопуларнији део војске",
-  "legendsClanCastle": "Замак клана",
+  "legendsAutomaticDefense": "Automatic defense",
+  "legendsPopularArmyItem": "Most popular army item",
+  "legendsClanCastle": "Clan Castle",
   "@cwlDuration": {
     "description": "Explicit countdown units; avoid native unit conversion.",
     "placeholders": {
@@ -5081,20 +5211,20 @@
       }
     }
   },
-  "clanNotificationRemoveConfirmation": "Искључити обавештења овог клана и уклонити обележивач?",
-  "personalBasesTab": "Bases",
+  "clanNotificationRemoveConfirmation": "Turn off this clan’s notifications and remove the bookmark?",
+  "personalBasesTab": "Baze",
   "personalBasesDownloaded": "Downloaded",
   "personalArmyName": "Army name",
   "personalArmyNotes": "Notes",
   "personalArmyUnnamed": "Unnamed army",
   "personalArmyEdit": "Edit army",
   "personalArmyUnknownTownHall": "Unknown Town Hall",
-  "discordBotDashboard": "Kontrolna tabla Discord bota",
-  "discordAddBot": "Dodaj bota",
-  "discordAddToMyDiscord": "Dodaj u moj Discord",
-  "discordServersWithoutBot": "Serveri bez ClashKing-a",
-  "rankingsPlayerSection": "Rang-liste igrača",
-  "rankingsClanSection": "Rang-liste klanova",
+  "discordBotDashboard": "Discord Bot Dashboard",
+  "discordAddBot": "Add bot",
+  "discordAddToMyDiscord": "Add to My Discord",
+  "discordServersWithoutBot": "Servers without ClashKing",
+  "rankingsPlayerSection": "Player Rankings",
+  "rankingsClanSection": "Clan Rankings",
   "cwlArchiveCoverage": "{available} of {total} matchups available.",
   "cwlStandingsIncomplete": "Missing archives are excluded. Group ranks and forecasts are unavailable.",
   "cwlPromotionChance": "Estimated promotion chance",
@@ -5105,62 +5235,62 @@
   "cwlRecordedStats": "Recorded wars only",
   "cwlMissingMatchups": "{count} matchups unavailable",
   "cwlHighestLeague": "Highest league · no promotion",
-  "warOutlookWinPossible": "Победа је још могућа",
-  "warOutlookDrawOnly": "Највише нерешено",
-  "warOutlookDefeat": "Победа није могућа",
-  "warOutlookMaximum": "Највећи могући резултат",
-  "warOutlookAssumption": "Претпоставља савршене преостале нападе. Ово је математичка граница, не предвиђање.",
-  "warScoutTitle": "Анализа поставе",
-  "warScoutOpponent": "Недавни ратови противника",
-  "warScoutScope": "Тренутна постава · иста правила · до 10 претходна рата",
-  "upgradeTrackerCapturedWork": "Из последњег ажурирања",
-  "tutorialWelcomeBody": "Упознајте ClashKing кроз кратак обилазак. Можете га прескочити у сваком тренутку.",
-  "tutorialReorderBody": "Држите картицу притиснуту и превуците је на ново место.",
-  "tutorialSidebarBody": "Превуците преко почетног екрана да отворите мени или додирните свој аватар.",
-  "tutorialExploreBody": "У овом менију отворите Подешавања, па Обавештења. Наставите да одмах пређете тамо.",
-  "tutorialRemindersBody": "Изаберите подсетнике испод. Када завршите, вратите се на почетни екран.",
-  "tutorialResetTitle": "Ресетуј упутства",
-  "tutorialResetConfirm": "Поново покренути упутства при следећим посетама?",
-  "upgradeTrackerOngoingUpgrades": "Надоградње у току",
-  "upgradeTrackerToLevel": "На ниво {level}",
-  "upgradeTrackerFreeSlots": "Слободно: {count}",
-  "upgradeTrackerFreeIn": "Слободно за {duration}",
-  "upgradeTrackerPetHouse": "Кућа љубимаца",
-  "upgradeTrackerNotBuilt": "Није изграђено",
-  "upgradeTrackerExtraSlots": "Додатно: {count}",
-  "rankedLeagueOverTime": "Лига током времена",
-  "rankedLeaguePromotionCutoff": "Граница за напредовање",
-  "rankedLeagueDemotionCutoff": "Граница за испадање",
-  "rankedLeagueCutoffsUnavailable": "Границе за напредовање и испадање нису доступне.",
-  "rankedAutomaticDefenseSummary": "{count} одбрана · по {points} трофеја",
-  "rankedAutomaticDefenseExplanation": "На основу свих стварних одбрана ове недеље, заокружено наниже.",
-  "warStatusInWar": "У рату",
-  "warStatusNoWar": "Нема рата",
-  "warNoActiveClans": "Ниједан клан тренутно није у рату.",
-  "warNoInactiveClans": "Нема кланова ван рата",
-  "warAllClansInWar": "Сви ваши кланови су тренутно у рату.",
-  "warStatusOther": "Остало",
-  "warNoOtherClans": "Нема других кланова.",
-  "playerWarLifetime": "Цела историја",
-  "playerWarThScope": "Важи само за картице статистике, не за битке. Задржите дугме за ово објашњење.",
-  "playerWarNoAttacks": "Још нема напада",
-  "playerWarRegularWars": "Обичан рат",
-  "warWidgetNoActiveWar": "Нема активног рата",
-  "warWidgetPrivateWarLog": "Приватан ратни дневник",
-  "warWidgetChooseClan": "Изабери клан",
-  "legendPerformanceTitle": "Дневни учинак",
-  "legendCompleteDays": "Потпуни дани",
-  "legendPerfectDays": "Савршени дани",
-  "legendPartialDays": "Непотпуни дани",
-  "legendMissingDays": "Без записа",
-  "legendInvalidDays": "Неважећи дани",
-  "legendTrophiesGained": "Освојени трофеји",
-  "legendTrophiesLost": "Изгубљени трофеји",
-  "legendDistribution": "Расподела",
-  "legendPreviousDays": "Претходних {count} дана",
-  "legendAvailableDays": "Доступни дани",
-  "legendCompleteOnly": "Расподела обухвата дане са 8 забележених битака.",
-  "legendPerfectSources": "Савршени дани по рангу",
+  "warOutlookWinPossible": "Win still possible",
+  "warOutlookDrawOnly": "Draw at best",
+  "warOutlookDefeat": "No path to a win",
+  "warOutlookMaximum": "Maximum possible score",
+  "warOutlookAssumption": "Assumes perfect remaining attacks. This is a mathematical limit, not a prediction.",
+  "warScoutTitle": "Lineup scouting",
+  "warScoutOpponent": "Opponent’s recent wars",
+  "warScoutScope": "Current lineup · same rules · up to 10 previous wars",
+  "upgradeTrackerCapturedWork": "From your last update",
+  "tutorialWelcomeBody": "Take a quick tour of ClashKing. You can skip it at any time.",
+  "tutorialReorderBody": "Hold a card, then drag it to change its position.",
+  "tutorialSidebarBody": "Swipe across Home to open the menu, or tap your avatar.",
+  "tutorialExploreBody": "From this menu, open Settings, then Notifications. Continue to go there now.",
+  "tutorialRemindersBody": "Choose reminders below. When you are done, return to Home.",
+  "tutorialResetTitle": "Reset tutorials",
+  "tutorialResetConfirm": "Start the tutorials again on your next visits?",
+  "upgradeTrackerOngoingUpgrades": "Ongoing Upgrades",
+  "upgradeTrackerToLevel": "To Level {level}",
+  "upgradeTrackerFreeSlots": "{count} free",
+  "upgradeTrackerFreeIn": "Free in {duration}",
+  "upgradeTrackerPetHouse": "Pet House",
+  "upgradeTrackerNotBuilt": "Not built",
+  "upgradeTrackerExtraSlots": "{count} extra",
+  "rankedLeagueOverTime": "League over time",
+  "rankedLeaguePromotionCutoff": "Promotion cutoff",
+  "rankedLeagueDemotionCutoff": "Demotion cutoff",
+  "rankedLeagueCutoffsUnavailable": "Promotion and demotion thresholds unavailable.",
+  "rankedAutomaticDefenseSummary": "{count} defenses · {points} trophies each",
+  "rankedAutomaticDefenseExplanation": "Based on all real defenses this week, rounded down.",
+  "warStatusInWar": "In war",
+  "warStatusNoWar": "No war",
+  "warNoActiveClans": "No clans are currently in war.",
+  "warNoInactiveClans": "No clans out of war",
+  "warAllClansInWar": "All your clans are currently in war.",
+  "warStatusOther": "Ostalo",
+  "warNoOtherClans": "No other clans.",
+  "playerWarLifetime": "Lifetime",
+  "playerWarThScope": "Applies only to the statistics cards, not Battles. Hold the button for this explanation.",
+  "playerWarNoAttacks": "No attacks yet",
+  "playerWarRegularWars": "Regular war",
+  "warWidgetNoActiveWar": "No active war",
+  "warWidgetPrivateWarLog": "Private war log",
+  "warWidgetChooseClan": "Choose a clan",
+  "legendPerformanceTitle": "Daily performance",
+  "legendCompleteDays": "Complete days",
+  "legendPerfectDays": "Perfect days",
+  "legendPartialDays": "Partial days",
+  "legendMissingDays": "No observations",
+  "legendInvalidDays": "Invalid days",
+  "legendTrophiesGained": "Trophies gained",
+  "legendTrophiesLost": "Trophies lost",
+  "legendDistribution": "Raspodela",
+  "legendPreviousDays": "Previous {count} days",
+  "legendAvailableDays": "Days available",
+  "legendCompleteOnly": "Distribution uses days with 8 recorded battles.",
+  "legendPerfectSources": "Perfect days by rank",
   "@legendPreviousDays": {
     "placeholders": {
       "count": {
@@ -5168,15 +5298,15 @@
       }
     }
   },
-  "onboardingOverviewTitle": "Твоји налози и кланови",
-  "onboardingOverviewBody": "Држи своје играче, кланове и надоградње на једном месту.",
-  "onboardingProgressTitle": "Погледај ранг-листе и статистику",
-  "onboardingProgressBody": "Прати битке, упореди напредак и настави побољшања.",
-  "onboardingRemindersTitle": "Примај подсетнике и обавештења",
-  "onboardingRemindersBody": "Примај ратне подсетнике и изабрана обавештења. Изабери налоге и врсте обавештења у Подешавањима.",
-  "onboardingReplayTitle": "Понови увод",
-  "statsViewLatestData": "Прикажи најновије податке",
-  "statsLatestAvailableDate": "Најновије доступно: {date}",
+  "onboardingOverviewTitle": "Your accounts & clans",
+  "onboardingOverviewBody": "Keep your players, clans, and upgrades together.",
+  "onboardingProgressTitle": "View rankings and stats",
+  "onboardingProgressBody": "Follow your battles, compare your progress, and keep upgrades moving.",
+  "onboardingRemindersTitle": "Get reminders and alerts",
+  "onboardingRemindersBody": "Get war reminders and the alerts you choose. Pick your accounts and alert types in Settings.",
+  "onboardingReplayTitle": "Replay introduction",
+  "statsViewLatestData": "View latest data",
+  "statsLatestAvailableDate": "Latest available: {date}",
   "@statsLatestAvailableDate": {
     "placeholders": {
       "date": {
@@ -5184,23 +5314,23 @@
       }
     }
   },
-  "legendPerfectedDefenseDays": "Дани са потпуно пораженом одбраном",
-  "legendCompleteDayDefinition": "Укључени су само дани са свих 8 битака.",
-  "statsCommunity": "Заједница",
-  "rankedFullOffenseDays": "+320 дана",
-  "rankedFullDefenseDays": "−320 дана",
-  "rankedTrophiesByRank": "Трофеји по рангу",
-  "statsArmyTypes": "Типови војске",
-  "onboardingStatsBody": "Истражи статистику играча, прати своје кланове и види како се цела игра мења.",
-  "onboardingWidgetsTitle": "Додај виџете на почетни екран",
-  "onboardingWidgetsBody": "Прати резултате ратова и напредак надоградњи помоћу виџета на почетном екрану.",
-  "onboardingAlertTitle": "Рат се ускоро завршава",
-  "onboardingAlertBody": "Време је за твој последњи напад.",
-  "onboardingSetupNotifications": "Омогући обавештења",
-  "onboardingAccountsReadyBody": "Твоји повезани налози су спремни. Додај још један или настави.",
-  "onboardingSkipAccountSetup": "Прескочи",
-  "accountsSetupBody": "Додај и потврди своје Clash of Clans налоге.",
-  "accountsMyTitle": "Моји налози",
-  "profileAvatar": "Промени изглед",
-  "avatarPickerTitle": "Изабери аватар"
+  "legendPerfectedDefenseDays": "Perfected defense days",
+  "legendCompleteDayDefinition": "Only days with all 8 battles are included.",
+  "statsCommunity": "Zajednica",
+  "rankedFullOffenseDays": "+320 days",
+  "rankedFullDefenseDays": "−320 days",
+  "rankedTrophiesByRank": "Trophies by rank",
+  "statsArmyTypes": "Army Types",
+  "onboardingStatsBody": "Explore player stats, follow your clans, and see how the whole game is changing.",
+  "onboardingWidgetsTitle": "Add Home Screen widgets",
+  "onboardingWidgetsBody": "Keep war scores and upgrade progress close with Home Screen widgets.",
+  "onboardingAlertTitle": "War ends soon",
+  "onboardingAlertBody": "Time for your final attack.",
+  "onboardingSetupNotifications": "Enable notifications",
+  "onboardingAccountsReadyBody": "Your linked accounts are ready. Add another account or continue.",
+  "onboardingSkipAccountSetup": "Skip",
+  "accountsSetupBody": "Add and verify your Clash of Clans accounts.",
+  "accountsMyTitle": "My Accounts",
+  "profileAvatar": "Change look",
+  "avatarPickerTitle": "Pick an avatar"
 }
