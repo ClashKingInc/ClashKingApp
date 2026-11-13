@@ -1,7 +1,7 @@
 import { Share2, Copy } from 'lucide-react-native';
 import * as Clipboard from 'expo-clipboard';
 import { useI18n } from '../../../i18n';
-import { appLinkPath } from '../../../core/deep-links/app-link';
+import { sharePageUrl } from '../../../core/deep-links/share-page-link';
 import { useAdaptiveLayout } from '../../../ui/adaptive-layout';
 import { modalOrientations } from '../../../ui/modal-orientations';
 import { useCallback, useEffect, useRef, useState } from 'react';
@@ -44,9 +44,11 @@ export function AnnouncementStoryModal({
 }) {
   const { t } = useI18n();
   const sharing = useRef(false);
-  const sharedUrl =
-    'https://app.clashk.ing' +
-    appLinkPath({ kind: 'page', page: 'posts', params: { postId: announcement.id } });
+  const sharedUrl = sharePageUrl({
+    kind: 'page',
+    page: 'posts',
+    params: { postId: announcement.id },
+  });
   const copyLink = async () => {
     try {
       await Clipboard.setStringAsync(sharedUrl);
@@ -72,6 +74,7 @@ export function AnnouncementStoryModal({
     }
   };
   const { width, height } = useWindowDimensions();
+  const [viewport, setViewport] = useState({ width, height });
   const layout = useAdaptiveLayout();
   const insets = useSafeAreaInsets();
   const { reduceMotion } = useCKAccessibility();
@@ -104,8 +107,8 @@ export function AnnouncementStoryModal({
     0,
     Math.min(
       layout.isExpanded ? 760 : 560,
-      (layout.isExpanded ? layout.width : width) - 24,
-      (layout.isExpanded ? layout.height : height) - insets.top - insets.bottom - 84,
+      viewport.width - 24,
+      viewport.height - insets.top - insets.bottom - 84,
     ),
   );
 
@@ -161,7 +164,15 @@ export function AnnouncementStoryModal({
       <View
         accessibilityLabel={`Close ${announcement.title}`}
         accessibilityViewIsModal
-        style={styles.overlay}
+        onLayout={({ nativeEvent }) => {
+          const next = nativeEvent.layout;
+          setViewport((current) =>
+            current.width === next.width && current.height === next.height
+              ? current
+              : { width: next.width, height: next.height },
+          );
+        }}
+        style={[styles.overlay, { paddingTop: insets.top + 12, paddingBottom: insets.bottom + 12 }]}
       >
         <Pressable
           accessibilityLabel={`Close ${announcement.title}`}

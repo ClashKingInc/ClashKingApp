@@ -2,7 +2,7 @@
 
 ## Native application boundary
 
-The product UI runs on iOS and Android. Browser URLs serve only the small app-opening landing page, association files, and OAuth callbacks. Do not add browser UI parity or use browser product tests to validate native screens. The landing page derives supported routes from the native route manifest; do not maintain a separate route list or forward authentication parameters to app links.
+The product UI runs on iOS and Android. Browser URLs serve the small app-opening landing page, association files, OAuth callbacks, and the public read-only post reader. Shared post URLs use `/share/posts/:id` so they stay in the browser; opening the app is explicit. Do not add other browser UI parity or use browser product tests to validate native screens. The landing page derives supported native routes from the native route manifest; do not maintain a second native route list or forward authentication parameters to app links.
 
 Keep durable setup and maintenance guidance in the existing READMEs. Do not add one-off implementation reports or artwork-generation diaries to the repository. Preserve actual third-party license files.
 

@@ -454,6 +454,8 @@
   "postsLoadMore": "さらに読み込む",
   "postsCurrent": "現在",
   "postsPast": "過去",
+  "postsStoryFinished": "ストーリーが終了しました",
+  "postsWatchAgain": "もう一度見る",
   "postsStory": "インタラクティブストーリー",
   "postsPinned": "注目",
   "generalTryAgain": "もう一度試す",

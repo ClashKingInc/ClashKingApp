@@ -1,6 +1,7 @@
-import { cp, mkdir, readFile, rm, writeFile } from 'node:fs/promises';
+import { cp, mkdir, readFile, readdir, rm, writeFile } from 'node:fs/promises';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import ts from 'typescript';
 import { prepareAppLanding } from './prepare-app-landing.mjs';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
@@ -40,10 +41,58 @@ for (const [name, id] of [
     )
     .replace(`id="store-${id}-status">Coming soon`, `id="store-${id}-status">Download the app`);
 }
-await cp(join(root, 'public/landing/post-preview-worker.js'), join(output, '_worker.js'));
+// Inline the tiny portable modules: Pages advanced mode ships one Worker,
+// while native stories and web stories retain the same fitting contract.
+const worker = await readFile(join(root, 'public/landing/post-preview-worker.js'), 'utf8');
+// Compile directly into dist. Changing .gitignore to hide intermediate web
+// modules changes Expo's native fingerprint even though no native code moved.
+async function portableSource(path) {
+  const input = await readFile(join(root, path), 'utf8');
+  return ts
+    .transpileModule(input, {
+      compilerOptions: { target: ts.ScriptTarget.ES2022, module: ts.ModuleKind.ES2022 },
+    })
+    .outputText.replaceAll('export ', '');
+}
+const renderer = await portableSource('src/features/home/data/announcement-content.ts');
+const storyContract = await portableSource(
+  'src/features/home/presentation/announcement-webview-contract.ts',
+);
+const readerLocales = {};
+const readerKeys = [
+  'postsStoryFinished',
+  'postsWatchAgain',
+  'generalOpen',
+  'apiErrorNotFound',
+  'postsLoadFailed',
+  'generalTryAgain',
+  'faqFanContentPolicy',
+];
+for (const file of await readdir(join(root, 'src/i18n/arb'))) {
+  if (!/^app_.*\.arb$/.test(file)) continue;
+  const catalog = JSON.parse(await readFile(join(root, 'src/i18n/arb', file), 'utf8'));
+  const locale = file.slice(4, -4).replaceAll('_', '-').toLowerCase();
+  readerLocales[locale] = Object.fromEntries(
+    readerKeys.map((key) => {
+      if (typeof catalog[key] !== 'string' || !catalog[key].trim())
+        throw new Error(`Missing ${locale} reader text: ${key}`);
+      return [key, catalog[key]];
+    }),
+  );
+}
+await writeFile(
+  join(output, '_worker.js'),
+  renderer +
+    '\n' +
+    storyContract +
+    '\n' +
+    worker
+      .replace('/* CK_STORE_LINKS */ {}', JSON.stringify(stores))
+      .replace('/* CK_READER_LOCALES */ {}', JSON.stringify(readerLocales)),
+);
 await writeFile(
   join(output, '_routes.json'),
-  JSON.stringify({ version: 1, include: ['/posts/*'], exclude: [] }),
+  JSON.stringify({ version: 1, include: ['/posts/*', '/share/posts/*'], exclude: [] }),
 );
 await writeFile(join(output, 'index.html'), html);
 await writeFile(join(output, '404.html'), html);
