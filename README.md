@@ -203,3 +203,12 @@ makes no writes. It does not validate native share sheets, device gestures,
 Discord's preview cache, or visual appearance. Deploying the landing requires
 Pages Functions support; rolling back the Pages deployment restores the prior
 static landing without changing stored posts or native data.
+
+The story archive also has a local service end-to-end check. From `expo/`, set
+`CLASHKING_E2E_API_REPO` to an API checkout with the presentation-type filter,
+and run the canonical schema repository's `scripts/with-test-timescale.sh
+--profile retained-api -- node scripts/e2e/post-story-filter.mjs`. This starts
+an isolated Worker, seeds only its disposable database, and exercises the real
+`AnnouncementService` through the installed client package. It checks that five
+stories remain discoverable behind newer articles, plus pagination, platform
+filtering, legacy story URLs, and draft exclusion.
