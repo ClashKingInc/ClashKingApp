@@ -1,6 +1,7 @@
 import { cp, mkdir, readFile, rm, writeFile } from 'node:fs/promises';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import ts from 'typescript';
 import { prepareAppLanding } from './prepare-app-landing.mjs';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
@@ -43,12 +44,20 @@ for (const [name, id] of [
 // Inline the tiny portable modules: Pages advanced mode ships one Worker,
 // while native stories and web stories retain the same fitting contract.
 const worker = await readFile(join(root, 'public/landing/post-preview-worker.js'), 'utf8');
-const renderer = (
-  await readFile(join(root, 'public/landing/announcement-content.js'), 'utf8')
-).replaceAll('export ', '');
-const storyContract = (
-  await readFile(join(root, 'public/landing/announcement-webview-contract.js'), 'utf8')
-).replaceAll('export ', '');
+// Compile directly into dist. Changing .gitignore to hide intermediate web
+// modules changes Expo's native fingerprint even though no native code moved.
+async function portableSource(path) {
+  const input = await readFile(join(root, path), 'utf8');
+  return ts
+    .transpileModule(input, {
+      compilerOptions: { target: ts.ScriptTarget.ES2022, module: ts.ModuleKind.ES2022 },
+    })
+    .outputText.replaceAll('export ', '');
+}
+const renderer = await portableSource('src/features/home/data/announcement-content.ts');
+const storyContract = await portableSource(
+  'src/features/home/presentation/announcement-webview-contract.ts',
+);
 await writeFile(
   join(output, '_worker.js'),
   renderer +
