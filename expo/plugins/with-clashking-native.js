@@ -154,10 +154,10 @@ function validateLegacyWidgetContract(contract) {
   const expectedIconOptions = [
     ['default', null, 'assets/icons/app_icon_ios_default.png'],
     ['white_mode', 'AppIconWhite', 'assets/icons/app_icon_white.png'],
+    ['dark_mode', 'AppIconDarkLogo', 'assets/icons/app_icon_dark_logo.png'],
+    ['black_white', 'AppIconBlackWhite', 'assets/icons/app_icon_black_white.png'],
     ['halloween', 'AppIconHalloween', 'assets/icons/app_icon_halloween.png'],
     ['christmas', 'AppIconChristmas', 'assets/icons/app_icon_christmas.png'],
-    ['black_white', 'AppIconBlackWhite', 'assets/icons/app_icon_black_white.png'],
-    ['dark_mode', 'AppIconDarkLogo', 'assets/icons/app_icon_dark_logo.png'],
   ];
   if (
     JSON.stringify(contract.alternateIcons) !==

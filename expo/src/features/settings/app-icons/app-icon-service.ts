@@ -31,6 +31,16 @@ export const APP_ICON_OPTIONS: readonly AppIconOption[] = [
     previewAsset: 'assets/icons/app_icon_white.png',
   },
   {
+    labelKey: 'dark_mode',
+    iconName: DARK_LOGO_ICON_NAME,
+    previewAsset: 'assets/icons/app_icon_dark_logo.png',
+  },
+  {
+    labelKey: 'black_white',
+    iconName: BLACK_WHITE_ICON_NAME,
+    previewAsset: 'assets/icons/app_icon_black_white.png',
+  },
+  {
     labelKey: 'halloween',
     iconName: HALLOWEEN_ICON_NAME,
     previewAsset: 'assets/icons/app_icon_halloween.png',
@@ -39,16 +49,6 @@ export const APP_ICON_OPTIONS: readonly AppIconOption[] = [
     labelKey: 'christmas',
     iconName: CHRISTMAS_ICON_NAME,
     previewAsset: 'assets/icons/app_icon_christmas.png',
-  },
-  {
-    labelKey: 'black_white',
-    iconName: BLACK_WHITE_ICON_NAME,
-    previewAsset: 'assets/icons/app_icon_black_white.png',
-  },
-  {
-    labelKey: 'dark_mode',
-    iconName: DARK_LOGO_ICON_NAME,
-    previewAsset: 'assets/icons/app_icon_dark_logo.png',
   },
 ];
 
