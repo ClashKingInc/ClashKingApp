@@ -1,6 +1,7 @@
 // HTTP end-to-end checks against the built landing running in Wrangler Pages.
 // Uses a real public post; does not mock the API or mutate any environment.
 import assert from 'node:assert/strict';
+import { readFile } from 'node:fs/promises';
 const origin = process.env.CK_LANDING_E2E_ORIGIN ?? 'http://127.0.0.1:8792';
 assert(
   ['127.0.0.1', 'localhost'].includes(new URL(origin).hostname),
@@ -43,9 +44,27 @@ if (sharedHtml.includes('id="story"')) {
   const html = await story.text();
   assert(html.includes('__clashkingStoryContentFit'));
   assert(html.includes('parent.postMessage'));
+  for (const locale of ['fr', 'nl', 'ar']) {
+    const catalog = JSON.parse(
+      await readFile(new URL(`../../src/i18n/arb/app_${locale}.arb`, import.meta.url), 'utf8'),
+    );
+    const response = await fetch(`${origin}/share/posts/${encodeURIComponent(postId)}`, {
+      headers: { 'Accept-Language': `${locale},en;q=0.8` },
+    });
+    assert.equal(response.status, 200);
+    assert.equal(response.headers.get('content-language'), locale);
+    const localized = await response.text();
+    assert(localized.includes(`<html lang="${locale}"`));
+    assert(localized.includes(catalog.postsStoryFinished));
+    assert(localized.includes(catalog.postsWatchAgain));
+    assert(localized.includes(catalog.generalOpen));
+    if (locale === 'ar') assert(localized.includes('dir="rtl"'));
+  }
 }
 if (process.env.CK_LANDING_E2E_ARTICLE_ID) {
-  const article = await fetch(`${origin}/share/posts/${encodeURIComponent(process.env.CK_LANDING_E2E_ARTICLE_ID)}`);
+  const article = await fetch(
+    `${origin}/share/posts/${encodeURIComponent(process.env.CK_LANDING_E2E_ARTICLE_ID)}`,
+  );
   assert.equal(article.status, 200);
   const html = await article.text();
   assert(html.includes('<article>'));

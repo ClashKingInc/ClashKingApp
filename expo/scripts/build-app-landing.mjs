@@ -1,4 +1,4 @@
-import { cp, mkdir, readFile, rm, writeFile } from 'node:fs/promises';
+import { cp, mkdir, readFile, readdir, rm, writeFile } from 'node:fs/promises';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import ts from 'typescript';
@@ -58,13 +58,37 @@ const renderer = await portableSource('src/features/home/data/announcement-conte
 const storyContract = await portableSource(
   'src/features/home/presentation/announcement-webview-contract.ts',
 );
+const readerLocales = {};
+const readerKeys = [
+  'postsStoryFinished',
+  'postsWatchAgain',
+  'generalOpen',
+  'apiErrorNotFound',
+  'postsLoadFailed',
+  'generalTryAgain',
+  'faqFanContentPolicy',
+];
+for (const file of await readdir(join(root, 'src/i18n/arb'))) {
+  if (!/^app_.*\.arb$/.test(file)) continue;
+  const catalog = JSON.parse(await readFile(join(root, 'src/i18n/arb', file), 'utf8'));
+  const locale = file.slice(4, -4).replaceAll('_', '-').toLowerCase();
+  readerLocales[locale] = Object.fromEntries(
+    readerKeys.map((key) => {
+      if (typeof catalog[key] !== 'string' || !catalog[key].trim())
+        throw new Error(`Missing ${locale} reader text: ${key}`);
+      return [key, catalog[key]];
+    }),
+  );
+}
 await writeFile(
   join(output, '_worker.js'),
   renderer +
     '\n' +
     storyContract +
     '\n' +
-    worker.replace('/* CK_STORE_LINKS */ {}', JSON.stringify(stores)),
+    worker
+      .replace('/* CK_STORE_LINKS */ {}', JSON.stringify(stores))
+      .replace('/* CK_READER_LOCALES */ {}', JSON.stringify(readerLocales)),
 );
 await writeFile(
   join(output, '_routes.json'),
