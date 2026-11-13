@@ -1,20 +1,20 @@
 {
-  "capitalCurrentOpponent": "Nykyinen vastustaja",
-  "capitalRaidMedals": "Ryöstömitalit",
-  "warReplayTitle": "Pistetilanteen historia",
-  "warReplayPlay": "Toista historia",
-  "warReplayPause": "Keskeytä historia",
-  "cwlLeading": "Johdossa",
-  "cwlTrailing": "Tappiolla",
-  "cwlYourClan": "Oma klaanisi",
-  "cwlPromotionZone": "Noususija",
-  "cwlDemotionZone": "Putoamissija",
-  "cwlNotInLineup": "Ei kokoonpanossa",
-  "esportsEloSubtitle": "Maailmanlaajuinen joukkueiden sijoituslista ja ottelut lähteestä",
-  "esportsTopTeamsMatches": "Nykyisten 50 parhaan joukkueen ottelut.",
-  "esportsPartialMatches": "Joidenkin joukkueiden tietoja ei voitu päivittää.",
-  "settingsHideAccounts": "Piilota tilit",
-  "settingsHideAccountsDescription": "Näytä yhdistettyjen tilien piilotusvalinta. Nykyiset yksityisyysvalinnat eivät muutu.",
+  "capitalCurrentOpponent": "Current opponent",
+  "capitalRaidMedals": "Raid medals",
+  "warReplayTitle": "Score history",
+  "warReplayPlay": "Play history",
+  "warReplayPause": "Pause history",
+  "cwlLeading": "Leading",
+  "cwlTrailing": "Trailing",
+  "cwlYourClan": "Your clan",
+  "cwlPromotionZone": "Promotion zone",
+  "cwlDemotionZone": "Demotion zone",
+  "cwlNotInLineup": "Not in lineup",
+  "esportsEloSubtitle": "Global team rankings and matches from",
+  "esportsTopTeamsMatches": "Matches from the current top 50 teams.",
+  "esportsPartialMatches": "Some teams could not be refreshed.",
+  "settingsHideAccounts": "Hide accounts",
+  "settingsHideAccountsDescription": "Show the option to hide linked accounts. Existing privacy choices stay unchanged.",
   "calcRocketBalloonAssumption": "1 hit + death · {damage} damage each",
   "calcKeepEquipped": "Keep one equipped",
   "calcCustomLevels": "Custom levels",
@@ -38,31 +38,31 @@
   "personalBasesEmptyBody": "Bases you post through ClashKing on Discord appear here. You can also save bases from the library.",
   "personalArmiesEmptyTitle": "Keep your armies close",
   "personalArmiesEmptyBody": "Armies you post through ClashKing on Discord appear here. Save your favourites to find them before your next attack.",
-  "homeCardOriginal": "Alkuperäinen",
-  "homeCardTint": "Pehmeä väri",
-  "homeCardEdge": "Värilliset reunukset",
-  "homeCardGlow": "Hidas hehku",
-  "competitiveNoHistory": "Ei vielä turnauksia",
-  "competitiveHistoryHint": "Joukkueesi ja turnaustuloksesi näkyvät täällä.",
-  "esportsMonthlyFinals": "Kuukausifinaalit",
-  "esportsMonthlyQualifier": "Kuukausikarsinnat",
-  "esportsHeroSubtitle": "Tie maailmanmestaruuskilpailuihin",
-  "esportsViewEvent": "Tutustu tapahtumaan",
-  "esportsWinLoss": "{wins} voittoa · {losses} tappiota",
-  "esportsViewPlayer": "Näytä pelaaja",
-  "esportsRecentMatches": "Viimeisimmät ottelut",
-  "esportsHideAttacks": "Piilota taistelun tiedot",
-  "esportsViewAttacks": "Näytä taistelun tiedot",
-  "esportsPlayer": "E-urheilupelaaja",
+  "homeCardOriginal": "Original",
+  "homeCardTint": "Soft color",
+  "homeCardEdge": "Colored edges",
+  "homeCardGlow": "Slow glow",
+  "competitiveNoHistory": "No tournaments yet",
+  "competitiveHistoryHint": "Your teams and tournament results will appear here.",
+  "esportsMonthlyFinals": "Monthly finals",
+  "esportsMonthlyQualifier": "Monthly qualifiers",
+  "esportsHeroSubtitle": "The road to the World Championship",
+  "esportsViewEvent": "Explore event",
+  "esportsWinLoss": "{wins} wins · {losses} losses",
+  "esportsViewPlayer": "View player",
+  "esportsRecentMatches": "Recent matches",
+  "esportsHideAttacks": "Hide battle details",
+  "esportsViewAttacks": "View battle details",
+  "esportsPlayer": "Esports player",
   "esportsBattles": "Taistelut",
-  "esportsTriples": "Kolmen tähden hyökkäykset",
-  "esportsAverageStars": "Tähdet keskimäärin",
-  "esportsDestruction": "Tuho",
-  "esportsAccounts": "Pelitilit",
+  "esportsTriples": "Triples",
+  "esportsAverageStars": "Keskimääräiset tähdet",
+  "esportsDestruction": "Hävittäminen",
+  "esportsAccounts": "Game accounts",
   "esportsAttack": "Hyökkäys",
   "esportsDefense": "Puolustus",
-  "competitiveArenaSubtitle": "Sinun klaanisi. Sinun joukkueesi. Sinun seuraava haasteesi.",
-  "competitiveViewTournament": "Näytä turnaus",
+  "competitiveArenaSubtitle": "Your clan. Your team. Your next challenge.",
+  "competitiveViewTournament": "View tournament",
   "@esportsWinLoss": {
     "placeholders": {
       "wins": {
@@ -87,50 +87,50 @@
   "esportsStage": "Stage",
   "esportsStandings": "Standings",
   "esportsMatches": "Matches",
-  "esportsPoints": "Points",
+  "esportsPoints": "Pisteet",
   "esportsPlayed": "played",
   "esportsSource": "Data from Competitive Clash Network",
-  "esportsRoster": "Roster",
+  "esportsRoster": "Kokoonpano",
   "esportsSeasonPoints": "Season points",
   "esportsStageStandings": "Stage standings",
-  "competitiveCompetition": "Kilpailu",
-  "competitiveWebsite": "Verkkosivusto",
-  "competitiveVerifiedAccounts": "Vahvistetut tilit",
-  "competitiveEsports": "Elektroninen urheilu",
-  "competitiveTournaments": "Turnaukset",
+  "competitiveCompetition": "Competition",
+  "competitiveWebsite": "Website",
+  "competitiveVerifiedAccounts": "Verified accounts",
+  "competitiveEsports": "eSports",
+  "competitiveTournaments": "Tournaments",
   "competitiveProfile": "Profiili",
-  "competitiveTeams": "Joukkueet",
-  "competitiveFreeEntry": "Ilmainen osallistuminen",
-  "competitiveRegister": "Ilmoita joukkue",
-  "competitiveCheckIn": "Vahvista osallistuminen",
-  "competitiveRules": "Säännöt",
-  "competitiveUnavailable": "Kilpailun tiedot eivät ole saatavilla. Yritä uudelleen.",
-  "competitiveRegistrationSaved": "Ilmoittautuminen lähetetty",
-  "competitiveTeamHistory": "Joukkueen historia",
-  "competitiveDebutName": "Turnausdebyytti",
-  "competitiveDebutDescription": "Osallistu turnaukseen vahvistetulla tililläsi.",
-  "competitiveViewProfile": "Näytä profiili",
+  "competitiveTeams": "Tiimit",
+  "competitiveFreeEntry": "Free entry",
+  "competitiveRegister": "Register team",
+  "competitiveCheckIn": "Check in",
+  "competitiveRules": "Rules",
+  "competitiveUnavailable": "Competition data is unavailable. Try again.",
+  "competitiveRegistrationSaved": "Registration submitted",
+  "competitiveTeamHistory": "Team history",
+  "competitiveDebutName": "Tournament debut",
+  "competitiveDebutDescription": "Participate in a tournament with your verified account.",
+  "competitiveViewProfile": "View profile",
   "calcPinEquipment": "Keep one equipped",
-  "calcSearch": "Search",
+  "calcSearch": "Hae",
   "calcEquipmentTitle": "Equipment Compare",
   "calcDamageIntro": "Find the combinations that take a defense down.",
   "calcFarmIntro": "Plan the loot needed for your next upgrades.",
   "calcEquipmentIntro": "Compare hero loadouts, levels, and ability stats.",
   "calcComingSoon": "Coming soon",
-  "calcHero": "Hero",
+  "calcHero": "Sankari",
   "calcHeroLevel": "Hero level",
   "calcMaxLevels": "Max levels",
   "calcEquipmentPool": "Equipment to compare",
   "calcPoolHelp": "Choose pieces and default levels. Compare every pair, then customize individual rows.",
   "calcSelectAll": "Select all",
-  "calcClear": "Clear",
+  "calcClear": "Selkeä",
   "calcAttributes": "Attributes",
   "calcAddAttribute": "Add attribute",
-  "calcTable": "Compare",
+  "calcTable": "Vertaa",
   "calcProgression": "Level progression",
   "calcCompareHelp": "DPS adds the hero's base and equipment DPS. Speed bonuses and temporary effects are separate attributes; healing is not extra max HP.",
   "calcChartHelp": "Equipment levels increase together; each piece stops at its own maximum. Hero levels stay fixed. First six loadouts shown.",
-  "calcSort": "Sort by",
+  "calcSort": "Lajitteluperuste",
   "calcNoEquipment": "No equipment",
   "calcDuplicate": "Duplicate loadout",
   "calcRemove": "Remove loadout",
@@ -154,9 +154,9 @@
   "calcComparisonDownloaded": "Comparison image downloaded",
   "calcComparisonExportFailed": "Could not copy the comparison image. Please try again.",
   "calcEffectiveLevel": "Effective level {level}",
-  "calcTarget": "Target",
+  "calcTarget": "Kohde",
   "calcSupercharge": "Supercharge",
-  "calcNone": "None",
+  "calcNone": "Ei mitään",
   "calcResults": "{count} combinations",
   "calcResultsHelp": "Smallest spell cost first, then fewer equipment activations. Extra sources that do not help are removed.",
   "calcNoCombinationHelp": "Try another source, a higher level, or more spell capacity.",
@@ -164,63 +164,63 @@
   "calcAlternative": "Alternative",
   "calcCombinationCost": "{housing} spell space · {equipment} equipment",
   "calcUseStack": "Use stack",
-  "homeRankingsAndStats": "Sijoitukset ja tilastot",
-  "homeActivityRecorded": "Vain tallennettu toiminta; historia voi olla puutteellinen.",
-  "homeWidgetsServers": "Palvelimet",
-  "homeWidgetsEdit": "Muokkaa etusivua",
-  "homeWidgetsAdd": "Lisää pienoisohjelma",
-  "homeWidgetsRemove": "Poista pienoisohjelma",
-  "homeWidgetsMoveUp": "Siirrä ylös",
-  "homeWidgetsMoveDown": "Siirrä alas",
+  "homeRankingsAndStats": "Rankings & Stats",
+  "homeActivityRecorded": "Recorded activity only; history may be incomplete.",
+  "homeWidgetsServers": "Servers",
+  "homeWidgetsEdit": "Edit Home",
+  "homeWidgetsAdd": "Add widget",
+  "homeWidgetsRemove": "Remove widget",
+  "homeWidgetsMoveUp": "Move up",
+  "homeWidgetsMoveDown": "Move down",
   "homeWidgetsSmall": "Pieni",
-  "homeWidgetsWide": "Leveä",
-  "homeWidgetsSaveError": "Etusivua ei voitu synkronoida. Päivitä ennen uutta muokkausta.",
-  "homeWidgetsUnavailable": "Ei tallennettuja tietoja",
-  "homeWidgetsBookmarkFirst": "Lisää ensin pelaaja tai klaani kirjanmerkkeihin.",
-  "rankingsWarTripleStreak": "Sodan kolmen tähden putki",
+  "homeWidgetsWide": "Wide",
+  "homeWidgetsSaveError": "Could not sync Home. Please refresh before editing again.",
+  "homeWidgetsUnavailable": "No recorded data available",
+  "homeWidgetsBookmarkFirst": "Bookmark a player or clan first.",
+  "rankingsWarTripleStreak": "War Triple Streak",
   "rankingsWarTripleRulesTitle": "How streaks count",
   "rankingsWarTripleRulesBody": "+2 for two triples against your own Town Hall level in a regular war.\n\nA missed attack, non-triple, or different-TH target resets your streak.\n\nCWL and friendly wars don’t count. Streaks are separate for each Town Hall level.",
-  "clanLegendsRanked": "Legendat ja ranking",
-  "appIconChangeWarning": "Sovelluskuvakkeen vaihtaminen sulkee ClashKingin. Jatketaanko?",
-  "upgradeTrackerUnverifiedAccount": "Tämä tili on liitetty, mutta sitä ei ole vahvistettu. Vahvista se tilien hallinnassa, jotta voit tuoda parannustietosi.",
-  "clanWarNotificationsTitle": "Sotailmoitukset",
-  "clanCapitalNotificationsTitle": "Klaanipääkaupungin ilmoitukset",
-  "clanWarNotificationsBody": "Vastaanota tämän klaanin sotapäivityksiä.",
-  "clanCapitalNotificationsBody": "Vastaanota tämän klaanin pääkaupungin päivityksiä.",
-  "notifSystemNotifications": "Järjestelmän ilmoitukset",
-  "notifSystemSettings": "Avaa ilmoitusasetukset",
-  "notifSystemSettingsDescription": "Hallitse hälytyksiä, ääniä ja merkkejä laitteen asetuksissa.",
-  "notifSystemSettingsFailed": "Ilmoitusasetuksia ei voitu avata. Avaa laitteen Asetukset.",
-  "notifManagePlayersDescription": "Hallitse tilin ilmoituksia kohdassa Pelaajat → Linkitetyt → Asetukset.",
-  "notifCustomReminders": "Mukautetut muistutukset",
-  "notifTestType": "Ilmoituksen tyyppi",
-  "statsBattlelogsGroup": "Taistelulokit",
-  "statsGlobalStatsGroup": "Maailmanlaajuiset tilastot",
-  "playerOptionShowOnHomeTitle": "Näytä tili etusivulla",
-  "playerOptionShowOnHomeSubtitle": "Sisällytä tämä vahvistettu tili etusivun kortteihin (enintään 5).",
-  "playerOptionShowOnHomeVerifyFirst": "Vahvista tämä tili, jotta se näkyy etusivulla.",
-  "playerOptionHomeInclusionFirst": "Ota ensin käyttöön Näytä tili etusivulla.",
-  "homeIncludedAccountsLimit": "Etusivulla voi näkyä enintään 5 tiliä. Poista ensin yksi.",
-  "statsHitratesByTownHall": "Onnistumisprosentit kaupungintaloittain",
-  "statsChartGranularity": "Kaavion aikaväli",
+  "clanLegendsRanked": "Legends & Ranked",
+  "appIconChangeWarning": "Changing the app icon will close ClashKing. Continue?",
+  "upgradeTrackerUnverifiedAccount": "This account is linked but not verified. Verify it in Manage Accounts to import your upgrade data.",
+  "clanWarNotificationsTitle": "War notifications",
+  "clanCapitalNotificationsTitle": "Clan Capital notifications",
+  "clanWarNotificationsBody": "Receive war updates for this clan.",
+  "clanCapitalNotificationsBody": "Receive Clan Capital updates for this clan.",
+  "notifSystemNotifications": "System notifications",
+  "notifSystemSettings": "Open notification settings",
+  "notifSystemSettingsDescription": "Manage alerts, sounds, and badges in your device settings.",
+  "notifSystemSettingsFailed": "Could not open notification settings. Please open Settings on your device.",
+  "notifManagePlayersDescription": "Manage account notifications in Players → Linked → Options.",
+  "notifCustomReminders": "Custom reminders",
+  "notifTestType": "Notification type",
+  "statsBattlelogsGroup": "Battlelogs",
+  "statsGlobalStatsGroup": "Global Stats",
+  "playerOptionShowOnHomeTitle": "Show account on Home",
+  "playerOptionShowOnHomeSubtitle": "Include this verified account in Home cards (up to 5).",
+  "playerOptionShowOnHomeVerifyFirst": "Verify this account to show it on Home.",
+  "playerOptionHomeInclusionFirst": "Turn on Show account on Home first.",
+  "homeIncludedAccountsLimit": "Home can show up to 5 accounts. Remove one first.",
+  "statsHitratesByTownHall": "Hitrates by Town Hall",
+  "statsChartGranularity": "Chart interval",
   "statsDaily": "Päivittäin",
   "statsWeekly": "Viikoittain",
-  "playerBattlelogCumulative": "Kumulatiivinen",
-  "statsMonthly": "Kuukausittain",
-  "statsCompareCohorts": "Vertaa ryhmiä",
-  "statsAcrossCohorts": "Käyttö ryhmittäin",
-  "legendsTrophyGrid": "Kauden yleiskatsaus",
-  "legendsPopularArmyItems": "Suosituimmat armeijan osat",
-  "legendsPopularTroop": "Suosikki",
-  "legendsHitrate": "Onnistumisaste",
-  "legendsAvgOffense": "Keskim. hyökkäys",
-  "legendsAvgDefense": "Keskim. puolustus",
-  "settingsClearImageCache": "Tyhjennä kuvavälimuisti",
-  "settingsImageCacheCleared": "Kuvavälimuisti tyhjennettiin.",
-  "settingsImageCacheClearFailed": "Kuvavälimuistia ei voitu tyhjentää. Yritä uudelleen.",
-  "startupCheckingUpdate": "Tarkistetaan päivityksiä…",
-  "startupDownloadingUpdate": "Ladataan päivitystä…",
-  "startupUpdateInBackground": "Päivitä taustalla",
+  "playerBattlelogCumulative": "Cumulative",
+  "statsMonthly": "Monthly",
+  "statsCompareCohorts": "Compare cohorts",
+  "statsAcrossCohorts": "Usage across cohorts",
+  "legendsTrophyGrid": "Season overview",
+  "legendsPopularArmyItems": "Most popular army items",
+  "legendsPopularTroop": "Favorite",
+  "legendsHitrate": "Hitrate",
+  "legendsAvgOffense": "Avg. Offense",
+  "legendsAvgDefense": "Avg. Defense",
+  "settingsClearImageCache": "Clear image cache",
+  "settingsImageCacheCleared": "Image cache cleared.",
+  "settingsImageCacheClearFailed": "Could not clear the image cache. Please try again.",
+  "startupCheckingUpdate": "Checking for updates…",
+  "startupDownloadingUpdate": "Downloading update…",
+  "startupUpdateInBackground": "Update in background",
   "warStatsRangeTitle": "Sotatilastojen aikaväli",
   "warStatsRangeDescription": "Valitse, kattavatko tilastot kiinteän määrän viimeaikaisia sotia vai viimeaikaisen ajanjakson päivinä.",
   "warStatsRangeDays": "Päivät",
@@ -235,20 +235,81 @@
   "upgradeTrackerCompletionDetails": "Kylän edistymisen tiedot",
   "upgradeTrackerCustomSoundtrack": "Mukautettu ääniraita",
   "upgradeTrackerGoldPassPercent": "{percent} %:n kultapassi",
+  "@upgradeTrackerGoldPassPercent": {
+    "placeholders": {
+      "percent": {
+        "type": "int"
+      }
+    }
+  },
   "upgradeTrackerGroupSummary": "Ryhmän {group} yhteenveto",
+  "@upgradeTrackerGroupSummary": {
+    "placeholders": {
+      "group": {
+        "type": "String"
+      }
+    }
+  },
   "upgradeTrackerGuardians": "Vartijat",
   "upgradeTrackerHelpers": "Apulaiset",
   "upgradeTrackerHouseParts": "Talon osat",
-  "upgradeTrackerIdleBuilders": "{count} vapaata rakentajaa",
+  "upgradeTrackerIdleBuilders": "{count, plural, one {# idle builder} other {# idle builders}}",
+  "@upgradeTrackerIdleBuilders": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "upgradeTrackerInProgress": "Käynnissä",
-  "upgradeTrackerItemSemanticLabel": "{item}, taso {currentLevel}/{targetLevel}, {count} rakennusta",
+  "upgradeTrackerItemSemanticLabel": "{item}, level {currentLevel} of {targetLevel}{count, plural, =1 {} other {, # buildings}}",
+  "@upgradeTrackerItemSemanticLabel": {
+    "placeholders": {
+      "item": {
+        "type": "String"
+      },
+      "currentLevel": {
+        "type": "int"
+      },
+      "targetLevel": {
+        "type": "int"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "upgradeTrackerItemsOwned": "Omistettu: {count}",
+  "@upgradeTrackerItemsOwned": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "upgradeTrackerLane": "Jono",
   "upgradeTrackerLevelTransition": "Taso {from} → {to}",
+  "@upgradeTrackerLevelTransition": {
+    "placeholders": {
+      "from": {
+        "type": "int"
+      },
+      "to": {
+        "type": "int"
+      }
+    }
+  },
   "upgradeTrackerLootNow": "Saalis nyt",
   "upgradeTrackerLootOutlook": "Saalisennuste",
   "upgradeTrackerMusic": "Musiikki",
-  "upgradeTrackerNextDays": "Seuraavat {count} päivää",
+  "upgradeTrackerNextDays": "Next {count, plural, one {# day} other {# days}}",
+  "@upgradeTrackerNextDays": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "upgradeTrackerNextPeriod": "Seuraava jakso",
   "upgradeTrackerNoGoldPass": "Ei kultapassia",
   "upgradeTrackerNoMatchingUpgrades": "Ei vastaavia parannuksia",
@@ -259,12 +320,46 @@
   "upgradeTrackerPassReward": "Passipalkinto",
   "upgradeTrackerPauseSoundtrack": "Keskeytä ääniraita",
   "upgradeTrackerPeriodCount": "Jakso {current} / {total}",
+  "@upgradeTrackerPeriodCount": {
+    "placeholders": {
+      "current": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
   "upgradeTrackerPlaySoundtrack": "Toista ääniraita",
   "upgradeTrackerPreviousPeriod": "Edellinen jakso",
   "upgradeTrackerResourceAmount": "{resource}, {amount}",
+  "@upgradeTrackerResourceAmount": {
+    "placeholders": {
+      "resource": {
+        "type": "String"
+      },
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
   "upgradeTrackerSceneries": "Maisemat",
   "upgradeTrackerScheduledLane": "Ajastettu nro {lane}",
+  "@upgradeTrackerScheduledLane": {
+    "placeholders": {
+      "lane": {
+        "type": "int"
+      }
+    }
+  },
   "upgradeTrackerShareProgress": "Kylän {village} edistyminen",
+  "@upgradeTrackerShareProgress": {
+    "placeholders": {
+      "village": {
+        "type": "String"
+      }
+    }
+  },
   "upgradeTrackerSize": "Koko",
   "upgradeTrackerSortLongest": "Pisimmät ensin",
   "upgradeTrackerSortName": "Nimi A–Z",
@@ -280,17 +375,59 @@
   "notifPushEnabled": "Push-ilmoitukset käytössä",
   "notifReceiveNotifications": "Vastaanota ilmoituksia",
   "notifTokenPreview": "Tunnus: {token}",
+  "@notifTokenPreview": {
+    "placeholders": {
+      "token": {
+        "type": "String"
+      }
+    }
+  },
   "notifEnabledDeliveryDescription": "Käytössä olevat hälytykset voidaan toimittaa tähän laitteeseen.",
   "notifDisabledAccountDescription": "Ilmoitukset on poistettu käytöstä koko ClashKing-tililtäsi.",
   "notifMaximumRemindersAdded": "Muistutusten enimmäismäärä lisätty",
   "notifAddReminder": "Lisää muistutus",
   "notifDurationOneHour": "1 tunti",
   "notifDurationHours": "{count} tuntia",
+  "@notifDurationHours": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "notifDurationMinutes": "{count} minuuttia",
+  "@notifDurationMinutes": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "notifAddTiming": "Lisää {timing}",
+  "@notifAddTiming": {
+    "placeholders": {
+      "timing": {
+        "type": "String"
+      }
+    }
+  },
   "notifTimingOneHourBefore": "1 tunti ennen",
   "notifTimingHoursBefore": "{count} tuntia ennen",
+  "@notifTimingHoursBefore": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "notifTimingMinutesBefore": "{count} minuuttia ennen",
+  "@notifTimingMinutesBefore": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "notifPushReady": "Push-ilmoitukset ovat valmiina tällä laitteella.",
   "notifPushPermissionRequired": "Salli ilmoitukset saadaksesi ClashKing-hälytyksiä.",
   "notifPushPermissionDenied": "Ilmoituslupa evättiin.",
@@ -299,12 +436,13 @@
   "notifPushUnsupported": "Push-ilmoituksia ei tueta tällä alustalla.",
   "notifPushInitializing": "Määritetään push-ilmoituksia…",
   "notificationPrimerTitle": "Ota ilmoitukset käyttöön?",
-  "notificationPrimerBody": "ClashKing voi lähettää päivityksiä tapahtumista, ilmoituksista, Legend-puolustuksista ja tuesta. Sota- ja ryöstöviikonloppumuistutukset pysyvät pois käytöstä, kunnes määrität ne. Voit muuttaa valintoja kohdassa Asetukset > Ilmoitukset.",
+  "notificationPrimerBody": "ClashKing voi ilmoittaa sodan, CWL:n, tilin ja projektien päivityksistä. Voit muuttaa tätä milloin tahansa kohdassa Asetukset > Ilmoitukset.",
   "notificationPrimerNotNow": "Ei nyt",
   "notificationPrimerAllow": "Salli",
+  "@@last_modified": "2024-12-23T10:00:00.000Z",
   "achievementsTitle": "Saavutukset",
   "achievementEarnedLabel": "Ansaittu",
-  "achievementGemsEarnedRatio": "{earned} / {total} ansaittu",
+  "achievementGemsEarnedRatio": "{earned} / {total} earned",
   "@achievementGemsEarnedRatio": {
     "placeholders": {
       "earned": {
@@ -315,7 +453,7 @@
       }
     }
   },
-  "achievementGemsAccessibility": "Ansaittu {earned} / {total} saavutusten jalokiveä.",
+  "achievementGemsAccessibility": "Earned {earned} of {total} achievement gems.",
   "@achievementGemsAccessibility": {
     "placeholders": {
       "earned": {
@@ -328,6 +466,23 @@
   },
   "achievementSummary": "{earned}/{total} valmis",
   "achievementEarnedCount": "Ansaittu ×{count}",
+  "@achievementSummary": {
+    "placeholders": {
+      "earned": {
+        "type": "String"
+      },
+      "total": {
+        "type": "String"
+      }
+    }
+  },
+  "@achievementEarnedCount": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
   "achievementTownhall18Name": "Kaupungintalo 18",
   "achievementTownhall18Requirement": "Saavuta kaupungintalo 18.",
   "achievementWarWarriorName": "Sotasoturi",
@@ -336,7 +491,6 @@
   "achievementMrLegendDescription": "Suoritit virheettömän hyökkäyspäivän Legendaliigassa.",
   "achievementDefenseDoesntMatterName": "Puolustuksella ei ole väliä",
   "achievementDefenseDoesntMatterDescription": "Selvisit täydellisestä puolustuspäivästä Legendaliigassa.",
-  "@@last_modified": "2024-12-23T10:00:00.000Z",
   "appTitle": "ClashKing",
   "appDescription": "Sinun lopullinen Clash of Clans -kumppanisi tilastojen seurantaan, klaanien hallintaan ja suorituskyvyn analysointiin.",
   "generalLoading": "Ladataan...",
@@ -359,8 +513,8 @@
   "postsLoadMore": "Lataa lisää",
   "postsCurrent": "Nykyiset",
   "postsPast": "Aiemmat",
-  "postsStoryFinished": "Tarina päättyi",
-  "postsWatchAgain": "Katso uudelleen",
+  "postsStoryFinished": "Story finished",
+  "postsWatchAgain": "Watch again",
   "postsStory": "Vuorovaikutteinen tarina",
   "postsPinned": "Nostettu",
   "generalTryAgain": "Yritä uudelleen",
@@ -449,7 +603,7 @@
     "description": "Filter value is not set"
   },
   "generalWarning": "Varoitus",
-  "gameHandoffDontShowAgain": "Älä näytä tätä uudelleen",
+  "gameHandoffDontShowAgain": "Don't show this again",
   "generalUnknown": "Tuntematon",
   "generalNoDataAvailable": "Tietoja ei ole saatavilla.",
   "generalNoFilteredResults": "Mikään tulos ei vastaa suodattimiasi",
@@ -678,9 +832,9 @@
   "accountsAdd": "Lisää tili",
   "accountsAddInstruction": "Lisää tili napauttamalla +-painiketta",
   "accountsApiToken": "Tilin API-tunniste",
-  "accountsEnterApiToken": "Vahvista tilin omistajuus pelistä löytyvällä API-tunnuksella.",
+  "accountsEnterApiToken": "Anna tilin API-tunnus vahvistaaksesi, että se on sinun. Löydät sen Clash of Clansista:",
   "accountsApiTokenLocation": "Asetukset > Lisää asetuksia > API-tunnus",
-  "accountsOpenMoreSettings": "Hae API-tunnus",
+  "accountsOpenMoreSettings": "Avaa Lisää asetuksia",
   "accountsCouldNotOpenClash": "Clash of Clansia ei voitu avata. Avaa se käsin.",
   "accountsFillAllFields": "Täytä kaikki kentät.",
   "accountsErrorTagNotExists": "Syötettyä soittimen tunnusta ei ole olemassa.",
@@ -1200,8 +1354,32 @@
   "warParticipation": "Sota Osallistuminen",
   "cwlParticipantOnly": "Vain osallistuja",
   "warStatsRangeWarsCompact": "{number} sotaa",
+  "@warStatsRangeWarsCompact": {
+    "description": "Compact clan war statistics war range label",
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
   "warStatsRangeDaysCompact": "{number} päivää",
+  "@warStatsRangeDaysCompact": {
+    "description": "Compact clan war statistics day range label",
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
   "warStatsLastXDays": "Viimeiset {number} päivää",
+  "@warStatsLastXDays": {
+    "description": "Clan war statistics date-range label",
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
   "warStatsCurrentMembers": "Nykyiset jäsenet",
   "warLeague": "Sota/Liitto",
   "warHistory": "Sota Historia",
@@ -1210,6 +1388,13 @@
   "warLogClosed": "{clan}'s sota loki on suljettu.",
   "warLogPrivate": "{clan}-klaanin sotapäiväkirja on yksityinen.",
   "@warLogClosed": {
+    "placeholders": {
+      "clan": {
+        "type": "String"
+      }
+    }
+  },
+  "@warLogPrivate": {
     "placeholders": {
       "clan": {
         "type": "String"
@@ -1513,7 +1698,7 @@
   "warStarsTwo": "2 tähteä",
   "warStarsThree": "3 tähteä",
   "warStarsZero": "0 Tähti",
-  "legendHistoryZeroStars": "Nolla tähteä",
+  "legendHistoryZeroStars": "Zero Stars",
   "warStarsBestPerformance": "Paras suorituskyky",
   "@warStarsBestPerformance": {
     "description": "Best performance in war"
@@ -1668,7 +1853,7 @@
   "clanLeaderboardHistoryTab": "Tulostaulukkohistoria",
   "clanLegendHistoryTab": "Legendahistoria",
   "clanRecordsTab": "Ennätykset",
-  "clanRecordsChangesTab": "Ennätykset ja muutokset",
+  "clanRecordsChangesTab": "Records & Changes",
   "clanProfileHistoryTab": "Profiilihistoria",
   "clanProfileLevelChanged": "Klaanin taso muuttui",
   "clanProfileDescriptionChanged": "Kuvaus muuttui",
@@ -1710,8 +1895,8 @@
   "legendsCountryTitle": "Maa",
   "legendsLocalRankTitle": "Paikallinen arvosana",
   "legendsGlobalRankTitle": "Globaali sijoitus",
-  "legendsYourArmy": "Armeijasi",
-  "legendsArmyUsedAgainstYou": "Sinua vastaan käytetty armeija",
+  "legendsYourArmy": "Your army",
+  "legendsArmyUsedAgainstYou": "Army used against you",
   "warWinsTitle": "Voittoja",
   "warLossesTitle": "Tappiot",
   "warDrawsTitle": "Tasoittaa",
@@ -1956,7 +2141,7 @@
   "faqWhatCanBotDo": "Mitä ClashKingin Discord-botti voi tehdä?",
   "faqWhatCanBotDoAnswer": "ClashKingin Discord-botti auttaa hallitsemaan klaaniasi suoraan Discordista kattavilla seurantatyökaluilla, automaattisilla ilmoituksilla ja saumattomalla integraatiolla tähän sovellukseen. Se on suunniteltu klaanijohtajille ja jäsenille, jotka haluavat pysyä yhteydessä ja järjestyksessä:",
   "faqInviteBotToServer": "Kutsu botti palvelimelle",
-  "drawerInviteDiscordBot": "Kutsu botti palvelimelle",
+  "drawerInviteDiscordBot": "Invite Discord Bot",
   "faqBotFeatureTracking": "Pelaajien ja klaanien seuranta",
   "faqBotFeatureTrackingDesc": "Lisää ja seuraa useita klaaneja ja pelaajia reaaliaikaisilla päivityksillä",
   "faqBotFeatureWars": "Sotien hallinta",
@@ -2113,7 +2298,7 @@
     "description": "Defender town hall filter label"
   },
   "filtersSameTownHallOnly": "Vain sama kaupungintalo",
-  "warStatsSameTownHall": "Sama kaupungintalo",
+  "warStatsSameTownHall": "Same Townhall",
   "@filtersSameTownHallOnly": {
     "description": "Same town hall filter option"
   },
@@ -2767,7 +2952,7 @@
   "@settingsNotificationsTitle": {
     "description": "Settings tile: notifications title"
   },
-  "settingsNotificationsSubtitle": "Valitse, mitä hälytyksiä saat.",
+  "settingsNotificationsSubtitle": "Valitse hälytykset ja lähetä paikalliset testiesikatselut.",
   "@settingsNotificationsSubtitle": {
     "description": "Settings tile: notifications subtitle"
   },
@@ -3239,7 +3424,7 @@
   "playerBestTrophies": "Parhaat pokaalit",
   "clanLoadFailed": "Klaanin lataus epäonnistui.",
   "gameItemLevels": "Tasot",
-  "gameItemLevelCount": "{count, plural, one {# taso} other {# tasoa}}",
+  "gameItemLevelCount": "{count, plural, one {# Level} other {# Levels}}",
   "@gameItemLevelCount": {
     "placeholders": {
       "count": {
@@ -3310,6 +3495,20 @@
   },
   "todoAllCaughtUpForNow": "Kaikki ajan tasalla toistaiseksi",
   "timeDurationShort": "{unit, select, daysHours {{primary}pv {secondary}t} hoursMinutes {{primary}t {secondary}min} other {{primary}min}}",
+  "@timeDurationShort": {
+    "description": "Compact localized duration used in countdowns",
+    "placeholders": {
+      "unit": {
+        "type": "String"
+      },
+      "primary": {
+        "type": "int"
+      },
+      "secondary": {
+        "type": "int"
+      }
+    }
+  },
   "todoEventEndsIn": "Päättyy {duration} kuluttua",
   "@todoEventEndsIn": {
     "placeholders": {
@@ -3419,9 +3618,14 @@
   "statsHero": "Sankari",
   "statsPet": "Lemmikki",
   "statsEquipment": "Varusteet",
-  "statsPetCombinations": "Lemmikkiyhdistelmät",
-  "statsEquipmentPairs": "Varusteparit",
-  "statsArmyFallback": "Armeija {id}",
+  "statsPetCombinations": "Pet combinations",
+  "statsEquipmentPairs": "Equipment pairs",
+  "statsArmyFallback": "Army {id}",
+  "@statsArmyFallback": {
+    "placeholders": {
+      "id": {}
+    }
+  },
   "statsOwningHero": "Omistaa sankarin",
   "statsAddItem": "Lisää kohde",
   "statsAnalyzeItems": "Analysoi kohteita",
@@ -3865,9 +4069,9 @@
     }
   },
   "upgradeTrackerShare": "Jaa seuranta",
-  "trackerPosterCopied": "Kuva kopioitu",
-  "trackerPosterCopy": "Kopioi kuva",
-  "trackerPosterShareAll": "Jaa kaikki 3",
+  "trackerPosterCopied": "Image copied",
+  "trackerPosterCopy": "Copy image",
+  "trackerPosterShareAll": "Share all 3",
   "upgradeTrackerPasteJson": "Liitä tilin JSON",
   "upgradeTrackerImportTitle": "Tuo tilitiedot",
   "upgradeTrackerImportDescription": "Liitä käsittelemätön tilin JSON. Se säilyy tällä laitteella.",
@@ -4176,8 +4380,8 @@
   "homeActivityLeft": "poistui",
   "homeActivityAClan": "klaanista",
   "statsCwlSeasonGroups": "Ryhmät",
-  "statsCwlSeasonHistory": "Klaanisotaliiga ajan kuluessa",
-  "statsCwlRosterNotLineup": "Ilmoittautuneiden kokoonpano suhteutettuna {size} paikkaan; todelliset sotakokoonpanot voivat poiketa.",
+  "statsCwlSeasonHistory": "CWL over time",
+  "statsCwlRosterNotLineup": "Registered roster mix, scaled to {size} places; actual war lineups may differ.",
   "@statsCwlRosterNotLineup": {
     "placeholders": {
       "size": {
@@ -4185,28 +4389,28 @@
       }
     }
   },
-  "statsTroopStats": "Joukkojen tilastot",
-  "statsWarSizes": "Sotien koot",
-  "statsMissedAttacks": "Väliin jääneet hyökkäykset",
-  "statsCopyChart": "Kopioi kaavio",
-  "statsCompareItems": "Vertaa kohteita",
-  "statsCompareItemsHint": "Valitse enintään 5 vertailtavaa kohdetta.",
-  "statsVsOverall": "verrattuna kokonaisuuteen",
-  "statsCopyChartFailed": "Kaaviota ei voitu kopioida. Yritä uudelleen.",
-  "statsPercentagePoints": "prosenttiyksikköä",
+  "statsTroopStats": "Troop Stats",
+  "statsWarSizes": "War sizes",
+  "statsMissedAttacks": "Missed attacks",
+  "statsCopyChart": "Copy chart",
+  "statsCompareItems": "Compare items",
+  "statsCompareItemsHint": "Select up to 5 items to compare.",
+  "statsVsOverall": "vs. overall",
+  "statsCopyChartFailed": "Could not copy chart. Try again.",
+  "statsPercentagePoints": "percentage points",
   "statsMeta": "Meta",
   "statsBattle": "Taistelu",
   "statsWorld": "Maailma",
   "statsHeaderSubtitle": "Tutki taistelusuorituksia ja seuraamaamme pelimaailmaa.",
   "statsPreview": "Esikatselu",
-  "statsTownHallDistribution": "Kaupungintalot",
+  "statsTownHallDistribution": "Kaupungintalon jakelu",
   "statsBuilderHallDistribution": "Rakennushallin jakelu",
-  "statsLeagueDistribution": "Ranking-liigat",
+  "statsLeagueDistribution": "Sijoitettu liigajakauma",
   "statsTrackedPlayers": "Nykyinen seurattu pelaajamäärä",
   "statsTrackedClans": "Nykyinen seurattu klaanipopulaatio",
-  "statsCwlLeagueDistribution": "CWL-liigat",
-  "statsCapitalLeagueDistribution": "Pääkaupunkiliigat",
-  "statsTrackedLocations": "Klaanien sijainnit",
+  "statsCwlLeagueDistribution": "CWL-liigajakauma",
+  "statsCapitalLeagueDistribution": "Pääkaupunkiliigan jakelu",
+  "statsTrackedLocations": "Seuratut klaanipaikat",
   "statsLocationCountHelp": "Seurattujen klaanien edustamat maat ja paikat.",
   "statsLeagueId": "Liiga {id}",
   "@statsLeagueId": {
@@ -4284,7 +4488,7 @@
   "rankedLeagueNoBattles": "Taisteluita ei ole vielä kirjattu.",
   "rankedLeagueGroupRanking": "Ryhmän sijoitukset",
   "rankedLeagueRankingSubtitle": "Nykyisen ryhmän ajantasaiset sijoitukset. Pelaajasi on korostettu.",
-  "rankedLeagueJumpToMyRank": "Siirry sijoitukseen",
+  "rankedLeagueJumpToMyRank": "Siirry omaan sijoitukseeni",
   "rankedLeagueLastPeriod": "Edellinen kausi",
   "rankedLeagueBestGroupRank": "Paras sijoitus",
   "rankedLeaguePeriodHistory": "Kausihistoria",
@@ -4849,7 +5053,7 @@
       }
     }
   },
-  "upgradeTrackerPlanRuleNote": "Vedä kategoriat haluamaasi päivitysjärjestykseen. Riviasetuksissa voi jakaa prioriteetin tai pysähtyä tavoiteprosenttiin.",
+  "upgradeTrackerPlanRuleNote": "Numeroidut tasot suoritetaan ensin. Jaetut rivit säilyttävät saman tasonumeron ja niiden sekoitus normalisoidaan suhteellisista painoista, joten 50 + 25 tulee 67 % / 33 %. Tavoite tuottaa kategorian tuoton saavutettuaan kyseisen prosenttiosuuden, mutta se pysyy kelvollisena myöhemmin.",
   "upgradeTrackerPlanGoalMaxCurrentHall": "Max ennen etenemistä",
   "upgradeTrackerPlanGoalRushNextHall": "Saavu nopeasti seuraavaan saliin",
   "upgradeTrackerPlanGoalCatchUp": "Pidä kiinni kiireisistä tasoista",
@@ -4951,19 +5155,40 @@
       }
     }
   },
-  "cwlRegisteredRoster": "Ilmoitettu kokoonpano",
-  "cwlMatches": "Ottelut",
-  "cwlNextMatchup": "Seuraava ottelu",
-  "cwlOtherMatches": "Muut ottelut",
-  "cwlOutlook": "Kauden näkymät",
-  "cwlFirstPlace": "Ensimmäinen sija",
-  "cwlTopTwo": "Kaksi parasta",
-  "cwlRemainingOpponents": "Jäljellä olevat vastustajat",
-  "cwlWinBonusNote": "Tähtiin sisältyy 10 bonustähteä jokaisesta päättyneestä voitosta.",
-  "cwlEstimateNote": "Arviot perustuvat päättyneisiin sotiin ja jäljellä oleviin vastustajiin, eivät kokoonpanomuutoksiin. Jokaiselta klaanilta tarvitaan vähintään kaksi päättynyttä sotaa. Arvioita ei ole kalibroitu; noususäännöt vaihtelevat liigoittain.",
-  "cwlDuration": "{unit, select, hours {{count, plural, one {# tunti} other {# tuntia}}} other {{count, plural, one {# minuutti} other {# minuuttia}}}}",
-  "personalBasesDeleteOld": "Poista yli 90 päivää vanhat tukikohdat",
-  "personalBasesDeleteOldConfirm": "{count} yli 90 päivää vanhaa tallennettua tukikohtaa poistetaan. Lataushistoria ja jaetut tukikohdat säilyvät.",
+  "@settingsWarWidgetIosReady": {
+    "placeholders": {
+      "clanName": {
+        "type": "String"
+      }
+    }
+  },
+  "@settingsWarWidgetAndroidReady": {
+    "placeholders": {
+      "clanName": {
+        "type": "String"
+      }
+    }
+  },
+  "@settingsWarWidgetPrepareFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "cwlRegisteredRoster": "Registered roster",
+  "cwlMatches": "Matchups",
+  "cwlNextMatchup": "Next matchup",
+  "cwlOtherMatches": "Other matchups",
+  "cwlOutlook": "Season outlook",
+  "cwlFirstPlace": "First place",
+  "cwlTopTwo": "Top two",
+  "cwlRemainingOpponents": "Remaining opponents",
+  "cwlWinBonusNote": "Stars include 10 bonus stars per completed win.",
+  "cwlEstimateNote": "Estimates use completed wars and remaining opponents, not lineup changes. At least two completed wars per clan are needed. These are uncalibrated estimates; promotion rules vary by league.",
+  "cwlDuration": "{unit, select, hours {{count, plural, one {# hour} other {# hours}}} other {{count, plural, one {# minute} other {# minutes}}}}",
+  "personalBasesDeleteOld": "Remove bases older than 90 days",
+  "personalBasesDeleteOldConfirm": "{count} saved bases older than 90 days will be removed. Download history and shared bases will remain.",
   "@personalBasesDeleteOldConfirm": {
     "description": "Confirms cleanup while preserving lifetime download history.",
     "placeholders": {
@@ -4972,9 +5197,9 @@
       }
     }
   },
-  "legendsAutomaticDefense": "Automaattinen puolustus",
-  "legendsPopularArmyItem": "Suosituin armeijan osa",
-  "legendsClanCastle": "Klaanilinna",
+  "legendsAutomaticDefense": "Automatic defense",
+  "legendsPopularArmyItem": "Most popular army item",
+  "legendsClanCastle": "Clan Castle",
   "@cwlDuration": {
     "description": "Explicit countdown units; avoid native unit conversion.",
     "placeholders": {
@@ -4986,20 +5211,20 @@
       }
     }
   },
-  "clanNotificationRemoveConfirmation": "Poistetaanko tämän klaanin ilmoitukset käytöstä ja poistetaanko kirjanmerkki?",
-  "personalBasesTab": "Bases",
+  "clanNotificationRemoveConfirmation": "Turn off this clan’s notifications and remove the bookmark?",
+  "personalBasesTab": "Tukikohdat",
   "personalBasesDownloaded": "Downloaded",
   "personalArmyName": "Army name",
   "personalArmyNotes": "Notes",
   "personalArmyUnnamed": "Unnamed army",
   "personalArmyEdit": "Edit army",
   "personalArmyUnknownTownHall": "Unknown Town Hall",
-  "discordBotDashboard": "Discord-botin hallintapaneeli",
-  "discordAddBot": "Lisää botti",
-  "discordAddToMyDiscord": "Lisää omaan Discordiini",
-  "discordServersWithoutBot": "Palvelimet ilman ClashKingiä",
-  "rankingsPlayerSection": "Pelaajien rankingit",
-  "rankingsClanSection": "Klaanien rankingit",
+  "discordBotDashboard": "Discord Bot Dashboard",
+  "discordAddBot": "Add bot",
+  "discordAddToMyDiscord": "Add to My Discord",
+  "discordServersWithoutBot": "Servers without ClashKing",
+  "rankingsPlayerSection": "Player Rankings",
+  "rankingsClanSection": "Clan Rankings",
   "cwlArchiveCoverage": "{available} of {total} matchups available.",
   "cwlStandingsIncomplete": "Missing archives are excluded. Group ranks and forecasts are unavailable.",
   "cwlPromotionChance": "Estimated promotion chance",
@@ -5010,62 +5235,62 @@
   "cwlRecordedStats": "Recorded wars only",
   "cwlMissingMatchups": "{count} matchups unavailable",
   "cwlHighestLeague": "Highest league · no promotion",
-  "warOutlookWinPossible": "Voitto on yhä mahdollinen",
-  "warOutlookDrawOnly": "Parhaimmillaan tasapeli",
-  "warOutlookDefeat": "Voitto ei ole enää mahdollinen",
-  "warOutlookMaximum": "Suurin mahdollinen pistemäärä",
-  "warOutlookAssumption": "Olettaa jäljellä olevat hyökkäykset täydellisiksi. Tämä on matemaattinen raja, ei ennuste.",
-  "warScoutTitle": "Kokoonpanon kartoitus",
-  "warScoutOpponent": "Vastustajan viime sodat",
-  "warScoutScope": "Nykyinen kokoonpano · samat säännöt · enintään 10 aiempaa sotaa",
-  "upgradeTrackerCapturedWork": "Viimeisimmästä päivityksestäsi",
-  "tutorialWelcomeBody": "Tutustu ClashKingiin lyhyellä kierroksella. Voit ohittaa sen milloin tahansa.",
-  "tutorialReorderBody": "Pidä korttia painettuna ja siirrä se vetämällä.",
-  "tutorialSidebarBody": "Avaa valikko pyyhkäisemällä aloitusnäytöllä tai napauttamalla avatariasi.",
-  "tutorialExploreBody": "Avaa tästä valikosta Asetukset ja sitten Ilmoitukset. Jatka siirtyäksesi sinne nyt.",
-  "tutorialRemindersBody": "Valitse muistutukset alta. Palaa aloitusnäyttöön, kun olet valmis.",
-  "tutorialResetTitle": "Nollaa opastukset",
-  "tutorialResetConfirm": "Aloitetaanko opastukset uudelleen seuraavilla käynneillä?",
-  "upgradeTrackerOngoingUpgrades": "Käynnissä olevat parannukset",
-  "upgradeTrackerToLevel": "Tasolle {level}",
-  "upgradeTrackerFreeSlots": "{count} vapaana",
-  "upgradeTrackerFreeIn": "Vapaa {duration} kuluttua",
-  "upgradeTrackerPetHouse": "Lemmikkitalo",
-  "upgradeTrackerNotBuilt": "Ei rakennettu",
-  "upgradeTrackerExtraSlots": "{count} ylimääräistä",
-  "rankedLeagueOverTime": "Liiga ajan kuluessa",
-  "rankedLeaguePromotionCutoff": "Nousuraja",
-  "rankedLeagueDemotionCutoff": "Putoamisraja",
-  "rankedLeagueCutoffsUnavailable": "Nousu- ja putoamisrajat eivät ole saatavilla.",
-  "rankedAutomaticDefenseSummary": "{count} puolustusta · {points} pokaalia kustakin",
-  "rankedAutomaticDefenseExplanation": "Perustuu viikon kaikkiin todellisiin puolustuksiin, pyöristettynä alaspäin.",
-  "warStatusInWar": "Sodassa",
-  "warStatusNoWar": "Ei sotaa",
-  "warNoActiveClans": "Yksikään klaani ei ole parhaillaan sodassa.",
-  "warNoInactiveClans": "Ei sodan ulkopuolella olevia klaaneja",
-  "warAllClansInWar": "Kaikki klaanisi ovat parhaillaan sodassa.",
-  "warStatusOther": "Muut",
-  "warNoOtherClans": "Ei muita klaaneja.",
-  "playerWarLifetime": "Koko historia",
-  "playerWarThScope": "Koskee vain tilastokortteja, ei taisteluja. Näet tämän selityksen pitämällä painiketta painettuna.",
-  "playerWarNoAttacks": "Ei vielä hyökkäyksiä",
-  "playerWarRegularWars": "Tavallinen sota",
-  "warWidgetNoActiveWar": "Ei aktiivista sotaa",
-  "warWidgetPrivateWarLog": "Yksityinen sotaloki",
-  "warWidgetChooseClan": "Valitse klaani",
-  "legendPerformanceTitle": "Päivittäinen suoritus",
-  "legendCompleteDays": "Täydet päivät",
-  "legendPerfectDays": "Täydelliset päivät",
-  "legendPartialDays": "Osittaiset päivät",
-  "legendMissingDays": "Ei havaintoja",
-  "legendInvalidDays": "Virheelliset päivät",
-  "legendTrophiesGained": "Saadut pokaalit",
-  "legendTrophiesLost": "Menetetyt pokaalit",
+  "warOutlookWinPossible": "Win still possible",
+  "warOutlookDrawOnly": "Draw at best",
+  "warOutlookDefeat": "No path to a win",
+  "warOutlookMaximum": "Maximum possible score",
+  "warOutlookAssumption": "Assumes perfect remaining attacks. This is a mathematical limit, not a prediction.",
+  "warScoutTitle": "Lineup scouting",
+  "warScoutOpponent": "Opponent’s recent wars",
+  "warScoutScope": "Current lineup · same rules · up to 10 previous wars",
+  "upgradeTrackerCapturedWork": "From your last update",
+  "tutorialWelcomeBody": "Take a quick tour of ClashKing. You can skip it at any time.",
+  "tutorialReorderBody": "Hold a card, then drag it to change its position.",
+  "tutorialSidebarBody": "Swipe across Home to open the menu, or tap your avatar.",
+  "tutorialExploreBody": "From this menu, open Settings, then Notifications. Continue to go there now.",
+  "tutorialRemindersBody": "Choose reminders below. When you are done, return to Home.",
+  "tutorialResetTitle": "Reset tutorials",
+  "tutorialResetConfirm": "Start the tutorials again on your next visits?",
+  "upgradeTrackerOngoingUpgrades": "Ongoing Upgrades",
+  "upgradeTrackerToLevel": "To Level {level}",
+  "upgradeTrackerFreeSlots": "{count} free",
+  "upgradeTrackerFreeIn": "Free in {duration}",
+  "upgradeTrackerPetHouse": "Pet House",
+  "upgradeTrackerNotBuilt": "Not built",
+  "upgradeTrackerExtraSlots": "{count} extra",
+  "rankedLeagueOverTime": "League over time",
+  "rankedLeaguePromotionCutoff": "Promotion cutoff",
+  "rankedLeagueDemotionCutoff": "Demotion cutoff",
+  "rankedLeagueCutoffsUnavailable": "Promotion and demotion thresholds unavailable.",
+  "rankedAutomaticDefenseSummary": "{count} defenses · {points} trophies each",
+  "rankedAutomaticDefenseExplanation": "Based on all real defenses this week, rounded down.",
+  "warStatusInWar": "In war",
+  "warStatusNoWar": "No war",
+  "warNoActiveClans": "No clans are currently in war.",
+  "warNoInactiveClans": "No clans out of war",
+  "warAllClansInWar": "All your clans are currently in war.",
+  "warStatusOther": "Muu",
+  "warNoOtherClans": "No other clans.",
+  "playerWarLifetime": "Lifetime",
+  "playerWarThScope": "Applies only to the statistics cards, not Battles. Hold the button for this explanation.",
+  "playerWarNoAttacks": "No attacks yet",
+  "playerWarRegularWars": "Regular war",
+  "warWidgetNoActiveWar": "No active war",
+  "warWidgetPrivateWarLog": "Private war log",
+  "warWidgetChooseClan": "Choose a clan",
+  "legendPerformanceTitle": "Daily performance",
+  "legendCompleteDays": "Complete days",
+  "legendPerfectDays": "Perfect days",
+  "legendPartialDays": "Partial days",
+  "legendMissingDays": "No observations",
+  "legendInvalidDays": "Invalid days",
+  "legendTrophiesGained": "Trophies gained",
+  "legendTrophiesLost": "Trophies lost",
   "legendDistribution": "Jakauma",
-  "legendPreviousDays": "Edelliset {count} päivää",
-  "legendAvailableDays": "Saatavilla olevat päivät",
-  "legendCompleteOnly": "Jakauma sisältää päivät, joille on kirjattu 8 taistelua.",
-  "legendPerfectSources": "Täydelliset päivät sijoituksen mukaan",
+  "legendPreviousDays": "Previous {count} days",
+  "legendAvailableDays": "Days available",
+  "legendCompleteOnly": "Distribution uses days with 8 recorded battles.",
+  "legendPerfectSources": "Perfect days by rank",
   "@legendPreviousDays": {
     "placeholders": {
       "count": {
@@ -5073,15 +5298,15 @@
       }
     }
   },
-  "onboardingOverviewTitle": "Tilisi ja klaanisi",
-  "onboardingOverviewBody": "Pidä pelaajasi, klaanisi ja parannuksesi yhdessä paikassa.",
-  "onboardingProgressTitle": "Katso sijoituksia ja tilastoja",
-  "onboardingProgressBody": "Seuraa taistelujasi, vertaa edistymistäsi ja jatka parannuksia.",
-  "onboardingRemindersTitle": "Saa muistutuksia ja ilmoituksia",
-  "onboardingRemindersBody": "Saa sotamuistutuksia ja valitsemiasi ilmoituksia. Valitse tilit ja ilmoitustyypit asetuksista.",
-  "onboardingReplayTitle": "Näytä esittely uudelleen",
-  "statsViewLatestData": "Näytä uusimmat tiedot",
-  "statsLatestAvailableDate": "Uusimmat saatavilla: {date}",
+  "onboardingOverviewTitle": "Your accounts & clans",
+  "onboardingOverviewBody": "Keep your players, clans, and upgrades together.",
+  "onboardingProgressTitle": "View rankings and stats",
+  "onboardingProgressBody": "Follow your battles, compare your progress, and keep upgrades moving.",
+  "onboardingRemindersTitle": "Get reminders and alerts",
+  "onboardingRemindersBody": "Get war reminders and the alerts you choose. Pick your accounts and alert types in Settings.",
+  "onboardingReplayTitle": "Replay introduction",
+  "statsViewLatestData": "View latest data",
+  "statsLatestAvailableDate": "Latest available: {date}",
   "@statsLatestAvailableDate": {
     "placeholders": {
       "date": {
@@ -5089,23 +5314,23 @@
       }
     }
   },
-  "legendPerfectedDefenseDays": "Täysin kukistetun puolustuksen päivät",
-  "legendCompleteDayDefinition": "Vain päivät, joilla on kaikki 8 taistelua, lasketaan mukaan.",
+  "legendPerfectedDefenseDays": "Perfected defense days",
+  "legendCompleteDayDefinition": "Only days with all 8 battles are included.",
   "statsCommunity": "Yhteisö",
-  "rankedFullOffenseDays": "+320 päivää",
-  "rankedFullDefenseDays": "−320 päivää",
-  "rankedTrophiesByRank": "Pokaalit sijoituksen mukaan",
-  "statsArmyTypes": "Armeijatyypit",
-  "onboardingStatsBody": "Tutki pelaajatilastoja, seuraa klaanejasi ja näe, miten koko peli muuttuu.",
-  "onboardingWidgetsTitle": "Lisää widgetejä kotinäytölle",
-  "onboardingWidgetsBody": "Pidä sotatulokset ja parannusten edistyminen lähellä kotinäytön widgeteillä.",
-  "onboardingAlertTitle": "Sota päättyy pian",
-  "onboardingAlertBody": "Viimeisen hyökkäyksesi aika.",
-  "onboardingSetupNotifications": "Ota ilmoitukset käyttöön",
-  "onboardingAccountsReadyBody": "Yhdistetyt tilisi ovat valmiina. Lisää toinen tili tai jatka.",
-  "onboardingSkipAccountSetup": "Ohita",
-  "accountsSetupBody": "Lisää ja vahvista Clash of Clans -tilisi.",
-  "accountsMyTitle": "Omat tilit",
-  "profileAvatar": "Vaihda ulkoasua",
-  "avatarPickerTitle": "Valitse avatar"
+  "rankedFullOffenseDays": "+320 days",
+  "rankedFullDefenseDays": "−320 days",
+  "rankedTrophiesByRank": "Trophies by rank",
+  "statsArmyTypes": "Army Types",
+  "onboardingStatsBody": "Explore player stats, follow your clans, and see how the whole game is changing.",
+  "onboardingWidgetsTitle": "Add Home Screen widgets",
+  "onboardingWidgetsBody": "Keep war scores and upgrade progress close with Home Screen widgets.",
+  "onboardingAlertTitle": "War ends soon",
+  "onboardingAlertBody": "Time for your final attack.",
+  "onboardingSetupNotifications": "Enable notifications",
+  "onboardingAccountsReadyBody": "Your linked accounts are ready. Add another account or continue.",
+  "onboardingSkipAccountSetup": "Skip",
+  "accountsSetupBody": "Add and verify your Clash of Clans accounts.",
+  "accountsMyTitle": "My Accounts",
+  "profileAvatar": "Change look",
+  "avatarPickerTitle": "Pick an avatar"
 }
