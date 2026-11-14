@@ -5202,5 +5202,8 @@
   "accountsSetupBody": "Clash of Clans hesaplarını ekle ve doğrula.",
   "accountsMyTitle": "Hesaplarım",
   "profileAvatar": "Görünümü değiştir",
-  "avatarPickerTitle": "Bir avatar seç"
+  "avatarPickerTitle": "Bir avatar seç",
+  "homeCreatorCodeInGame": "Clash of Clans’ta",
+  "homeCreatorCodeInStore": "Supercell Store’da",
+  "homeCreatorCodeOpenFailed": "Bağlantı açılamadı. Tekrar dene."
 }

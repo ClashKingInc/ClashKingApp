@@ -5202,5 +5202,8 @@
   "accountsSetupBody": "اپنے Clash of Clans اکاؤنٹس شامل کریں اور ان کی تصدیق کریں۔",
   "accountsMyTitle": "میرے اکاؤنٹس",
   "profileAvatar": "شکل بدلیں",
-  "avatarPickerTitle": "ایک اوتار چنیں"
+  "avatarPickerTitle": "ایک اوتار چنیں",
+  "homeCreatorCodeInGame": "Clash of Clans میں",
+  "homeCreatorCodeInStore": "Supercell Store میں",
+  "homeCreatorCodeOpenFailed": "لنک نہیں کھل سکا۔ دوبارہ کوشش کریں۔"
 }

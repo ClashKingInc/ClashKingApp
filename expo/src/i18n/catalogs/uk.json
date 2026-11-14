@@ -2379,5 +2379,8 @@
   "accountsSetupBody": "Додайте та підтвердьте свої облікові записи Clash of Clans.",
   "accountsMyTitle": "Мої облікові записи",
   "profileAvatar": "Змінити вигляд",
-  "avatarPickerTitle": "Обери аватар"
+  "avatarPickerTitle": "Обери аватар",
+  "homeCreatorCodeInGame": "У Clash of Clans",
+  "homeCreatorCodeInStore": "У Supercell Store",
+  "homeCreatorCodeOpenFailed": "Не вдалося відкрити посилання. Спробуй ще раз."
 }

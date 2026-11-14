@@ -2379,5 +2379,8 @@
   "accountsSetupBody": "Thêm và xác minh các tài khoản Clash of Clans của bạn.",
   "accountsMyTitle": "Tài khoản của tôi",
   "profileAvatar": "Đổi diện mạo",
-  "avatarPickerTitle": "Chọn ảnh đại diện"
+  "avatarPickerTitle": "Chọn ảnh đại diện",
+  "homeCreatorCodeInGame": "Trong Clash of Clans",
+  "homeCreatorCodeInStore": "Trong Supercell Store",
+  "homeCreatorCodeOpenFailed": "Không thể mở liên kết. Hãy thử lại."
 }

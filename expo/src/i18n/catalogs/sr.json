@@ -2379,5 +2379,8 @@
   "accountsSetupBody": "Додај и потврди своје Clash of Clans налоге.",
   "accountsMyTitle": "Моји налози",
   "profileAvatar": "Промени изглед",
-  "avatarPickerTitle": "Изабери аватар"
+  "avatarPickerTitle": "Изабери аватар",
+  "homeCreatorCodeInGame": "У Clash of Clans",
+  "homeCreatorCodeInStore": "У Supercell Store-у",
+  "homeCreatorCodeOpenFailed": "Није могуће отворити везу. Покушај поново."
 }

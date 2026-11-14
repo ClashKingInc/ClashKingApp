@@ -2379,5 +2379,8 @@
   "accountsSetupBody": "添加并验证你的《部落冲突》账号。",
   "accountsMyTitle": "我的账号",
   "profileAvatar": "更换形象",
-  "avatarPickerTitle": "选择头像"
+  "avatarPickerTitle": "选择头像",
+  "homeCreatorCodeInGame": "在 Clash of Clans 中使用",
+  "homeCreatorCodeInStore": "在 Supercell Store 中使用",
+  "homeCreatorCodeOpenFailed": "无法打开链接，请重试。"
 }

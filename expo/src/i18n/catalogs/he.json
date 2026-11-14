@@ -2379,5 +2379,8 @@
   "accountsSetupBody": "הוסף ואמת את חשבונות Clash of Clans שלך.",
   "accountsMyTitle": "החשבונות שלי",
   "profileAvatar": "שינוי מראה",
-  "avatarPickerTitle": "בחרו אווטאר"
+  "avatarPickerTitle": "בחרו אווטאר",
+  "homeCreatorCodeInGame": "ב-Clash of Clans",
+  "homeCreatorCodeInStore": "בחנות Supercell",
+  "homeCreatorCodeOpenFailed": "לא ניתן לפתוח את הקישור. נסה שוב."
 }

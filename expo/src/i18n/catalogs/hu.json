@@ -2379,5 +2379,8 @@
   "accountsSetupBody": "Add hozzá és igazold Clash of Clans-fiókjaidat.",
   "accountsMyTitle": "Saját fiókjaim",
   "profileAvatar": "Kinézet módosítása",
-  "avatarPickerTitle": "Válassz egy avatárt"
+  "avatarPickerTitle": "Válassz egy avatárt",
+  "homeCreatorCodeInGame": "A Clash of Clansban",
+  "homeCreatorCodeInStore": "A Supercell Store-ban",
+  "homeCreatorCodeOpenFailed": "Nem sikerült megnyitni a hivatkozást. Próbáld újra."
 }

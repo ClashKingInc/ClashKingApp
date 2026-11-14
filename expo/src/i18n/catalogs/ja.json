@@ -2379,5 +2379,8 @@
   "accountsSetupBody": "Clash of Clansのアカウントを追加し、所有権を確認しましょう。",
   "accountsMyTitle": "マイアカウント",
   "profileAvatar": "見た目を変更",
-  "avatarPickerTitle": "アバターを選ぼう"
+  "avatarPickerTitle": "アバターを選ぼう",
+  "homeCreatorCodeInGame": "Clash of Clansで使う",
+  "homeCreatorCodeInStore": "Supercell Storeで使う",
+  "homeCreatorCodeOpenFailed": "リンクを開けませんでした。もう一度お試しください。"
 }

@@ -23,12 +23,31 @@ function useDialogInsets() {
     : undefined;
 }
 
-function DialogFrame({ children }: { children: ReactNode }) {
+export function DialogFrame({
+  children,
+  scrollable = false,
+}: {
+  children: ReactNode;
+  scrollable?: boolean;
+}) {
   if (!isAdaptiveNativeDevice) {
     return (
       <View style={styles.overlay}>
-        <Surface style={styles.dialog} accessibilityViewIsModal>
-          {children}
+        <Surface
+          style={[styles.dialog, scrollable && styles.scrollDialog]}
+          accessibilityViewIsModal
+        >
+          {scrollable ? (
+            <ScrollView
+              bounces={false}
+              style={styles.dialogScroll}
+              contentContainerStyle={styles.dialogBody}
+            >
+              {children}
+            </ScrollView>
+          ) : (
+            children
+          )}
         </Surface>
       </View>
     );

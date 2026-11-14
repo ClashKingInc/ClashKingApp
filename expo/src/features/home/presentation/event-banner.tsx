@@ -27,6 +27,7 @@ import {
   useCKTheme,
 } from '../../../ui';
 import type { HomeAnnouncement } from './contracts';
+import { CreatorCodeDialog } from './creator-code-dialog';
 
 export interface HomeBannerItem {
   readonly id: string;
@@ -227,6 +228,7 @@ function BannerCard({
     >
       {item.highlighted ? <HighlightSweep color={item.color} active={active} /> : null}
       <View
+        pointerEvents="none"
         style={[
           styles.iconCircle,
           featured && styles.featuredIconCircle,
@@ -242,7 +244,7 @@ function BannerCard({
           }
         />
       </View>
-      <View style={styles.copy}>
+      <View pointerEvents="none" style={styles.copy}>
         <CKText
           role={mobile ? 'labelLarge' : featured ? 'titleSmall' : 'labelMedium'}
           style={styles.heavy}
@@ -260,9 +262,17 @@ function BannerCard({
       </View>
       {onPress ? (
         isRtl ? (
-          <ChevronLeft size={featured || mobile ? 17 : 13} color={theme.onSurfaceVariant} />
+          <ChevronLeft
+            pointerEvents="none"
+            size={featured || mobile ? 17 : 13}
+            color={theme.onSurfaceVariant}
+          />
         ) : (
-          <ChevronRight size={featured || mobile ? 17 : 13} color={theme.onSurfaceVariant} />
+          <ChevronRight
+            pointerEvents="none"
+            size={featured || mobile ? 17 : 13}
+            color={theme.onSurfaceVariant}
+          />
         )
       ) : null}
     </Pressable>
@@ -328,19 +338,36 @@ function HighlightSweep({ color, active }: { color: string; active: boolean }) {
   );
 }
 
-export function HomeEventBanner({
-  active,
-  announcements,
-  desktop,
-  compact = false,
-  onOpen,
-}: {
+type HomeEventBannerProps = {
   active: boolean;
   announcements: readonly HomeAnnouncement[];
   desktop: boolean;
   compact?: boolean;
   onOpen: (announcement: HomeAnnouncement) => void;
-}) {
+};
+
+export function HomeEventBanner(props: HomeEventBannerProps) {
+  const [creatorCodeOpen, setCreatorCodeOpen] = useState(false);
+  return (
+    <>
+      <HomeEventBannerContent
+        {...props}
+        active={props.active && !creatorCodeOpen}
+        onOpenCreatorCode={() => setCreatorCodeOpen(true)}
+      />
+      <CreatorCodeDialog visible={creatorCodeOpen} onClose={() => setCreatorCodeOpen(false)} />
+    </>
+  );
+}
+
+function HomeEventBannerContent({
+  active,
+  announcements,
+  desktop,
+  compact = false,
+  onOpen,
+  onOpenCreatorCode,
+}: HomeEventBannerProps & { onOpenCreatorCode: () => void }) {
   const { t, isRtl } = useI18n();
   const theme = useCKTheme();
   const layout = useAdaptiveLayout();
@@ -465,9 +492,11 @@ export function HomeEventBanner({
     availableWidth,
   ]);
   const action = (item: HomeBannerItem) =>
-    item.announcement && isHomeAnnouncementOpenable(item.announcement)
-      ? () => onOpen(item.announcement!)
-      : undefined;
+    item.id === 'creator-code' && !item.announcement
+      ? onOpenCreatorCode
+      : item.announcement && isHomeAnnouncementOpenable(item.announcement)
+        ? () => onOpen(item.announcement!)
+        : undefined;
   if (compact) {
     // Announcements stay first. Landscape iPad has room for four events;
     // portrait and Duo keep three readable cards in the same manual strip.
