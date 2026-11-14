@@ -1,8 +1,10 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { applyReanimatedNativeCompat } from './reanimated-native-compat.mjs';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
+applyReanimatedNativeCompat(root);
 const packageRoot = path.join(root, 'node_modules/react-native-draggable-flatlist');
 const version = JSON.parse(fs.readFileSync(path.join(packageRoot, 'package.json'), 'utf8')).version;
 if (version !== '4.0.3')
