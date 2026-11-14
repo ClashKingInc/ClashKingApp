@@ -512,7 +512,9 @@ export function AuthenticatedRoot({
   const screens = {
     home: (
       <HomeDashboardRoot
-        active={primary === 'home' && !utility && pushedScenes.length === 0}
+        active={
+          primary === 'home' && !utility && pushedScenes.length === 0 && !announcementPresentation
+        }
         onReady={startupPlayerLink ? undefined : handleHomeReady}
         openManageAccounts={() => openUtility(routeById('accounts'))}
         openAnnouncement={(item) => void presentHomeAnnouncement(item)}

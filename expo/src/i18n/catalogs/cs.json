@@ -2379,5 +2379,8 @@
   "accountsSetupBody": "Přidej a ověř své účty Clash of Clans.",
   "accountsMyTitle": "Moje účty",
   "profileAvatar": "Změnit vzhled",
-  "avatarPickerTitle": "Vyber si avatara"
+  "avatarPickerTitle": "Vyber si avatara",
+  "homeCreatorCodeInGame": "V Clash of Clans",
+  "homeCreatorCodeInStore": "V Supercell Store",
+  "homeCreatorCodeOpenFailed": "Odkaz se nepodařilo otevřít. Zkus to znovu."
 }

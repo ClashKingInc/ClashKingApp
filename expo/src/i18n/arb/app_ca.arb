@@ -5107,5 +5107,8 @@
   "accountsSetupBody": "Afegeix i verifica els teus comptes de Clash of Clans.",
   "accountsMyTitle": "Els meus comptes",
   "profileAvatar": "Canvia l’aspecte",
-  "avatarPickerTitle": "Tria un avatar"
+  "avatarPickerTitle": "Tria un avatar",
+  "homeCreatorCodeInGame": "A Clash of Clans",
+  "homeCreatorCodeInStore": "A la Supercell Store",
+  "homeCreatorCodeOpenFailed": "No s’ha pogut obrir l’enllaç. Torna-ho a provar."
 }

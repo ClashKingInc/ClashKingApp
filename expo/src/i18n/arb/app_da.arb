@@ -5107,5 +5107,8 @@
   "accountsSetupBody": "Tilføj og bekræft dine Clash of Clans-konti.",
   "accountsMyTitle": "Mine konti",
   "profileAvatar": "Skift udseende",
-  "avatarPickerTitle": "Vælg en avatar"
+  "avatarPickerTitle": "Vælg en avatar",
+  "homeCreatorCodeInGame": "I Clash of Clans",
+  "homeCreatorCodeInStore": "I Supercell Store",
+  "homeCreatorCodeOpenFailed": "Linket kunne ikke åbnes. Prøv igen."
 }

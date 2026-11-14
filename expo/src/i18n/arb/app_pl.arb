@@ -5202,5 +5202,8 @@
   "accountsSetupBody": "Dodaj i zweryfikuj swoje konta Clash of Clans.",
   "accountsMyTitle": "Moje konta",
   "profileAvatar": "Zmień wygląd",
-  "avatarPickerTitle": "Wybierz awatar"
+  "avatarPickerTitle": "Wybierz awatar",
+  "homeCreatorCodeInGame": "W Clash of Clans",
+  "homeCreatorCodeInStore": "W Supercell Store",
+  "homeCreatorCodeOpenFailed": "Nie udało się otworzyć linku. Spróbuj ponownie."
 }

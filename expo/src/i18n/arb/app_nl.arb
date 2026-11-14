@@ -5107,5 +5107,8 @@
   "accountsSetupBody": "Voeg je Clash of Clans-accounts toe en verifieer ze.",
   "accountsMyTitle": "Mijn accounts",
   "profileAvatar": "Uiterlijk wijzigen",
-  "avatarPickerTitle": "Kies een avatar"
+  "avatarPickerTitle": "Kies een avatar",
+  "homeCreatorCodeInGame": "In Clash of Clans",
+  "homeCreatorCodeInStore": "In de Supercell Store",
+  "homeCreatorCodeOpenFailed": "De link kon niet worden geopend. Probeer het opnieuw."
 }

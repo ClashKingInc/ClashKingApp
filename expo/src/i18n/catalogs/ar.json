@@ -2379,5 +2379,8 @@
   "accountsSetupBody": "أضف حساباتك في Clash of Clans وتحقق من ملكيتها.",
   "accountsMyTitle": "حساباتي",
   "profileAvatar": "غيّر المظهر",
-  "avatarPickerTitle": "اختر صورة رمزية"
+  "avatarPickerTitle": "اختر صورة رمزية",
+  "homeCreatorCodeInGame": "في Clash of Clans",
+  "homeCreatorCodeInStore": "في متجر Supercell",
+  "homeCreatorCodeOpenFailed": "تعذّر فتح الرابط. حاول مرة أخرى."
 }

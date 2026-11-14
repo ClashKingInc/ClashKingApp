@@ -5202,5 +5202,8 @@
   "accountsSetupBody": "Adaugă și verifică-ți conturile Clash of Clans.",
   "accountsMyTitle": "Conturile mele",
   "profileAvatar": "Schimbă aspectul",
-  "avatarPickerTitle": "Alege un avatar"
+  "avatarPickerTitle": "Alege un avatar",
+  "homeCreatorCodeInGame": "În Clash of Clans",
+  "homeCreatorCodeInStore": "În Supercell Store",
+  "homeCreatorCodeOpenFailed": "Linkul nu a putut fi deschis. Încearcă din nou."
 }

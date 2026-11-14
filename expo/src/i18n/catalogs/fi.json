@@ -2379,5 +2379,8 @@
   "accountsSetupBody": "Lisää ja vahvista Clash of Clans -tilisi.",
   "accountsMyTitle": "Omat tilit",
   "profileAvatar": "Vaihda ulkoasua",
-  "avatarPickerTitle": "Valitse avatar"
+  "avatarPickerTitle": "Valitse avatar",
+  "homeCreatorCodeInGame": "Clash of Clansissa",
+  "homeCreatorCodeInStore": "Supercell Storessa",
+  "homeCreatorCodeOpenFailed": "Linkkiä ei voitu avata. Yritä uudelleen."
 }

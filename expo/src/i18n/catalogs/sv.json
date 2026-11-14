@@ -2379,5 +2379,8 @@
   "accountsSetupBody": "Lägg till och verifiera dina Clash of Clans-konton.",
   "accountsMyTitle": "Mina konton",
   "profileAvatar": "Ändra utseende",
-  "avatarPickerTitle": "Välj en avatar"
+  "avatarPickerTitle": "Välj en avatar",
+  "homeCreatorCodeInGame": "I Clash of Clans",
+  "homeCreatorCodeInStore": "I Supercell Store",
+  "homeCreatorCodeOpenFailed": "Det gick inte att öppna länken. Försök igen."
 }

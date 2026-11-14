@@ -2379,5 +2379,8 @@
   "accountsSetupBody": "클래시 오브 클랜 계정을 추가하고 인증하세요.",
   "accountsMyTitle": "내 계정",
   "profileAvatar": "모습 바꾸기",
-  "avatarPickerTitle": "아바타를 골라 보세요"
+  "avatarPickerTitle": "아바타를 골라 보세요",
+  "homeCreatorCodeInGame": "Clash of Clans에서 사용",
+  "homeCreatorCodeInStore": "Supercell Store에서 사용",
+  "homeCreatorCodeOpenFailed": "링크를 열 수 없습니다. 다시 시도해 주세요."
 }
