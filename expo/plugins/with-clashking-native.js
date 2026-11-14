@@ -328,49 +328,31 @@ function withClashKingEntitlements(config, contract) {
   });
 }
 
-function androidData(scheme, host, pathValue) {
-  return {
-    $: {
-      'android:scheme': scheme,
-      'android:host': host,
-      ...(pathValue ? { 'android:path': pathValue } : {}),
-    },
-  };
-}
-
 function withClashKingAndroidLinks(config, contract) {
   return withAndroidManifest(config, (mod) => {
     const application = mod.modResults.manifest.application?.[0];
     if (!application) throw new Error('Generated AndroidManifest has no application node.');
     const activities = application.activity || [];
-    const mainActivity = activities.find((activity) =>
+    // Existing prebuilds put MAIN on launcher aliases.
+    const launcherComponents = [...activities, ...(application['activity-alias'] || [])];
+    const launcher = launcherComponents.find((activity) =>
       (activity['intent-filter'] || []).some((filter) =>
         (filter.action || []).some(
           (action) => action.$?.['android:name'] === 'android.intent.action.MAIN',
         ),
       ),
     );
+    const mainActivity = launcher?.$?.['android:targetActivity']
+      ? activities.find(
+          (activity) => activity.$?.['android:name'] === launcher.$['android:targetActivity'],
+        )
+      : launcher;
     if (!mainActivity) throw new Error('Generated AndroidManifest has no launcher activity.');
 
-    const filters = removeUnscopedAndroidScheme(
+    const filters = configureAndroidAppLinkFilters(
       mainActivity['intent-filter'] || [],
       contract.urlScheme,
     );
-    const common = {
-      action: [{ $: { 'android:name': 'android.intent.action.VIEW' } }],
-      category: [
-        { $: { 'android:name': 'android.intent.category.DEFAULT' } },
-        { $: { 'android:name': 'android.intent.category.BROWSABLE' } },
-      ],
-    };
-    filters.push({
-      ...common,
-      data: ['player', 'clan', 'war'].map((host) => androidData(contract.urlScheme, host)),
-    });
-    filters.push({
-      ...common,
-      data: [androidData(contract.urlScheme, contract.oauthHost, contract.oauthPath)],
-    });
     mainActivity['intent-filter'] = filters.filter(
       (filter) =>
         !(filter.action || []).some(
@@ -444,8 +426,8 @@ function copyAndroidLauncherAssets(projectRoot, androidRoot) {
   }
 }
 
-function removeUnscopedAndroidScheme(filters, scheme) {
-  return filters.flatMap((filter) => {
+function configureAndroidAppLinkFilters(filters, scheme) {
+  const otherFilters = filters.flatMap((filter) => {
     const isView = (filter.action || []).some(
       (action) => action.$?.['android:name'] === 'android.intent.action.VIEW',
     );
@@ -453,6 +435,18 @@ function removeUnscopedAndroidScheme(filters, scheme) {
     const data = (filter.data || []).filter((entry) => entry.$?.['android:scheme'] !== scheme);
     return data.length === 0 ? [] : [{ ...filter, data }];
   });
+  // Host/path restrictions would reject hostless landing links like clashking:///.
+  return [
+    ...otherFilters,
+    {
+      action: [{ $: { 'android:name': 'android.intent.action.VIEW' } }],
+      category: [
+        { $: { 'android:name': 'android.intent.category.DEFAULT' } },
+        { $: { 'android:name': 'android.intent.category.BROWSABLE' } },
+      ],
+      data: [{ $: { 'android:scheme': scheme } }],
+    },
+  ];
 }
 
 const BLOCKED_ANDROID_PERMISSIONS = new Set([
@@ -1151,6 +1145,5 @@ module.exports.configureGeneratedAndroidBuildTypePermissions =
 module.exports.configureIosPlatformPlist = configureIosPlatformPlist;
 module.exports.configureAndroidLauncherAliases = configureAndroidLauncherAliases;
 module.exports.copyAndroidLauncherAssets = copyAndroidLauncherAssets;
-module.exports.removeUnscopedAndroidScheme = removeUnscopedAndroidScheme;
 module.exports.android12SplashStyleXml = android12SplashStyleXml;
 module.exports.copyAndroidSplashResources = copyAndroidSplashResources;
