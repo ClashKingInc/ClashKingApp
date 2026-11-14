@@ -117,7 +117,6 @@ function PriorityDraggableList<T>(props: DraggableFlatListProps<T>) {
       pendingTarget.value = target;
       runOnJS(scrollOuter)(target);
     },
-    [scrollOuter, animValues],
   );
   return (
     <DraggableFlatList
