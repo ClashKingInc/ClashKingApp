@@ -387,14 +387,19 @@ export function HomeEventBanner({
   const [index, setIndex] = useState(0);
   const [availableWidth, setAvailableWidth] = useState(680);
   const safeIndex = Math.min(index, Math.max(0, items.length - 1));
+  const looping = !desktop && !compact && items.length > 1;
+  // End copies let native paging cross either boundary. Once scrolling settles,
+  // move to the identical real card without animation so the next swipe can continue.
+  const pages = looping ? [items[items.length - 1]!, ...items, items[0]!] : items;
   const settle = useCallback(() => {
     clearTimeout(settleTimer.current);
-    const next = homeBannerPageIndex(offset.current, availableWidth, items.length);
+    const page = homeBannerPageIndex(offset.current, availableWidth, pages.length);
+    const next = looping ? (page - 1 + items.length) % items.length : page;
     // Native paging owns dragging and deceleration. The fallback may only
     // correct a released, quiet scroller; an animated correction starts another
     // momentum cycle and can fight a new swipe on either native platform.
     if (touchActive.current || dragActive.current) return;
-    const target = next * availableWidth;
+    const target = (next + (looping ? 1 : 0)) * availableWidth;
     if (Math.abs(offset.current - target) > 0.5) {
       offset.current = target;
       scrollRef.current?.scrollTo({ x: target, animated: false });
@@ -402,7 +407,7 @@ export function HomeEventBanner({
     settledIndex.current = next;
     setIndex(next);
     setInteracting(false);
-  }, [availableWidth, items.length]);
+  }, [availableWidth, items.length, looping, pages.length]);
   const scheduleSettle = useCallback(() => {
     clearTimeout(settleTimer.current);
     settleTimer.current = setTimeout(settle, 180);
@@ -433,9 +438,11 @@ export function HomeEventBanner({
   useEffect(() => {
     clearTimeout(settleTimer.current);
     dragActive.current = false;
-    offset.current = Math.min(settledIndex.current, Math.max(0, items.length - 1)) * availableWidth;
+    offset.current =
+      (Math.min(settledIndex.current, Math.max(0, items.length - 1)) + (looping ? 1 : 0)) *
+      availableWidth;
     scrollRef.current?.scrollTo({ x: offset.current, animated: false });
-  }, [availableWidth, items.length]);
+  }, [availableWidth, items.length, looping]);
   useEffect(() => {
     if (desktop || compact || !running || interacting || reduceMotion || items.length < 2) return;
     const timer = setTimeout(() => {
@@ -443,7 +450,7 @@ export function HomeEventBanner({
       if (touchActive.current || dragActive.current) return;
       const next = (safeIndex + 1) % items.length;
       settledIndex.current = next;
-      scrollRef.current?.scrollTo({ x: next * availableWidth, animated: next !== 0 });
+      scrollRef.current?.scrollTo({ x: (safeIndex + 2) * availableWidth, animated: true });
       setIndex(next);
     }, 8000);
     return () => clearTimeout(timer);
@@ -599,9 +606,9 @@ export function HomeEventBanner({
           settle();
         }}
       >
-        {items.map((item) => (
+        {pages.map((item, page) => (
           <View
-            key={item.id}
+            key={`${page}-${item.id}`}
             style={[{ width: availableWidth, paddingHorizontal: 1 }, isRtl && styles.rtlItem]}
           >
             <BannerCard active={running} item={item} mobile isRtl={isRtl} onPress={action(item)} />
