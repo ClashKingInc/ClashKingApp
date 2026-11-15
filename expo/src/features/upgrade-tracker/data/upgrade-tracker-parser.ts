@@ -606,15 +606,16 @@ function parseCollections(account: JsonRecord, lookup: StaticLookup) {
       );
     }
   };
-  add(
-    'emotes',
-    UpgradeCollectionType.emotes,
-    (data) => `${ImageAssets.baseUrl}/emotes/${String(data._id)}/static.webp`,
-    {
-      defaultOwned: (data) => data.default_unlocked === true,
-      subtitle: (data) => String(data.set_name ?? '') || null,
-    },
-  );
+  if (Array.isArray(account.emotes))
+    add(
+      'emotes',
+      UpgradeCollectionType.emotes,
+      (data) => `${ImageAssets.baseUrl}/emotes/${String(data._id)}/static.webp`,
+      {
+        defaultOwned: (data) => data.default_unlocked === true,
+        subtitle: (data) => String(data.set_name ?? '') || null,
+      },
+    );
   add(
     'skins',
     UpgradeCollectionType.skins,
