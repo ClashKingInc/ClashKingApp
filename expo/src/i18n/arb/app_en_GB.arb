@@ -5107,5 +5107,7 @@
   "accountsSetupBody": "Add and verify your Clash of Clans accounts.",
   "accountsMyTitle": "My Accounts",
   "profileAvatar": "Change look",
-  "avatarPickerTitle": "Pick an avatar"
+  "avatarPickerTitle": "Pick an avatar",
+  "gameEmotes": "Emotes",
+  "gameSquads": "Squads"
 }

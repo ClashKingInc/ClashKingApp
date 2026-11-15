@@ -5202,5 +5202,7 @@
   "accountsSetupBody": "클래시 오브 클랜 계정을 추가하고 인증하세요.",
   "accountsMyTitle": "내 계정",
   "profileAvatar": "모습 바꾸기",
-  "avatarPickerTitle": "아바타를 골라 보세요"
+  "avatarPickerTitle": "아바타를 골라 보세요",
+  "gameEmotes": "이모트",
+  "gameSquads": "분대"
 }

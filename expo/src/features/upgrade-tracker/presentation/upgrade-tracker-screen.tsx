@@ -1606,9 +1606,14 @@ function UpgradeGroupTiles({
             t('gameTroops'),
             items.filter(
               (item) =>
-                item.category === UpgradeCategory.troops ||
-                item.category === UpgradeCategory.darkTroops,
+                (item.category === UpgradeCategory.troops ||
+                  item.category === UpgradeCategory.darkTroops) &&
+                item.meta?.production_building !== 'Squad Barracks',
             ),
+          ],
+          [
+            t('gameSquads'),
+            items.filter((item) => item.meta?.production_building === 'Squad Barracks'),
           ],
           [t('gameSpells'), items.filter((item) => item.category === UpgradeCategory.spells)],
           [
@@ -3373,6 +3378,18 @@ function CollectionTab({
                 (village === 'home' ? UpgradeVillage.home : UpgradeVillage.builderBase)),
         )
         .sort((left, right) => {
+          if (category === UpgradeCollectionType.emotes) {
+            const setOrder = Number(left.meta?.set_id ?? 0) - Number(right.meta?.set_id ?? 0);
+            if (setOrder) return setOrder;
+            const bonusOrder =
+              Number(
+                Array.isArray(left.meta?.required_emotes) && left.meta.required_emotes.length > 0,
+              ) -
+              Number(
+                Array.isArray(right.meta?.required_emotes) && right.meta.required_emotes.length > 0,
+              );
+            if (bonusOrder) return bonusOrder;
+          }
           if (sort === 'nameAscending') return left.name.localeCompare(right.name);
           if (sort === 'nameDescending') return right.name.localeCompare(left.name);
           return sort === 'newest' ? right.id - left.id : left.id - right.id;
@@ -3382,7 +3399,8 @@ function CollectionTab({
   type CollectionRow =
     | { kind: 'summary'; key: string; summary: (typeof summaries)[number] }
     | { kind: 'items'; key: string; items: UpgradeCollectionItem[] }
-    | { kind: 'empty'; key: string };
+    | { kind: 'empty'; key: string }
+    | { kind: 'heading'; key: string; title: string };
   // Flatten the open category into the parent list: no nested scrolling grid,
   // and closed categories never mount hundreds of collection images.
   const rows = useMemo<CollectionRow[]>(
@@ -3391,12 +3409,26 @@ function CollectionTab({
         const result: CollectionRow[] = [{ kind: 'summary', key: summary.type, summary }];
         if (summary.type !== category) return result;
         if (!visibleItems.length) result.push({ kind: 'empty', key: summary.type + '-empty' });
-        for (let index = 0; index < visibleItems.length; index += collectionColumns) {
-          result.push({
-            kind: 'items',
-            key: summary.type + '-' + index,
-            items: visibleItems.slice(index, index + collectionColumns),
-          });
+        const groups =
+          summary.type === UpgradeCollectionType.emotes
+            ? [...new Set(visibleItems.map((item) => item.meta?.set_id))].map((id) =>
+                visibleItems.filter((item) => item.meta?.set_id === id),
+              )
+            : [visibleItems];
+        for (const [groupIndex, group] of groups.entries()) {
+          if (summary.type === UpgradeCollectionType.emotes && group.length)
+            result.push({
+              kind: 'heading',
+              key: `set-${groupIndex}`,
+              title: group[0]?.subtitle ?? '',
+            });
+          for (let index = 0; index < group.length; index += collectionColumns) {
+            result.push({
+              kind: 'items',
+              key: `${summary.type}-${groupIndex}-${index}`,
+              items: group.slice(index, index + collectionColumns),
+            });
+          }
         }
         return result;
       }),
@@ -3440,6 +3472,12 @@ function CollectionTab({
         maxToRenderPerBatch={6}
         windowSize={5}
         renderItem={({ item: row }) => {
+          if (row.kind === 'heading')
+            return (
+              <CKText role="labelLarge" style={{ marginVertical: 12 }}>
+                {row.title}
+              </CKText>
+            );
           if (row.kind === 'empty')
             return <EmptyState title={t('upgradeTrackerNoMatchingItems')} />;
           if (row.kind === 'summary') {
@@ -3528,9 +3566,28 @@ function CollectionTab({
                     <CKText role="body" numberOfLines={2} style={{ textAlign: 'center' }}>
                       {collectionDisplayName(item)}
                     </CKText>
-                    <CKText role="bodyMedium" muted>
-                      {item.owned ? ownershipLabels.owned : ownershipLabels.missing}
-                    </CKText>
+                    <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
+                      {item.type === UpgradeCollectionType.emotes &&
+                      !item.owned &&
+                      typeof item.meta?.prestige_medal_cost === 'number' ? (
+                        <MobileWebImage
+                          imageUrl={`${ImageAssets.baseUrl}/resources/ranked_medals.webp`}
+                          style={{ width: 18, height: 18 }}
+                        />
+                      ) : null}
+                      <CKText role="bodyMedium" muted>
+                        {item.type === UpgradeCollectionType.emotes && !item.owned
+                          ? Array.isArray(item.meta?.required_emotes) &&
+                            item.meta.required_emotes.length
+                            ? `${collectionItems.filter((candidate) => candidate.owned && (item.meta?.required_emotes as unknown[]).includes(candidate.id)).length}/${item.meta.required_emotes.length}`
+                            : typeof item.meta?.prestige_medal_cost === 'number'
+                              ? item.meta.prestige_medal_cost.toLocaleString()
+                              : ownershipLabels.missing
+                          : item.owned
+                            ? ownershipLabels.owned
+                            : ownershipLabels.missing}
+                      </CKText>
+                    </View>
                   </Surface>
                 </Pressable>
               ))}
@@ -3602,7 +3659,14 @@ function CollectionDetailModal({
   const info = collectionInfo(item, intlLocale, t);
   return (
     <ChoiceModal visible title={collectionDisplayName(item)} onClose={onClose}>
-      <MobileWebImage imageUrl={item.imageUrl} style={styles.collectionDetailImage} />
+      <MobileWebImage
+        imageUrl={
+          item.type === UpgradeCollectionType.emotes
+            ? `${ImageAssets.baseUrl}/emotes/${item.id}/animated.webp`
+            : item.imageUrl
+        }
+        style={styles.collectionDetailImage}
+      />
       <CKText muted style={styles.centerText}>
         {item.type === UpgradeCollectionType.decorations ||
         item.type === UpgradeCollectionType.obstacles
@@ -4021,6 +4085,7 @@ function IconButton({
 }
 function collectionTypeLabel(type: UpgradeCollectionTypeValue, t: I18nValue['t']) {
   const labels: Record<UpgradeCollectionTypeValue, string> = {
+    [UpgradeCollectionType.emotes]: t('gameEmotes'),
     [UpgradeCollectionType.skins]: t('gameAssetsCategorySkins'),
     [UpgradeCollectionType.sceneries]: t('upgradeTrackerSceneries'),
     [UpgradeCollectionType.decorations]: t('gameAssetsCategoryDecorations'),

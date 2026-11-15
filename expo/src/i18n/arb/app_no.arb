@@ -5107,5 +5107,7 @@
   "accountsSetupBody": "Legg til og bekreft Clash of Clans-kontoene dine.",
   "accountsMyTitle": "Mine kontoer",
   "profileAvatar": "Endre utseende",
-  "avatarPickerTitle": "Velg en avatar"
+  "avatarPickerTitle": "Velg en avatar",
+  "gameEmotes": "Emoter",
+  "gameSquads": "Tropper"
 }

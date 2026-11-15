@@ -74,6 +74,7 @@ export const UpgradeCollectionType = {
   decorations: 'decorations',
   obstacles: 'obstacles',
   capitalHouseParts: 'capitalHouseParts',
+  emotes: 'emotes',
 } as const;
 export type UpgradeCollectionTypeValue =
   (typeof UpgradeCollectionType)[keyof typeof UpgradeCollectionType];

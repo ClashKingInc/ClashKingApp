@@ -550,7 +550,15 @@ function parseCollections(account: JsonRecord, lookup: StaticLookup) {
     for (const row of mapList(account[key]))
       ownedCounts.set(int(row.data), (ownedCounts.get(int(row.data)) ?? 0) + int(row.cnt, 1));
   const ownedIds = new Set(ownedCounts.keys());
-  for (const key of ['skins', 'skins2', 'sceneries', 'sceneries2', 'house_parts'])
+  for (const key of [
+    'skins',
+    'skins2',
+    'sceneries',
+    'sceneries2',
+    'house_parts',
+    'emotes',
+    'building_variants',
+  ])
     if (Array.isArray(account[key])) for (const raw of account[key]) ownedIds.add(int(raw));
   const result: UpgradeCollectionItem[] = [],
     seen = new Set<string>();
@@ -573,6 +581,7 @@ function parseCollections(account: JsonRecord, lookup: StaticLookup) {
       let itemVillage: UpgradeVillageValue | null = null;
       if (type === UpgradeCollectionType.skins)
         itemVillage = options.villageOverride ?? skinVillage(data);
+      else if (type === UpgradeCollectionType.emotes) itemVillage = UpgradeVillage.home;
       else if (type === UpgradeCollectionType.sceneries)
         itemVillage =
           data.type === 'builderBase' ? UpgradeVillage.builderBase : UpgradeVillage.home;
@@ -597,6 +606,15 @@ function parseCollections(account: JsonRecord, lookup: StaticLookup) {
       );
     }
   };
+  add(
+    'emotes',
+    UpgradeCollectionType.emotes,
+    (data) => `${ImageAssets.baseUrl}/emotes/${String(data._id)}/static.webp`,
+    {
+      defaultOwned: (data) => data.default_unlocked === true,
+      subtitle: (data) => String(data.set_name ?? '') || null,
+    },
+  );
   add(
     'skins',
     UpgradeCollectionType.skins,

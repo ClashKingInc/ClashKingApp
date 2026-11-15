@@ -5202,5 +5202,7 @@
   "accountsSetupBody": "Добавьте и подтвердите свои аккаунты Clash of Clans.",
   "accountsMyTitle": "Мои аккаунты",
   "profileAvatar": "Изменить облик",
-  "avatarPickerTitle": "Выбери аватар"
+  "avatarPickerTitle": "Выбери аватар",
+  "gameEmotes": "Эмоции",
+  "gameSquads": "Отряды"
 }
