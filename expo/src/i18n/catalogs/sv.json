@@ -322,6 +322,8 @@
   "generalRetry": "Försök igen",
   "generalRetrying": "Försöker igen...",
   "postsTitle": "Inlägg",
+  "postsArticlesTitle": "Inlägg och artiklar",
+  "postsRead": "Läst",
   "postsDescription": "ClashKing-nyheter, berättelser om uppdateringar och tidigare meddelanden.",
   "postsEmpty": "Inga publicerade inlägg ännu.",
   "postsLoadFailed": "Inläggen kunde inte läsas in.",

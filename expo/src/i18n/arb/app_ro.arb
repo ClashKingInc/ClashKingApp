@@ -448,6 +448,8 @@
   "generalRetry": "Reîncearcă",
   "generalRetrying": "Se reîncearcă...",
   "postsTitle": "Postări",
+  "postsArticlesTitle": "Postări și articole",
+  "postsRead": "Citit",
   "postsDescription": "Știri ClashKing, povești despre actualizări și anunțuri anterioare.",
   "postsEmpty": "Nu există încă postări publicate.",
   "postsLoadFailed": "Postările nu au putut fi încărcate.",

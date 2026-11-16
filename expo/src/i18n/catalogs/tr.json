@@ -322,6 +322,8 @@
   "generalRetry": "Yeniden dene",
   "generalRetrying": "Yeniden deneniyor...",
   "postsTitle": "Gönderiler",
+  "postsArticlesTitle": "Gönderiler ve makaleler",
+  "postsRead": "Okundu",
   "postsDescription": "ClashKing haberleri, güncellemeler ve önceki duyurular.",
   "postsEmpty": "Henüz yayınlanmış gönderi yok.",
   "postsLoadFailed": "Gönderiler yüklenemedi.",

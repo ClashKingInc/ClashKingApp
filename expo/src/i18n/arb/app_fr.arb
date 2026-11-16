@@ -353,6 +353,8 @@
   "generalRetry": "Réessayer",
   "generalRetrying": "Nouvelle tentative...",
   "postsTitle": "Publications",
+  "postsArticlesTitle": "Publications et articles",
+  "postsRead": "Lu",
   "postsDescription": "Actualités ClashKing, nouveautés et annonces précédentes.",
   "postsEmpty": "Aucune publication pour le moment.",
   "postsLoadFailed": "Impossible de charger les publications.",

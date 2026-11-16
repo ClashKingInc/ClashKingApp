@@ -448,6 +448,8 @@
   "generalRetry": "再試行",
   "generalRetrying": "再試行中...",
   "postsTitle": "投稿",
+  "postsArticlesTitle": "投稿と記事",
+  "postsRead": "既読",
   "postsDescription": "ClashKingのニュース、アップデート情報、過去のお知らせです。",
   "postsEmpty": "公開された投稿はまだありません。",
   "postsLoadFailed": "投稿を読み込めませんでした。",

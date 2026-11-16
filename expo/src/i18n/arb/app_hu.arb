@@ -448,6 +448,8 @@
   "generalRetry": "Újrapróbálás",
   "generalRetrying": "Újrapróbálkozás...",
   "postsTitle": "Bejegyzések",
+  "postsArticlesTitle": "Bejegyzések és cikkek",
+  "postsRead": "Elolvasva",
   "postsDescription": "ClashKing-hírek, frissítési történetek és korábbi közlemények.",
   "postsEmpty": "Még nincs közzétett bejegyzés.",
   "postsLoadFailed": "A bejegyzéseket nem sikerült betölteni.",

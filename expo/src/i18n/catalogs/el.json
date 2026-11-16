@@ -322,6 +322,8 @@
   "generalRetry": "Επανάληψη",
   "generalRetrying": "Νέα προσπάθεια...",
   "postsTitle": "Δημοσιεύσεις",
+  "postsArticlesTitle": "Αναρτήσεις και άρθρα",
+  "postsRead": "Διαβάστηκε",
   "postsDescription": "Ειδήσεις ClashKing, ενημερώσεις ιστοριών και προηγούμενες ανακοινώσεις.",
   "postsEmpty": "Δεν υπάρχουν ακόμη δημοσιευμένες αναρτήσεις.",
   "postsLoadFailed": "Δεν ήταν δυνατή η φόρτωση των αναρτήσεων.",

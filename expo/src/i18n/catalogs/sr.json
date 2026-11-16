@@ -322,6 +322,8 @@
   "generalRetry": "Pokušaj ponovo",
   "generalRetrying": "Pokušavam ponovo...",
   "postsTitle": "Објаве",
+  "postsArticlesTitle": "Објаве и чланци",
+  "postsRead": "Прочитано",
   "postsDescription": "ClashKing вести, приче о ажурирањима и претходна обавештења.",
   "postsEmpty": "Још нема објављених објава.",
   "postsLoadFailed": "Објаве нису могле да се учитају.",

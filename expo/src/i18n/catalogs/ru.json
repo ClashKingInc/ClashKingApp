@@ -322,6 +322,8 @@
   "generalRetry": "Повторить",
   "generalRetrying": "Повторная попытка...",
   "postsTitle": "Публикации",
+  "postsArticlesTitle": "Публикации и статьи",
+  "postsRead": "Прочитано",
   "postsDescription": "Новости ClashKing, материалы об обновлениях и прошлые объявления.",
   "postsEmpty": "Пока нет опубликованных материалов.",
   "postsLoadFailed": "Не удалось загрузить публикации.",

@@ -353,6 +353,8 @@
   "generalRetry": "Tornar a intentar",
   "generalRetrying": "S'està tornant a intentar...",
   "postsTitle": "Publicacions",
+  "postsArticlesTitle": "Publicacions i articles",
+  "postsRead": "Llegit",
   "postsDescription": "Notícies, actualitzacions i anuncis anteriors de ClashKing.",
   "postsEmpty": "Encara no hi ha publicacions publicades.",
   "postsLoadFailed": "No es podien carregar les publicacions.",

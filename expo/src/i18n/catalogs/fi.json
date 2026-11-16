@@ -322,6 +322,8 @@
   "generalRetry": "Yritä uudelleen",
   "generalRetrying": "Yritetään uudelleen...",
   "postsTitle": "Julkaisut",
+  "postsArticlesTitle": "Julkaisut ja artikkelit",
+  "postsRead": "Luettu",
   "postsDescription": "ClashKingin uutiset, päivitystarinat ja aiemmat ilmoitukset.",
   "postsEmpty": "Julkaistuja kirjoituksia ei vielä ole.",
   "postsLoadFailed": "Julkaisuja ei voitu ladata.",

@@ -322,6 +322,8 @@
   "generalRetry": "Riprova",
   "generalRetrying": "Nuovo tentativo...",
   "postsTitle": "Post",
+  "postsArticlesTitle": "Post e articoli",
+  "postsRead": "Letto",
   "postsDescription": "Notizie di ClashKing, storie sugli aggiornamenti e annunci precedenti.",
   "postsEmpty": "Non ci sono ancora post pubblicati.",
   "postsLoadFailed": "Impossibile caricare i post.",

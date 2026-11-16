@@ -507,6 +507,8 @@
   "generalRetry": "Retry",
   "generalRetrying": "Retrying...",
   "postsTitle": "Posts",
+  "postsArticlesTitle": "Posts & Articles",
+  "postsRead": "Read",
   "postsDescription": "ClashKing news, update stories, and previous announcements.",
   "postsEmpty": "No published posts yet.",
   "postsLoadFailed": "Posts could not be loaded.",
