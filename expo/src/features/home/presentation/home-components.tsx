@@ -1,12 +1,15 @@
 import type { ScrollViewInstance } from 'react-native';
 import { ASSET_ORIGIN } from '../../../core/assets/asset-origin';
 import { createContext, useContext, useRef, useState, type ReactNode } from 'react';
-import { Pressable, ScrollView, StyleSheet, View } from 'react-native';
+import { Pressable, StyleSheet, View } from 'react-native';
 import { Check, ChevronLeft, ChevronRight, Group, ImageOff } from 'lucide-react-native';
 import Svg, { Circle as SvgCircle } from 'react-native-svg';
 
 import { ImageAssets } from '../../../core/assets/image-assets';
-import { AccountBarScrollView } from '../../../ui/account-bar-scroll-view';
+import {
+  AccountBarScrollView,
+  HorizontalSwipeScrollView,
+} from '../../../ui/account-bar-scroll-view';
 import { materialNextPageTooltip, materialPreviousPageTooltip, useI18n } from '../../../i18n';
 import {
   CKText,
@@ -288,7 +291,7 @@ export function DesktopComparison({
     >
       {summaryFirst ? <View style={{ width }}>{renderItem(0)}</View> : null}
       {summaryFirst ? <View style={{ width: ckSpacing.md }} /> : null}
-      <ScrollView
+      <HorizontalSwipeScrollView
         ref={railRef}
         horizontal
         showsHorizontalScrollIndicator={false}
@@ -303,7 +306,7 @@ export function DesktopComparison({
             {renderItem(localIndex + start)}
           </View>
         ))}
-      </ScrollView>
+      </HorizontalSwipeScrollView>
       {showsNavigation ? (
         <View style={styles.comparisonButtons}>
           <Pressable

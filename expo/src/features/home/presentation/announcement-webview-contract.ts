@@ -100,7 +100,11 @@ export const ANNOUNCEMENT_STORY_VIEWPORT_JAVASCRIPT = `
       document.head.appendChild(viewport);
     }
     if (viewport) viewport.content = 'width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no';
-    if (document.documentElement) document.documentElement.style.touchAction = 'pan-x pan-y';
+    if (document.documentElement) {
+      document.documentElement.style.touchAction = 'pan-x pan-y';
+      document.documentElement.style.setProperty('-webkit-text-size-adjust', '100%');
+      document.documentElement.style.setProperty('text-size-adjust', '100%');
+    }
   }
   lockViewport();
   if (!window.__clashkingStoryViewportLocked) {
@@ -112,6 +116,49 @@ export const ANNOUNCEMENT_STORY_VIEWPORT_JAVASCRIPT = `
     document.addEventListener('touchmove', function(event) {
       if (event.touches && event.touches.length > 1) event.preventDefault();
     }, { passive: false });
+  }
+  // Older story files have fixed 1080px composition coordinates. Fit the
+  // content group inside that canvas after fonts/images load; clipping the
+  // WebView or shrinking text alone loses footnotes and breaks the artwork.
+  if (!window.__clashkingStoryContentFit) {
+    window.__clashkingStoryContentFit = true;
+    var queued = false;
+    var observed = new WeakSet();
+    function scheduleFit() {
+      if (queued) return;
+      queued = true;
+      requestAnimationFrame(function() {
+        queued = false;
+        document.querySelectorAll('[data-content]').forEach(function(content) {
+          var canvas = content.parentElement;
+          if (!canvas || !canvas.clientHeight || !content.offsetHeight) return;
+          if (resizeObserver && !observed.has(content)) {
+            observed.add(content);
+            resizeObserver.observe(content);
+          }
+          var available = canvas.clientHeight - content.offsetTop - 32;
+          if (available <= 0) return;
+          var scale = Math.min(1, available / content.offsetHeight);
+          var transform = scale < 1 ? 'scale(' + scale + ')' : '';
+          if (content.style.transform !== transform) {
+            content.style.transformOrigin = 'top center';
+            content.style.transform = transform;
+          }
+        });
+      });
+    }
+    var resizeObserver = typeof ResizeObserver === 'function' ? new ResizeObserver(scheduleFit) : null;
+    function observeContent() {
+      if (!document.body) return;
+      // Observe page replacement, not animation style changes on every frame.
+      new MutationObserver(scheduleFit).observe(document.body, { childList: true, subtree: true });
+      scheduleFit();
+    }
+    if (document.body) observeContent();
+    else document.addEventListener('DOMContentLoaded', observeContent, { once: true });
+    window.addEventListener('resize', scheduleFit);
+    window.addEventListener('load', scheduleFit);
+    if (document.fonts) document.fonts.ready.then(scheduleFit);
   }
 })();
 true;

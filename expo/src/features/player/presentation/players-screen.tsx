@@ -1,3 +1,4 @@
+import { LocalTabSwipe } from '../../../ui/local-tab-swipe';
 import { useAdaptiveLayout } from '../../../ui/adaptive-layout';
 import { InlineReorderGrid } from '../../../ui/inline-reorder-grid';
 import { useNativePrimaryNavigation } from '../../../ui/native-primary-navigation';
@@ -282,7 +283,7 @@ export function PlayersScreen({
       renderItem={(params: RenderItemParams<PlayerRosterEntry>) => (
         <ScaleDecorator activeScale={1.015}>
           <DragJiggle active={params.isActive}>
-            <View style={[styles.cardItem, params.isActive && styles.activeCard]}>
+            <View style={styles.cardItem}>
               {cardForEntry(
                 params.item,
                 params.drag,
@@ -295,97 +296,105 @@ export function PlayersScreen({
     />
   );
   return (
-    <SafeAreaView
-      edges={['left', 'right']}
-      style={[styles.safe, { backgroundColor: theme.background }]}
+    <LocalTabSwipe
+      value={mode}
+      values={['linked', 'bookmarked'] as const}
+      onChange={setMode}
+      isRtl={isRtl}
+      disabled={gridDragging}
     >
-      {desktop || layout.isDuo || layout.isTablet ? (
-        <ScrollView
-          ref={nativeScroll}
-          scrollEnabled={!gridDragging}
-          testID="player-scroll-view"
-          onScroll={(event) => {
-            nativeScrollOffset.current = event.nativeEvent.contentOffset.y;
-            pullRefresh.onScroll(event);
+      <SafeAreaView
+        edges={['left', 'right']}
+        style={[styles.safe, { backgroundColor: theme.background }]}
+      >
+        {desktop || layout.isDuo || layout.isTablet ? (
+          <ScrollView
+            ref={nativeScroll}
+            scrollEnabled={!gridDragging}
+            testID="player-scroll-view"
+            onScroll={(event) => {
+              nativeScrollOffset.current = event.nativeEvent.contentOffset.y;
+              pullRefresh.onScroll(event);
+            }}
+            onScrollBeginDrag={pullRefresh.onScrollBeginDrag}
+            onScrollEndDrag={pullRefresh.onScrollEndDrag}
+            scrollEventThrottle={16}
+            alwaysBounceVertical
+            contentContainerStyle={{
+              paddingHorizontal: horizontal,
+              paddingBottom: nativeTabs ? insets.bottom + 24 : 32,
+            }}
+            refreshControl={refreshControl}
+          >
+            {listHeader}
+            {entries.length === 0 ? (
+              emptyRoster
+            ) : layout.isDuo || layout.isTablet ? (
+              <InlineReorderGrid
+                key={mode}
+                data={entries}
+                keyExtractor={playerRosterEntryTag}
+                columns={layout.columns(layout.isTablet ? 420 : 280, 2)}
+                scrollRef={nativeScroll}
+                scrollOffset={nativeScrollOffset}
+                onDragStateChange={setGridDragging}
+                onReorder={(data, from, to) => reorder({ data, from, to })}
+                renderItem={(entry, _index, active) => (
+                  <DragJiggle active={active}>
+                    {cardForEntry(
+                      entry,
+                      undefined,
+                      `player-roster-card-${playerRosterEntryTag(entry)}`,
+                    )}
+                  </DragJiggle>
+                )}
+              />
+            ) : (
+              <ResponsiveGrid minItemWidth={420} maxColumns={3} gap={12}>
+                {entries.map((entry) => (
+                  <View key={playerRosterEntryTag(entry)}>
+                    {cardForEntry(
+                      entry,
+                      undefined,
+                      `player-roster-card-${playerRosterEntryTag(entry)}`,
+                    )}
+                  </View>
+                ))}
+              </ResponsiveGrid>
+            )}
+            {entries.length > 0 ? pendingCards : null}
+          </ScrollView>
+        ) : (
+          draggableList
+        )}
+        <AccountVerificationDialog
+          visible={verification !== undefined}
+          playerTag={verification?.tag ?? ''}
+          playerName={verification?.name ?? ''}
+          townHallLevel={verification?.townHallLevel ?? 1}
+          onVerify={(token) =>
+            verification
+              ? actions.verifyAccount(verification.tag, token)
+              : Promise.resolve({ success: false, message: null })
+          }
+          onOpenSettings={actions.openGameSettings}
+          onCancel={() => setVerification(undefined)}
+          onVerified={() => {
+            setVerification(undefined);
+            void actions.refreshAccounts();
           }}
-          onScrollBeginDrag={pullRefresh.onScrollBeginDrag}
-          onScrollEndDrag={pullRefresh.onScrollEndDrag}
-          scrollEventThrottle={16}
-          alwaysBounceVertical
-          contentContainerStyle={{
-            paddingHorizontal: horizontal,
-            paddingBottom: nativeTabs ? insets.bottom + 24 : 32,
-          }}
-          refreshControl={refreshControl}
-        >
-          {listHeader}
-          {entries.length === 0 ? (
-            emptyRoster
-          ) : layout.isDuo || layout.isTablet ? (
-            <InlineReorderGrid
-              key={mode}
-              data={entries}
-              keyExtractor={playerRosterEntryTag}
-              columns={layout.columns(layout.isTablet ? 420 : 280, 2)}
-              scrollRef={nativeScroll}
-              scrollOffset={nativeScrollOffset}
-              onDragStateChange={setGridDragging}
-              onReorder={(data, from, to) => reorder({ data, from, to })}
-              renderItem={(entry, _index, active) => (
-                <DragJiggle active={active}>
-                  {cardForEntry(
-                    entry,
-                    undefined,
-                    `player-roster-card-${playerRosterEntryTag(entry)}`,
-                  )}
-                </DragJiggle>
-              )}
-            />
-          ) : (
-            <ResponsiveGrid minItemWidth={420} maxColumns={3} gap={12}>
-              {entries.map((entry) => (
-                <View key={playerRosterEntryTag(entry)}>
-                  {cardForEntry(
-                    entry,
-                    undefined,
-                    `player-roster-card-${playerRosterEntryTag(entry)}`,
-                  )}
-                </View>
-              ))}
-            </ResponsiveGrid>
-          )}
-          {entries.length > 0 ? pendingCards : null}
-        </ScrollView>
-      ) : (
-        draggableList
-      )}
-      <AccountVerificationDialog
-        visible={verification !== undefined}
-        playerTag={verification?.tag ?? ''}
-        playerName={verification?.name ?? ''}
-        townHallLevel={verification?.townHallLevel ?? 1}
-        onVerify={(token) =>
-          verification
-            ? actions.verifyAccount(verification.tag, token)
-            : Promise.resolve({ success: false, message: null })
-        }
-        onOpenSettings={actions.openGameSettings}
-        onCancel={() => setVerification(undefined)}
-        onVerified={() => {
-          setVerification(undefined);
-          void actions.refreshAccounts();
-        }}
-      />
-      <PullRefreshHint
-        distance={pullRefresh.distance}
-        refreshing={refreshing}
-        label={
-          model.lastRefresh
-            ? t('generalLastRefresh', { time: formatLastRefresh(model.lastRefresh, t, locale) })
-            : undefined
-        }
-      />
-    </SafeAreaView>
+        />
+        <PullRefreshHint
+          distance={pullRefresh.distance}
+          refreshing={refreshing}
+          label={
+            model.lastRefresh
+              ? t('generalLastRefresh', { time: formatLastRefresh(model.lastRefresh, t, locale) })
+              : undefined
+          }
+        />
+      </SafeAreaView>
+    </LocalTabSwipe>
   );
 }
 
@@ -426,6 +435,5 @@ const styles = StyleSheet.create({
   segmentWrap: { height: 74, paddingTop: 8, paddingBottom: 14, justifyContent: 'center' },
   cardItem: { marginBottom: 10 },
   mobileCards: { gap: 0 },
-  activeCard: { opacity: 0.96 },
   empty: { padding: 0 },
 });

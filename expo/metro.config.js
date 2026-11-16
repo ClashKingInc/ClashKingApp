@@ -1,3 +1,13 @@
+// Install scripts can be skipped by local tooling. Apply the version-checked
+// shared drag compatibility patch before Metro reads its source, so every
+// reorderable list uses the same Fabric release/measurement handoff.
+require('node:child_process').execFileSync(
+  process.execPath,
+  [require('node:path').join(__dirname, 'scripts/apply-sdk58-compat.mjs')],
+  // Doctor loads Metro too; keep successful patch chatter out of its diagnostics.
+  // execFileSync still throws on failure and includes the captured error output.
+  { stdio: 'pipe' },
+);
 const { getDefaultConfig } = require('expo/metro-config');
 const fs = require('node:fs');
 const path = require('node:path');

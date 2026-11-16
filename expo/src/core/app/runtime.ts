@@ -215,8 +215,17 @@ export function createAppRuntime(): AppRuntime {
   );
   const playerCardPreferences = new PlayerCardPreferencesService(preferences);
   const rankings = new RankingsService(contractApi, preferences);
+  // Preview published posts without sending local account credentials or
+  // redirecting any account mutations to production.
+  const announcementApi = __DEV__ && process.env.EXPO_PUBLIC_CK_PRODUCTION_POSTS === '1'
+    ? createAppContractClient({
+        baseUrl: 'https://api.clashk.ing',
+        transport: httpTransport(),
+        web: nativePlatform === 'web',
+      })
+    : contractApi;
   const announcements = new AnnouncementService(
-    contractApi,
+    announcementApi,
     runtimePlatform,
     () => appState.getState().locale,
   );

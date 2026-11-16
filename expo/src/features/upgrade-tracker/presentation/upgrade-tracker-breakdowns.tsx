@@ -1,11 +1,11 @@
 import { modalOrientations } from '../../../ui/modal-orientations';
 import { useState, type ReactNode } from 'react';
 import { Modal, Pressable, ScrollView, StyleSheet, View, useWindowDimensions } from 'react-native';
-import { Clock3, Coins, Layers3, X } from 'lucide-react-native';
+import { Lock, Clock3, Coins, Layers3, X } from 'lucide-react-native';
 import Svg, { Defs, LinearGradient, Rect, Stop } from 'react-native-svg';
 
 import { ImageAssets } from '../../../core/assets/image-assets';
-import { localizedInfoForItem } from '../../../core/game-data/game-data-localization';
+import { localizedInfoForItem, translationForTid } from '../../../core/game-data/game-data-localization';
 import { gameDataState, isRecord } from '../../../core/game-data/game-data-state';
 import { toIntlLocale, useI18n } from '../../../i18n';
 import { findLevelStats } from '../../player/data/player-item-utils';
@@ -30,6 +30,7 @@ import {
 } from '../models';
 import { formatTrackerDuration } from './upgrade-tracker-logic';
 import { AbilityDetails, abilityFieldLabel, formatAbilityValue } from './ability-details';
+import { trackerCategoryImage } from './tracker-category-art';
 import { LevelSlider } from '../../../ui/level-slider';
 import { SlidingSegmentControl } from '../../../ui/sliding-segment-control';
 
@@ -129,6 +130,7 @@ export function UpgradeCategorySummaryModal({
 
 export function UpgradeItemDetailModal({
   item,
+  snapshot,
   onClose,
 }: {
   item: UpgradeTrackerItem | null;
@@ -140,6 +142,7 @@ export function UpgradeItemDetailModal({
     <UpgradeItemDetailContent
       key={`${item.planKey}-${item.currentLevel}-${item.targetLevel}`}
       item={item}
+      snapshot={snapshot}
       onClose={onClose}
     />
   );
@@ -149,9 +152,11 @@ export const upgradeDetailGradientEnd = '100%';
 
 function UpgradeItemDetailContent({
   item,
+  snapshot,
   onClose,
 }: {
   item: UpgradeTrackerItem;
+  snapshot: UpgradeTrackerSnapshot;
   onClose: () => void;
 }) {
   const { t, locale, isRtl } = useI18n();
@@ -233,6 +238,38 @@ function UpgradeItemDetailContent({
           <X color={theme.onSurface} size={22} />
         </Pressable>
       </View>
+      {item.name === 'Town Hall' && Array.isArray(stats?.variants) && stats.variants.length > 0 ? (
+        <View style={{ gap: 10 }}>
+          <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ gap: 10, paddingBottom: 4 }}>
+            {stats.variants.filter(isRecord).map((variant) => {
+              const required = isRecord(variant.required_troop) ? variant.required_troop : null;
+              const troop = required ? snapshot.items.find((candidate) => candidate.id === Number(required._id)) : undefined;
+              const unlocked = !required || (troop?.currentLevel ?? 0) >= Number(required.level);
+              const tid = isRecord(variant.TID) ? variant.TID.name : undefined;
+              const name = typeof tid === 'string' ? translationForTid(tid) ?? String(variant.name) : String(variant.name);
+              const troopName = String(troop?.name ?? required?.name ?? '');
+              return (
+                <Surface key={String(variant._id)} radius={ckRadius.tile}
+                  accessibilityLabel={`${name}, ${unlocked ? t('playerActivityItemUnlocked', { name }) : t('widgetNotUnlocked')}${required ? `, ${troopName} ${troop?.currentLevel ?? 0}/${Number(required.level)}` : ''}`}
+                  style={{ width: 142, padding: 12, gap: 8, alignItems: 'center' }}>
+                  <View style={{ alignSelf: 'stretch', flexDirection: 'row', alignItems: 'center', minHeight: 24 }}>
+                    {!unlocked ? <Lock size={16} color={theme.onSurfaceVariant} /> : null}
+                    <View style={{ flex: 1 }} />
+                    {required ? <View style={{ flexDirection: 'row', alignItems: 'center', gap: 5 }}>
+                      <MobileWebImage imageUrl={ImageAssets.getTroopImage(troopName)} contentFit="contain" style={{ width: 24, height: 24 }} />
+                      {!unlocked ? <CKText muted role="labelSmall">{troop?.currentLevel ?? 0}/{Number(required.level)}</CKText> : null}
+                    </View> : null}
+                  </View>
+                  <MobileWebImage imageUrl={ImageAssets.getTownHallVariantImage(selected, Number(variant._id))}
+                    contentFit="contain" style={{ width: 84, height: 84, opacity: unlocked ? 1 : 0.65 }} />
+                  <CKText role="labelLarge" numberOfLines={2} style={{ textAlign: 'center' }}>{name}</CKText>
+
+                </Surface>
+              );
+            })}
+          </ScrollView>
+        </View>
+      ) : null}
       <SlidingSegmentControl
         isRtl={isRtl}
         value={displayMode}
@@ -848,6 +885,9 @@ function trackerStatRows(
   return rows;
 }
 function upgradeImageForLevel(item: UpgradeTrackerItem, level: number) {
+  // Module names/levels describe stats, not standalone buildings or art levels.
+  // Preserve the parent defense artwork already resolved by the parser.
+  if (item.category === UpgradeCategory.craftedDefenses) return item.imageUrl;
   if (item.category === UpgradeCategory.traps)
     return item.village === UpgradeVillage.home
       ? ImageAssets.getHomeVillageTrapImage(item.name, level)
@@ -886,6 +926,15 @@ export function upgradeImageFallbacks(item: UpgradeTrackerItem, fromLevel: numbe
   );
 }
 function directUnlockImage(name: string) {
+  // Unlocks include traps and level-less buildings; neither has a normal
+  // home-village building level_1 asset.
+  if (name === "B.O.B's Hut") return ImageAssets.getHomeVillageBuildingImage("Builder's Hut", 1);
+  if (name === 'Helper Hut') return ImageAssets.getHelperImage('Builder Apprentice');
+  if (name === 'Crafting Station') return trackerCategoryImage('craftedDefenses', UpgradeVillage.home);
+  if (name === 'Guardian Shrine') return trackerCategoryImage('guardians', UpgradeVillage.home);
+  const traps = gameDataState.bundleData.traps;
+  if (Array.isArray(traps) && traps.some((entry) => isRecord(entry) && entry.name === name && entry.village === 'home'))
+    return ImageAssets.getHomeVillageTrapImage(name, 1);
   return ImageAssets.getHomeVillageBuildingImage(name, 1);
 }
 function unlockImage(section: string, name: string) {

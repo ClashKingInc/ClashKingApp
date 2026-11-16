@@ -1,11 +1,12 @@
-import { cp, mkdir, readFile, rm, writeFile } from 'node:fs/promises';
+import { cp, mkdir, readFile, readdir, rm, writeFile } from 'node:fs/promises';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import ts from 'typescript';
 import { prepareAppLanding } from './prepare-app-landing.mjs';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const output = join(root, 'dist');
-await prepareAppLanding();
+const stores = await prepareAppLanding();
 // dist is the existing, ignored build output. Do not retain the old app bundle
 // or its routes when shipping the native-only landing artifact.
 await rm(output, { recursive: true, force: true });
@@ -13,6 +14,7 @@ await mkdir(output, { recursive: true });
 for (const file of [
   'landing',
   'icons/Icon-192.png',
+  'icons/Icon-512.png',
   'favicon.png',
   'auth',
   '.well-known',
@@ -23,7 +25,73 @@ for (const file of [
   await mkdir(dirname(join(output, file)), { recursive: true });
   await cp(join(root, 'public', file), join(output, file), { recursive: true });
 }
-const html = await readFile(join(root, 'public/app-landing.html'), 'utf8');
+let html = await readFile(join(root, 'public/app-landing.html'), 'utf8');
+// Store destinations also work without JavaScript, including crawler fetches.
+for (const [name, id] of [
+  ['App Store', 'ios'],
+  ['Google Play', 'android'],
+]) {
+  const href = stores[name];
+  if (!href) continue;
+  const escaped = href.replaceAll('&', '&amp;').replaceAll('"', '&quot;');
+  html = html
+    .replace(
+      new RegExp(`id="store-${id}"([\\s\\S]*?)aria-disabled="true"`),
+      `id="store-${id}"$1href="${escaped}" rel="noopener noreferrer"`,
+    )
+    .replace(`id="store-${id}-status">Coming soon`, `id="store-${id}-status">Download the app`);
+}
+// Inline the tiny portable modules: Pages advanced mode ships one Worker,
+// while native stories and web stories retain the same fitting contract.
+const worker = await readFile(join(root, 'public/landing/post-preview-worker.js'), 'utf8');
+// Compile directly into dist. Changing .gitignore to hide intermediate web
+// modules changes Expo's native fingerprint even though no native code moved.
+async function portableSource(path) {
+  const input = await readFile(join(root, path), 'utf8');
+  return ts
+    .transpileModule(input, {
+      compilerOptions: { target: ts.ScriptTarget.ES2022, module: ts.ModuleKind.ES2022 },
+    })
+    .outputText.replaceAll('export ', '');
+}
+const renderer = await portableSource('src/features/home/data/announcement-content.ts');
+const storyContract = await portableSource(
+  'src/features/home/presentation/announcement-webview-contract.ts',
+);
+const readerLocales = {};
+const readerKeys = [
+  'postsStoryFinished',
+  'postsWatchAgain',
+  'apiErrorNotFound',
+  'postsLoadFailed',
+  'generalTryAgain',
+];
+for (const file of await readdir(join(root, 'src/i18n/arb'))) {
+  if (!/^app_.*\.arb$/.test(file)) continue;
+  const catalog = JSON.parse(await readFile(join(root, 'src/i18n/arb', file), 'utf8'));
+  const locale = file.slice(4, -4).replaceAll('_', '-').toLowerCase();
+  readerLocales[locale] = Object.fromEntries(
+    readerKeys.map((key) => {
+      if (typeof catalog[key] !== 'string' || !catalog[key].trim())
+        throw new Error(`Missing ${locale} reader text: ${key}`);
+      return [key, catalog[key]];
+    }),
+  );
+}
+await writeFile(
+  join(output, '_worker.js'),
+  renderer +
+    '\n' +
+    storyContract +
+    '\n' +
+    worker
+      .replace('/* CK_STORE_LINKS */ {}', JSON.stringify(stores))
+      .replace('/* CK_READER_LOCALES */ {}', JSON.stringify(readerLocales)),
+);
+await writeFile(
+  join(output, '_routes.json'),
+  JSON.stringify({ version: 1, include: ['/posts/*', '/share/posts/*'], exclude: [] }),
+);
 await writeFile(join(output, 'index.html'), html);
 await writeFile(join(output, '404.html'), html);
 console.log('Built native-app landing only; no Expo web application exported.');

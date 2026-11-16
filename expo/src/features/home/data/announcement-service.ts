@@ -23,7 +23,10 @@ export function announcementTarget(platform: string): AnnouncementTarget {
 
 export class AnnouncementService {
   private readonly activeLoads = new Map<string, Promise<readonly AppAnnouncement[]>>();
-  private readonly activeCache = new Map<string, { at: number; items: readonly AppAnnouncement[] }>();
+  private readonly activeCache = new Map<
+    string,
+    { at: number; items: readonly AppAnnouncement[] }
+  >();
   constructor(
     private readonly api: ContractApiService,
     private readonly platform: string,
@@ -37,7 +40,8 @@ export class AnnouncementService {
   async getActiveAnnouncements(forceRefresh = false): Promise<readonly AppAnnouncement[]> {
     const locale = this.languageCode();
     const cached = this.activeCache.get(locale);
-    if (!forceRefresh && cached && Date.now() >= cached.at && Date.now() - cached.at < 60_000) return cached.items;
+    if (!forceRefresh && cached && Date.now() >= cached.at && Date.now() - cached.at < 60_000)
+      return cached.items;
     const pending = this.activeLoads.get(locale);
     if (pending) return pending;
     const load = this.fetchActiveAnnouncements(locale).finally(() => {
@@ -84,7 +88,11 @@ export class AnnouncementService {
     }
   }
 
-  async getPublishedPosts(limit = 20, offset = 0): Promise<AnnouncementArchivePage> {
+  async getPublishedPosts(
+    limit = 20,
+    offset = 0,
+    presentationType?: 'article' | 'story',
+  ): Promise<AnnouncementArchivePage> {
     const response = await Effect.runPromise(
       this.api.execute(PostsEndpoint, {
         path: {},
@@ -92,6 +100,7 @@ export class AnnouncementService {
           target: announcementTarget(this.platform),
           limit,
           offset,
+          ...(presentationType ? { presentation_type: presentationType } : {}),
           locale: this.languageCode(),
         },
         body: {},

@@ -108,6 +108,7 @@ import {
   type BattlelogLootDay,
 } from './player-battlelog-share';
 
+import { UpgradeGroupTiles } from '../../upgrade-tracker/presentation/upgrade-tracker-screen';
 import { UpgradeItemDetailModal } from '../../upgrade-tracker/presentation/upgrade-tracker-breakdowns';
 import { calculateRemainingUpgradeSummary, maxLevelForItemAtTH } from '../data/player-item-utils';
 import type {
@@ -613,6 +614,7 @@ export function PlayerBaseTab({
         />
         <PlayerItemSection
           title={t('gameEquipment')}
+          trackerLayout
           items={player.equipments}
           categoryIcon={trackerCategoryImage('equipment', UpgradeVillage.home)}
           townHallLevel={player.townHallLevel}
@@ -620,18 +622,21 @@ export function PlayerBaseTab({
         />
         <PlayerItemSection
           title={t('gameTroops')}
+          trackerLayout
           items={player.troops}
           categoryIcon={ImageAssets.upgradeCategoryIcons.troops}
           townHallLevel={player.townHallLevel}
         />
         <PlayerItemSection
           title={t('gameSpells')}
+          trackerLayout
           items={player.spells}
           categoryIcon={ImageAssets.upgradeCategoryIcons.spells}
           townHallLevel={player.townHallLevel}
         />
         <PlayerItemSection
           title={t('gameSiegeMachines')}
+          trackerLayout
           items={player.siegeMachines}
           categoryIcon={ImageAssets.upgradeCategoryIcons.siege}
           townHallLevel={player.townHallLevel}
@@ -681,12 +686,14 @@ function PlayerSuperTroopSection({
 }
 
 export function PlayerItemSection({
+  trackerLayout = false,
   title,
   items,
   categoryIcon,
   townHallLevel,
   initiallyExpanded = false,
 }: {
+  trackerLayout?: boolean;
   title: string;
   items: readonly PlayerItem[];
   categoryIcon?: string;
@@ -786,6 +793,14 @@ export function PlayerItemSection({
           </View>
         }
       >
+        {trackerLayout ? (
+          <UpgradeGroupTiles
+            group={visible.some((item) => item.type === 'gear') ? 'equipment' : 'laboratory'}
+            items={visible.map((item) => upgradeDetailsItem(item, maxLevelForItemAtTH(item, townHallLevel)))}
+            snapshot={upgradeDetailsSnapshot(null, townHallLevel)}
+            onSelect={(item) => setSelected(visible.find((candidate) => candidate.name === item.name) ?? null)}
+          />
+        ) : (
         <ResponsiveGrid
           minItemWidth={54}
           maxColumns={10}
@@ -847,6 +862,7 @@ export function PlayerItemSection({
             );
           })}
         </ResponsiveGrid>
+        )}
       </ExpandableProgressCard>
       {selected instanceof PlayerSuperTroop ? (
         <ItemDetailModal item={selected} onClose={() => setSelected(null)} />

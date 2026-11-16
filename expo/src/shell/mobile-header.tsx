@@ -1,4 +1,5 @@
-import type { ReactNode } from 'react';
+import { useRef, type ReactNode, type ComponentRef } from 'react';
+import { setSearchFieldOrigin } from '../ui/search-transition';
 import { Pressable, StyleSheet, View } from 'react-native';
 import { Menu, Search } from 'lucide-react-native';
 import { GlobalSearchHeaderFrame, globalSearchHeaderLayout } from '../ui/header';
@@ -37,6 +38,13 @@ export function MobileHeader({
   pageTitle?: string;
   alignSearchToEnd?: boolean;
 }) {
+  const searchOriginRef = useRef<ComponentRef<typeof View>>(null);
+  const openSearch = () => {
+    searchOriginRef.current?.measureInWindow((x, y, width, height) => {
+      setSearchFieldOrigin({ x, y, width, height });
+      onSearch?.();
+    });
+  };
   const theme = useCKTheme();
   const mode = useCKThemeMode();
   const tablet = useTabletTypography();
@@ -102,31 +110,34 @@ export function MobileHeader({
           <View style={styles.headerSpacer} />
         ) : null}
         {onSearch && (
-          <GlassControlSurface
+          <View
+            ref={searchOriginRef}
+            collapsable={false}
             style={[
               styles.searchGlass,
               tablet && { height: 54 },
               (pageTitle || alignSearchToEnd) && styles.trailingSearch,
               searchMaxWidth ? { maxWidth: searchMaxWidth } : undefined,
             ]}
-            testID="mobile-global-search-glass"
           >
-            <Pressable
-              accessibilityLabel={searchHint}
-              accessibilityRole="search"
-              onPress={onSearch}
-              style={({ pressed }) => [
-                styles.searchButton,
-                isRtl && styles.rowRtl,
-                pressed && styles.pressed,
-              ]}
-            >
-              <Search color={theme.onSurfaceVariant} size={20} />
-              <CKText muted numberOfLines={1} style={styles.searchText}>
-                {searchHint}
-              </CKText>
-            </Pressable>
-          </GlassControlSurface>
+            <GlassControlSurface style={{ flex: 1 }} testID="mobile-global-search-glass">
+              <Pressable
+                accessibilityLabel={searchHint}
+                accessibilityRole="search"
+                onPress={openSearch}
+                style={({ pressed }) => [
+                  styles.searchButton,
+                  isRtl && styles.rowRtl,
+                  pressed && styles.pressed,
+                ]}
+              >
+                <Search color={theme.onSurfaceVariant} size={20} />
+                <CKText muted numberOfLines={1} style={styles.searchText}>
+                  {searchHint}
+                </CKText>
+              </Pressable>
+            </GlassControlSurface>
+          </View>
         )}
       </View>
     </GlobalSearchHeaderFrame>
