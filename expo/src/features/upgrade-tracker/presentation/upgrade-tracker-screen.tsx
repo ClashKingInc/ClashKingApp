@@ -3379,7 +3379,9 @@ function CollectionTab({
         )
         .sort((left, right) => {
           if (category === UpgradeCollectionType.emotes) {
-            const setOrder = Number(left.meta?.set_id ?? 0) - Number(right.meta?.set_id ?? 0);
+            const setOrder =
+              Number((left.meta?.set as Record<string, unknown> | undefined)?.id ?? 0) -
+              Number((right.meta?.set as Record<string, unknown> | undefined)?.id ?? 0);
             if (setOrder) return setOrder;
             const bonusOrder =
               Number(
@@ -3411,8 +3413,16 @@ function CollectionTab({
         if (!visibleItems.length) result.push({ kind: 'empty', key: summary.type + '-empty' });
         const groups =
           summary.type === UpgradeCollectionType.emotes
-            ? [...new Set(visibleItems.map((item) => item.meta?.set_id))].map((id) =>
-                visibleItems.filter((item) => item.meta?.set_id === id),
+            ? [
+                ...new Set(
+                  visibleItems.map(
+                    (item) => (item.meta?.set as Record<string, unknown> | undefined)?.id,
+                  ),
+                ),
+              ].map((id) =>
+                visibleItems.filter(
+                  (item) => (item.meta?.set as Record<string, unknown> | undefined)?.id === id,
+                ),
               )
             : [visibleItems];
         for (const [groupIndex, group] of groups.entries()) {

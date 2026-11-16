@@ -613,7 +613,7 @@ function parseCollections(account: JsonRecord, lookup: StaticLookup) {
       (data) => `${ImageAssets.baseUrl}/emotes/${String(data._id)}/static.webp`,
       {
         defaultOwned: (data) => data.default_unlocked === true,
-        subtitle: (data) => String(data.set_name ?? '') || null,
+        subtitle: (data) => (isRecord(data.set) ? String(data.set.name ?? '') || null : null),
       },
     );
   add(
