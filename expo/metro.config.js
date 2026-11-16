@@ -4,7 +4,9 @@
 require('node:child_process').execFileSync(
   process.execPath,
   [require('node:path').join(__dirname, 'scripts/apply-sdk58-compat.mjs')],
-  { stdio: 'inherit' },
+  // Doctor loads Metro too; keep successful patch chatter out of its diagnostics.
+  // execFileSync still throws on failure and includes the captured error output.
+  { stdio: 'pipe' },
 );
 const { getDefaultConfig } = require('expo/metro-config');
 const fs = require('node:fs');
