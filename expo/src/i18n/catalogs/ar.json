@@ -2379,5 +2379,13 @@
   "accountsSetupBody": "أضف حساباتك في Clash of Clans وتحقق من ملكيتها.",
   "accountsMyTitle": "حساباتي",
   "profileAvatar": "غيّر المظهر",
-  "avatarPickerTitle": "اختر صورة رمزية"
+  "avatarPickerTitle": "اختر صورة رمزية",
+  "gameEmotes": "التعبيرات",
+  "gameSquads": "الفرق",
+  "gameTownHallVariants": "أشكال قاعة المدينة",
+  "emoteCostLabel": "التكلفة",
+  "emoteRequiredLabel": "المطلوب:",
+  "searchMinimumCharacters": "اكتب 3 أحرف على الأقل للبحث.",
+  "homeCreatorCodeInGame": "في Clash of Clans",
+  "homeCreatorCodeOpenFailed": "تعذّر فتح الرابط. حاول مرة أخرى."
 }

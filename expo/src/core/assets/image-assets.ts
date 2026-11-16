@@ -273,6 +273,35 @@ export class ImageAssets {
     return namedAsset(['helpers'], name);
   }
 
+  static getTownHallVariantImage(level: number, selectedVariantId?: number): string {
+    // Ownership alone never chooses an appearance. Only an explicit selected
+    // variant can replace the default Town Hall image.
+    if (selectedVariantId === undefined)
+      return ImageAssets.getHomeVillageBuildingImage('Town Hall', level);
+    const buildings = gameDataState.bundleData.buildings;
+    if (!Array.isArray(buildings))
+      return ImageAssets.getHomeVillageBuildingImage('Town Hall', level);
+    for (const building of buildings) {
+      if (!isRecord(building) || building.name !== 'Town Hall' || !Array.isArray(building.levels))
+        continue;
+      const row = building.levels.find(
+        (value: unknown) => isRecord(value) && value.level === level,
+      );
+      if (!isRecord(row) || !Array.isArray(row.variants)) continue;
+      const variant = row.variants.find(
+        (value: unknown) => isRecord(value) && value._id === selectedVariantId,
+      );
+      if (!isRecord(variant) || !isRecord(variant.TID) || typeof variant.TID.name !== 'string')
+        continue;
+      const style = /_VARIANT_(BARBARIAN|ARCHER|WIZARD)_TH$/
+        .exec(variant.TID.name)?.[1]
+        ?.toLowerCase();
+      if (style)
+        return `${ImageAssets.baseUrl}/buildings/home-village/town_hall/level_${level}_${style}.webp`;
+    }
+    return ImageAssets.getHomeVillageBuildingImage('Town Hall', level);
+  }
+
   static getHomeVillageBuildingImage(name: string, level: number): string {
     return leveledAsset(['buildings', 'home-village'], name, level);
   }

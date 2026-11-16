@@ -5202,5 +5202,13 @@
   "accountsSetupBody": "Додај и потврди своје Clash of Clans налоге.",
   "accountsMyTitle": "Моји налози",
   "profileAvatar": "Промени изглед",
-  "avatarPickerTitle": "Изабери аватар"
+  "avatarPickerTitle": "Изабери аватар",
+  "gameEmotes": "Емоције",
+  "gameSquads": "Одреди",
+  "gameTownHallVariants": "Варијанте градске куће",
+  "emoteCostLabel": "Цена",
+  "emoteRequiredLabel": "Потребно:",
+  "searchMinimumCharacters": "Унесите најмање 3 знака за претрагу.",
+  "homeCreatorCodeInGame": "У Clash of Clans",
+  "homeCreatorCodeOpenFailed": "Није могуће отворити везу. Покушај поново."
 }

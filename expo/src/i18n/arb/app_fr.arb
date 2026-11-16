@@ -5107,5 +5107,13 @@
   "accountsSetupBody": "Ajoute et vérifie tes comptes Clash of Clans.",
   "accountsMyTitle": "Mes comptes",
   "profileAvatar": "Changer de look",
-  "avatarPickerTitle": "Choisis un avatar"
+  "avatarPickerTitle": "Choisis un avatar",
+  "gameEmotes": "Émotes",
+  "gameSquads": "Escouades",
+  "gameTownHallVariants": "Variantes de l’hôtel de ville",
+  "emoteCostLabel": "Coût",
+  "emoteRequiredLabel": "Requis :",
+  "searchMinimumCharacters": "Saisissez au moins 3 caractères pour rechercher.",
+  "homeCreatorCodeInGame": "Dans Clash of Clans",
+  "homeCreatorCodeOpenFailed": "Impossible d’ouvrir le lien. Réessaie."
 }

@@ -2379,5 +2379,13 @@
   "accountsSetupBody": "Lisää ja vahvista Clash of Clans -tilisi.",
   "accountsMyTitle": "Omat tilit",
   "profileAvatar": "Vaihda ulkoasua",
-  "avatarPickerTitle": "Valitse avatar"
+  "avatarPickerTitle": "Valitse avatar",
+  "gameEmotes": "Emotet",
+  "gameSquads": "Ryhmät",
+  "gameTownHallVariants": "Kaupungintalon muunnelmat",
+  "emoteCostLabel": "Hinta",
+  "emoteRequiredLabel": "Vaaditaan:",
+  "searchMinimumCharacters": "Hae kirjoittamalla vähintään 3 merkkiä.",
+  "homeCreatorCodeInGame": "Clash of Clansissa",
+  "homeCreatorCodeOpenFailed": "Linkkiä ei voitu avata. Yritä uudelleen."
 }

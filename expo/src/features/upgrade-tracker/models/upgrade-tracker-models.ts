@@ -74,6 +74,7 @@ export const UpgradeCollectionType = {
   decorations: 'decorations',
   obstacles: 'obstacles',
   capitalHouseParts: 'capitalHouseParts',
+  emotes: 'emotes',
 } as const;
 export type UpgradeCollectionTypeValue =
   (typeof UpgradeCollectionType)[keyof typeof UpgradeCollectionType];
@@ -619,14 +620,30 @@ export class UpgradeTrackerSnapshot {
     const elapsed = Math.floor((now.getTime() - this.capturedAt.getTime()) / 1000);
     return clamp(original - clamp(elapsed, 0, original), 0, original);
   }
+  private builderPotionSeconds(item: UpgradeTrackerItem) {
+    if (item.village !== UpgradeVillage.home || item.queue !== UpgradeQueue.builders) return 0;
+    return this.boosts.activeEffects.find((effect) => effect.key === 'builder_boost')?.seconds ?? 0;
+  }
+  private remainingActiveWork(item: UpgradeTrackerItem, now: Date) {
+    const elapsed = Math.max(0, (now.getTime() - this.capturedAt.getTime()) / 1000);
+    const boostedElapsed = Math.min(elapsed, this.builderPotionSeconds(item));
+    return Math.max(0, (item.activeSeconds ?? 0) - elapsed - boostedElapsed * 9);
+  }
+  private completionSeconds(item: UpgradeTrackerItem, workSeconds: number, startsAt: Date) {
+    // Potion duration is real time. Only work inside that window runs at 10x;
+    // never divide an entire long upgrade by ten or grant ten times the saving.
+    const boostLeft = this.remainingCapturedSeconds(this.builderPotionSeconds(item), startsAt);
+    const boostedTime = Math.min(boostLeft, workSeconds / 10);
+    return Math.ceil(boostedTime + Math.max(0, workSeconds - boostedTime * 10));
+  }
   remainingActiveSeconds(item: UpgradeTrackerItem, now = new Date()) {
-    return this.remainingCapturedSeconds(item.activeSeconds ?? 0, now);
+    return this.completionSeconds(item, this.remainingActiveWork(item, now), now);
   }
   activeElapsedSeconds(item: UpgradeTrackerItem, now = new Date()) {
     const original = item.activeSeconds,
       first = item.steps[0]?.seconds ?? 0;
     if (original == null || original <= 0 || first <= 0) return 0;
-    return clamp(first - this.remainingActiveSeconds(item, now), 0, first);
+    return clamp(first - this.remainingActiveWork(item, now), 0, first);
   }
   remainingHelperSeconds(item: UpgradeTrackerItem, now = new Date()) {
     return this.remainingCapturedSeconds(item.helperSeconds ?? 0, now);
@@ -811,7 +828,7 @@ export class UpgradeTrackerSnapshot {
     return new UpgradeStep(
       step.targetLevel,
       costs,
-      Math.round((step.seconds * (100 - timeReduction)) / 100),
+      this.completionSeconds(item, Math.round((step.seconds * (100 - timeReduction)) / 100), startsAt),
     );
   }
   buildPlan(options: {

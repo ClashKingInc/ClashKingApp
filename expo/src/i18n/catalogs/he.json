@@ -2379,5 +2379,13 @@
   "accountsSetupBody": "הוסף ואמת את חשבונות Clash of Clans שלך.",
   "accountsMyTitle": "החשבונות שלי",
   "profileAvatar": "שינוי מראה",
-  "avatarPickerTitle": "בחרו אווטאר"
+  "avatarPickerTitle": "בחרו אווטאר",
+  "gameEmotes": "מחוות",
+  "gameSquads": "חוליות",
+  "gameTownHallVariants": "גרסאות בית העירייה",
+  "emoteCostLabel": "עלות",
+  "emoteRequiredLabel": "נדרש:",
+  "searchMinimumCharacters": "יש להקליד לפחות 3 תווים כדי לחפש.",
+  "homeCreatorCodeInGame": "ב-Clash of Clans",
+  "homeCreatorCodeOpenFailed": "לא ניתן לפתוח את הקישור. נסה שוב."
 }

@@ -2379,5 +2379,13 @@
   "accountsSetupBody": "Legg til og bekreft Clash of Clans-kontoene dine.",
   "accountsMyTitle": "Mine kontoer",
   "profileAvatar": "Endre utseende",
-  "avatarPickerTitle": "Velg en avatar"
+  "avatarPickerTitle": "Velg en avatar",
+  "gameEmotes": "Emoter",
+  "gameSquads": "Tropper",
+  "gameTownHallVariants": "Rådhusvarianter",
+  "emoteCostLabel": "Kostnad",
+  "emoteRequiredLabel": "Påkrevd:",
+  "searchMinimumCharacters": "Skriv minst 3 tegn for å søke.",
+  "homeCreatorCodeInGame": "I Clash of Clans",
+  "homeCreatorCodeOpenFailed": "Kunne ikke åpne lenken. Prøv igjen."
 }

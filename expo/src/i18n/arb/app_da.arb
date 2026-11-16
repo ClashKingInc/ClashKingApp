@@ -5107,5 +5107,13 @@
   "accountsSetupBody": "Tilføj og bekræft dine Clash of Clans-konti.",
   "accountsMyTitle": "Mine konti",
   "profileAvatar": "Skift udseende",
-  "avatarPickerTitle": "Vælg en avatar"
+  "avatarPickerTitle": "Vælg en avatar",
+  "gameEmotes": "Emotes",
+  "gameSquads": "Grupper",
+  "gameTownHallVariants": "Rådhusvarianter",
+  "emoteCostLabel": "Pris",
+  "emoteRequiredLabel": "Påkrævet:",
+  "searchMinimumCharacters": "Skriv mindst 3 tegn for at søge.",
+  "homeCreatorCodeInGame": "I Clash of Clans",
+  "homeCreatorCodeOpenFailed": "Linket kunne ikke åbnes. Prøv igen."
 }

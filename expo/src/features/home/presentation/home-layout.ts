@@ -31,7 +31,7 @@ function readItems(raw: string | null): HomeItem[] | null {
       ),
     );
     if (new Set(items.map((i) => i.id)).size !== items.length) return null;
-    const missing = initialHomeItems().filter(i => !items.some(v => v.id === i.id));
+    const missing = initialHomeItems().filter((i) => !items.some((v) => v.id === i.id));
     return [...items, ...missing];
   } catch {
     return null;
@@ -44,6 +44,7 @@ export function useHomeLayout(onError: (message: string) => void, refreshKey = 0
   const [userId, setUserId] = useState(runtime.auth.state.currentUser?.userId ?? 'guest');
   const userIdentity = useRef(userId);
   const [items, setItems] = useState<readonly HomeItem[]>(initialHomeItems);
+  const [resolvedUserId, setResolvedUserId] = useState<string | null>(null);
   const current = useRef(items),
     revision = useRef(0),
     generation = useRef(0),
@@ -56,7 +57,11 @@ export function useHomeLayout(onError: (message: string) => void, refreshKey = 0
         if (next === userIdentity.current) return;
         userIdentity.current = next;
         generation.current++;
-        setItems(initialHomeItems());
+        ready.current = false;
+        setResolvedUserId(null);
+        const defaults = initialHomeItems();
+        current.current = defaults;
+        setItems(defaults);
         setUserId(next);
       }),
     [runtime.auth],
@@ -68,7 +73,8 @@ export function useHomeLayout(onError: (message: string) => void, refreshKey = 0
     ready.current = false;
     revision.current = 0;
     void (async () => {
-      const local = readItems(await runtime.preferences.getString(storageKey));
+      // Storage failure must not prevent cloud recovery or leave startup covered.
+      const local = readItems(await runtime.preferences.getString(storageKey).catch(() => null));
       let next = local ?? initialHomeItems();
       if (!local) {
         try {
@@ -91,8 +97,7 @@ export function useHomeLayout(onError: (message: string) => void, refreshKey = 0
           const saved = await Effect.runPromise(
             runtime.contractApi.execute(HomeLayoutGetEndpoint, { path: {}, query: {}, body: {} }),
           );
-          if (saved.revision > 0)
-            next = readItems(JSON.stringify(saved.items)) ?? initialHomeItems();
+          if (saved.revision > 0) next = readItems(JSON.stringify(saved.items)) ?? next;
           if (alive && run === generation.current) revision.current = saved.revision;
         } catch {
           /* Offline/local layouts remain usable; edits report failed cloud saves. */
@@ -102,10 +107,15 @@ export function useHomeLayout(onError: (message: string) => void, refreshKey = 0
         current.current = next;
         setItems(next);
         ready.current = true;
+        setResolvedUserId(userId);
+        // Keep the last accepted cloud/legacy order for the next offline launch.
+        // Cache failures are non-fatal and must not discard the resolved layout.
+        void runtime.preferences.setString(storageKey, JSON.stringify(next)).catch(() => undefined);
       }
     })().catch(() => {
-      if (alive) {
+      if (alive && run === generation.current) {
         ready.current = true;
+        setResolvedUserId(userId);
         onError(t('homeWidgetsSaveError'));
       }
     });
@@ -168,6 +178,9 @@ export function useHomeLayout(onError: (message: string) => void, refreshKey = 0
   );
   return {
     items,
+    // Refresh may update the order, but never hides an already resolved layout.
+    // A different account must resolve its own order before any cards appear.
+    ready: resolvedUserId === userId,
     change,
     move: (id: string, delta: number) => {
       const next = [...current.current],

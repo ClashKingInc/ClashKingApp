@@ -5202,5 +5202,13 @@
   "accountsSetupBody": "Clash of Clans hesaplarını ekle ve doğrula.",
   "accountsMyTitle": "Hesaplarım",
   "profileAvatar": "Görünümü değiştir",
-  "avatarPickerTitle": "Bir avatar seç"
+  "avatarPickerTitle": "Bir avatar seç",
+  "gameEmotes": "İfadeler",
+  "gameSquads": "Mangalar",
+  "gameTownHallVariants": "Belediye binası çeşitleri",
+  "emoteCostLabel": "Maliyet",
+  "emoteRequiredLabel": "Gerekli:",
+  "searchMinimumCharacters": "Aramak için en az 3 karakter yazın.",
+  "homeCreatorCodeInGame": "Clash of Clans’ta",
+  "homeCreatorCodeOpenFailed": "Bağlantı açılamadı. Tekrar dene."
 }

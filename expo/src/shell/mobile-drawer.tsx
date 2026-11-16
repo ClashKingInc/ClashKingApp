@@ -35,6 +35,7 @@ export function MobileDrawer({
   onAddAccount,
   hasUser,
   hasManagedDiscordBot = false,
+  isDiscordCommunityMember = false,
   safeAreaEdges = ['top', 'right', 'bottom', 'left'],
 }: {
   isRtl: boolean;
@@ -50,6 +51,7 @@ export function MobileDrawer({
   onAddAccount: () => void;
   hasUser: boolean;
   hasManagedDiscordBot?: boolean;
+  isDiscordCommunityMember?: boolean;
   safeAreaEdges?: Edge[];
 }) {
   const theme = useCKTheme();
@@ -210,14 +212,16 @@ export function MobileDrawer({
             onPress={() => navigate(route)}
           />
         ))}
-        <DrawerAction
-          icon={<MessageCircle color={theme.onSurface} size={18} />}
-          label={t('faqJoinDiscord')}
-          compact
-          isRtl={isRtl}
-          onPress={() => openExternal(DISCORD_URL)}
-          testID="drawer-discord-server"
-        />
+        {!isDiscordCommunityMember ? (
+          <DrawerAction
+            icon={<MessageCircle color={theme.onSurface} size={18} />}
+            label={t('faqJoinDiscord')}
+            compact
+            isRtl={isRtl}
+            onPress={() => openExternal(DISCORD_URL)}
+            testID="drawer-discord-server"
+          />
+        ) : null}
       </View>
     </SafeAreaView>
   );

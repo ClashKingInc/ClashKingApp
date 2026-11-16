@@ -2379,5 +2379,13 @@
   "accountsSetupBody": "Přidej a ověř své účty Clash of Clans.",
   "accountsMyTitle": "Moje účty",
   "profileAvatar": "Změnit vzhled",
-  "avatarPickerTitle": "Vyber si avatara"
+  "avatarPickerTitle": "Vyber si avatara",
+  "gameEmotes": "Emoty",
+  "gameSquads": "Oddíly",
+  "gameTownHallVariants": "Varianty radnice",
+  "emoteCostLabel": "Cena",
+  "emoteRequiredLabel": "Vyžadováno:",
+  "searchMinimumCharacters": "Pro vyhledávání zadejte alespoň 3 znaky.",
+  "homeCreatorCodeInGame": "V Clash of Clans",
+  "homeCreatorCodeOpenFailed": "Odkaz se nepodařilo otevřít. Zkus to znovu."
 }

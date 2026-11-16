@@ -166,7 +166,11 @@ export function farmLeagueLootEstimate(
   const key = normalizeResource(resource);
   if (!key || !selected) return null;
   const loot = rewardAmount(selected.resources, key);
-  const starBonus = rewardAmount(selected.star_bonus, key);
+  const starRows = Array.isArray(gameDataState.bundleData.star_bonus)
+    ? gameDataState.bundleData.star_bonus
+    : [];
+  const starRow = starRows.map(record).find((row) => row?.townhall_level === townHall);
+  const starBonus = rewardAmount(starRow?.resources ?? selected.star_bonus, key);
   return loot === undefined && starBonus === undefined ? null : { loot, starBonus };
 }
 

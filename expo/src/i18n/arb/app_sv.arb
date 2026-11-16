@@ -5107,5 +5107,13 @@
   "accountsSetupBody": "Lägg till och verifiera dina Clash of Clans-konton.",
   "accountsMyTitle": "Mina konton",
   "profileAvatar": "Ändra utseende",
-  "avatarPickerTitle": "Välj en avatar"
+  "avatarPickerTitle": "Välj en avatar",
+  "gameEmotes": "Emotes",
+  "gameSquads": "Trupper",
+  "gameTownHallVariants": "Rådhusvarianter",
+  "emoteCostLabel": "Kostnad",
+  "emoteRequiredLabel": "Krävs:",
+  "searchMinimumCharacters": "Skriv minst 3 tecken för att söka.",
+  "homeCreatorCodeInGame": "I Clash of Clans",
+  "homeCreatorCodeOpenFailed": "Det gick inte att öppna länken. Försök igen."
 }

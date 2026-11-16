@@ -11,7 +11,8 @@ import {
   type RefObject,
 } from 'react';
 import { View, type ScrollViewInstance } from 'react-native';
-import { Gesture, GestureDetector } from 'react-native-gesture-handler';
+import { Gesture, GestureDetector, type LegacyPanGesture } from 'react-native-gesture-handler';
+import { DrawerGestureContext } from 'react-native-drawer-layout';
 import Animated, { useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
 import { CARD_REORDER_HOLD_MS } from './drag-jiggle';
 import { useI18n } from '../i18n';
@@ -304,6 +305,7 @@ function GridCell({
 }) {
   const { reduceMotion } = useCKAccessibility();
   const parentSwipe = useContext(PrimaryPageGestureContext);
+  const drawerSwipe = useContext(DrawerGestureContext) as unknown as LegacyPanGesture | undefined;
   const x = useSharedValue(position.x),
     y = useSharedValue(position.y);
   useEffect(() => {
@@ -341,11 +343,12 @@ function GridCell({
       .minDistance(0)
       .runOnJS(true);
     if (parentSwipe) gesture.blocksExternalGesture(parentSwipe);
+    if (drawerSwipe) gesture.blocksExternalGesture(drawerSwipe);
     // RNGH stores these for touch events; it does not read the refs in render.
     /* eslint-disable react-hooks/refs */
     return gesture.onStart(startGesture).onUpdate(moveGesture).onFinalize(finishGesture);
     /* eslint-enable react-hooks/refs */
-  }, [enabled, parentSwipe, startGesture, moveGesture, finishGesture]);
+  }, [enabled, parentSwipe, drawerSwipe, startGesture, moveGesture, finishGesture]);
   return (
     <GestureDetector gesture={pan}>
       <Animated.View

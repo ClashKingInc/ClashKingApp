@@ -4,6 +4,7 @@ export interface AuthUser {
   readonly avatarUrl: string;
   readonly authMethods: readonly string[];
   readonly email: string | null;
+  readonly discordCommunityMember?: boolean;
 }
 
 export interface CocAccountLink {
@@ -24,6 +25,8 @@ export function parseAuthUser(value: unknown): AuthUser {
     avatarUrl: stringOrDefault(json.avatar_url, ''),
     authMethods,
     email: stringOrNull(json.email),
+    discordCommunityMember:
+      authMethods.includes('discord') && json.discord_community_member === true,
   };
 }
 

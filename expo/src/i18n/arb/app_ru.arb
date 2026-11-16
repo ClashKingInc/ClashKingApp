@@ -5202,5 +5202,13 @@
   "accountsSetupBody": "Добавьте и подтвердите свои аккаунты Clash of Clans.",
   "accountsMyTitle": "Мои аккаунты",
   "profileAvatar": "Изменить облик",
-  "avatarPickerTitle": "Выбери аватар"
+  "avatarPickerTitle": "Выбери аватар",
+  "gameEmotes": "Эмоции",
+  "gameSquads": "Отряды",
+  "gameTownHallVariants": "Варианты ратуши",
+  "emoteCostLabel": "Стоимость",
+  "emoteRequiredLabel": "Требуется:",
+  "searchMinimumCharacters": "Введите не менее 3 символов для поиска.",
+  "homeCreatorCodeInGame": "В Clash of Clans",
+  "homeCreatorCodeOpenFailed": "Не удалось открыть ссылку. Попробуй ещё раз."
 }

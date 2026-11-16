@@ -2379,5 +2379,13 @@
   "accountsSetupBody": "Clash of Clansのアカウントを追加し、所有権を確認しましょう。",
   "accountsMyTitle": "マイアカウント",
   "profileAvatar": "見た目を変更",
-  "avatarPickerTitle": "アバターを選ぼう"
+  "avatarPickerTitle": "アバターを選ぼう",
+  "gameEmotes": "スタンプ",
+  "gameSquads": "部隊",
+  "gameTownHallVariants": "タウンホールのバリエーション",
+  "emoteCostLabel": "コスト",
+  "emoteRequiredLabel": "必要条件：",
+  "searchMinimumCharacters": "検索するには3文字以上入力してください。",
+  "homeCreatorCodeInGame": "Clash of Clansで使う",
+  "homeCreatorCodeOpenFailed": "リンクを開けませんでした。もう一度お試しください。"
 }

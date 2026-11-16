@@ -5202,5 +5202,13 @@
   "accountsSetupBody": "Add hozzá és igazold Clash of Clans-fiókjaidat.",
   "accountsMyTitle": "Saját fiókjaim",
   "profileAvatar": "Kinézet módosítása",
-  "avatarPickerTitle": "Válassz egy avatárt"
+  "avatarPickerTitle": "Válassz egy avatárt",
+  "gameEmotes": "Hangulatjelek",
+  "gameSquads": "Osztagok",
+  "gameTownHallVariants": "Városháza-változatok",
+  "emoteCostLabel": "Költség",
+  "emoteRequiredLabel": "Szükséges:",
+  "searchMinimumCharacters": "A kereséshez írj be legalább 3 karaktert.",
+  "homeCreatorCodeInGame": "A Clash of Clansban",
+  "homeCreatorCodeOpenFailed": "Nem sikerült megnyitni a hivatkozást. Próbáld újra."
 }
