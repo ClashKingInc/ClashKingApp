@@ -322,6 +322,8 @@
   "generalRetry": "다시 시도",
   "generalRetrying": "다시 시도 중...",
   "postsTitle": "소식",
+  "postsArticlesTitle": "게시물 및 기사",
+  "postsRead": "읽음",
   "postsDescription": "ClashKing 소식, 업데이트 이야기 및 이전 공지입니다.",
   "postsEmpty": "아직 게시된 소식이 없습니다.",
   "postsLoadFailed": "소식을 불러오지 못했습니다.",

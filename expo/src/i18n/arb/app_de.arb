@@ -353,6 +353,8 @@
   "generalRetry": "Wiederholen",
   "generalRetrying": "Versuche erneut...",
   "postsTitle": "Beiträge",
+  "postsArticlesTitle": "Beiträge und Artikel",
+  "postsRead": "Gelesen",
   "postsDescription": "Neuigkeiten von ClashKing, Berichte zu Updates und frühere Ankündigungen.",
   "postsEmpty": "Noch keine Beiträge veröffentlicht.",
   "postsLoadFailed": "Die Beiträge konnten nicht geladen werden.",

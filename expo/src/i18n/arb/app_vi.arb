@@ -448,6 +448,8 @@
   "generalRetry": "Thử lại",
   "generalRetrying": "Đang thử lại...",
   "postsTitle": "Bài viết",
+  "postsArticlesTitle": "Bài đăng và bài viết",
+  "postsRead": "Đã đọc",
   "postsDescription": "Tin tức ClashKing, câu chuyện cập nhật và các thông báo trước đây.",
   "postsEmpty": "Chưa có bài viết nào được đăng.",
   "postsLoadFailed": "Không thể tải bài viết.",

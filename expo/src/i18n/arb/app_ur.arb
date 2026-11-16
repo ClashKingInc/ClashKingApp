@@ -448,6 +448,8 @@
   "generalRetry": "دوبارہ کوشش کریں",
   "generalRetrying": "دوبارہ کوشش ہو رہی ہے...",
   "postsTitle": "پوسٹس",
+  "postsArticlesTitle": "پوسٹس اور مضامین",
+  "postsRead": "پڑھ لیا گیا",
   "postsDescription": "ClashKing کی خبریں، اپ ڈیٹ کی کہانیاں اور پچھلے اعلانات۔",
   "postsEmpty": "ابھی تک کوئی پوسٹ شائع نہیں ہوئی۔",
   "postsLoadFailed": "پوسٹس لوڈ نہیں ہو سکیں۔",

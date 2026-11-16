@@ -353,6 +353,8 @@
   "generalRetry": "Probeer weer",
   "generalRetrying": "Probeer weer...",
   "postsTitle": "Plasings",
+  "postsArticlesTitle": "Plasings en artikels",
+  "postsRead": "Gelees",
   "postsDescription": "ClashKing-nuus, opdateringsverhale en vorige aankondigings.",
   "postsEmpty": "Nog geen plasings gepubliseer nie.",
   "postsLoadFailed": "Plasings kon nie gelaai word nie.",

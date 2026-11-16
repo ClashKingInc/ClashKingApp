@@ -448,6 +448,8 @@
   "generalRetry": "إعادة المحاولة",
   "generalRetrying": "جارٍ إعادة المحاولة...",
   "postsTitle": "المنشورات",
+  "postsArticlesTitle": "المنشورات والمقالات",
+  "postsRead": "تمت القراءة",
   "postsDescription": "أخبار ClashKing وقصص التحديثات والإعلانات السابقة.",
   "postsEmpty": "لا توجد منشورات منشورة بعد.",
   "postsLoadFailed": "تعذر تحميل المنشورات.",

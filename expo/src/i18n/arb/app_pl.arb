@@ -448,6 +448,8 @@
   "generalRetry": "Spróbuj ponownie",
   "generalRetrying": "Próbuję ponownie...",
   "postsTitle": "Aktualności",
+  "postsArticlesTitle": "Posty i artykuły",
+  "postsRead": "Przeczytano",
   "postsDescription": "Wiadomości ClashKing, opisy aktualizacji i wcześniejsze ogłoszenia.",
   "postsEmpty": "Nie opublikowano jeszcze żadnych aktualności.",
   "postsLoadFailed": "Nie można wczytać aktualności.",

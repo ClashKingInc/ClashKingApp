@@ -322,6 +322,8 @@
   "generalRetry": "Повторити",
   "generalRetrying": "Повторна спроба...",
   "postsTitle": "Новини",
+  "postsArticlesTitle": "Дописи та статті",
+  "postsRead": "Прочитано",
   "postsDescription": "Новини ClashKing, огляди оновлень і попередні оголошення.",
   "postsEmpty": "Опублікованих новин поки немає.",
   "postsLoadFailed": "Не вдалося завантажити новини.",

@@ -448,6 +448,8 @@
   "generalRetry": "重试",
   "generalRetrying": "正在重试...",
   "postsTitle": "资讯",
+  "postsArticlesTitle": "动态与文章",
+  "postsRead": "已读",
   "postsDescription": "ClashKing 新闻、更新资讯及历史公告。",
   "postsEmpty": "暂无发布的资讯。",
   "postsLoadFailed": "资讯加载失败，请重试。",

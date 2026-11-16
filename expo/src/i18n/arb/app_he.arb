@@ -448,6 +448,8 @@
   "generalRetry": "נסה שוב",
   "generalRetrying": "מנסה שוב...",
   "postsTitle": "פוסטים",
+  "postsArticlesTitle": "פוסטים ומאמרים",
+  "postsRead": "נקרא",
   "postsDescription": "חדשות ClashKing, סיפורי עדכונים והכרזות קודמות.",
   "postsEmpty": "עדיין אין פוסטים שפורסמו.",
   "postsLoadFailed": "לא ניתן לטעון את הפוסטים.",

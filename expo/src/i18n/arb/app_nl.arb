@@ -353,6 +353,8 @@
   "generalRetry": "Opnieuw proberen",
   "generalRetrying": "Opnieuw proberen...",
   "postsTitle": "Berichten",
+  "postsArticlesTitle": "Berichten en artikelen",
+  "postsRead": "Gelezen",
   "postsDescription": "Nieuws van ClashKing, updateverhalen en eerdere aankondigingen.",
   "postsEmpty": "Nog geen berichten gepubliceerd.",
   "postsLoadFailed": "Berichten konden niet worden geladen.",

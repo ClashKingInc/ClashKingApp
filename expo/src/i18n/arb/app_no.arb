@@ -353,6 +353,8 @@
   "generalRetry": "Prøv igjen",
   "generalRetrying": "Prøver på nytt...",
   "postsTitle": "Poster",
+  "postsArticlesTitle": "Innlegg og artikler",
+  "postsRead": "Lest",
   "postsDescription": "ClashKing-nyheter, oppdateringshistorier og tidligere kunngjøringer.",
   "postsEmpty": "Ingen publiserte innlegg ennå.",
   "postsLoadFailed": "Innleggene kunne ikke lastes inn.",

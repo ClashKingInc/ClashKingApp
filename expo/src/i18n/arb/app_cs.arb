@@ -353,6 +353,8 @@
   "generalRetry": "Opakovat",
   "generalRetrying": "Opakuji pokus...",
   "postsTitle": "Příspěvky",
+  "postsArticlesTitle": "Příspěvky a články",
+  "postsRead": "Přečteno",
   "postsDescription": "Novinky ClashKing, příběhy aktualizací a předchozí oznámení.",
   "postsEmpty": "Zatím nebyly zveřejněny žádné příspěvky.",
   "postsLoadFailed": "Příspěvky se nepodařilo načíst.",
