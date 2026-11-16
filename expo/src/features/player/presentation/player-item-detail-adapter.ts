@@ -76,7 +76,7 @@ export function upgradeDetailsItem(item: PlayerItem, targetLevel = item.maxLevel
         : UpgradeVillage.home,
     category,
     queue,
-    currentLevel: item.level,
+    currentLevel: item.isUnlocked ? item.level : 0,
     targetLevel,
     count: 1,
     steps,

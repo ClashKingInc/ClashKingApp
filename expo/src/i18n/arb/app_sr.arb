@@ -5204,5 +5204,11 @@
   "profileAvatar": "Промени изглед",
   "avatarPickerTitle": "Изабери аватар",
   "gameEmotes": "Емоције",
-  "gameSquads": "Одреди"
+  "gameSquads": "Одреди",
+  "gameTownHallVariants": "Варијанте градске куће",
+  "emoteCostLabel": "Цена",
+  "emoteRequiredLabel": "Потребно:",
+  "searchMinimumCharacters": "Унесите најмање 3 знака за претрагу.",
+  "homeCreatorCodeInGame": "У Clash of Clans",
+  "homeCreatorCodeOpenFailed": "Није могуће отворити везу. Покушај поново."
 }

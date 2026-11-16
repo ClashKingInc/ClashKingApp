@@ -148,6 +148,7 @@ export interface HomeDashboardModel {
   readonly upgrade?: HomeUpgradeCardModel;
   readonly upgradeTrackerEnabled: boolean;
   readonly cardOrder?: readonly HomeCardId[];
+  readonly layoutReady?: boolean;
 }
 
 export interface HomeDashboardActions {
@@ -197,6 +198,8 @@ export function normalizeHomeCardOrder(value: unknown): HomeCardId[] {
 }
 
 export function visibleHomeCards(model: HomeDashboardModel): HomeCardId[] {
+  // Never mount reorderable cards in default positions while saved order loads.
+  if (model.layoutReady === false) return [];
   const visible = new Set<HomeCardId>();
   if (model.todo && model.todo.accounts.length > 0) visible.add('todo');
   if (model.ranked && model.ranked.state !== 'empty') visible.add('ranked');

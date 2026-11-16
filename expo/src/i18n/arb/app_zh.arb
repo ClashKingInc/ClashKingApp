@@ -5204,5 +5204,11 @@
   "profileAvatar": "更换形象",
   "avatarPickerTitle": "选择头像",
   "gameEmotes": "表情",
-  "gameSquads": "小队"
+  "gameSquads": "小队",
+  "gameTownHallVariants": "大本营变体",
+  "emoteCostLabel": "费用",
+  "emoteRequiredLabel": "要求：",
+  "searchMinimumCharacters": "输入至少 3 个字符以搜索。",
+  "homeCreatorCodeInGame": "在 Clash of Clans 中使用",
+  "homeCreatorCodeOpenFailed": "无法打开链接，请重试。"
 }

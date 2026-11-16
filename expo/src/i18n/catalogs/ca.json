@@ -2381,5 +2381,11 @@
   "profileAvatar": "Canvia l’aspecte",
   "avatarPickerTitle": "Tria un avatar",
   "gameEmotes": "Emoticones",
-  "gameSquads": "Escamots"
+  "gameSquads": "Escamots",
+  "gameTownHallVariants": "Variants de l’ajuntament",
+  "emoteCostLabel": "Cost",
+  "emoteRequiredLabel": "Requisit:",
+  "searchMinimumCharacters": "Escriu almenys 3 caràcters per cercar.",
+  "homeCreatorCodeInGame": "A Clash of Clans",
+  "homeCreatorCodeOpenFailed": "No s’ha pogut obrir l’enllaç. Torna-ho a provar."
 }

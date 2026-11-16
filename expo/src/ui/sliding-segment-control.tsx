@@ -1,4 +1,5 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { PrimaryPageGestureContext } from './primary-swipe-guard';
+import { useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import {
   Animated,
   Pressable,
@@ -32,6 +33,7 @@ export function SlidingSegmentControl<T extends string>({
   isRtl: boolean;
   onChange: (value: T) => void;
 }) {
+  const pageGesture = useContext(PrimaryPageGestureContext);
   const theme = useCKTheme();
   const { reduceMotion } = useCKAccessibility();
   const [segmentWidth, setSegmentWidth] = useState(0);
@@ -66,42 +68,53 @@ export function SlidingSegmentControl<T extends string>({
     [position, reduceMotion],
   );
   useEffect(() => animateTo(startIndex), [animateTo, startIndex]);
-  const pan = useMemo(
-    () =>
-      Gesture.Pan()
-        .activeOffsetX([-4, 4])
-        .failOffsetY([-10, 10])
-        .runOnJS(true)
-        .onStart(() => position.stopAnimation())
-        .onUpdate((gesture) => {
-          if (segmentWidth <= 0) return;
-          const direction = isRtl ? -1 : 1;
-          position.setValue(
-            Math.max(
-              0,
-              Math.min(lastIndex, startIndex + direction * (gesture.translationX / segmentWidth)),
-            ),
-          );
-        })
-        .onEnd((gesture) => {
-          if (segmentWidth <= 0) return;
-          const direction = isRtl ? -1 : 1;
-          const projected =
-            startIndex +
-            direction *
-              (gesture.translationX / segmentWidth + (gesture.velocityX / segmentWidth) * 0.08);
-          const target = Math.max(0, Math.min(lastIndex, Math.round(projected)));
-          const selected = options[target];
-          if (!selected) return;
-          animateTo(target);
-          onChange(selected.value);
-        })
-        .onFinalize((_event, success) => {
-          if (success) return;
-          animateTo(startIndex);
-        }),
-    [animateTo, isRtl, lastIndex, onChange, options, position, segmentWidth, startIndex],
-  );
+  const pan = useMemo(() => {
+    const gesture = Gesture.Pan()
+      .activeOffsetX([-4, 4])
+      .failOffsetY([-10, 10])
+      .runOnJS(true)
+      .onStart(() => position.stopAnimation())
+      .onUpdate((gesture) => {
+        if (segmentWidth <= 0) return;
+        const direction = isRtl ? -1 : 1;
+        position.setValue(
+          Math.max(
+            0,
+            Math.min(lastIndex, startIndex + direction * (gesture.translationX / segmentWidth)),
+          ),
+        );
+      })
+      .onEnd((gesture) => {
+        if (segmentWidth <= 0) return;
+        const direction = isRtl ? -1 : 1;
+        const projected =
+          startIndex +
+          direction *
+            (gesture.translationX / segmentWidth + (gesture.velocityX / segmentWidth) * 0.08);
+        const target = Math.max(0, Math.min(lastIndex, Math.round(projected)));
+        const selected = options[target];
+        if (!selected) return;
+        animateTo(target);
+        onChange(selected.value);
+      })
+      .onFinalize((_event, success) => {
+        if (success) return;
+        animateTo(startIndex);
+      });
+    // Dragging the indicator must not also switch the page underneath it.
+    if (pageGesture) gesture.blocksExternalGesture(pageGesture);
+    return gesture;
+  }, [
+    pageGesture,
+    animateTo,
+    isRtl,
+    lastIndex,
+    onChange,
+    options,
+    position,
+    segmentWidth,
+    startIndex,
+  ]);
   return (
     <GestureDetector gesture={pan}>
       <View

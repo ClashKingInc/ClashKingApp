@@ -5109,5 +5109,11 @@
   "profileAvatar": "Uiterlijk wijzigen",
   "avatarPickerTitle": "Kies een avatar",
   "gameEmotes": "Emotes",
-  "gameSquads": "Teams"
+  "gameSquads": "Teams",
+  "gameTownHallVariants": "Stadhuisvarianten",
+  "emoteCostLabel": "Kosten",
+  "emoteRequiredLabel": "Vereist:",
+  "searchMinimumCharacters": "Typ minimaal 3 tekens om te zoeken.",
+  "homeCreatorCodeInGame": "In Clash of Clans",
+  "homeCreatorCodeOpenFailed": "De link kon niet worden geopend. Probeer het opnieuw."
 }

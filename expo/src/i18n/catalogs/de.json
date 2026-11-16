@@ -2381,5 +2381,11 @@
   "profileAvatar": "Aussehen ändern",
   "avatarPickerTitle": "Wähle einen Avatar",
   "gameEmotes": "Emotes",
-  "gameSquads": "Trupps"
+  "gameSquads": "Trupps",
+  "gameTownHallVariants": "Rathausvarianten",
+  "emoteCostLabel": "Kosten",
+  "emoteRequiredLabel": "Erforderlich:",
+  "searchMinimumCharacters": "Gib mindestens 3 Zeichen ein, um zu suchen.",
+  "homeCreatorCodeInGame": "In Clash of Clans",
+  "homeCreatorCodeOpenFailed": "Der Link konnte nicht geöffnet werden. Versuche es erneut."
 }

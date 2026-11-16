@@ -2381,5 +2381,11 @@
   "profileAvatar": "Cambia aspetto",
   "avatarPickerTitle": "Scegli un avatar",
   "gameEmotes": "Emote",
-  "gameSquads": "Squadre"
+  "gameSquads": "Squadre",
+  "gameTownHallVariants": "Varianti del municipio",
+  "emoteCostLabel": "Costo",
+  "emoteRequiredLabel": "Richiesto:",
+  "searchMinimumCharacters": "Digita almeno 3 caratteri per cercare.",
+  "homeCreatorCodeInGame": "In Clash of Clans",
+  "homeCreatorCodeOpenFailed": "Impossibile aprire il link. Riprova."
 }

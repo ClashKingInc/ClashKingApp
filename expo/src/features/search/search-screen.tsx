@@ -1,12 +1,37 @@
+import { scheduleOnRN } from 'react-native-worklets';
+import { getSearchFieldOrigin, clearSearchFieldOrigin } from '../../ui/search-transition';
+import Reanimated, {
+  useSharedValue,
+  useAnimatedStyle,
+  withSpring,
+  withTiming,
+  Easing,
+} from 'react-native-reanimated';
+import { SEARCH_MIN_QUERY_LENGTH } from './search-state';
+import { modalOrientations } from '../../ui/modal-orientations';
+import { ReservedRegionLayout } from '../../ui/reserved-region-layout';
 import type { TextInputInstance } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useAdaptiveLayout } from '../../ui/adaptive-layout';
 import { ResponsiveGrid } from '../../ui/responsive-grid';
-import { useCallback, useEffect, useMemo, useRef, useState, useSyncExternalStore, type ReactNode } from 'react';
+import {
+  createContext,
+  useContext,
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useMemo,
+  useRef,
+  useState,
+  useSyncExternalStore,
+  type ReactNode,
+  type ComponentRef,
+} from 'react';
 import { SlidingSegmentControl } from '../../ui/sliding-segment-control';
 import {
   Animated,
   Keyboard,
+  Modal,
   Pressable,
   ScrollView,
   StyleSheet,
@@ -18,10 +43,8 @@ import {
   ChevronLeft,
   ChevronRight,
   CornerUpLeft,
-  FilterX,
   Globe2,
-  Medal,
-  RotateCcw,
+  Check,
   Search,
   Shield,
   SlidersHorizontal,
@@ -37,6 +60,7 @@ import { materialBackLabel, useI18n } from '../../i18n';
 import {
   CKText,
   GlassControlSurface,
+  GlassSurface,
   LoadingIndicator,
   SkeletonContent,
   MobileWebImage,
@@ -103,10 +127,131 @@ export function SearchScreen(props: SearchScreenProps) {
     alignSelf: 'center' as const,
   };
   const { reduceMotion } = useCKAccessibility();
-  const [contentOpacity] = useState(
-    () => new Animated.Value(props.overlay && !reduceMotion ? 0 : 1),
-  );
+  const [fieldSettled, setFieldSettled] = useState(!props.overlay || reduceMotion);
   const inputRef = useRef<TextInputInstance>(null);
+  const [fieldOrigin] = useState(() => (props.overlay ? getSearchFieldOrigin() : null));
+  useEffect(() => {
+    if (props.overlay) clearSearchFieldOrigin();
+  }, [props.overlay]);
+  const fieldSlotRef = useRef<ComponentRef<typeof View>>(null);
+  const fieldProgress = useSharedValue(fieldOrigin && !reduceMotion ? 0 : 1);
+  const fieldGeometry = useSharedValue({
+    x: 0,
+    y: 0,
+    width: 0,
+    height: 48,
+    dx: 0,
+    dy: 0,
+    dw: 0,
+    dh: 0,
+  });
+  const [fieldMeasured, setFieldMeasured] = useState(false);
+  const [isClosing, setIsClosing] = useState(false);
+  const closingSearch = useRef(false);
+  const motionStarted = useRef(false);
+  const fieldMotionStyle = useAnimatedStyle(() => {
+    const g = fieldGeometry.get();
+    const remaining = 1 - fieldProgress.get();
+    return {
+      width: g.width + g.dw * remaining,
+      height: g.height + g.dh * remaining,
+      transform: [{ translateX: g.dx * remaining }, { translateY: g.dy * remaining }],
+    };
+  });
+  const fieldSurfaceStyle = useAnimatedStyle(() => {
+    const g = fieldGeometry.get();
+    return {
+      width: Math.max(g.width, g.width + g.dw),
+      height: Math.max(g.height, g.height + g.dh),
+    };
+  });
+  const fieldGlassStyle = useAnimatedStyle(() => {
+    const g = fieldGeometry.get();
+    const remaining = 1 - fieldProgress.get();
+    const baseWidth = Math.max(1, g.width, g.width + g.dw);
+    const width = g.width + g.dw * remaining;
+    // Transform only the material; text is a sibling at its natural size.
+    // UIKit's glass view never receives an animated layout size.
+    return { transform: [{ translateX: (width - baseWidth) / 2 }, { scaleX: width / baseWidth }] };
+  });
+  const screenRevealStyle = useAnimatedStyle(() => ({ opacity: fieldProgress.get() }));
+  const contentExitStyle = useAnimatedStyle(() => ({
+    opacity: fieldProgress.get() * fieldProgress.get(),
+    transform: [{ translateY: (1 - fieldProgress.get()) * 8 }],
+  }));
+  const controlsMotionStyle = useAnimatedStyle(() => ({
+    // Controls clear the field's return path early, before its edge reaches them.
+    opacity: Math.max(0, Math.min(1, (fieldProgress.get() - 0.65) / 0.35)),
+    transform: [{ translateY: (1 - fieldProgress.get()) * -6 }],
+  }));
+  const finishOpen = useCallback(() => setFieldSettled(true), []);
+  const measureField = () => {
+    fieldSlotRef.current?.measureInWindow((x, y, width, height) => {
+      if (!width || !height) return;
+      // Match actual field edges, not a translation-only proxy that jumps
+      // when the wider home header replaces the editable field.
+      fieldGeometry.set({
+        x,
+        y,
+        width,
+        height,
+        dx: fieldOrigin ? fieldOrigin.x - x : 0,
+        dy: fieldOrigin ? fieldOrigin.y - y : 0,
+        dw: fieldOrigin ? fieldOrigin.width - width : 0,
+        dh: fieldOrigin ? fieldOrigin.height - height : 0,
+      });
+      setFieldMeasured(true);
+    });
+  };
+  useLayoutEffect(() => {
+    if (!fieldMeasured || motionStarted.current) return;
+    motionStarted.current = true;
+    // Start only after the measured field is visible, so measurement/React
+    // commit time cannot consume the first frames of the movement.
+    fieldProgress.set(
+      withTiming(
+        1,
+        {
+          duration: reduceMotion ? 0 : 260,
+          easing: Easing.bezier(0.4, 0, 0.2, 1),
+        },
+        (finished) => {
+          if (finished) scheduleOnRN(finishOpen);
+        },
+      ),
+    );
+  }, [fieldMeasured, fieldProgress, reduceMotion, finishOpen]);
+  const finishClose = () => props.onCancel?.();
+  const closeSearch = () => {
+    if (closingSearch.current) return;
+    closingSearch.current = true;
+    setIsClosing(true);
+    inputRef.current?.blur();
+    Keyboard.dismiss();
+    if (reduceMotion || !fieldOrigin || !fieldMeasured) {
+      finishClose();
+      return;
+    }
+    // A bounded duration avoids waiting on an imperceptible spring tail before
+    // returning to the home header. The field itself never fades or scales text.
+    fieldProgress.set(
+      withTiming(
+        0,
+        {
+          duration: 200,
+          easing: Easing.bezier(0.2, 0, 0, 1),
+        },
+        (finished) => {
+          if (finished) scheduleOnRN(finishClose);
+        },
+      ),
+    );
+  };
+  const openFilters = () => {
+    inputRef.current?.blur();
+    Keyboard.dismiss();
+    props.onFiltersExpandedChange(true);
+  };
   const [headerLaidOut, setHeaderLaidOut] = useState(!props.overlay);
   const activeFilters =
     props.mode === 'clans'
@@ -117,84 +262,66 @@ export function SearchScreen(props: SearchScreenProps) {
   );
 
   useEffect(() => {
-    // Let the anchored header settle before Android adjustResize opens the
-    // keyboard; focus must not race the overlay's initial native layout.
-    if (!props.autofocus || !headerLaidOut) return;
+    // Keyboard layout and recent-image mounting must start after the field
+    // reaches its target; doing both during the morph competes for frame time.
+    if (!props.autofocus || !headerLaidOut || (props.overlay && !fieldSettled)) return;
     const frame = requestAnimationFrame(() => inputRef.current?.focus());
     return () => cancelAnimationFrame(frame);
-  }, [props.autofocus, headerLaidOut]);
+  }, [props.autofocus, headerLaidOut, props.overlay, fieldSettled]);
 
-  useEffect(() => {
-    const animation = Animated.timing(contentOpacity, {
-      toValue: 1,
-      duration: reduceMotion ? 0 : 160,
-      useNativeDriver: true,
-    });
-    animation.start();
-    return () => animation.stop();
-  }, [contentOpacity, reduceMotion]);
-
-  const searchField = (
-    <GlassControlSurface style={[styles.searchField, isRtl && styles.rowRtl]}>
+  const searchFieldContent = (
+    <>
       <Search size={20} color={theme.onSurfaceVariant} />
-      <TextInput
-        ref={inputRef}
-        testID="search-input"
-        accessibilityLabel={
-          props.mode === 'players' ? t('playerSearchPlaceholder') : t('clanSearchPlaceholder')
-        }
-        allowFontScaling
-        autoCapitalize="none"
-        autoCorrect={false}
-        onChangeText={props.onQueryChange}
-        onSubmitEditing={props.onSubmit}
-        placeholder={
-          props.mode === 'players' ? t('playerSearchPlaceholder') : t('clanSearchPlaceholder')
-        }
-        placeholderTextColor={theme.onSurfaceVariant}
-        returnKeyType="search"
-        style={[
-          styles.searchInput,
-          { color: theme.onSurface, textAlign: isRtl ? 'right' : 'left' },
-        ]}
-        value={props.query}
-      />
-      <Pressable
-        accessibilityRole="button"
-        accessibilityLabel={t('generalFilters')}
-        onPress={() => {
-          const expanding = !props.filtersExpanded;
-          if (expanding) {
-            inputRef.current?.blur();
-            Keyboard.dismiss();
+      <View style={{ flex: 1, justifyContent: 'center' }}>
+        <TextInput
+          ref={inputRef}
+          testID="search-input"
+          accessibilityLabel={
+            props.mode === 'players' ? t('playerSearchPlaceholder') : t('clanSearchPlaceholder')
           }
-          props.onFiltersExpandedChange(expanding);
-        }}
-        hitSlop={8}
-        style={styles.fieldAction}
-      >
-        {props.filtersExpanded ? (
-          <FilterX size={22} color={activeFilters ? theme.primary : theme.onSurfaceVariant} />
-        ) : (
+          editable={!isClosing}
+          allowFontScaling
+          autoCapitalize="none"
+          autoCorrect={false}
+          onChangeText={props.onQueryChange}
+          onSubmitEditing={props.onSubmit}
+          placeholder={
+            props.mode === 'players' ? t('playerSearchPlaceholder') : t('clanSearchPlaceholder')
+          }
+          placeholderTextColor={theme.onSurfaceVariant}
+          returnKeyType="search"
+          style={[
+            styles.searchInput,
+            props.overlay && (!fieldSettled || isClosing) && { opacity: 0 },
+            { color: theme.onSurface, textAlign: isRtl ? 'right' : 'left' },
+          ]}
+          value={props.query}
+        />
+        {props.overlay && (!fieldSettled || isClosing) ? (
+          <CKText muted numberOfLines={1} style={{ position: 'absolute', left: 0, right: 0 }}>
+            {t('searchGlobalHint')}
+          </CKText>
+        ) : null}
+      </View>
+      {!props.overlay ? (
+        <Pressable
+          accessibilityRole="button"
+          accessibilityLabel={t('generalFilters')}
+          onPress={openFilters}
+          style={styles.fieldAction}
+        >
           <SlidersHorizontal
             size={22}
             color={activeFilters ? theme.primary : theme.onSurfaceVariant}
           />
-        )}
-      </Pressable>
-      {props.isSearching ? (
-        <LoadingIndicator />
-      ) : props.query.length ? (
-        <Pressable
-          accessibilityRole="button"
-          accessibilityLabel={t('searchClear')}
-          onPress={() => props.onQueryChange('')}
-          hitSlop={8}
-          style={styles.fieldAction}
-        >
-          <X size={22} color={theme.onSurfaceVariant} />
         </Pressable>
       ) : null}
+      {props.isSearching ? <LoadingIndicator /> : null}
+    </>
+  );
+  const searchField = (
+    <GlassControlSurface style={[styles.searchField, isRtl && styles.rowRtl]}>
+      {searchFieldContent}
     </GlassControlSurface>
   );
 
@@ -207,7 +334,7 @@ export function SearchScreen(props: SearchScreenProps) {
             role="titleMedium"
             style={[
               styles.recentTitle,
-              { marginTop: props.overlay ? 4 : 18 },
+              { marginTop: props.overlay ? 0 : 16 },
               props.overlay ? { color: theme.onSurfaceVariant } : undefined,
               isRtl && styles.rtlText,
             ]}
@@ -230,10 +357,9 @@ export function SearchScreen(props: SearchScreenProps) {
           </SearchResultCollection>
         </>
       ) : null}
-      {props.query.trim().length !== 0 &&
-      props.hasSearched &&
-      !props.isSearching &&
-      props.results.length === 0 ? (
+      {props.query.trim().length > 0 &&
+      (props.query.trim().length < SEARCH_MIN_QUERY_LENGTH ||
+        (props.hasSearched && !props.isSearching && props.results.length === 0)) ? (
         <CKText role="bodyLarge" muted style={styles.noResults}>
           {t('searchNoResult')}
         </CKText>
@@ -280,32 +406,86 @@ export function SearchScreen(props: SearchScreenProps) {
       <GlobalSearchHeaderFrame
         style={[
           styles.screen,
-          { backgroundColor: theme.background },
           (layout.isDuo || layout.isTablet) && {
             paddingLeft: insets.left,
             paddingRight: insets.right,
           },
         ]}
       >
+        <Reanimated.View
+          pointerEvents="none"
+          style={[
+            StyleSheet.absoluteFill,
+            { backgroundColor: theme.background },
+            screenRevealStyle,
+          ]}
+        />
         <View
           onLayout={() => setHeaderLaidOut(true)}
           style={[styles.overlayHeader, isRtl && styles.rowRtl, controlBounds]}
         >
-          <Pressable
-            accessibilityRole="button"
-            accessibilityLabel={materialBackLabel(locale)}
-            onPress={props.onCancel}
-            style={styles.cancelButton}
+          <Reanimated.View style={controlsMotionStyle}>
+            <Pressable
+              accessibilityRole="button"
+              accessibilityLabel={materialBackLabel(locale)}
+              onPress={closeSearch}
+              style={styles.cancelButton}
+            >
+              <ChevronLeft
+                size={22}
+                color={theme.onSurface}
+                style={isRtl && styles.mirrorHorizontal}
+              />
+            </Pressable>
+          </Reanimated.View>
+          <View
+            ref={fieldSlotRef}
+            collapsable={false}
+            onLayout={measureField}
+            style={[styles.grow, { height: globalSearchHeaderLayout.fieldHeight, zIndex: 1 }]}
           >
-            <ChevronLeft
-              size={24}
-              color={theme.onSurface}
-              style={isRtl && styles.mirrorHorizontal}
-            />
-          </Pressable>
-          <View style={styles.grow}>{searchField}</View>
+            <Reanimated.View
+              style={[
+                {
+                  position: 'absolute',
+                  left: 0,
+                  top: 0,
+                  opacity: fieldMeasured ? 1 : 0,
+                },
+                fieldMotionStyle,
+              ]}
+            >
+              <Reanimated.View
+                pointerEvents="none"
+                style={[StyleSheet.absoluteFill, fieldSurfaceStyle, fieldGlassStyle]}
+              >
+                <GlassControlSurface style={{ flex: 1 }} />
+              </Reanimated.View>
+              <View style={[StyleSheet.absoluteFill, styles.searchField, isRtl && styles.rowRtl]}>
+                {searchFieldContent}
+              </View>
+            </Reanimated.View>
+          </View>
+          <Reanimated.View style={controlsMotionStyle}>
+            <Pressable
+              accessibilityRole="button"
+              accessibilityLabel={t('generalFilters')}
+              accessibilityState={{ expanded: props.filtersExpanded }}
+              onPress={openFilters}
+              disabled={!fieldSettled || isClosing}
+              style={styles.cancelButton}
+            >
+              <SlidersHorizontal
+                size={22}
+                color={activeFilters ? theme.primary : theme.onSurfaceVariant}
+              />
+              {activeFilters ? (
+                <View style={[styles.activeFilterDot, { backgroundColor: theme.primary }]} />
+              ) : null}
+            </Pressable>
+          </Reanimated.View>
         </View>
-        <Animated.View style={[styles.grow, { opacity: contentOpacity }]}>
+        <Reanimated.View style={[styles.grow, contentExitStyle]}>
           <View style={[styles.overlayMode, controlBounds]}>
             <ModeSelector mode={props.mode} compact isRtl={isRtl} onChange={props.onModeChange} />
           </View>
@@ -323,12 +503,10 @@ export function SearchScreen(props: SearchScreenProps) {
             ]}
             testID="search-overlay-scroll"
           >
-            {props.filtersExpanded ? (
-              <View style={[styles.overlayFilters, controlBounds]}>{filtersPanel(props)}</View>
-            ) : null}
-            {resultContent}
+            {fieldSettled ? resultContent : null}
           </ScrollView>
-        </Animated.View>
+        </Reanimated.View>
+        {props.filtersExpanded ? <SearchFiltersSheet {...props} /> : null}
       </GlobalSearchHeaderFrame>
     );
   }
@@ -348,9 +526,7 @@ export function SearchScreen(props: SearchScreenProps) {
           <ModeSelector mode={props.mode} isRtl={isRtl} onChange={props.onModeChange} />
         )}
         <View style={[styles.pageSearch, controlBounds]}>{searchField}</View>
-        {props.filtersExpanded ? (
-          <View style={[styles.pageFilters, controlBounds]}>{filtersPanel(props)}</View>
-        ) : null}
+
         <View
           style={
             props.query.trim().length !== 0 || visibleRecents.length === 0
@@ -361,6 +537,7 @@ export function SearchScreen(props: SearchScreenProps) {
           {resultContent}
         </View>
       </ScrollView>
+      {props.filtersExpanded ? <SearchFiltersSheet {...props} /> : null}
     </View>
   );
 }
@@ -375,19 +552,225 @@ function SearchResultCollection({ children }: { children: ReactNode }) {
   );
 }
 
-function filtersPanel(props: SearchScreenProps): ReactNode {
-  return props.mode === 'clans' ? (
-    <ClanFiltersPanel
-      value={props.clanFilters}
-      locations={props.locations}
-      onChange={props.onClanFiltersChange}
-    />
-  ) : (
-    <PlayerFiltersPanel
-      value={props.playerFilters}
-      leagues={props.leagues}
-      onChange={props.onPlayerFiltersChange}
-    />
+type FilterChoicePage = {
+  title: string;
+  value: string;
+  options: readonly PickerOption[];
+  onChange: (value: string) => void;
+};
+const FilterNavigationContext = createContext<((page: FilterChoicePage) => void) | null>(null);
+
+function SearchFiltersSheet(props: SearchScreenProps) {
+  const { t, isRtl, locale } = useI18n();
+  const theme = useCKTheme();
+  const layout = useAdaptiveLayout();
+  const insets = useSafeAreaInsets();
+  const { reduceMotion } = useCKAccessibility();
+  const [players, setPlayers] = useState(props.playerFilters);
+  const [clans, setClans] = useState(props.clanFilters);
+  const [choicePage, setChoicePage] = useState<FilterChoicePage | null>(null);
+  const [bodyOpacity] = useState(() => new Animated.Value(1));
+  const bodyHeight = useSharedValue(0);
+  const [bodyMeasured, setBodyMeasured] = useState(false);
+  const transitionVersion = useRef(0);
+  const bodyStyle = useAnimatedStyle(() => ({ height: bodyHeight.get() }));
+  const maxBodyHeight = Math.max(100, layout.height * 0.9 - 170);
+  const measureBody = (_width: number, height: number) => {
+    const target = Math.min(height, maxBodyHeight);
+    if (!bodyMeasured || reduceMotion) bodyHeight.set(target);
+    else
+      bodyHeight.set(
+        withSpring(target, {
+          damping: 30,
+          stiffness: 300,
+          mass: 1,
+          overshootClamping: true,
+        }),
+      );
+    setBodyMeasured(true);
+  };
+  const changePage = (page: FilterChoicePage | null) => {
+    // Keep the outgoing content in place until it fades. Then measure the new
+    // page and animate the existing surface on the UI thread, without a new modal.
+    const version = ++transitionVersion.current;
+    bodyOpacity.stopAnimation();
+    if (reduceMotion) {
+      setChoicePage(page);
+      bodyOpacity.setValue(1);
+      return;
+    }
+    Animated.timing(bodyOpacity, { toValue: 0, duration: 85, useNativeDriver: true }).start(
+      ({ finished }) => {
+        if (!finished || version !== transitionVersion.current) return;
+        setChoicePage(page);
+        Animated.timing(bodyOpacity, {
+          toValue: 1,
+          duration: 190,
+          delay: 30,
+          useNativeDriver: true,
+        }).start();
+      },
+    );
+  };
+  const close = () => props.onFiltersExpandedChange(false);
+  return (
+    <Modal
+      transparent
+      visible
+      supportedOrientations={modalOrientations}
+      animationType={reduceMotion ? 'none' : 'fade'}
+      statusBarTranslucent
+      navigationBarTranslucent
+      presentationStyle="overFullScreen"
+      onRequestClose={() => (choicePage ? changePage(null) : close())}
+    >
+      <ReservedRegionLayout>
+        <View
+          style={[
+            styles.filterBackdrop,
+            {
+              paddingTop: insets.top + 12,
+              paddingBottom: insets.bottom + 12,
+              paddingLeft: Math.max(12, insets.left),
+              paddingRight: Math.max(12, insets.right),
+              justifyContent: layout.isExpanded || layout.isDuo ? 'center' : 'flex-end',
+            },
+          ]}
+        >
+          <Pressable
+            style={StyleSheet.absoluteFill}
+            onPress={close}
+            accessibilityRole="button"
+            accessibilityLabel={t('upgradeTrackerPlanClose')}
+          />
+          <GlassSurface
+            cornerRadius={28}
+            style={[styles.filterSheet, { backgroundColor: theme.surface }]}
+            accessibilityViewIsModal
+            onAccessibilityEscape={close}
+          >
+            <View style={styles.filterSheetHeader}>
+              <Pressable
+                accessibilityRole="button"
+                accessibilityLabel={materialBackLabel(locale)}
+                onPress={() => (choicePage ? changePage(null) : close())}
+                style={styles.cancelButton}
+              >
+                <ChevronLeft size={22} color={theme.onSurface} />
+              </Pressable>
+              <CKText role="sectionTitle" numberOfLines={2} style={styles.filterSheetTitle}>
+                {choicePage?.title ?? t('searchFilters')}
+              </CKText>
+              <Pressable
+                onPress={close}
+                accessibilityRole="button"
+                accessibilityLabel={t('upgradeTrackerPlanClose')}
+                style={styles.cancelButton}
+              >
+                <X size={22} color={theme.onSurface} />
+              </Pressable>
+            </View>
+            <Reanimated.View style={bodyMeasured ? bodyStyle : { maxHeight: maxBodyHeight }}>
+              <Animated.View style={[bodyMeasured && { flex: 1 }, { opacity: bodyOpacity }]}>
+                <ScrollView
+                  key={choicePage?.title ?? 'overview'}
+                  onContentSizeChange={measureBody}
+                  keyboardShouldPersistTaps="handled"
+                  contentContainerStyle={styles.filterSheetContent}
+                >
+                  {choicePage ? (
+                    choicePage.options.map((option) => (
+                      <Pressable
+                        key={option.value}
+                        accessibilityRole="radio"
+                        accessibilityState={{ checked: option.value === choicePage.value }}
+                        onPress={() => {
+                          choicePage.onChange(option.value);
+                          changePage(null);
+                        }}
+                        style={[styles.choiceRow, isRtl && styles.rowRtl]}
+                      >
+                        {option.imageUrl ? (
+                          <MobileWebImage
+                            imageUrl={option.imageUrl}
+                            style={styles.filterIconImage}
+                            contentFit="contain"
+                          />
+                        ) : option.value === '' ? (
+                          <View
+                            style={[
+                              styles.unsetFilterIcon,
+                              { backgroundColor: theme.surfaceContainerHighest },
+                            ]}
+                          >
+                            <X size={16} strokeWidth={3} color={theme.onSurfaceVariant} />
+                          </View>
+                        ) : null}
+                        <CKText role="rowTitle" style={styles.grow}>
+                          {option.label}
+                        </CKText>
+                        {option.value === choicePage.value ? (
+                          <Check size={21} color={theme.primary} />
+                        ) : null}
+                      </Pressable>
+                    ))
+                  ) : (
+                    <FilterNavigationContext.Provider value={changePage}>
+                      {props.mode === 'players' ? (
+                        <PlayerFiltersPanel
+                          value={players}
+                          leagues={props.leagues}
+                          onChange={setPlayers}
+                        />
+                      ) : (
+                        <ClanFiltersPanel
+                          value={clans}
+                          locations={props.locations}
+                          onChange={setClans}
+                        />
+                      )}
+                    </FilterNavigationContext.Provider>
+                  )}
+                </ScrollView>
+              </Animated.View>
+            </Reanimated.View>
+            {
+              <View style={[styles.filterSheetFooter, isRtl && styles.rowRtl]}>
+                <Pressable
+                  accessibilityRole="button"
+                  onPress={() =>
+                    props.mode === 'players'
+                      ? setPlayers(emptyPlayerSearchFilters)
+                      : setClans(emptyClanSearchFilters)
+                  }
+                  style={[
+                    styles.filterFooterButton,
+                    { backgroundColor: theme.surfaceContainerHighest },
+                  ]}
+                >
+                  <CKText role="rowTitle">{t('generalReset')}</CKText>
+                </Pressable>
+                <Pressable
+                  accessibilityRole="button"
+                  onPress={() => {
+                    // Commit one draft: SearchRoot's existing debounce runs with the
+                    // newly applied filters. Calling onSubmit here would use stale props.
+                    if (props.mode === 'players') props.onPlayerFiltersChange(players);
+                    else props.onClanFiltersChange(clans);
+                    close();
+                  }}
+                  style={[styles.filterFooterButton, { backgroundColor: theme.primary }]}
+                >
+                  <CKText role="rowTitle" style={{ color: theme.onPrimary }}>
+                    {t('calcSearch')}
+                  </CKText>
+                </Pressable>
+              </View>
+            }
+          </GlassSurface>
+        </View>
+      </ReservedRegionLayout>
+    </Modal>
   );
 }
 
@@ -553,8 +936,9 @@ function ClanFiltersPanel({
     t('generalNotSet');
   return (
     <View testID="clan-search-filters" style={styles.filters}>
-      <View style={styles.labelledPicker} testID="clan-war-frequency-filter">
+      <View style={styles.filterPickerRow} testID="clan-war-frequency-filter">
         <FilterLabel
+          row
           icon={<Swords size={18} color={theme.onSurfaceVariant} />}
           label={t('warFrequency')}
         />
@@ -566,8 +950,9 @@ function ClanFiltersPanel({
           onChange={(next) => onChange({ ...value, warFrequency: next || null })}
         />
       </View>
-      <View style={styles.labelledPicker} testID="clan-location-filter">
+      <View style={styles.filterPickerRow} testID="clan-location-filter">
         <FilterLabel
+          row
           icon={<Globe2 size={18} color={theme.onSurfaceVariant} />}
           label={t('clanLocation')}
         />
@@ -603,9 +988,6 @@ function ClanFiltersPanel({
         value={value.minClanLevel ?? 1}
         onChange={(next) => onChange({ ...value, minClanLevel: next === 1 ? null : next })}
       />
-      {!isClanSearchFiltersEmpty(value) ? (
-        <ResetButton onPress={() => onChange(emptyClanSearchFilters)} />
-      ) : null}
     </View>
   );
 }
@@ -620,8 +1002,7 @@ function PlayerFiltersPanel({
   onChange: (value: PlayerSearchFilters) => void;
 }) {
   const { t } = useI18n();
-  const theme = useCKTheme();
-  const options = [
+  const options: PickerOption[] = [
     { value: '', label: t('generalNotSet') },
     ...[...leagues]
       .sort((left, right) => right.id - left.id)
@@ -636,7 +1017,11 @@ function PlayerFiltersPanel({
       ? value.minTownHallLevel
       : null;
   // Refresh open filters when downloaded static data changes.
-  useSyncExternalStore(subscribeToGameDataRevision, () => gameDataState.revision, () => gameDataState.revision);
+  useSyncExternalStore(
+    subscribeToGameDataRevision,
+    () => gameDataState.revision,
+    () => gameDataState.revision,
+  );
   const maxTownHall = Math.max(getMaxTownHallLevel(), selectedTownHall ?? 0);
   const townHallOptions = [
     { value: '', label: t('generalNotSet') },
@@ -648,9 +1033,19 @@ function PlayerFiltersPanel({
   ];
   return (
     <View style={styles.filters}>
-      <View style={styles.labelledPicker}>
+      <View style={styles.filterPickerRow}>
         <FilterLabel
-          icon={<Medal size={18} color={theme.onSurfaceVariant} />}
+          row
+          icon={
+            <MobileWebImage
+              imageUrl={
+                options.find((option) => option.value === String(value.leagueIds[0]))?.imageUrl ??
+                ImageAssets.getLeagueImage('Unranked')
+              }
+              contentFit="contain"
+              style={styles.filterIconImage}
+            />
+          }
           label={t('gameLeague')}
         />
         <OptionPicker
@@ -664,11 +1059,12 @@ function PlayerFiltersPanel({
           onChange={(next) => onChange({ ...value, leagueIds: next ? [Number(next)] : [] })}
         />
       </View>
-      <View style={styles.labelledPicker}>
+      <View style={styles.filterPickerRow}>
         <FilterLabel
+          row
           icon={
             <MobileWebImage
-              imageUrl={ImageAssets.townHall(selectedTownHall ?? maxTownHall)}
+              imageUrl={ImageAssets.townHall(selectedTownHall ?? 2)}
               contentFit="contain"
               style={styles.filterIconImage}
             />
@@ -689,9 +1085,6 @@ function PlayerFiltersPanel({
           }}
         />
       </View>
-      {!isPlayerSearchFiltersEmpty(value) ? (
-        <ResetButton onPress={() => onChange(emptyPlayerSearchFilters)} />
-      ) : null}
     </View>
   );
 }
@@ -719,26 +1112,49 @@ function OptionPicker({
   searchPlaceholder?: string;
   onChange: (value: string) => void;
 }) {
-  const { t } = useI18n();
+  const { t, isRtl } = useI18n();
+  const theme = useCKTheme();
+  const openPage = useContext(FilterNavigationContext);
   const selected = options.find((option) => option.value === value) ?? options[0];
+  if (openPage)
+    return (
+      <Pressable
+        accessibilityRole="button"
+        accessibilityLabel={accessibilityLabel ?? `${title}: ${selected?.label}`}
+        onPress={() => openPage({ title: title ?? '', value, options, onChange })}
+        style={[styles.pickerValue, styles.filterValueButton, isRtl && styles.rowRtl]}
+      >
+        <CKText muted role="rowTitle" style={styles.filterSelectedValue}>
+          {selected?.label}
+        </CKText>
+        <ChevronRight
+          size={20}
+          color={theme.onSurfaceVariant}
+          style={isRtl && styles.mirrorHorizontal}
+        />
+      </Pressable>
+    );
   return (
-    <SelectionPicker
-      accessibilityLabel={accessibilityLabel ?? selected?.label}
-      clearSearchAccessibilityLabel={t('searchClear')}
-      fillWidth
-      leading={icon}
-      onSelect={onChange}
-      options={options.map((option) => ({
-        key: option.value,
-        label: option.label,
-        icon: option.imageUrl ? (
-          <MobileWebImage imageUrl={option.imageUrl} contentFit="contain" style={styles.flag} />
-        ) : undefined,
-      }))}
-      searchPlaceholder={searchPlaceholder}
-      selectedKey={value}
-      title={title ?? selected?.label ?? ''}
-    />
+    <View style={styles.pickerValue}>
+      <SelectionPicker
+        accessibilityLabel={accessibilityLabel ?? selected?.label}
+        clearSearchAccessibilityLabel={t('searchClear')}
+        fillWidth
+        plain
+        leading={icon}
+        onSelect={onChange}
+        options={options.map((option) => ({
+          key: option.value,
+          label: option.label,
+          icon: option.imageUrl ? (
+            <MobileWebImage imageUrl={option.imageUrl} contentFit="contain" style={styles.flag} />
+          ) : undefined,
+        }))}
+        searchPlaceholder={searchPlaceholder}
+        selectedKey={value}
+        title={title ?? selected?.label ?? ''}
+      />
+    </View>
   );
 }
 
@@ -804,14 +1220,24 @@ function SingleFilter(props: {
   );
 }
 
-function FilterLabel({ icon, label, value }: { icon?: ReactNode; label: string; value?: string }) {
+function FilterLabel({
+  icon,
+  label,
+  value,
+  row = false,
+}: {
+  icon?: ReactNode;
+  label: string;
+  value?: string;
+  row?: boolean;
+}) {
   const { isRtl } = useI18n();
   return (
-    <View style={[styles.filterLabel, isRtl && styles.rowRtl]}>
+    <View style={[styles.filterLabel, row && styles.filterRowLabel, isRtl && styles.rowRtl]}>
       {icon}
       <CKText
-        numberOfLines={2}
-        role="compactLabel"
+        numberOfLines={row ? 1 : 2}
+        role="rowTitle"
         style={[styles.grow, styles.filterName, isRtl && styles.rtlText]}
       >
         {label}
@@ -1004,23 +1430,6 @@ function ContinuousSlider({
   );
 }
 
-function ResetButton({ onPress }: { onPress: () => void }) {
-  const { t, isRtl } = useI18n();
-  const theme = useCKTheme();
-  return (
-    <Pressable
-      accessibilityRole="button"
-      onPress={onPress}
-      style={[styles.resetButton, isRtl && styles.rowRtl]}
-    >
-      <RotateCcw size={18} color={theme.primary} />
-      <CKText role="labelLarge" style={{ color: theme.primary }}>
-        {t('generalReset')}
-      </CKText>
-    </Pressable>
-  );
-}
-
 function recentSubtitle(item: RecentSearchItem, t: ReturnType<typeof useI18n>['t']): string {
   return item.type === 'clan'
     ? t('generalMembersCount', { count: item.members })
@@ -1048,6 +1457,59 @@ function resultImage(result: JsonRecord, mode: SearchMode): string | null {
 
 const styles = StyleSheet.create({
   screen: { flex: 1 },
+  activeFilterDot: { position: 'absolute', top: 7, right: 7, width: 6, height: 6, borderRadius: 3 },
+  filterBackdrop: { flex: 1, backgroundColor: '#00000070', alignItems: 'center' },
+  filterSheet: { width: '100%', maxWidth: 560, maxHeight: '90%', overflow: 'hidden' },
+  filterSheetHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: 10,
+    paddingTop: 10,
+    paddingBottom: 4,
+    gap: 8,
+  },
+  filterSheetTitle: { flex: 1, minWidth: 0, textAlign: 'center' },
+  filterSheetContent: { paddingHorizontal: 22, paddingVertical: 12 },
+  filterSheetFooter: { flexDirection: 'row', gap: 12, padding: 18 },
+  filterFooterButton: {
+    flex: 1,
+    minHeight: 48,
+    borderRadius: 24,
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: 12,
+  },
+  filterRowLabel: { flexGrow: 1, flexShrink: 0, minWidth: 120 },
+  filterPickerRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 12,
+    paddingVertical: 8,
+    flexWrap: 'wrap',
+  },
+  unsetFilterIcon: {
+    width: 24,
+    height: 24,
+    borderRadius: 7,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  choiceRow: {
+    minHeight: 52,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 12,
+    paddingVertical: 12,
+  },
+  filterValueButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'flex-end',
+    gap: 8,
+    minHeight: 48,
+  },
+  filterSelectedValue: { textAlign: 'right', flexShrink: 1 },
+  pickerValue: { flexGrow: 1, flexBasis: 145, minWidth: 130, maxWidth: '100%' },
   grow: { flex: 1 },
   page: { padding: 16, paddingBottom: 96 },
   pageSearch: { marginTop: 12 },
@@ -1056,13 +1518,13 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     height: globalSearchHeaderLayout.height,
-    paddingHorizontal: globalSearchHeaderLayout.paddingHorizontal,
-    gap: globalSearchHeaderLayout.gap,
+    paddingHorizontal: 12,
+    gap: 6,
   },
-  overlayMode: { paddingHorizontal: 16, paddingBottom: 6 },
+  overlayMode: { paddingHorizontal: 16, paddingTop: 4, paddingBottom: 0 },
   overlayFilters: { paddingTop: 4, paddingBottom: 12 },
   cancelButton: {
-    width: globalSearchHeaderLayout.leadingWidth,
+    width: 44,
     height: 48,
     alignItems: 'center',
     justifyContent: 'center',
@@ -1086,9 +1548,9 @@ const styles = StyleSheet.create({
   },
   fieldAction: { width: 38, height: 44, alignItems: 'center', justifyContent: 'center' },
   pageResultSpacer: { paddingTop: 14 },
-  overlayResults: { paddingHorizontal: 16, paddingTop: 10, paddingBottom: 20 },
+  overlayResults: { paddingHorizontal: 16, paddingTop: 16, paddingBottom: 20 },
   overlayResultSpacer: { paddingTop: 12 },
-  recentTitle: { marginBottom: 8, fontWeight: '800' },
+  recentTitle: { marginBottom: 12, fontWeight: '700' },
   noResults: { paddingTop: 24, textAlign: 'center' },
   entityCard: { marginBottom: 10, padding: 12 },
   overlayTile: { paddingVertical: 11, borderRadius: 14 },

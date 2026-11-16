@@ -33,7 +33,12 @@ export const nativeDetailScreenOptions = {
 
 export function nativeSecondaryScreenOptions(layer?: string) {
   return layer?.startsWith('utility:search:')
-    ? { ...nativeDetailScreenOptions, animation: 'none' as const, gestureEnabled: false }
+    ? {
+        ...nativeDetailScreenOptions,
+        // The search field owns its in-place movement; the route must not fade or slide.
+        animation: 'none' as const,
+        gestureEnabled: false,
+      }
     : nativeDetailScreenOptions;
 }
 

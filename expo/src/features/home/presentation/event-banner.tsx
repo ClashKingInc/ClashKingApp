@@ -27,6 +27,7 @@ import {
   useCKTheme,
 } from '../../../ui';
 import type { HomeAnnouncement } from './contracts';
+import { CreatorCodeDialog } from './creator-code-dialog';
 
 export interface HomeBannerItem {
   readonly id: string;
@@ -227,6 +228,7 @@ function BannerCard({
     >
       {item.highlighted ? <HighlightSweep color={item.color} active={active} /> : null}
       <View
+        pointerEvents="none"
         style={[
           styles.iconCircle,
           featured && styles.featuredIconCircle,
@@ -242,7 +244,7 @@ function BannerCard({
           }
         />
       </View>
-      <View style={styles.copy}>
+      <View pointerEvents="none" style={styles.copy}>
         <CKText
           role={mobile ? 'labelLarge' : featured ? 'titleSmall' : 'labelMedium'}
           style={styles.heavy}
@@ -260,9 +262,17 @@ function BannerCard({
       </View>
       {onPress ? (
         isRtl ? (
-          <ChevronLeft size={featured || mobile ? 17 : 13} color={theme.onSurfaceVariant} />
+          <ChevronLeft
+            pointerEvents="none"
+            size={featured || mobile ? 17 : 13}
+            color={theme.onSurfaceVariant}
+          />
         ) : (
-          <ChevronRight size={featured || mobile ? 17 : 13} color={theme.onSurfaceVariant} />
+          <ChevronRight
+            pointerEvents="none"
+            size={featured || mobile ? 17 : 13}
+            color={theme.onSurfaceVariant}
+          />
         )
       ) : null}
     </Pressable>
@@ -328,19 +338,36 @@ function HighlightSweep({ color, active }: { color: string; active: boolean }) {
   );
 }
 
-export function HomeEventBanner({
-  active,
-  announcements,
-  desktop,
-  compact = false,
-  onOpen,
-}: {
+type HomeEventBannerProps = {
   active: boolean;
   announcements: readonly HomeAnnouncement[];
   desktop: boolean;
   compact?: boolean;
   onOpen: (announcement: HomeAnnouncement) => void;
-}) {
+};
+
+export function HomeEventBanner(props: HomeEventBannerProps) {
+  const [creatorCodeOpen, setCreatorCodeOpen] = useState(false);
+  return (
+    <>
+      <HomeEventBannerContent
+        {...props}
+        active={props.active && !creatorCodeOpen}
+        onOpenCreatorCode={() => setCreatorCodeOpen(true)}
+      />
+      <CreatorCodeDialog visible={creatorCodeOpen} onClose={() => setCreatorCodeOpen(false)} />
+    </>
+  );
+}
+
+function HomeEventBannerContent({
+  active,
+  announcements,
+  desktop,
+  compact = false,
+  onOpen,
+  onOpenCreatorCode,
+}: HomeEventBannerProps & { onOpenCreatorCode: () => void }) {
   const { t, isRtl } = useI18n();
   const theme = useCKTheme();
   const layout = useAdaptiveLayout();
@@ -387,14 +414,19 @@ export function HomeEventBanner({
   const [index, setIndex] = useState(0);
   const [availableWidth, setAvailableWidth] = useState(680);
   const safeIndex = Math.min(index, Math.max(0, items.length - 1));
+  const looping = !desktop && !compact && items.length > 1;
+  // End copies let native paging cross either boundary. Once scrolling settles,
+  // move to the identical real card without animation so the next swipe can continue.
+  const pages = looping ? [items[items.length - 1]!, ...items, items[0]!] : items;
   const settle = useCallback(() => {
     clearTimeout(settleTimer.current);
-    const next = homeBannerPageIndex(offset.current, availableWidth, items.length);
+    const page = homeBannerPageIndex(offset.current, availableWidth, pages.length);
+    const next = looping ? (page - 1 + items.length) % items.length : page;
     // Native paging owns dragging and deceleration. The fallback may only
     // correct a released, quiet scroller; an animated correction starts another
     // momentum cycle and can fight a new swipe on either native platform.
     if (touchActive.current || dragActive.current) return;
-    const target = next * availableWidth;
+    const target = (next + (looping ? 1 : 0)) * availableWidth;
     if (Math.abs(offset.current - target) > 0.5) {
       offset.current = target;
       scrollRef.current?.scrollTo({ x: target, animated: false });
@@ -402,7 +434,7 @@ export function HomeEventBanner({
     settledIndex.current = next;
     setIndex(next);
     setInteracting(false);
-  }, [availableWidth, items.length]);
+  }, [availableWidth, items.length, looping, pages.length]);
   const scheduleSettle = useCallback(() => {
     clearTimeout(settleTimer.current);
     settleTimer.current = setTimeout(settle, 180);
@@ -433,9 +465,11 @@ export function HomeEventBanner({
   useEffect(() => {
     clearTimeout(settleTimer.current);
     dragActive.current = false;
-    offset.current = Math.min(settledIndex.current, Math.max(0, items.length - 1)) * availableWidth;
+    offset.current =
+      (Math.min(settledIndex.current, Math.max(0, items.length - 1)) + (looping ? 1 : 0)) *
+      availableWidth;
     scrollRef.current?.scrollTo({ x: offset.current, animated: false });
-  }, [availableWidth, items.length]);
+  }, [availableWidth, items.length, looping]);
   useEffect(() => {
     if (desktop || compact || !running || interacting || reduceMotion || items.length < 2) return;
     const timer = setTimeout(() => {
@@ -443,7 +477,7 @@ export function HomeEventBanner({
       if (touchActive.current || dragActive.current) return;
       const next = (safeIndex + 1) % items.length;
       settledIndex.current = next;
-      scrollRef.current?.scrollTo({ x: next * availableWidth, animated: next !== 0 });
+      scrollRef.current?.scrollTo({ x: (safeIndex + 2) * availableWidth, animated: true });
       setIndex(next);
     }, 8000);
     return () => clearTimeout(timer);
@@ -458,9 +492,11 @@ export function HomeEventBanner({
     availableWidth,
   ]);
   const action = (item: HomeBannerItem) =>
-    item.announcement && isHomeAnnouncementOpenable(item.announcement)
-      ? () => onOpen(item.announcement!)
-      : undefined;
+    item.id === 'creator-code' && !item.announcement
+      ? onOpenCreatorCode
+      : item.announcement && isHomeAnnouncementOpenable(item.announcement)
+        ? () => onOpen(item.announcement!)
+        : undefined;
   if (compact) {
     // Announcements stay first. Landscape iPad has room for four events;
     // portrait and Duo keep three readable cards in the same manual strip.
@@ -599,9 +635,9 @@ export function HomeEventBanner({
           settle();
         }}
       >
-        {items.map((item) => (
+        {pages.map((item, page) => (
           <View
-            key={item.id}
+            key={`${page}-${item.id}`}
             style={[{ width: availableWidth, paddingHorizontal: 1 }, isRtl && styles.rtlItem]}
           >
             <BannerCard active={running} item={item} mobile isRtl={isRtl} onPress={action(item)} />

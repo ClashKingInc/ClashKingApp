@@ -5109,5 +5109,11 @@
   "profileAvatar": "Mudar visual",
   "avatarPickerTitle": "Escolhe um avatar",
   "gameEmotes": "Emotes",
-  "gameSquads": "Esquadrões"
+  "gameSquads": "Esquadrões",
+  "gameTownHallVariants": "Variantes do centro da vila",
+  "emoteCostLabel": "Custo",
+  "emoteRequiredLabel": "Necessário:",
+  "searchMinimumCharacters": "Digite pelo menos 3 caracteres para pesquisar.",
+  "homeCreatorCodeInGame": "No Clash of Clans",
+  "homeCreatorCodeOpenFailed": "Não foi possível abrir a ligação. Tenta novamente."
 }

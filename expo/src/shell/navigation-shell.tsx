@@ -49,6 +49,8 @@ export interface NavigationShellProps {
   secondaryRouteId?: AppRouteId;
   primaryScreens: PrimaryScreenSlots;
   secondaryContent?: ReactNode;
+  /** Retained search presentation; native result details still push above it. */
+  searchOverlay?: ReactNode;
   /** Android and web retain app-owned secondary scenes; iOS uses Expo Router's native stack. */
   secondaryLayers?: readonly { readonly key: string; readonly content: ReactNode }[];
   /** Flutter's global search route covers the complete desktop shell, including the sidebar. */
@@ -63,6 +65,7 @@ export interface NavigationShellProps {
   productLabel: string;
   hasUser: boolean;
   hasManagedDiscordBot?: boolean;
+  isDiscordCommunityMember?: boolean;
   hidePrimaryNavigation?: boolean;
   profileMenuLabel: string;
   closeDrawerLabel: string;
@@ -221,7 +224,7 @@ function MobileNavigationShell(props: NavigationShellProps & { width: number }) 
       style={styles.shell}
       drawerStyle={{ width: drawerWidth, backgroundColor: 'transparent' }}
       keyboardDismissMode="on-drag"
-      swipeEnabled={!secondaryActive && (drawerOpen || canSwipeOpenDrawer)}
+      swipeEnabled={!props.searchOverlay && !secondaryActive && (drawerOpen || canSwipeOpenDrawer)}
       // Drawer 4.x creates a legacy Gesture.Pan at runtime; Gesture Handler 3
       // renamed its public type without changing this builder's behavior.
       configureGestureHandler={
@@ -253,6 +256,7 @@ function MobileNavigationShell(props: NavigationShellProps & { width: number }) 
             onAddAccount={props.onAddAccount}
             hasUser={props.hasUser}
             hasManagedDiscordBot={props.hasManagedDiscordBot}
+            isDiscordCommunityMember={props.isDiscordCommunityMember}
           />
         </View>
       )}
@@ -288,7 +292,8 @@ function MobileNavigationShell(props: NavigationShellProps & { width: number }) 
             screens={props.primaryScreens}
             onSelect={props.onPrimarySelect}
             isRtl={props.isRtl}
-            swipeEnabled={platformAllowsTabSwipe(props.platform)}
+            // Horizontal swipes belong to each page's local tabs, never this pager.
+            swipeEnabled={false}
           />
           <View style={styles.tabBarOverlay}>
             <PrimaryTabBar
@@ -300,6 +305,9 @@ function MobileNavigationShell(props: NavigationShellProps & { width: number }) 
           </View>
           {showsDrawerEdgeHint && drawerHintVisible ? <DrawerEdgeHint isRtl={isRtl} /> : null}
         </View>
+        {props.searchOverlay ? (
+          <View style={StyleSheet.absoluteFill}>{props.searchOverlay}</View>
+        ) : null}
         {secondaryActive
           ? mountedSecondaryLayers.map((layer, index) => {
               const isTop = index === mountedSecondaryLayers.length - 1;
@@ -487,10 +495,6 @@ function DesktopNavigationShell(props: NavigationShellProps & { width: number })
       ) : null}
     </View>
   );
-}
-
-function platformAllowsTabSwipe(platform?: string): boolean {
-  return (platform ?? Platform.OS) !== 'web';
 }
 
 function platformAllowsDrawerEdgeGesture(platform?: string): boolean {

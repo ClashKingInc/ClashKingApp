@@ -2381,5 +2381,11 @@
   "profileAvatar": "Đổi diện mạo",
   "avatarPickerTitle": "Chọn ảnh đại diện",
   "gameEmotes": "Biểu cảm",
-  "gameSquads": "Biệt đội"
+  "gameSquads": "Biệt đội",
+  "gameTownHallVariants": "Biến thể Nhà Chính",
+  "emoteCostLabel": "Chi phí",
+  "emoteRequiredLabel": "Yêu cầu:",
+  "searchMinimumCharacters": "Nhập ít nhất 3 ký tự để tìm kiếm.",
+  "homeCreatorCodeInGame": "Trong Clash of Clans",
+  "homeCreatorCodeOpenFailed": "Không thể mở liên kết. Hãy thử lại."
 }

@@ -293,7 +293,10 @@ export function AuthenticatedRoot({
   const closeSecondary = useCallback(() => {
     navigationGeneration.current += 1;
     if (backThroughBrowserHistory()) return;
-    if (usesNativeSecondaryNavigation && (pushedScenes.length || utility !== undefined)) {
+    if (
+      usesNativeSecondaryNavigation &&
+      (pushedScenes.length || (utility !== undefined && utility !== 'search'))
+    ) {
       router.back();
       return;
     }
@@ -512,7 +515,9 @@ export function AuthenticatedRoot({
   const screens = {
     home: (
       <HomeDashboardRoot
-        active={primary === 'home' && !utility && pushedScenes.length === 0}
+        active={
+          primary === 'home' && !utility && pushedScenes.length === 0 && !announcementPresentation
+        }
         onReady={startupPlayerLink ? undefined : handleHomeReady}
         openManageAccounts={() => openUtility(routeById('accounts'))}
         openAnnouncement={(item) => void presentHomeAnnouncement(item)}
@@ -1146,9 +1151,14 @@ export function AuthenticatedRoot({
       return;
     }
 
-    const expected = secondaryLayers.map((layer) => layer.key);
+    // Search stays over the retained tab tree. Only result details enter UIKit's
+    // stack; pushing search itself replaces its source header mid-morph.
+    const nativeLayers = secondaryLayers.filter(
+      (layer) => !layer.key.startsWith('utility:search:'),
+    );
+    const expected = nativeLayers.map((layer) => layer.key);
     expectedNativeRouteKeys.current = expected;
-    secondaryLayers.forEach((layer, layerIndex) => {
+    nativeLayers.forEach((layer, layerIndex) => {
       publishNativeSecondaryLayer(layer.key, {
         clanSpring: 'clanSpring' in layer ? layer.clanSpring : undefined,
         // Only the top retained route shows navigation progress; keep its real
@@ -1156,7 +1166,7 @@ export function AuthenticatedRoot({
         content: (
           <PageLoadingHost value={true}>
             {layer.content}
-            {layerIndex === secondaryLayers.length - 1 ? (
+            {layerIndex === nativeLayers.length - 1 ? (
               <PageLoadingOverlay visible={deepLinkLoading || pageLoading} />
             ) : null}
           </PageLoadingHost>
@@ -1213,6 +1223,7 @@ export function AuthenticatedRoot({
         followerCount={authState.followerCount}
         hasUser={user !== null}
         hidePrimaryNavigation={suppressAnnouncements}
+        isDiscordCommunityMember={user?.discordCommunityMember === true}
         hasManagedDiscordBot={discordServers.servers.some(
           (server) => server.has_bot && managesDiscordServer(server),
         )}
@@ -1242,6 +1253,11 @@ export function AuthenticatedRoot({
         }
         productLabel=""
         profileMenuLabel={t('navigationOpenProfileMenu')}
+        searchOverlay={
+          usesNativeSecondaryNavigation && utility === 'search'
+            ? secondaryLayers[0]?.content
+            : undefined
+        }
         secondaryContent={usesNativeSecondaryNavigation ? undefined : secondaryContent}
         secondaryLayers={usesNativeSecondaryNavigation ? [] : secondaryLayers}
         secondaryFullScreen={
@@ -1360,7 +1376,9 @@ const styles = StyleSheet.create({
 function selectNativePrimary(route: PrimaryRouteId) {
   // Dismiss the outer detail stack before targeting a nested tab. Dispatching
   // both in the same commit lets the detail dismissal undo the tab selection.
-  router.dismissAll();
+  // Primary-to-primary selection has no stack to pop. Dispatching dismissAll
+  // there emits an unhandled POP_TO_TOP instead of changing only the tab.
+  if (router.canDismiss()) router.dismissAll();
   // iPad uses the retained pager, not nested native tab routes. Its caller has
   // already selected the page in state; only dismiss any native detail stack.
   if (Platform.OS === 'ios' && Platform.isPad) return;

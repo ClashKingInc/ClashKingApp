@@ -1,3 +1,4 @@
+import { LocalTabSwipe } from '../../../ui/local-tab-swipe';
 import { useAdaptiveLayout } from '../../../ui/adaptive-layout';
 import { ResponsiveGrid } from '../../../ui/responsive-grid';
 import { useNativePrimaryNavigation } from '../../../ui/native-primary-navigation';
@@ -308,125 +309,133 @@ export function WarCwlScreen({
     />
   );
   return (
-    <SafeAreaView
-      edges={['left', 'right']}
-      style={[styles.safe, { backgroundColor: theme.background }]}
+    <LocalTabSwipe
+      value={mode}
+      values={['inWar', 'other'] as const}
+      onChange={setMode}
+      isRtl={isRtl}
+      disabled={false}
     >
-      {desktop || layout.isDuo || layout.isTablet ? (
-        <ScrollView
-          testID="war-scroll-view"
-          onScroll={pullRefresh.onScroll}
-          onScrollBeginDrag={pullRefresh.onScrollBeginDrag}
-          onScrollEndDrag={pullRefresh.onScrollEndDrag}
-          scrollEventThrottle={16}
-          refreshControl={refreshControl}
-          contentContainerStyle={[
-            styles.scroll,
-            (layout.isDuo || layout.isTablet) && { maxWidth: layout.contentMaxWidth },
-            { paddingBottom: insets.bottom + (desktop ? 32 : nativeTabs ? 24 : 96) },
-          ]}
-        >
-          {listHeader}
-          {!entries.length ? (
-            emptyRoster
-          ) : layout.isDuo || layout.isTablet ? (
-            <ResponsiveGrid
-              // Each war card compares two named clans. Give that comparison
-              // enough space rather than squeezing both identities into thirds.
-              minItemWidth={layout.isExpanded ? (layout.isTablet ? 430 : 300) : 420}
-              maxColumns={
-                layout.isExpanded
-                  ? layout.columns(layout.isTablet ? 430 : 300, layout.isTablet ? 2 : 3)
-                  : 2
-              }
-              gap={12}
-            >
-              {entries.map((item) => (
-                <View key={item.tag}>
-                  <WarSummaryCard
-                    item={item}
-                    loading={
-                      loadingWarTags.has(item.tag) ||
-                      (!item.summary && !requestedWars.current.has(item.tag))
-                    }
-                    now={now}
-                    onOpenWar={(war) => onOpenWar(item, war)}
-                    onOpenCwl={() => {
-                      if (item.summary) onOpenCwl(item, item.summary);
-                    }}
-                  />
-                </View>
-              ))}
-            </ResponsiveGrid>
-          ) : (
-            <View style={[styles.grid, desktop && styles.desktopGrid]}>
-              {entries.map((item) => (
-                <View key={item.tag} style={desktop ? styles.desktopItem : styles.mobileItem}>
-                  <WarSummaryCard
-                    item={item}
-                    loading={
-                      loadingWarTags.has(item.tag) ||
-                      (!item.summary && !requestedWars.current.has(item.tag))
-                    }
-                    now={now}
-                    onOpenWar={(war) => onOpenWar(item, war)}
-                    onOpenCwl={() => {
-                      if (item.summary) onOpenCwl(item, item.summary);
-                    }}
-                  />
-                </View>
-              ))}
-            </View>
-          )}
-        </ScrollView>
-      ) : (
-        <FlatList
-          style={styles.listViewport}
-          onScroll={pullRefresh.onScroll}
-          scrollEventThrottle={16}
-          onScrollBeginDrag={pullRefresh.onScrollBeginDrag}
-          onScrollEndDrag={pullRefresh.onScrollEndDrag}
-          alwaysBounceVertical
-          data={entries}
-          testID="war-scroll-view"
-          key={`${mode}-war-roster`}
-          keyExtractor={(item) => item.tag}
-          contentContainerStyle={[
-            styles.scroll,
-            (layout.isDuo || layout.isTablet) && { maxWidth: layout.contentMaxWidth },
-            { paddingBottom: insets.bottom + (nativeTabs ? 24 : 96) },
-          ]}
-          ListHeaderComponent={listHeader}
-          ListEmptyComponent={emptyRoster}
-          refreshControl={refreshControl}
-          renderItem={({ item }) => (
-            <View style={styles.mobileItem}>
-              <WarSummaryCard
-                item={item}
-                loading={
-                  loadingWarTags.has(item.tag) ||
-                  (!item.summary && !requestedWars.current.has(item.tag))
+      <SafeAreaView
+        edges={['left', 'right']}
+        style={[styles.safe, { backgroundColor: theme.background }]}
+      >
+        {desktop || layout.isDuo || layout.isTablet ? (
+          <ScrollView
+            testID="war-scroll-view"
+            onScroll={pullRefresh.onScroll}
+            onScrollBeginDrag={pullRefresh.onScrollBeginDrag}
+            onScrollEndDrag={pullRefresh.onScrollEndDrag}
+            scrollEventThrottle={16}
+            refreshControl={refreshControl}
+            contentContainerStyle={[
+              styles.scroll,
+              (layout.isDuo || layout.isTablet) && { maxWidth: layout.contentMaxWidth },
+              { paddingBottom: insets.bottom + (desktop ? 32 : nativeTabs ? 24 : 96) },
+            ]}
+          >
+            {listHeader}
+            {!entries.length ? (
+              emptyRoster
+            ) : layout.isDuo || layout.isTablet ? (
+              <ResponsiveGrid
+                // Each war card compares two named clans. Give that comparison
+                // enough space rather than squeezing both identities into thirds.
+                minItemWidth={layout.isExpanded ? (layout.isTablet ? 430 : 300) : 420}
+                maxColumns={
+                  layout.isExpanded
+                    ? layout.columns(layout.isTablet ? 430 : 300, layout.isTablet ? 2 : 3)
+                    : 2
                 }
-                now={now}
-                onOpenWar={(war) => onOpenWar(item, war)}
-                onOpenCwl={() => {
-                  if (item.summary) onOpenCwl(item, item.summary);
-                }}
-              />
-            </View>
-          )}
+                gap={12}
+              >
+                {entries.map((item) => (
+                  <View key={item.tag}>
+                    <WarSummaryCard
+                      item={item}
+                      loading={
+                        loadingWarTags.has(item.tag) ||
+                        (!item.summary && !requestedWars.current.has(item.tag))
+                      }
+                      now={now}
+                      onOpenWar={(war) => onOpenWar(item, war)}
+                      onOpenCwl={() => {
+                        if (item.summary) onOpenCwl(item, item.summary);
+                      }}
+                    />
+                  </View>
+                ))}
+              </ResponsiveGrid>
+            ) : (
+              <View style={[styles.grid, desktop && styles.desktopGrid]}>
+                {entries.map((item) => (
+                  <View key={item.tag} style={desktop ? styles.desktopItem : styles.mobileItem}>
+                    <WarSummaryCard
+                      item={item}
+                      loading={
+                        loadingWarTags.has(item.tag) ||
+                        (!item.summary && !requestedWars.current.has(item.tag))
+                      }
+                      now={now}
+                      onOpenWar={(war) => onOpenWar(item, war)}
+                      onOpenCwl={() => {
+                        if (item.summary) onOpenCwl(item, item.summary);
+                      }}
+                    />
+                  </View>
+                ))}
+              </View>
+            )}
+          </ScrollView>
+        ) : (
+          <FlatList
+            style={styles.listViewport}
+            onScroll={pullRefresh.onScroll}
+            scrollEventThrottle={16}
+            onScrollBeginDrag={pullRefresh.onScrollBeginDrag}
+            onScrollEndDrag={pullRefresh.onScrollEndDrag}
+            alwaysBounceVertical
+            data={entries}
+            testID="war-scroll-view"
+            key={`${mode}-war-roster`}
+            keyExtractor={(item) => item.tag}
+            contentContainerStyle={[
+              styles.scroll,
+              (layout.isDuo || layout.isTablet) && { maxWidth: layout.contentMaxWidth },
+              { paddingBottom: insets.bottom + (nativeTabs ? 24 : 96) },
+            ]}
+            ListHeaderComponent={listHeader}
+            ListEmptyComponent={emptyRoster}
+            refreshControl={refreshControl}
+            renderItem={({ item }) => (
+              <View style={styles.mobileItem}>
+                <WarSummaryCard
+                  item={item}
+                  loading={
+                    loadingWarTags.has(item.tag) ||
+                    (!item.summary && !requestedWars.current.has(item.tag))
+                  }
+                  now={now}
+                  onOpenWar={(war) => onOpenWar(item, war)}
+                  onOpenCwl={() => {
+                    if (item.summary) onOpenCwl(item, item.summary);
+                  }}
+                />
+              </View>
+            )}
+          />
+        )}
+        <PullRefreshHint
+          distance={pullRefresh.distance}
+          refreshing={refreshing}
+          label={
+            model.lastRefresh
+              ? t('generalLastRefresh', { time: relativeWarTime(model.lastRefresh, now, t) })
+              : undefined
+          }
         />
-      )}
-      <PullRefreshHint
-        distance={pullRefresh.distance}
-        refreshing={refreshing}
-        label={
-          model.lastRefresh
-            ? t('generalLastRefresh', { time: relativeWarTime(model.lastRefresh, now, t) })
-            : undefined
-        }
-      />
-    </SafeAreaView>
+      </SafeAreaView>
+    </LocalTabSwipe>
   );
 }
 

@@ -1,6 +1,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { applyReanimatedNativeCompat } from './reanimated-native-compat.mjs';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const packageRoot = path.join(root, 'node_modules/react-native-draggable-flatlist');
@@ -189,7 +190,9 @@ if (!cell.includes('// CK Fabric synchronous transform handoff')) {
   const start = cell.indexOf('  const animStyle = useAnimatedStyle(');
   const end = cell.indexOf('\n  const updateCellMeasurements', start);
   if (start < 0 || end < 0) throw new Error('Missing Fabric transform patch anchor');
-  cell = cell.slice(0, start) + `  // CK Fabric synchronous transform handoff
+  cell =
+    cell.slice(0, start) +
+    `  // CK Fabric synchronous transform handoff
   const dragging = useSharedValue(false);
   useLayoutEffect(() => {
     executeOnUIRuntimeSync((value: boolean) => {
@@ -202,14 +205,52 @@ if (!cell.includes('// CK Fabric synchronous transform handoff')) {
       ? { translateX: dragging.value ? translate.value : 0 }
       : { translateY: dragging.value ? translate.value : 0 }],
   }));
-` + cell.slice(end);
+` +
+    cell.slice(end);
   cell = cell
     .replace('useEffect, useMemo', 'useEffect, useLayoutEffect, useMemo')
     .replace('  const heldTanslate = useSharedValue(0);\n', '')
     .replace('        heldTanslate.value = 0;\n', '')
-    .replace('    // Releasing in the original slot needs this too: the final hover offset can\n    // be zero without ever replacing the last nonzero held translation.',
-      '    // Refresh cached offsets for the next pickup even when Fabric skips onLayout.');
+    .replace(
+      '    // Releasing in the original slot needs this too: the final hover offset can\n    // be zero without ever replacing the last nonzero held translation.',
+      '    // Refresh cached offsets for the next pickup even when Fabric skips onLayout.',
+    );
   if (!cell.includes('  executeOnUIRuntimeSync,'))
     cell = cell.replace('  runOnUI,', '  runOnUI,\n  executeOnUIRuntimeSync,');
   fs.writeFileSync(cellSource, cell);
 }
+
+// Remove the experimental imperative reset from existing installations too.
+// A virtualized cell can have no attached Fabric node in a layout effect;
+// setNativeProps then crashes inside _updateProps. Keep transform ownership
+// declarative through useAnimatedStyle, including on mount and unmount.
+cell = fs.readFileSync(cellSource, 'utf8');
+cell = cell
+  .replace(
+    '  const viewRef = useAnimatedRef<Animated.View>();',
+    '  const viewRef = useRef<Animated.View>(null);',
+  )
+  .replace('  useAnimatedRef,\n', '')
+  .replace('  setNativeProps,\n', '')
+  .replace(
+    '      // CK clear native release transform before paint\n      if (!value) setNativeProps(viewRef, { transform: [{ translateX: 0 }, { translateY: 0 }] });\n',
+    '',
+  );
+fs.writeFileSync(cellSource, cell);
+
+// Preserve the return spring instead of snapping the decorator to scale=1
+// when React clears isActive. Applies to every list using ScaleDecorator.
+const decoratorsFile = path.join(packageRoot, 'src/components/CellDecorators.tsx');
+let decorators = fs.readFileSync(decoratorsFile, 'utf8');
+if (!decorators.includes('// CK smooth scale release')) {
+  const anchor = '    const scale = isActive ? animScale : 1;';
+  if (!decorators.includes(anchor)) throw new Error('Missing scale release anchor');
+  decorators = decorators.replace(
+    anchor,
+    '    // CK smooth scale release\n    const scale = animScale;',
+  );
+  fs.writeFileSync(decoratorsFile, decorators);
+}
+
+// Apply after structural drag patches: native dependency removal changes their anchors.
+applyReanimatedNativeCompat(root);

@@ -5204,5 +5204,11 @@
   "profileAvatar": "Αλλαγή εμφάνισης",
   "avatarPickerTitle": "Διάλεξε ένα άβαταρ",
   "gameEmotes": "Εκφράσεις",
-  "gameSquads": "Ομάδες"
+  "gameSquads": "Ομάδες",
+  "gameTownHallVariants": "Παραλλαγές Δημαρχείου",
+  "emoteCostLabel": "Κόστος",
+  "emoteRequiredLabel": "Απαιτείται:",
+  "searchMinimumCharacters": "Πληκτρολογήστε τουλάχιστον 3 χαρακτήρες για αναζήτηση.",
+  "homeCreatorCodeInGame": "Στο Clash of Clans",
+  "homeCreatorCodeOpenFailed": "Δεν ήταν δυνατό το άνοιγμα του συνδέσμου. Δοκίμασε ξανά."
 }

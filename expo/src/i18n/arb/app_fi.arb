@@ -5109,5 +5109,11 @@
   "profileAvatar": "Vaihda ulkoasua",
   "avatarPickerTitle": "Valitse avatar",
   "gameEmotes": "Emotet",
-  "gameSquads": "Ryhmät"
+  "gameSquads": "Ryhmät",
+  "gameTownHallVariants": "Kaupungintalon muunnelmat",
+  "emoteCostLabel": "Hinta",
+  "emoteRequiredLabel": "Vaaditaan:",
+  "searchMinimumCharacters": "Hae kirjoittamalla vähintään 3 merkkiä.",
+  "homeCreatorCodeInGame": "Clash of Clansissa",
+  "homeCreatorCodeOpenFailed": "Linkkiä ei voitu avata. Yritä uudelleen."
 }

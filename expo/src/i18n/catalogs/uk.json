@@ -2381,5 +2381,11 @@
   "profileAvatar": "Змінити вигляд",
   "avatarPickerTitle": "Обери аватар",
   "gameEmotes": "Емоції",
-  "gameSquads": "Загони"
+  "gameSquads": "Загони",
+  "gameTownHallVariants": "Варіанти ратуші",
+  "emoteCostLabel": "Вартість",
+  "emoteRequiredLabel": "Потрібно:",
+  "searchMinimumCharacters": "Введіть щонайменше 3 символи для пошуку.",
+  "homeCreatorCodeInGame": "У Clash of Clans",
+  "homeCreatorCodeOpenFailed": "Не вдалося відкрити посилання. Спробуй ще раз."
 }

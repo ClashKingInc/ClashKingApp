@@ -5109,5 +5109,11 @@
   "profileAvatar": "Ändra utseende",
   "avatarPickerTitle": "Välj en avatar",
   "gameEmotes": "Emotes",
-  "gameSquads": "Trupper"
+  "gameSquads": "Trupper",
+  "gameTownHallVariants": "Rådhusvarianter",
+  "emoteCostLabel": "Kostnad",
+  "emoteRequiredLabel": "Krävs:",
+  "searchMinimumCharacters": "Skriv minst 3 tecken för att söka.",
+  "homeCreatorCodeInGame": "I Clash of Clans",
+  "homeCreatorCodeOpenFailed": "Det gick inte att öppna länken. Försök igen."
 }

@@ -2381,5 +2381,11 @@
   "profileAvatar": "Verander voorkoms",
   "avatarPickerTitle": "Kies ’n avatar",
   "gameEmotes": "Emotes",
-  "gameSquads": "Groepe"
+  "gameSquads": "Groepe",
+  "gameTownHallVariants": "Stadsaalvariante",
+  "emoteCostLabel": "Koste",
+  "emoteRequiredLabel": "Vereis:",
+  "searchMinimumCharacters": "Tik minstens 3 karakters om te soek.",
+  "homeCreatorCodeInGame": "In Clash of Clans",
+  "homeCreatorCodeOpenFailed": "Kon nie die skakel oopmaak nie. Probeer weer."
 }

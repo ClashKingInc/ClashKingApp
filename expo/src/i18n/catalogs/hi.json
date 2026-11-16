@@ -2381,5 +2381,11 @@
   "profileAvatar": "रूप बदलें",
   "avatarPickerTitle": "एक अवतार चुनें",
   "gameEmotes": "इमोट्स",
-  "gameSquads": "दस्ते"
+  "gameSquads": "दस्ते",
+  "gameTownHallVariants": "टाउन हॉल के रूप",
+  "emoteCostLabel": "लागत",
+  "emoteRequiredLabel": "आवश्यक:",
+  "searchMinimumCharacters": "खोजने के लिए कम से कम 3 अक्षर टाइप करें।",
+  "homeCreatorCodeInGame": "Clash of Clans में",
+  "homeCreatorCodeOpenFailed": "लिंक नहीं खुल सका। फिर से कोशिश करें।"
 }

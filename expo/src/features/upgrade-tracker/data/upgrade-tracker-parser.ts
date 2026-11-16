@@ -189,12 +189,15 @@ export class UpgradeTrackerParser {
       (data) => ImageAssets.getHelperImage(itemName(data)),
     );
 
+    addMissingLaboratoryItems(items, lookup, townHallLevel, builderHallLevel);
     items.sort(
       (a, b) =>
         Object.values(UpgradeVillage).indexOf(a.village) -
           Object.values(UpgradeVillage).indexOf(b.village) ||
+        compareLaboratoryOrder(a, b) ||
         Object.values(UpgradeCategory).indexOf(a.category) -
           Object.values(UpgradeCategory).indexOf(b.category) ||
+        compareCatalogUnlockOrder(a, b) ||
         Number(a.isComplete) - Number(b.isComplete) ||
         a.name.localeCompare(b.name),
     );
@@ -237,19 +240,24 @@ function addBuildingItems(
     target = maximumItemLevelAtHall(data, hall, lookup.bundle),
     type = String(data.type ?? ''),
     name = itemName(data),
+    // Level zero means not built; artwork starts at level one. Keep progress at zero.
+    imageLevel = Math.max(1, current),
     category = buildingCategory(type, name, target),
     image =
       itemVillage === UpgradeVillage.home
-        ? ImageAssets.getHomeVillageBuildingImage(name, current)
+        ? ImageAssets.getHomeVillageBuildingImage(name, imageLevel)
         : name === 'Battle Machine' || name === 'Battle Copter'
           ? ImageAssets.getBuilderBaseHeroImage(name)
-          : ImageAssets.getBuilderBaseBuildingImage(name, current),
+          : ImageAssets.getBuilderBaseBuildingImage(name, imageLevel),
     steps = buildSteps(data, current, target, true),
     totals = upgradeTimeTotals(data, current, steps, true),
     resource =
       category === UpgradeCategory.walls
         ? resourceProgressTotals(data, current, true, category, steps)
         : null;
+  // The Crafting Station has no levels of its own. Parse its modules before
+  // skipping the level-less parent, or all crafted defenses disappear.
+  addCraftedDefenses(output, raw, data, lookup, itemVillage, hall);
   if (target <= 0) return;
   output.push(
     new UpgradeTrackerItem({
@@ -282,7 +290,6 @@ function addBuildingItems(
   );
   if (target >= maxLevel(mapList(data.levels)))
     addSupercharge(output, raw, data, image, itemVillage, hall);
-  addCraftedDefenses(output, raw, data, lookup, itemVillage, hall);
 }
 
 function addSupercharge(
@@ -364,7 +371,7 @@ function addCraftedDefenses(
         new UpgradeTrackerItem({
           id: int(module._id),
           name: itemName(module),
-          imageUrl: ImageAssets.getSeasonalDefenseImage(itemName(seasonal), current),
+          imageUrl: ImageAssets.getSeasonalDefenseImage(itemName(seasonal), Math.max(1, current)),
           village: itemVillage,
           category: UpgradeCategory.craftedDefenses,
           queue: UpgradeQueue.builders,
@@ -443,6 +450,72 @@ function addLeveledSection(
         isExtra: bool(raw.extra),
       }),
     );
+  }
+}
+
+function compareCatalogUnlockOrder(a: UpgradeTrackerItem, b: UpgradeTrackerItem): number {
+  const ordered = new Set<UpgradeCategoryValue>([
+    UpgradeCategory.heroes, UpgradeCategory.guardians, UpgradeCategory.defenses,
+    UpgradeCategory.army, UpgradeCategory.resources, UpgradeCategory.traps,
+  ]);
+  if (a.category !== b.category || !ordered.has(a.category)) return 0;
+  const unlockHall = (item: UpgradeTrackerItem) => {
+    const requirements = mapList(item.meta?.levels)
+      .map((level) => optionalInt(level.required_townhall))
+      .filter((level): level is number => level !== null && level > 0);
+    return requirements.length ? Math.min(...requirements) : 0;
+  };
+  // Unlock order comes from game metadata; stable game IDs break ties so
+  // completion or translations never reshuffle the familiar browsing order.
+  return unlockHall(a) - unlockHall(b) || a.id - b.id;
+}
+
+function compareLaboratoryOrder(a: UpgradeTrackerItem, b: UpgradeTrackerItem): number {
+  if (a.queue !== UpgradeQueue.laboratory || b.queue !== UpgradeQueue.laboratory) return 0;
+  // Match training-building unlock order. Completion status must never shuffle
+  // maxed or still-locked units away from their familiar position in the lab.
+  const producers = ['Barracks', 'Dark Barracks', 'Builder Barracks', 'Squad Barracks', 'Spell Factory', 'Dark Spell Factory', 'Workshop'];
+  const rank = (item: UpgradeTrackerItem) => {
+    const index = producers.indexOf(String(item.meta?.production_building ?? ''));
+    return index < 0 ? producers.length : index;
+  };
+  return rank(a) - rank(b)
+    || int(a.meta?.production_building_level) - int(b.meta?.production_building_level)
+    || a.id - b.id;
+}
+
+function addMissingLaboratoryItems(
+  output: UpgradeTrackerItem[], lookup: StaticLookup, townHall: number, builderHall: number,
+) {
+  const present = new Set(output.map((item) => item.id));
+  for (const section of ['troops', 'spells']) {
+    for (const data of mapList(lookup.bundle[section])) {
+      if (present.has(int(data._id)) || data.is_seasonal === true || data.super_troop || data.is_super_troop) continue;
+      const producer = String(data.production_building ?? '');
+      if (!producer || !mapList(data.levels).length) continue;
+      const itemVillage = village(data);
+      const hall = itemVillage === UpgradeVillage.home ? townHall : builderHall;
+      const available = maximumItemLevelAtHall(data, hall, lookup.bundle);
+      const category = section === 'spells' ? UpgradeCategory.spells
+        : producer === 'Workshop' ? UpgradeCategory.sieges
+        : normalizeResource(data.upgrade_resource).includes('dark') ? UpgradeCategory.darkTroops : UpgradeCategory.troops;
+      const target = available || maxLevel(mapList(data.levels));
+      const steps = available > 0 ? buildSteps(data, 0, target, false) : [];
+      const totals = upgradeTimeTotals(data, 0, steps, false);
+      // Future-hall entries are browseable but must not add work to this hall's
+      // completion totals or planner. An unowned unit available here does count.
+      output.push(new UpgradeTrackerItem({
+        id: int(data._id), name: itemName(data), village: itemVillage, category,
+        queue: UpgradeQueue.laboratory, currentLevel: 0, targetLevel: target,
+        count: available > 0 ? 1 : 0, steps,
+        imageUrl: section === 'spells' ? ImageAssets.getSpellImage(itemName(data))
+          : producer === 'Workshop' ? ImageAssets.getSiegeMachineImage(itemName(data))
+          : itemVillage === UpgradeVillage.home ? ImageAssets.getTroopImage(itemName(data))
+          : ImageAssets.getBuilderBaseTroopImage(itemName(data)),
+        completedUpgradeSeconds: totals.completed, totalUpgradeSeconds: totals.total, meta: data,
+      }));
+      present.add(int(data._id));
+    }
   }
 }
 

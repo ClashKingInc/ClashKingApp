@@ -248,3 +248,17 @@ an isolated Worker, seeds only its disposable database, and exercises the real
 `AnnouncementService` through the installed client package. It checks that five
 stories remain discoverable behind newer articles, plus pagination, platform
 filtering, legacy story URLs, and draft exclusion.
+
+### Official news in native Posts
+
+Native Posts requests Supercell's public blog directly and extracts its
+`__NEXT_DATA__` page props. No backend sync, hard-coded build ID, or persistent
+article cache is used. The two feeds render independently with separate cursors.
+Official failures are silent until the next refresh. Opening an official card
+fetches its article and renders it in the existing script-disabled reader.
+
+The official archive follows the app language for German, English, Spanish,
+French, Indonesian, Italian, Japanese, Korean, Portuguese, Polish, and Simplified
+or Traditional Chinese. Unsupported languages use English. Each localized feed
+reflects Supercell's published translations. This undocumented website format
+must remain isolated from ClashKing feed failures.

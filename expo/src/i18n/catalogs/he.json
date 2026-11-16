@@ -2381,5 +2381,11 @@
   "profileAvatar": "שינוי מראה",
   "avatarPickerTitle": "בחרו אווטאר",
   "gameEmotes": "מחוות",
-  "gameSquads": "חוליות"
+  "gameSquads": "חוליות",
+  "gameTownHallVariants": "גרסאות בית העירייה",
+  "emoteCostLabel": "עלות",
+  "emoteRequiredLabel": "נדרש:",
+  "searchMinimumCharacters": "יש להקליד לפחות 3 תווים כדי לחפש.",
+  "homeCreatorCodeInGame": "ב-Clash of Clans",
+  "homeCreatorCodeOpenFailed": "לא ניתן לפתוח את הקישור. נסה שוב."
 }

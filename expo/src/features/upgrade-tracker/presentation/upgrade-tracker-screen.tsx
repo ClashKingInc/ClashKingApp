@@ -48,6 +48,7 @@ import { HeroHeaderScrim } from '../../../ui/hero-header-scrim';
 
 import { ImageAssets } from '../../../core/assets/image-assets';
 import { translationForTid } from '../../../core/game-data/game-data-localization';
+import { gameDataState, isRecord } from '../../../core/game-data/game-data-state';
 import {
   materialBackLabel,
   toIntlLocale,
@@ -1528,10 +1529,12 @@ function UpgradeSummaryMetrics({
   levels,
   seconds,
   costs,
+  showLevels = true,
 }: {
   levels: number;
   seconds: number;
   costs: Readonly<Record<string, number>>;
+  showLevels?: boolean;
 }) {
   const { t, locale } = useI18n();
   const resources = Object.entries(costs).filter(([, amount]) => amount > 0);
@@ -1549,9 +1552,9 @@ function UpgradeSummaryMetrics({
         flexWrap: layout.isExpanded ? 'wrap' : 'nowrap',
       }}
     >
-      <CKText role="bodyMedium" muted numberOfLines={1} style={{ fontSize, flexShrink: 1 }}>
+      {showLevels ? <CKText role="bodyMedium" muted numberOfLines={1} style={{ fontSize, flexShrink: 1 }}>
         {label}
-      </CKText>
+      </CKText> : null}
       {levels > 0 && seconds > 0 ? (
         <CKText
           role="bodyMedium"
@@ -1560,7 +1563,7 @@ function UpgradeSummaryMetrics({
           style={{ fontSize, flexShrink: 1 }}
           accessibilityLabel={`${t('gameItemUpgradeTime')}: ${formatTrackerDuration(seconds)}`}
         >
-          · {formatTrackerDuration(seconds)}
+          {showLevels ? '· ' : ''}{formatTrackerDuration(seconds)}
         </CKText>
       ) : null}
       {resources.map(([resource, amount]) => (
@@ -1583,7 +1586,7 @@ function UpgradeSummaryMetrics({
   );
 }
 
-function UpgradeGroupTiles({
+export function UpgradeGroupTiles({
   group,
   items,
   snapshot,
@@ -1672,7 +1675,6 @@ function CraftedDefenseGroups({
   snapshot: UpgradeTrackerSnapshot;
   onSelect: (item: UpgradeTrackerItem) => void;
 }) {
-  const { t } = useI18n();
   const theme = useCKTheme();
   const [expanded, setExpanded] = useState<string | null>(null);
   const families = new Map<string, UpgradeTrackerItem[]>();
@@ -1702,9 +1704,9 @@ function CraftedDefenseGroups({
               />
               <View style={styles.grow}>
                 <CKText role="rowTitle">{name}</CKText>
-                <CKText role="metadata" muted>
-                  {t('gameLevel', { level: current, maxLevel: target })}
-                </CKText>
+                <View style={{ height: 4, marginTop: 8, borderRadius: 2, backgroundColor: theme.surfaceContainerHighest, overflow: 'hidden' }}>
+                  <View style={{ width: `${target ? Math.min(100, current / target * 100) : 0}%`, height: 4, backgroundColor: theme.primary }} />
+                </View>
               </View>
               <ChevronDown
                 size={20}
@@ -1738,6 +1740,7 @@ function CraftedDefenseGroups({
                       <ChevronRight size={16} color={theme.onSurfaceVariant} />
                     </View>
                     <UpgradeSummaryMetrics
+                      showLevels={false}
                       levels={item.levelsRemaining}
                       seconds={item.totalSeconds}
                       costs={item.totalCosts}
@@ -2106,7 +2109,7 @@ function UpgradeTile({
   const theme = useCKTheme();
   const themeMode = useCKThemeMode();
   const containedArt = usesContainedUpgradeArt(item.category);
-  const lockedEquipment = item.category === UpgradeCategory.equipment && item.isUnbuilt;
+  const lockedEquipment = item.isUnbuilt && (item.category === UpgradeCategory.equipment || item.queue === UpgradeQueue.laboratory);
   const frameBackground =
     item.category === UpgradeCategory.equipment
       ? String(item.meta?.rarity ?? '') === '2'
@@ -3347,7 +3350,7 @@ function CollectionTab({
     collectionItems.some((item) => item.village === UpgradeVillage.builderBase);
   const summaries = useMemo(
     () =>
-      Object.values(UpgradeCollectionType).flatMap((type) => {
+      [UpgradeCollectionType.emotes, ...Object.values(UpgradeCollectionType).filter((type) => type !== UpgradeCollectionType.emotes)].flatMap((type) => {
         const all = collectionItems.filter((item) => item.type === type);
         if (!all.length) return [];
         return [
@@ -3579,7 +3582,7 @@ function CollectionTab({
                     <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
                       {item.type === UpgradeCollectionType.emotes &&
                       !item.owned &&
-                      typeof item.meta?.prestige_medal_cost === 'number' ? (
+                      typeof item.meta?.cost === 'number' ? (
                         <MobileWebImage
                           imageUrl={`${ImageAssets.baseUrl}/resources/ranked_medals.webp`}
                           style={{ width: 18, height: 18 }}
@@ -3590,8 +3593,8 @@ function CollectionTab({
                           ? Array.isArray(item.meta?.required_emotes) &&
                             item.meta.required_emotes.length
                             ? `${collectionItems.filter((candidate) => candidate.owned && (item.meta?.required_emotes as unknown[]).includes(candidate.id)).length}/${item.meta.required_emotes.length}`
-                            : typeof item.meta?.prestige_medal_cost === 'number'
-                              ? item.meta.prestige_medal_cost.toLocaleString()
+                            : typeof item.meta?.cost === 'number'
+                              ? item.meta.cost.toLocaleString()
                               : ownershipLabels.missing
                           : item.owned
                             ? ownershipLabels.owned
@@ -3685,13 +3688,25 @@ function CollectionDetailModal({
             ? t('upgradeTrackerFilterOwned')
             : t('upgradeTrackerFilterMissing')}
       </CKText>
+      {item.type === UpgradeCollectionType.emotes && !Array.isArray(item.meta?.required_emotes) && typeof item.meta?.cost === 'number' && item.meta.cost > 0 ? (
+        <View style={styles.detailLine}>
+          <CKText muted style={styles.grow}>{t('emoteCostLabel')}</CKText>
+          <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
+            <MobileWebImage imageUrl={`${ImageAssets.baseUrl}/resources/ranked_medals.webp`} style={{ width: 20, height: 20 }} />
+            <CKText>{compactNumber(item.meta.cost, intlLocale)}</CKText>
+          </View>
+        </View>
+      ) : null}
       {music ? <SceneryPlayer source={music} /> : null}
       {info.map((row) => (
         <View key={row.label} style={styles.detailLine}>
           <CKText muted style={styles.grow}>
             {row.label}
           </CKText>
-          <CKText>{row.value}</CKText>
+          <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6, flexShrink: 1 }}>
+            {row.imageUrl ? <MobileWebImage imageUrl={row.imageUrl} style={{ width: 26, height: 26 }} /> : null}
+            <CKText style={{ flexShrink: 1 }}>{row.value}</CKText>
+          </View>
         </View>
       ))}
     </ChoiceModal>
@@ -3701,7 +3716,7 @@ function CollectionDetailModal({
 function collectionInfo(item: UpgradeCollectionItem, locale: string, t: I18nValue['t']) {
   const meta = item.meta;
   if (!meta) return [];
-  const rows: { label: string; value: string }[] = [];
+  const rows: { label: string; value: string; imageUrl?: string }[] = [];
   const add = (label: string, value: unknown) => {
     if (value === null || value === undefined || String(value).length === 0) return;
     rows.push({ label, value: String(value) });
@@ -3717,7 +3732,19 @@ function collectionInfo(item: UpgradeCollectionItem, locale: string, t: I18nValu
     if (value === 'home') return t('upgradeTrackerHomeVillage');
     return value;
   };
-  if (item.type === UpgradeCollectionType.skins) {
+  if (item.type === UpgradeCollectionType.emotes) {
+    const bundle = gameDataState.bundleData;
+    const section = (key: string): Record<string, unknown>[] => {
+      const value = bundle[key];
+      return (Array.isArray(value) ? value : isRecord(value) && Array.isArray(value.items) ? value.items : []).filter(isRecord);
+    };
+    const league = section('league_tiers').find((entry) => entry.league_tier === meta.required_league_tier);
+    const isSetBonus = Array.isArray(meta.required_emotes) && meta.required_emotes.length > 0;
+    if (!isSetBonus && league && Number(meta.required_league_tier) > 0) {
+      const tid = isRecord(league.TID) ? league.TID.name : undefined;
+      rows.push({ label: t('emoteRequiredLabel'), value: String(typeof tid === 'string' ? translationForTid(tid) ?? league.name : league.name), imageUrl: ImageAssets.getLeagueImage(String(league.name)) });
+    }
+  } else if (item.type === UpgradeCollectionType.skins) {
     add(t('upgradeTrackerTier'), meta.tier);
     add(t('statsHero'), meta.character);
   } else if (item.type === UpgradeCollectionType.sceneries) {
