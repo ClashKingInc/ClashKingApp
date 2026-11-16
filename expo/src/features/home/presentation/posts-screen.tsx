@@ -78,7 +78,6 @@ export function PostsScreen({ service, readHistory, onBack, initialPostId }: Pos
   const [loading, setLoading] = useState(false);
   const [hasMore, setHasMore] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
-  const queues = useRef({ own: [] as AppAnnouncement[], official: [] as AppAnnouncement[] });
   const displayedIds = useRef(new Set<string>());
   const feedStarted = useRef(false);
   const nextOffset = useRef(0);
@@ -123,7 +122,6 @@ export function PostsScreen({ service, readHistory, onBack, initialPostId }: Pos
         articleRequest.current += 1;
         openingArticleRef.current = false;
         setRefreshing(true);
-        queues.current = { own: [], official: [] };
         displayedIds.current = new Set();
         feedStarted.current = false;
         setStoriesLoading(true);
@@ -145,32 +143,46 @@ export function PostsScreen({ service, readHistory, onBack, initialPostId }: Pos
         nextOffset.current = 0;
         setHasMore(true);
       }
-      // Merge ordered source queues only at their heads. Once displayed, a
-      // card never changes position when a slower source/page arrives. Stop
-      // when a live source needs another page rather than sorting the feed.
+      // Publish each successful source immediately. Sorting is limited to its
+      // new batch: a late source must never move cards already on screen.
+      const publish = (items: readonly AppAnnouncement[]) => {
+        if (!current()) return;
+        const next = [...items]
+          .sort((a, b) => (b.publishedAt?.getTime() ?? 0) - (a.publishedAt?.getTime() ?? 0))
+          .filter((item) => {
+            if (displayedIds.current.has(item.id)) return false;
+            displayedIds.current.add(item.id);
+            return true;
+          });
+        if (!next.length) return;
+        const append = feedStarted.current;
+        feedStarted.current = true;
+        setPosts((previous) => (append ? [...previous, ...next] : next));
+        setRefreshing(false);
+      };
       let ownError: unknown;
       await Promise.all([
-        ownHasMore.current && queues.current.own.length === 0
+        ownHasMore.current
           ? service
               .getPublishedPosts(20, nextOffset.current, 'article')
               .then((page) => {
                 if (!current()) return;
-                queues.current.own = page.items.filter((item) => !item.isStory);
                 nextOffset.current = page.nextOffset;
                 ownHasMore.current = page.hasMore;
+                publish(page.items.filter((item) => !item.isStory));
               })
               .catch((reason: unknown) => {
                 if (current()) ownError = reason;
               })
           : Promise.resolve(),
-        officialHasMore.current && queues.current.official.length === 0
+        officialHasMore.current
           ? officialBlog
               .getPage(officialPage.current, locale)
               .then((page) => {
                 if (!current()) return;
-                queues.current.official = [...page.items];
                 officialPage.current += 1;
                 officialHasMore.current = page.hasMore;
+                publish(page.items);
               })
               .catch(() => {
                 // Keep already displayed articles; try this source again on refresh.
@@ -179,29 +191,11 @@ export function PostsScreen({ service, readHistory, onBack, initialPostId }: Pos
           : Promise.resolve(),
       ]);
       if (current()) {
-        const next: AppAnnouncement[] = [];
-        const { own, official } = queues.current;
-        while (own.length || official.length) {
-          if (!own.length && ownHasMore.current && !ownError) break;
-          if (!official.length && officialHasMore.current) break;
-          const ownDate = own[0]?.publishedAt?.getTime() ?? -Infinity;
-          const officialDate = official[0]?.publishedAt?.getTime() ?? -Infinity;
-          const item =
-            own.length && (!official.length || ownDate >= officialDate)
-              ? own.shift()!
-              : official.shift()!;
-          if (!displayedIds.current.has(item.id)) {
-            displayedIds.current.add(item.id);
-            next.push(item);
-          }
-        }
-        const append = feedStarted.current;
-        setPosts((previous) => (append ? [...previous, ...next] : next));
-        feedStarted.current = true;
+        // An empty refresh replaces stale content only after both sources
+        // settle; an empty fast source must not hide the still-pending one.
+        if (!feedStarted.current) setPosts([]);
         setError(ownError);
-        setHasMore(
-          own.length > 0 || official.length > 0 || ownHasMore.current || officialHasMore.current,
-        );
+        setHasMore(ownHasMore.current || officialHasMore.current);
         setLoading(false);
         setRefreshing(false);
         loadingRef.current = false;
