@@ -2,7 +2,7 @@ import type { TextInputInstance } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useAdaptiveLayout } from '../../ui/adaptive-layout';
 import { ResponsiveGrid } from '../../ui/responsive-grid';
-import { useCallback, useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState, useSyncExternalStore, type ReactNode } from 'react';
 import { SlidingSegmentControl } from '../../ui/sliding-segment-control';
 import {
   Animated,
@@ -30,6 +30,8 @@ import {
 } from 'lucide-react-native';
 
 import { ImageAssets } from '../../core/assets/image-assets';
+import { getMaxTownHallLevel } from '../../core/game-data/game-data-service';
+import { gameDataState, subscribeToGameDataRevision } from '../../core/game-data/game-data-state';
 import { GlobalSearchHeaderFrame, globalSearchHeaderLayout } from '../../ui/header';
 import { materialBackLabel, useI18n } from '../../i18n';
 import {
@@ -633,9 +635,12 @@ function PlayerFiltersPanel({
     value.minTownHallLevel !== null && value.minTownHallLevel === value.maxTownHallLevel
       ? value.minTownHallLevel
       : null;
+  // Refresh open filters when downloaded static data changes.
+  useSyncExternalStore(subscribeToGameDataRevision, () => gameDataState.revision, () => gameDataState.revision);
+  const maxTownHall = Math.max(getMaxTownHallLevel(), selectedTownHall ?? 0);
   const townHallOptions = [
     { value: '', label: t('generalNotSet') },
-    ...Array.from({ length: 18 }, (_, index) => 18 - index).map((level) => ({
+    ...Array.from({ length: maxTownHall }, (_, index) => maxTownHall - index).map((level) => ({
       value: String(level),
       label: t('gameTownHallLevelNumber', { level }),
       imageUrl: ImageAssets.townHall(level),
@@ -663,7 +668,7 @@ function PlayerFiltersPanel({
         <FilterLabel
           icon={
             <MobileWebImage
-              imageUrl={ImageAssets.townHall(selectedTownHall ?? 18)}
+              imageUrl={ImageAssets.townHall(selectedTownHall ?? maxTownHall)}
               contentFit="contain"
               style={styles.filterIconImage}
             />
