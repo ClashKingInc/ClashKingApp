@@ -1622,9 +1622,13 @@ function trackerStatRows(
   return rows;
 }
 function upgradeImageForLevel(item: UpgradeTrackerItem, level: number) {
-  // Module names/levels describe stats, not standalone buildings or art levels.
-  // Preserve the parent defense artwork already resolved by the parser.
-  if (item.category === UpgradeCategory.craftedDefenses) return item.imageUrl;
+  // Module and supercharge levels describe stats, not building artwork levels.
+  // Preserve the parent defense image already resolved by the tracker parser.
+  if (
+    item.category === UpgradeCategory.craftedDefenses ||
+    item.category === UpgradeCategory.supercharge
+  )
+    return item.imageUrl;
   if (item.category === UpgradeCategory.traps)
     return item.village === UpgradeVillage.home
       ? ImageAssets.getHomeVillageTrapImage(item.name, level)
@@ -1645,6 +1649,7 @@ function upgradeImageForLevel(item: UpgradeTrackerItem, level: number) {
   return item.imageUrl;
 }
 export function upgradeImageFallbacks(item: UpgradeTrackerItem, fromLevel: number) {
+  if (item.category === UpgradeCategory.supercharge) return [];
   if (
     ![
       UpgradeCategory.defenses,
