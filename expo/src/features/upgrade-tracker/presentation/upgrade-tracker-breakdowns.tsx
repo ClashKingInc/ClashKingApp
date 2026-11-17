@@ -1,4 +1,4 @@
-import { wikiSectionForUpgradeCategory } from '../../game-assets/wiki-catalogue';
+import { wikiSectionForUpgradeCategory, wikiSections } from '../../game-assets/wiki-catalogue';
 import { formatWikiDuration } from '../../game-assets/wiki-duration';
 import { WikiUpgradeCost } from '../../game-assets/wiki-upgrade-cost';
 import {
@@ -9,7 +9,6 @@ import {
 import { WikiStatBars } from '../../game-assets/wiki-stat-bars';
 import { WikiScrollView } from '../../game-assets/wiki-scroll-view';
 import { WikiHeader, WikiSectionLinks, WikiTheme } from '../../game-assets/wiki-layout';
-import { wikiSections } from '../../game-assets/wiki-catalogue';
 import { WikiTable } from '../../game-assets/wiki-table';
 import { useWikiNavigation } from '../../game-assets/wiki-navigation';
 import { WikiSquadMembers } from '../../game-assets/wiki-squad-members';
