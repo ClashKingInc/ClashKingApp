@@ -33,6 +33,16 @@ export const wikiSections: readonly { id: string; label: MessageKey }[] = [
   { id: 'decorations', label: 'gameAssetsCategoryDecorations' },
   { id: 'obstacles', label: 'upgradeTrackerObstacles' },
 ];
+/** Tracker categories and public Wiki section IDs are different contracts.
+ * Share links must use the catalogue ID so another device can resolve them. */
+export function wikiSectionForUpgradeCategory(category: string): string {
+  if (category === UpgradeCategory.builders) return 'helpers';
+  if (category === UpgradeCategory.darkTroops || category === UpgradeCategory.sieges)
+    return 'troops';
+  if (['defenses', 'army', 'resources', 'walls'].includes(category)) return 'buildings';
+  return category;
+}
+
 export interface WikiEntry {
   key: string;
   section: string;

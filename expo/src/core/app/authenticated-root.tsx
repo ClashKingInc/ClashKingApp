@@ -1,3 +1,4 @@
+import { wikiSectionForUpgradeCategory } from '../../features/game-assets/wiki-catalogue';
 import { WikiNavigationContext } from '../../features/game-assets/wiki-navigation';
 import type { WikiNavigation } from '../../features/game-assets/wiki-navigation';
 import { UpgradeItemDetailContent } from '../../features/upgrade-tracker/presentation/upgrade-tracker-breakdowns';
@@ -1064,13 +1065,7 @@ export function AuthenticatedRoot({
           snapshot={scene.snapshot}
           page
           embedded
-          wikiSection={
-            scene.item.category === 'sieges' || scene.item.category === 'darkTroops'
-              ? 'troops'
-              : ['defenses', 'army', 'resources', 'walls'].includes(scene.item.category)
-                ? 'buildings'
-                : scene.item.category
-          }
+          wikiSection={wikiSectionForUpgradeCategory(scene.item.category)}
           onClose={closeSecondary}
         />
       );

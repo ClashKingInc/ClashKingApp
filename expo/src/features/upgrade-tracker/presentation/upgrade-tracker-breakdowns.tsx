@@ -1,3 +1,4 @@
+import { wikiSectionForUpgradeCategory } from '../../game-assets/wiki-catalogue';
 import { formatWikiDuration } from '../../game-assets/wiki-duration';
 import { WikiUpgradeCost } from '../../game-assets/wiki-upgrade-cost';
 import {
@@ -172,16 +173,7 @@ export function UpgradeItemDetailModal({
       key={`${item.planKey}-${item.currentLevel}-${item.targetLevel}`}
       item={item}
       snapshot={snapshot}
-      wikiSection={
-        item.category === UpgradeCategory.darkTroops || item.category === UpgradeCategory.sieges
-          ? 'troops'
-          : item.category === UpgradeCategory.defenses ||
-              item.category === UpgradeCategory.army ||
-              item.category === UpgradeCategory.resources ||
-              item.category === UpgradeCategory.walls
-            ? 'buildings'
-            : item.category
-      }
+      wikiSection={wikiSectionForUpgradeCategory(item.category)}
       page
       onClose={onClose}
     />
@@ -843,6 +835,8 @@ function detailTableRows(
       if (research && isRecord(stats.upgrade_cost))
         for (const [resource, amount] of Object.entries(stats.upgrade_cost))
           if (typeof amount === 'number') cells.set(`ore:${resource}`, number.format(amount));
+      // Construction data uses build_time; research uses upgrade_time. Both
+      // belong to the same displayed level row as their respective cost.
       const upgradeSeconds = stats.build_time ?? stats.upgrade_time;
       if (research && typeof upgradeSeconds === 'number')
         cells.set('upgrade-time', formatTrackerDuration(upgradeSeconds));
