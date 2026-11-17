@@ -33,7 +33,15 @@ export type ClanInfoTabKey =
 
 export type ClanInfoFeatureFlags = Readonly<Partial<Record<ClanInfoTabKey, boolean>>>;
 
+export interface ClanMemberActivity {
+  readonly tag: string;
+  readonly lastObservedAt: string | null;
+  readonly joinedAt: string | null;
+}
+
 export interface ClanInfoPresentationModel {
+  readonly canViewMemberActivity?: boolean;
+  readonly memberActivity?: ReadonlyMap<string, ClanMemberActivity>;
   readonly clan: Clan;
   readonly bookmarked: boolean;
   readonly notifications?: ClanNotificationControls;

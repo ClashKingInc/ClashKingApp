@@ -405,7 +405,7 @@ function GameAssetTile({
   );
 }
 
-function GameAssetPreview({
+export function GameAssetPreview({
   asset,
   actions,
   message,

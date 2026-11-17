@@ -1,9 +1,19 @@
+import { wikiSectionForUpgradeCategory } from '../../features/game-assets/wiki-catalogue';
+import { WikiNavigationContext } from '../../features/game-assets/wiki-navigation';
+import type { WikiNavigation } from '../../features/game-assets/wiki-navigation';
+import { UpgradeItemDetailContent } from '../../features/upgrade-tracker/presentation/upgrade-tracker-breakdowns';
+import type {
+  UpgradeTrackerItem,
+  UpgradeTrackerSnapshot,
+} from '../../features/upgrade-tracker/models';
 import { ProfileAvatar } from '../../features/avatars/clash-avatar';
 import * as Clipboard from 'expo-clipboard';
-import { router, type Href } from 'expo-router';
+import { router, useNavigationContainerRef, type Href } from 'expo-router';
+import { WikiCatalogueContext, type WikiEntry } from '../../features/game-assets/wiki-catalogue';
 import {
   useCallback,
   useEffect,
+  useLayoutEffect,
   useRef,
   useState,
   useSyncExternalStore,
@@ -95,6 +105,8 @@ import { subscribeSecondaryBackHandler } from './secondary-back-handler';
 import {
   applyNativeSecondaryRouteTransition,
   nativeSecondaryRouteTransition,
+  notifyNativeSecondaryPopped,
+  retainedNativeWikiRouteKeys,
   publishNativeSecondaryLayer,
   removeNativeSecondaryLayers,
 } from './native-secondary-navigation';
@@ -113,10 +125,17 @@ import { onboarding } from '../../features/onboarding/onboarding-service';
 import { useStartupCovered } from './startup-loading';
 
 type ResolvedScene = {
+  readonly nativeKey?: string;
+  readonly wikiCatalogue?: readonly WikiEntry[];
   readonly linkParams?: AppLinkParams;
   readonly linkKey?: number;
   readonly clanSpring?: import('../../features/clan/presentation/clan-spring-transition').ClanSpringOrigin;
 } & (
+  | {
+      readonly kind: 'wiki';
+      readonly item: UpgradeTrackerItem;
+      readonly snapshot?: UpgradeTrackerSnapshot;
+    }
   | { readonly kind: 'player'; readonly player: Player }
   | { readonly kind: 'clan'; readonly clan: Clan }
   | { readonly kind: 'capital'; readonly clan: Clan }
@@ -145,6 +164,7 @@ type PushedScene =
   | ResolvedScene
   | {
       readonly kind: 'deferred';
+      readonly nativeKey?: string;
       readonly preview: ResolvedScene;
       readonly initial?: ResolvedScene;
       readonly load: () => Promise<ResolvedScene>;
@@ -166,8 +186,10 @@ export function AuthenticatedRoot({
   const { t, isRtl, locale } = useI18n();
   const theme = useCKTheme();
   const viewportWidth = useWindowDimensions().width;
+  // Both mobile platforms use a real native stack. Plain retained overlays
+  // appear instantly and cannot animate Back or interactive pop correctly.
   const usesNativeSecondaryNavigation =
-    Platform.OS === 'ios' && resolveShellLayout(Platform.OS, viewportWidth) === 'mobile';
+    Platform.OS !== 'web' && resolveShellLayout(Platform.OS, viewportWidth) === 'mobile';
   const subscribeAuth = useCallback(
     (listener: () => void) => runtime.auth.subscribe(listener),
     [runtime.auth],
@@ -217,8 +239,23 @@ export function AuthenticatedRoot({
   };
   const routeCurrent = useRef(true);
   const navigationGeneration = useRef(0);
+  const nativeNavigation = useNavigationContainerRef();
   const nativeRouteKeys = useRef<readonly string[]>([]);
   const expectedNativeRouteKeys = useRef<readonly string[]>([]);
+  useEffect(() => {
+    if (!usesNativeSecondaryNavigation) return;
+    let observed = nativeDetailLayers(nativeNavigation.getRootState());
+    // Listen above the pages being removed. A popped page can unsubscribe before
+    // its own state callback fires, leaving the shell convinced it is still open.
+    // Only remove routes actually observed in the navigator: a just-published
+    // destination is pending until its push appears and must not be discarded.
+    return nativeNavigation.addListener('state', () => {
+      const actual = nativeDetailLayers(nativeNavigation.getRootState());
+      const removed = observed.filter((key) => !actual.includes(key));
+      observed = actual;
+      for (const key of removed.reverse()) notifyNativeSecondaryPopped(key);
+    });
+  }, [nativeNavigation, usesNativeSecondaryNavigation]);
   const {
     openHomeAnnouncement: presentHomeAnnouncement,
     openPreparedStory: presentPreparedStory,
@@ -266,14 +303,21 @@ export function AuthenticatedRoot({
           params: { ...initialParams, ...(playerTag ? { player: playerTag } : {}) },
         }),
       );
-      setLinkState({ key: 0, params: initialParams });
-      navigationGeneration.current += 1;
+      const generation = ++navigationGeneration.current;
+      // A fresh user intent must navigate even if a previous native pop missed
+      // its cleanup. Re-read the real stack instead of trusting its old mirror.
+      nativeRouteKeys.current = nativeDetailLayers(nativeNavigation.getRootState());
+      // Invalidate outgoing cleanup synchronously, before React commits the new
+      // route, so a delayed old pop cannot clear this freshly requested page.
+      if (usesNativeSecondaryNavigation)
+        expectedNativeRouteKeys.current = [`utility:${route.id}:${playerTag ?? ''}:${generation}`];
+      setLinkState({ key: generation, params: initialParams });
       setPushedScenes([]);
       setUtilityPostId(undefined);
       setUtilityPlayerTag(playerTag);
       setUtility(route.id);
     },
-    [],
+    [nativeNavigation, usesNativeSecondaryNavigation],
   );
   const openUtility = useCallback((route: AppRouteDefinition) => showUtility(route), [showUtility]);
   const openPlayerUtility = (route: AppRouteDefinition, playerTag: string) => {
@@ -520,7 +564,13 @@ export function AuthenticatedRoot({
         }
         onReady={startupPlayerLink ? undefined : handleHomeReady}
         openManageAccounts={() => openUtility(routeById('accounts'))}
-        openAnnouncement={(item) => void presentHomeAnnouncement(item)}
+        openAnnouncement={(item) => {
+          void presentHomeAnnouncement(item)
+            .then((opened) => {
+              if (opened) return runtime.announcementPresentation.markRead(item);
+            })
+            .catch(() => {});
+        }}
         openTodo={() => openUtility(routeById('todo'))}
         openRanked={(playerTag) => openPlayerUtility(routeById('ranked'), playerTag)}
         openLegends={(playerTag) => openPlayerUtility(routeById('legends'), playerTag)}
@@ -575,7 +625,10 @@ export function AuthenticatedRoot({
         shouldPresent: (item) => runtime.announcementPresentation.shouldPresent(item),
         prepareStory: (item) => sharedAnnouncementStoryCache.prepare(item),
         presentStory: (item, preparedUri) => presentPreparedStory(item, preparedUri, canPresent),
-        markDismissed: (item) => runtime.announcementPresentation.markDismissed(item),
+        markDismissed: async (item) => {
+          await runtime.announcementPresentation.markRead(item);
+          await runtime.announcementPresentation.markDismissed(item);
+        },
       });
       void controller.tryPresent();
     }, 0);
@@ -980,9 +1033,11 @@ export function AuthenticatedRoot({
           load={scene.load}
           initial={scene.initial}
           pending={
-            <LinkParametersContext.Provider value={EMPTY_LINK_PARAMS}>
-              {renderPushedScene(scene.preview, true)}
-            </LinkParametersContext.Provider>
+            <WikiNavigationContext.Provider value={wikiNavigation}>
+              <LinkParametersContext.Provider value={EMPTY_LINK_PARAMS}>
+                {renderPushedScene(scene.preview, true)}
+              </LinkParametersContext.Provider>
+            </WikiNavigationContext.Provider>
           }
           onBack={closeSecondary}
         >
@@ -1003,6 +1058,17 @@ export function AuthenticatedRoot({
       );
     if (scene.kind === 'serverDashboard')
       return <ServerDashboardScreen server={scene.server} onBack={closeSecondary} />;
+    if (scene.kind === 'wiki')
+      return (
+        <UpgradeItemDetailContent
+          item={scene.item}
+          snapshot={scene.snapshot}
+          page
+          embedded
+          wikiSection={wikiSectionForUpgradeCategory(scene.item.category)}
+          onClose={closeSecondary}
+        />
+      );
     if (scene.kind === 'player')
       return (
         <PlayerDetailRoot
@@ -1115,35 +1181,190 @@ export function AuthenticatedRoot({
       );
     return renderUtilityContent(scene.route, scene.playerTag);
   };
+  const prepareNativeWikiScene = (
+    scene: ResolvedScene,
+    layer: string,
+    sourceRoutes: readonly string[],
+    catalogue?: readonly WikiEntry[],
+  ) => {
+    // Publish the exact destination before the native push. Keep ownership
+    // out of shell state so navigation cannot also rebuild retained pages.
+    publishNativeSecondaryLayer(layer, {
+      owner: 'wiki-link',
+      content: (
+        <PageLoadingHost value={true}>
+          <WikiNavigationContext.Provider value={wikiNavigation}>
+            <LinkParametersContext.Provider
+              value={scene.linkParams ?? EMPTY_LINK_PARAMS}
+              key={scene.linkKey}
+            >
+              <WikiCatalogueContext.Provider value={catalogue ?? null}>
+                {renderPushedScene(scene)}
+              </WikiCatalogueContext.Provider>
+            </LinkParametersContext.Provider>
+          </WikiNavigationContext.Provider>
+          <PageLoadingOverlay visible={deepLinkLoading || pageLoading} />
+        </PageLoadingHost>
+      ),
+      onRemove() {
+        if (!expectedNativeRouteKeys.current.includes(layer)) return;
+        navigationGeneration.current += 1;
+        nativeRouteKeys.current = nativeRouteKeys.current.filter((key) => key !== layer);
+        expectedNativeRouteKeys.current = expectedNativeRouteKeys.current.filter(
+          (key) => key !== layer,
+        );
+      },
+    });
+    nativeRouteKeys.current = [...sourceRoutes, layer];
+    expectedNativeRouteKeys.current = nativeRouteKeys.current;
+    // No shell state update here: the native Link pushes the
+    // published page directly, and its native pop releases it.
+  };
+  const wikiNavigation: WikiNavigation = {
+    openSection(category: string, catalogue?: readonly WikiEntry[]) {
+      const generation = ++navigationGeneration.current;
+      if (usesNativeSecondaryNavigation) {
+        const layer = `pushed:wiki:${generation}:utility:wiki:section`;
+        prepareNativeWikiScene(
+          { kind: 'utility', route: 'gameAssets', linkKey: generation, linkParams: { category } },
+          layer,
+          nativeDetailLayers(nativeNavigation.getRootState()),
+          catalogue,
+        );
+        router.push({ pathname: '/detail', params: { layer } });
+        return;
+      }
+      setPushedScenes((current) => [
+        ...current,
+        {
+          kind: 'utility',
+          route: 'gameAssets',
+          linkKey: generation,
+          linkParams: { category },
+          wikiCatalogue: catalogue,
+        },
+      ]);
+    },
+    openItem(item: UpgradeTrackerItem, snapshot?: UpgradeTrackerSnapshot) {
+      const generation = ++navigationGeneration.current;
+      if (usesNativeSecondaryNavigation) {
+        const layer = `pushed:wiki:${generation}:utility:wiki:item`;
+        prepareNativeWikiScene(
+          { kind: 'wiki', item, snapshot },
+          layer,
+          nativeDetailLayers(nativeNavigation.getRootState()),
+        );
+        router.push({ pathname: '/detail', params: { layer } });
+        return;
+      }
+      setPushedScenes((current) => [...current, { kind: 'wiki', item, snapshot }]);
+    },
+    openEntry(key: string) {
+      const generation = ++navigationGeneration.current;
+      if (usesNativeSecondaryNavigation) {
+        const layer = `pushed:wiki:${generation}:utility:wiki:entry`;
+        prepareNativeWikiScene(
+          { kind: 'utility', route: 'gameAssets', linkKey: generation, linkParams: { asset: key } },
+          layer,
+          nativeDetailLayers(nativeNavigation.getRootState()),
+        );
+        router.push({ pathname: '/detail', params: { layer } });
+        return;
+      }
+      setPushedScenes((current) => [
+        ...current,
+        {
+          kind: 'utility',
+          route: 'gameAssets',
+          linkKey: generation,
+          linkParams: { asset: key },
+        },
+      ]);
+    },
+    ...(usesNativeSecondaryNavigation
+      ? {
+          entryLink(
+            key: string,
+            token: string,
+            sourceLayer?: string,
+            catalogue?: readonly WikiEntry[],
+          ) {
+            const layer = `pushed:wiki:${token}:utility:wiki:entry`;
+            return {
+              href: { pathname: '/detail' as const, params: { layer } },
+              prepare() {
+                // The pressed native route is authoritative. A frozen source
+                // may still hold props published while its child was open.
+                // Reconcile that removed tail now, rather than making the user
+                // wait for the owner's next render after native Back.
+                const state = nativeNavigation.getRootState();
+                const sourceRoutes = nativeDetailLayers(state);
+                // Read the native navigator at press time. The owner can still
+                // contain popped scenes while UIKit is already on the source.
+                // Focus in a retained child navigator is not authoritative.
+                if (sourceLayer && sourceRoutes.at(-1) !== sourceLayer) return false;
+                if (!sourceLayer && sourceRoutes.length > 0) return false;
+                // Native Wiki links own their route lifetime. Adding this item
+                // to the shell's React state also republishes every retained
+                // page and renders the home cards during each push and pop.
+                const scene: ResolvedScene = {
+                  kind: 'utility',
+                  route: 'gameAssets',
+                  linkKey: ++navigationGeneration.current,
+                  linkParams: { asset: key },
+                  nativeKey: layer,
+                  wikiCatalogue: catalogue,
+                };
+                prepareNativeWikiScene(scene, layer, sourceRoutes, catalogue);
+                return true;
+              },
+            };
+          },
+        }
+      : {}),
+  };
+
   const secondaryLayers = [
     ...(utility
       ? [
           {
             key: `utility:${utility}:${utilityPlayerTag ?? ''}:${linkState.key}`,
             content: (
-              <LinkParametersContext.Provider value={linkState.params} key={linkState.key}>
-                {renderUtilityContent(utility)}
-              </LinkParametersContext.Provider>
+              <WikiNavigationContext.Provider value={wikiNavigation}>
+                <LinkParametersContext.Provider value={linkState.params} key={linkState.key}>
+                  {renderUtilityContent(utility)}
+                </LinkParametersContext.Provider>
+              </WikiNavigationContext.Provider>
             ),
           },
         ]
       : []),
     ...pushedScenes.map((scene, index) => ({
       clanSpring: scene.clanSpring,
-      key: `pushed:${index}:${scene.kind}:${scene.linkKey ?? ''}`,
+      key:
+        ('nativeKey' in scene ? scene.nativeKey : undefined) ??
+        `pushed:${index}:${scene.kind}:${scene.linkKey ?? ''}`,
       content: (
-        <LinkParametersContext.Provider
-          value={scene.linkParams ?? EMPTY_LINK_PARAMS}
-          key={scene.linkKey}
-        >
-          {renderPushedScene(scene)}
-        </LinkParametersContext.Provider>
+        <WikiNavigationContext.Provider value={wikiNavigation}>
+          <LinkParametersContext.Provider
+            value={scene.linkParams ?? EMPTY_LINK_PARAMS}
+            key={scene.linkKey}
+          >
+            <WikiCatalogueContext.Provider
+              value={('wikiCatalogue' in scene ? scene.wikiCatalogue : null) ?? null}
+            >
+              {renderPushedScene(scene)}
+            </WikiCatalogueContext.Provider>
+          </LinkParametersContext.Provider>
+        </WikiNavigationContext.Provider>
       ),
     })),
   ];
   const secondaryContent = secondaryLayers.at(-1)?.content;
 
-  useEffect(() => {
+  // Publish the route and dispatch its push before paint. A passive effect
+  // leaves a visible beat between the press and the native transition.
+  useLayoutEffect(() => {
     if (!usesNativeSecondaryNavigation) {
       removeNativeSecondaryLayers([...nativeRouteKeys.current, ...expectedNativeRouteKeys.current]);
       nativeRouteKeys.current = [];
@@ -1156,7 +1377,10 @@ export function AuthenticatedRoot({
     const nativeLayers = secondaryLayers.filter(
       (layer) => !layer.key.startsWith('utility:search:'),
     );
-    const expected = nativeLayers.map((layer) => layer.key);
+    const expected = retainedNativeWikiRouteKeys(
+      nativeLayers.map((layer) => layer.key),
+      nativeDetailLayers(nativeNavigation.getRootState()),
+    );
     expectedNativeRouteKeys.current = expected;
     nativeLayers.forEach((layer, layerIndex) => {
       publishNativeSecondaryLayer(layer.key, {
@@ -1175,15 +1399,24 @@ export function AuthenticatedRoot({
           if (!expectedNativeRouteKeys.current.includes(layer.key)) return;
           navigationGeneration.current += 1;
           nativeRouteKeys.current = nativeRouteKeys.current.filter((key) => key !== layer.key);
+          // Root and page listeners can both observe the same pop. Claim it
+          // once before updating React, so an older cleanup cannot clear a new open.
+          expectedNativeRouteKeys.current = expectedNativeRouteKeys.current.filter(
+            (key) => key !== layer.key,
+          );
           if (layer.key.startsWith('utility:')) {
             setPushedScenes([]);
             setUtility(undefined);
             return;
           }
-          const pushedIndex = Number(layer.key.split(':')[1]);
-          if (Number.isInteger(pushedIndex)) {
-            setPushedScenes((current) => current.slice(0, pushedIndex));
-          }
+          setPushedScenes((current) => {
+            const position = current.findIndex(
+              (entry, index) =>
+                (entry.nativeKey ?? `pushed:${index}:${entry.kind}:${entry.linkKey ?? ''}`) ===
+                layer.key,
+            );
+            return position < 0 ? current : current.slice(0, position);
+          });
         },
       });
     });
@@ -1241,12 +1474,14 @@ export function AuthenticatedRoot({
               const entry = primaryLinks[key as PrimaryRouteId];
               return [
                 key,
-                <LinkParametersContext.Provider
-                  key={entry?.key ?? 0}
-                  value={entry?.params ?? EMPTY_LINK_PARAMS}
-                >
-                  {screen}
-                </LinkParametersContext.Provider>,
+                <WikiNavigationContext.Provider key={key} value={wikiNavigation}>
+                  <LinkParametersContext.Provider
+                    key={entry?.key ?? 0}
+                    value={entry?.params ?? EMPTY_LINK_PARAMS}
+                  >
+                    {screen}
+                  </LinkParametersContext.Provider>
+                </WikiNavigationContext.Provider>,
               ];
             }),
           ) as Record<PrimaryRouteId, React.ReactNode>
@@ -1298,6 +1533,7 @@ function secondaryRouteIdFor(scene: PushedScene | undefined): AppRouteId | undef
   // Keep this exhaustive: an omitted kind silently reveals the primary list
   // even when its pushed screen and API data are ready.
   const routes = {
+    wiki: 'gameAssets',
     player: 'players',
     clan: 'clans',
     capital: 'clans',
@@ -1383,4 +1619,22 @@ function selectNativePrimary(route: PrimaryRouteId) {
   // already selected the page in state; only dismiss any native detail stack.
   if (Platform.OS === 'ios' && Platform.isPad) return;
   requestAnimationFrame(() => router.navigate(routeById(route).href as Href));
+}
+
+/** Active native detail routes, read at the moment a Wiki card is pressed. */
+function nativeDetailLayers(
+  state:
+    | { index?: number; routes: readonly { name: string; params?: unknown; state?: unknown }[] }
+    | undefined,
+): string[] {
+  if (!state) return [];
+  if (state.routes.some((route) => route.name === 'detail')) {
+    return state.routes.slice(0, (state.index ?? state.routes.length - 1) + 1).flatMap((route) => {
+      const params = route.params as { layer?: unknown } | undefined;
+      return route.name === 'detail' && typeof params?.layer === 'string' ? [params.layer] : [];
+    });
+  }
+  return nativeDetailLayers(
+    state.routes[state.index ?? 0]?.state as Parameters<typeof nativeDetailLayers>[0],
+  );
 }

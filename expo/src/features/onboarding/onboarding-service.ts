@@ -96,6 +96,10 @@ class OnboardingService {
     if (!storage || !key) return Promise.resolve();
     this.finishing = storage
       .setString(key, JSON.stringify(outcome))
+      .catch(() => {
+        // An optional introduction must never trap the user because local
+        // preferences cannot be written. Still attempt the durable flag below.
+      })
       .then(async () => {
         if (generation !== this.generation) return;
         await SecureStore.setItemAsync(

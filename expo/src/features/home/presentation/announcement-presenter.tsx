@@ -1,4 +1,4 @@
-import { modalOrientations } from "../../../ui/modal-orientations";
+import { modalOrientations } from '../../../ui/modal-orientations';
 import { useCallback, useEffect, useRef, useState, type ReactNode } from 'react';
 import { Modal, Platform } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
@@ -52,6 +52,7 @@ export function useAnnouncementPresentation(
   const [presentation, setPresentation] = useState<Presentation>();
   const mounted = useRef(true);
   const request = useRef(0);
+  const storyViewed = useRef(false);
   const storyCompletion = useRef<((displayed: boolean) => void) | null>(null);
   useEffect(() => {
     mounted.current = true;
@@ -64,7 +65,7 @@ export function useAnnouncementPresentation(
 
   const closeAnnouncement = useCallback(() => {
     request.current += 1;
-    storyCompletion.current?.(true);
+    storyCompletion.current?.(storyViewed.current);
     storyCompletion.current = null;
     setPresentation(undefined);
   }, []);
@@ -72,6 +73,7 @@ export function useAnnouncementPresentation(
   const displayPreparedStory = useCallback(
     (announcement: AppAnnouncement, preparedUri: string, canDisplay?: () => boolean) => {
       if (!mounted.current || (canDisplay && !canDisplay())) return Promise.resolve(false);
+      storyViewed.current = false;
       setPresentation({ type: 'story', announcement, preparedUri });
       return new Promise<boolean>((resolve) => {
         storyCompletion.current = resolve;
@@ -137,11 +139,15 @@ export function useAnnouncementPresentation(
       presentation?.type === 'story' ? (
         <AnnouncementStoryModal
           announcement={presentation.announcement}
+          onViewed={() => {
+            storyViewed.current = true;
+          }}
           onFinish={closeAnnouncement}
           preparedUri={presentation.preparedUri}
         />
       ) : presentation?.type === 'article' ? (
-        <Modal supportedOrientations={modalOrientations}
+        <Modal
+          supportedOrientations={modalOrientations}
           animationType="slide"
           onRequestClose={closeAnnouncement}
           presentationStyle="fullScreen"

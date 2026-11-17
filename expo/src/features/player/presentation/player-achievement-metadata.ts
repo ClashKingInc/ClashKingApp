@@ -16,6 +16,10 @@ export type AchievementMetadata = {
 };
 
 const nameKey = (name: string) => name.normalize('NFKC').replace(/[‘’]/g, "'").trim().toLowerCase();
+let indexedSource: unknown;
+let indexedRevision = -1;
+const entriesByName = new Map<string, JsonRecord>();
+const metadataByName = new Map<string, AchievementMetadata>();
 
 function collection(value: unknown): readonly JsonRecord[] {
   const items = Array.isArray(value) ? value : isRecord(value) ? value.items : [];
@@ -24,12 +28,34 @@ function collection(value: unknown): readonly JsonRecord[] {
 
 /** Only enrich live player progress with the loaded authoritative bundle.
  * Missing or older metadata must not fabricate targets, rewards or tiers. */
-export function achievementMetadata(item: PlayerAchievement): AchievementMetadata | null {
-  const raw = collection(gameDataState.bundleData.achievements).find(
-    (entry) => typeof entry.name === 'string' && nameKey(entry.name) === nameKey(item.name),
-  );
+export function achievementMetadata(
+  item: PlayerAchievement,
+  revision = gameDataState.revision,
+): AchievementMetadata | null {
+  const source = gameDataState.bundleData.achievements;
+  // Revision matters even when a refresh retains the collection identity.
+  // Every card and the gem summary share this index instead of rescanning it.
+  if (source !== indexedSource || indexedRevision !== revision) {
+    indexedSource = source;
+    indexedRevision = revision;
+    entriesByName.clear();
+    metadataByName.clear();
+    for (const entry of collection(source)) {
+      if (typeof entry.name === 'string' && !entriesByName.has(nameKey(entry.name))) {
+        entriesByName.set(nameKey(entry.name), entry);
+      }
+    }
+  }
+  const key = nameKey(item.name);
+  const raw = entriesByName.get(key);
   if (!raw) return null;
-  return metadataFromEntry(raw, item.village);
+  const cacheKey = `${key}:${item.village}`;
+  let metadata = metadataByName.get(cacheKey);
+  if (!metadata) {
+    metadata = metadataFromEntry(raw, item.village);
+    metadataByName.set(cacheKey, metadata);
+  }
+  return metadata;
 }
 
 function metadataFromEntry(raw: JsonRecord, fallbackVillage: string): AchievementMetadata {
@@ -69,7 +95,10 @@ function metadataFromEntry(raw: JsonRecord, fallbackVillage: string): Achievemen
 /** Sum each API achievement's unique catalog tiers once, including account
  * protection. Missing metadata or rewards make the corresponding total unknown,
  * because a partial sum must not appear complete. Stars establish earned tiers. */
-export function achievementGemTotals(items: readonly PlayerAchievement[]) {
+export function achievementGemTotals(
+  items: readonly PlayerAchievement[],
+  revision = gameDataState.revision,
+) {
   const groups = new Map<string, PlayerAchievement[]>();
   for (const item of items) {
     const key = nameKey(item.name);
@@ -83,7 +112,7 @@ export function achievementGemTotals(items: readonly PlayerAchievement[]) {
   let possible = 0;
   for (const group of groups.values()) {
     const first = group[0]!;
-    const metadata = achievementMetadata(first);
+    const metadata = achievementMetadata(first, revision);
     if (!metadata) {
       earnedKnown = possibleKnown = false;
       continue;

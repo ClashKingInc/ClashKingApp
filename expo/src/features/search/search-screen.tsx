@@ -1,15 +1,13 @@
+import { MorphFilterSheet, type FilterChoicePage } from '../../ui/morph-filter-sheet';
 import { scheduleOnRN } from 'react-native-worklets';
 import { getSearchFieldOrigin, clearSearchFieldOrigin } from '../../ui/search-transition';
 import Reanimated, {
   useSharedValue,
   useAnimatedStyle,
-  withSpring,
   withTiming,
   Easing,
 } from 'react-native-reanimated';
 import { SEARCH_MIN_QUERY_LENGTH } from './search-state';
-import { modalOrientations } from '../../ui/modal-orientations';
-import { ReservedRegionLayout } from '../../ui/reserved-region-layout';
 import type { TextInputInstance } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useAdaptiveLayout } from '../../ui/adaptive-layout';
@@ -28,28 +26,17 @@ import {
   type ComponentRef,
 } from 'react';
 import { SlidingSegmentControl } from '../../ui/sliding-segment-control';
-import {
-  Animated,
-  Keyboard,
-  Modal,
-  Pressable,
-  ScrollView,
-  StyleSheet,
-  TextInput,
-  View,
-} from 'react-native';
+import { Keyboard, Pressable, ScrollView, StyleSheet, TextInput, View } from 'react-native';
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 import {
   ChevronLeft,
   ChevronRight,
   CornerUpLeft,
   Globe2,
-  Check,
   Search,
   Shield,
   SlidersHorizontal,
   Swords,
-  X,
 } from 'lucide-react-native';
 
 import { ImageAssets } from '../../core/assets/image-assets';
@@ -60,7 +47,6 @@ import { materialBackLabel, useI18n } from '../../i18n';
 import {
   CKText,
   GlassControlSurface,
-  GlassSurface,
   LoadingIndicator,
   SkeletonContent,
   MobileWebImage,
@@ -552,225 +538,36 @@ function SearchResultCollection({ children }: { children: ReactNode }) {
   );
 }
 
-type FilterChoicePage = {
-  title: string;
-  value: string;
-  options: readonly PickerOption[];
-  onChange: (value: string) => void;
-};
 const FilterNavigationContext = createContext<((page: FilterChoicePage) => void) | null>(null);
-
 function SearchFiltersSheet(props: SearchScreenProps) {
-  const { t, isRtl, locale } = useI18n();
-  const theme = useCKTheme();
-  const layout = useAdaptiveLayout();
-  const insets = useSafeAreaInsets();
-  const { reduceMotion } = useCKAccessibility();
+  const { t } = useI18n();
   const [players, setPlayers] = useState(props.playerFilters);
   const [clans, setClans] = useState(props.clanFilters);
-  const [choicePage, setChoicePage] = useState<FilterChoicePage | null>(null);
-  const [bodyOpacity] = useState(() => new Animated.Value(1));
-  const bodyHeight = useSharedValue(0);
-  const [bodyMeasured, setBodyMeasured] = useState(false);
-  const transitionVersion = useRef(0);
-  const bodyStyle = useAnimatedStyle(() => ({ height: bodyHeight.get() }));
-  const maxBodyHeight = Math.max(100, layout.height * 0.9 - 170);
-  const measureBody = (_width: number, height: number) => {
-    const target = Math.min(height, maxBodyHeight);
-    if (!bodyMeasured || reduceMotion) bodyHeight.set(target);
-    else
-      bodyHeight.set(
-        withSpring(target, {
-          damping: 30,
-          stiffness: 300,
-          mass: 1,
-          overshootClamping: true,
-        }),
-      );
-    setBodyMeasured(true);
-  };
-  const changePage = (page: FilterChoicePage | null) => {
-    // Keep the outgoing content in place until it fades. Then measure the new
-    // page and animate the existing surface on the UI thread, without a new modal.
-    const version = ++transitionVersion.current;
-    bodyOpacity.stopAnimation();
-    if (reduceMotion) {
-      setChoicePage(page);
-      bodyOpacity.setValue(1);
-      return;
-    }
-    Animated.timing(bodyOpacity, { toValue: 0, duration: 85, useNativeDriver: true }).start(
-      ({ finished }) => {
-        if (!finished || version !== transitionVersion.current) return;
-        setChoicePage(page);
-        Animated.timing(bodyOpacity, {
-          toValue: 1,
-          duration: 190,
-          delay: 30,
-          useNativeDriver: true,
-        }).start();
-      },
-    );
-  };
-  const close = () => props.onFiltersExpandedChange(false);
   return (
-    <Modal
-      transparent
-      visible
-      supportedOrientations={modalOrientations}
-      animationType={reduceMotion ? 'none' : 'fade'}
-      statusBarTranslucent
-      navigationBarTranslucent
-      presentationStyle="overFullScreen"
-      onRequestClose={() => (choicePage ? changePage(null) : close())}
+    <MorphFilterSheet
+      title={t('searchFilters')}
+      applyLabel={t('calcSearch')}
+      onClose={() => props.onFiltersExpandedChange(false)}
+      onReset={() =>
+        props.mode === 'players'
+          ? setPlayers(emptyPlayerSearchFilters)
+          : setClans(emptyClanSearchFilters)
+      }
+      onApply={() => {
+        if (props.mode === 'players') props.onPlayerFiltersChange(players);
+        else props.onClanFiltersChange(clans);
+      }}
     >
-      <ReservedRegionLayout>
-        <View
-          style={[
-            styles.filterBackdrop,
-            {
-              paddingTop: insets.top + 12,
-              paddingBottom: insets.bottom + 12,
-              paddingLeft: Math.max(12, insets.left),
-              paddingRight: Math.max(12, insets.right),
-              justifyContent: layout.isExpanded || layout.isDuo ? 'center' : 'flex-end',
-            },
-          ]}
-        >
-          <Pressable
-            style={StyleSheet.absoluteFill}
-            onPress={close}
-            accessibilityRole="button"
-            accessibilityLabel={t('upgradeTrackerPlanClose')}
-          />
-          <GlassSurface
-            cornerRadius={28}
-            style={[styles.filterSheet, { backgroundColor: theme.surface }]}
-            accessibilityViewIsModal
-            onAccessibilityEscape={close}
-          >
-            <View style={styles.filterSheetHeader}>
-              <Pressable
-                accessibilityRole="button"
-                accessibilityLabel={materialBackLabel(locale)}
-                onPress={() => (choicePage ? changePage(null) : close())}
-                style={styles.cancelButton}
-              >
-                <ChevronLeft size={22} color={theme.onSurface} />
-              </Pressable>
-              <CKText role="sectionTitle" numberOfLines={2} style={styles.filterSheetTitle}>
-                {choicePage?.title ?? t('searchFilters')}
-              </CKText>
-              <Pressable
-                onPress={close}
-                accessibilityRole="button"
-                accessibilityLabel={t('upgradeTrackerPlanClose')}
-                style={styles.cancelButton}
-              >
-                <X size={22} color={theme.onSurface} />
-              </Pressable>
-            </View>
-            <Reanimated.View style={bodyMeasured ? bodyStyle : { maxHeight: maxBodyHeight }}>
-              <Animated.View style={[bodyMeasured && { flex: 1 }, { opacity: bodyOpacity }]}>
-                <ScrollView
-                  key={choicePage?.title ?? 'overview'}
-                  onContentSizeChange={measureBody}
-                  keyboardShouldPersistTaps="handled"
-                  contentContainerStyle={styles.filterSheetContent}
-                >
-                  {choicePage ? (
-                    choicePage.options.map((option) => (
-                      <Pressable
-                        key={option.value}
-                        accessibilityRole="radio"
-                        accessibilityState={{ checked: option.value === choicePage.value }}
-                        onPress={() => {
-                          choicePage.onChange(option.value);
-                          changePage(null);
-                        }}
-                        style={[styles.choiceRow, isRtl && styles.rowRtl]}
-                      >
-                        {option.imageUrl ? (
-                          <MobileWebImage
-                            imageUrl={option.imageUrl}
-                            style={styles.filterIconImage}
-                            contentFit="contain"
-                          />
-                        ) : option.value === '' ? (
-                          <View
-                            style={[
-                              styles.unsetFilterIcon,
-                              { backgroundColor: theme.surfaceContainerHighest },
-                            ]}
-                          >
-                            <X size={16} strokeWidth={3} color={theme.onSurfaceVariant} />
-                          </View>
-                        ) : null}
-                        <CKText role="rowTitle" style={styles.grow}>
-                          {option.label}
-                        </CKText>
-                        {option.value === choicePage.value ? (
-                          <Check size={21} color={theme.primary} />
-                        ) : null}
-                      </Pressable>
-                    ))
-                  ) : (
-                    <FilterNavigationContext.Provider value={changePage}>
-                      {props.mode === 'players' ? (
-                        <PlayerFiltersPanel
-                          value={players}
-                          leagues={props.leagues}
-                          onChange={setPlayers}
-                        />
-                      ) : (
-                        <ClanFiltersPanel
-                          value={clans}
-                          locations={props.locations}
-                          onChange={setClans}
-                        />
-                      )}
-                    </FilterNavigationContext.Provider>
-                  )}
-                </ScrollView>
-              </Animated.View>
-            </Reanimated.View>
-            {
-              <View style={[styles.filterSheetFooter, isRtl && styles.rowRtl]}>
-                <Pressable
-                  accessibilityRole="button"
-                  onPress={() =>
-                    props.mode === 'players'
-                      ? setPlayers(emptyPlayerSearchFilters)
-                      : setClans(emptyClanSearchFilters)
-                  }
-                  style={[
-                    styles.filterFooterButton,
-                    { backgroundColor: theme.surfaceContainerHighest },
-                  ]}
-                >
-                  <CKText role="rowTitle">{t('generalReset')}</CKText>
-                </Pressable>
-                <Pressable
-                  accessibilityRole="button"
-                  onPress={() => {
-                    // Commit one draft: SearchRoot's existing debounce runs with the
-                    // newly applied filters. Calling onSubmit here would use stale props.
-                    if (props.mode === 'players') props.onPlayerFiltersChange(players);
-                    else props.onClanFiltersChange(clans);
-                    close();
-                  }}
-                  style={[styles.filterFooterButton, { backgroundColor: theme.primary }]}
-                >
-                  <CKText role="rowTitle" style={{ color: theme.onPrimary }}>
-                    {t('calcSearch')}
-                  </CKText>
-                </Pressable>
-              </View>
-            }
-          </GlassSurface>
-        </View>
-      </ReservedRegionLayout>
-    </Modal>
+      {(open) => (
+        <FilterNavigationContext.Provider value={open}>
+          {props.mode === 'players' ? (
+            <PlayerFiltersPanel value={players} leagues={props.leagues} onChange={setPlayers} />
+          ) : (
+            <ClanFiltersPanel value={clans} locations={props.locations} onChange={setClans} />
+          )}
+        </FilterNavigationContext.Provider>
+      )}
+    </MorphFilterSheet>
   );
 }
 

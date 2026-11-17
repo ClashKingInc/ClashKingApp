@@ -14,6 +14,7 @@ export function generateStaticParams() {
     'upgrade-tracker',
     'bases-armies',
     'game-assets',
+    'wiki',
     'accounts',
     'profile',
     'settings',

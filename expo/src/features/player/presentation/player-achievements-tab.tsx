@@ -1,4 +1,4 @@
-import { useEffect, useState, useSyncExternalStore } from 'react';
+import { memo, useEffect, useMemo, useRef, useState, useSyncExternalStore } from 'react';
 import { Pressable, StyleSheet, View } from 'react-native';
 import { Star } from 'lucide-react-native';
 import Reanimated, { useAnimatedStyle, useSharedValue, withSpring } from 'react-native-reanimated';
@@ -37,18 +37,29 @@ import {
 
 const GEM_IMAGE = `${ImageAssets.baseUrl}/resources/gems.webp`;
 
-export function PlayerAchievementsTab({ player }: { player: Player }) {
+export const PlayerAchievementsTab = memo(function PlayerAchievementsTab({
+  player,
+}: {
+  player: Player;
+}) {
   const { t, locale } = useI18n();
   const layout = useAdaptiveLayout();
-  useSyncExternalStore(
+  const revision = useSyncExternalStore(
     subscribeToGameDataRevision,
     () => gameDataState.revision,
     () => 0,
   );
-  const items = player.achievements
-    .filter((item) => item.name !== 'Keep Your Account Safe!')
-    .map((item) => ({ item, metadata: achievementMetadata(item) }));
-  const gemTotals = achievementGemTotals(player.achievements);
+  const items = useMemo(
+    () =>
+      player.achievements
+        .filter((item) => item.name !== 'Keep Your Account Safe!')
+        .map((item) => ({ item, metadata: achievementMetadata(item, revision) })),
+    [player.achievements, revision],
+  );
+  const gemTotals = useMemo(
+    () => achievementGemTotals(player.achievements, revision),
+    [player.achievements, revision],
+  );
   const gemNumber = new Intl.NumberFormat(toIntlLocale(locale));
   const earnedGems =
     gemTotals.earned === null ? t('generalUnknown') : gemNumber.format(gemTotals.earned);
@@ -148,9 +159,9 @@ export function PlayerAchievementsTab({ player }: { player: Player }) {
       {!items.length ? <EmptyState title={t('generalNoDataAvailable')} /> : null}
     </View>
   );
-}
+});
 
-function AchievementCard({
+const AchievementCard = memo(function AchievementCard({
   item,
   metadata,
 }: {
@@ -161,13 +172,16 @@ function AchievementCard({
   const theme = useCKTheme();
   const { reduceMotion } = useCKAccessibility();
   const [flipped, setFlipped] = useState(false);
+  const [backMounted, setBackMounted] = useState(false);
   const [sizes, setSizes] = useState({ front: 0, back: 0 });
+  const frontHeight = useRef(0);
   const progress = useSharedValue(0);
   useEffect(() => {
+    if (!backMounted || (flipped && !sizes.back)) return;
     progress.value = reduceMotion
       ? Number(flipped)
       : withSpring(Number(flipped), { duration: 340, dampingRatio: 1 });
-  }, [flipped, progress, reduceMotion]);
+  }, [backMounted, flipped, progress, reduceMotion, sizes.back]);
   const frontStyle = useAnimatedStyle(() => ({
     opacity: progress.value < 0.5 ? 1 : 0,
     transform: [{ perspective: 1200 }, { rotateY: `${progress.value * 180}deg` }],
@@ -177,7 +191,12 @@ function AchievementCard({
     transform: [{ perspective: 1200 }, { rotateY: `${(progress.value - 1) * 180}deg` }],
   }));
   const measure = (side: 'front' | 'back', height: number) => {
+    if (height <= 0) return;
     const next = Math.ceil(height + 32);
+    if (side === 'front') frontHeight.current = next;
+    // The ordinary front uses intrinsic height. Do not issue a React update
+    // for every card's first measurement just to make it absolutely positioned.
+    if (!backMounted) return;
     setSizes((current) => (current[side] === next ? current : { ...current, [side]: next }));
   };
   // Measure each face independently so long translations and larger text fit.
@@ -205,19 +224,21 @@ function AchievementCard({
   ]
     .filter(Boolean)
     .join(', ');
-  const backLabel = metadata?.tiers
-    .map((tier) =>
-      [
-        `${t('upgradeTrackerTier')} ${tier.level}`,
-        `${t('calcTarget')} ${achievementTierTarget(tier, metadata, toIntlLocale(locale))}`,
-        `${t('capitalRaidRewards')} ${tier.gems === null ? '—' : `${number.format(tier.gems)} ${gems}`}`,
-      ].join(', '),
-    )
-    .join('. ');
+  const backLabel = backMounted
+    ? metadata?.tiers
+        .map((tier) =>
+          [
+            `${t('upgradeTrackerTier')} ${tier.level}`,
+            `${t('calcTarget')} ${achievementTierTarget(tier, metadata, toIntlLocale(locale))}`,
+            `${t('capitalRaidRewards')} ${tier.gems === null ? '—' : `${number.format(tier.gems)} ${gems}`}`,
+          ].join(', '),
+        )
+        .join('. ')
+    : undefined;
   return (
-    <Reanimated.View style={sizeStyle}>
+    <Reanimated.View style={backMounted ? sizeStyle : undefined}>
       <Reanimated.View
-        style={[styles.face, !sizes.front && styles.initialFace, frontStyle]}
+        style={[styles.face, (!backMounted || !sizes.front) && styles.initialFace, frontStyle]}
         pointerEvents={flipped ? 'none' : 'auto'}
         accessibilityElementsHidden={flipped}
         importantForAccessibility={flipped ? 'no-hide-descendants' : 'auto'}
@@ -229,7 +250,11 @@ function AchievementCard({
           accessibilityLabel={hasTiers ? frontLabel : undefined}
           accessibilityHint={hasTiers ? t('generalDetails') : undefined}
           accessibilityState={hasTiers ? { expanded: false } : undefined}
-          onPress={() => setFlipped(true)}
+          onPress={() => {
+            setSizes((current) => ({ ...current, front: frontHeight.current }));
+            setBackMounted(true);
+            setFlipped(true);
+          }}
         >
           <Surface
             style={styles.card}
@@ -278,7 +303,7 @@ function AchievementCard({
           </Surface>
         </Pressable>
       </Reanimated.View>
-      {metadata && hasTiers ? (
+      {backMounted && metadata && hasTiers ? (
         <Reanimated.View
           style={[styles.face, backStyle]}
           pointerEvents={flipped ? 'auto' : 'none'}
@@ -356,7 +381,7 @@ function AchievementCard({
       ) : null}
     </Reanimated.View>
   );
-}
+});
 
 const styles = StyleSheet.create({
   page: { gap: 28, padding: 12, width: '100%', alignSelf: 'center' },

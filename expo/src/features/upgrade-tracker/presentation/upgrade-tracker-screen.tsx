@@ -1,10 +1,13 @@
 import { useAdaptiveLayout } from '../../../ui/adaptive-layout';
+import { sectionScrollOffset, useSectionSelection } from '../../../ui/use-section-selection';
+import { RetainedSection } from '../../../ui/retained-section';
 import { illustratedHeaderLayout } from '../../../ui/illustrated-header-layout';
 import { useNativeRailBack, useNativeRailShare } from '../../../ui/native-back-context';
 import { modalOrientations } from '../../../ui/modal-orientations';
 import { useLinkParameters, linkChoice } from '../../../core/deep-links/link-parameters';
 import { Image as ExpoImage } from 'expo-image';
 import {
+  memo,
   useCallback,
   useEffect,
   useMemo,
@@ -33,10 +36,7 @@ import {
   ChevronDown,
   ChevronRight,
   Filter,
-  Headphones,
   Lock,
-  Pause,
-  Play,
   Search,
   Share2,
   ClipboardPaste,
@@ -76,12 +76,8 @@ import {
   useCKTheme,
   useCKThemeMode,
 } from '../../../ui';
-import {
-  PagerView,
-  type PagerViewHandle,
-  type PagerViewOnPageSelectedEvent,
-} from '../../../ui/pager';
-import { SceneryAudioService, type SceneryAudioState } from '../audio/scenery-audio-service';
+import { PagerView, type PagerViewHandle } from '../../../ui/pager';
+import { SceneryPlayer } from './scenery-player';
 import {
   UpgradeCategory,
   UpgradeCollectionType,
@@ -158,7 +154,14 @@ export function UpgradeTrackerScreen(props: UpgradeTrackerScreenProps) {
   const theme = useCKTheme();
   const insets = useSafeAreaInsets();
   const link = useLinkParameters();
-  const [tab, setTab] = useState<TrackerTab>(linkChoice(link.tab, trackerTabs, 'home'));
+  const selection = useSectionSelection<TrackerTab>(
+    linkChoice(link.tab, trackerTabs, 'home'),
+    undefined,
+    3,
+  );
+  const tab = selection.selectedKey;
+  const contentTab = selection.contentKey;
+  const activeTrackerTab = useRef(contentTab);
   const [accountOpen, setAccountOpen] = useState(false);
   // A Home shortcut opens the same importer once. Closing it must not reopen
   // it on loading updates, so this is initial state rather than a link effect.
@@ -180,7 +183,9 @@ export function UpgradeTrackerScreen(props: UpgradeTrackerScreenProps) {
   const [goldPassOpen, setGoldPassOpen] = useState(false);
   const pager = useRef<PagerViewHandle>(null);
   const [trackerScrollY] = useState(() => new Animated.Value(0));
-  const [trackerOffsets, setTrackerOffsets] = useState<Partial<Record<TrackerTab, number>>>({});
+  const trackerOffsets = useRef<Partial<Record<TrackerTab, number>>>({});
+  const [pageOffsets, setPageOffsets] = useState<Partial<Record<TrackerTab, number>>>({});
+  const [trackerViewportHeight, setTrackerViewportHeight] = useState(0);
   // Reserve the page while the saved snapshot resolves. Fast empty responses
   // must go directly to import, without flashing a fictitious village.
   const pending = props.loading && !props.snapshot;
@@ -246,16 +251,11 @@ export function UpgradeTrackerScreen(props: UpgradeTrackerScreenProps) {
       ),
     },
   ];
-  const selectTab = (next: TrackerTab) => {
-    setTab(next);
-    trackerScrollY.setValue(trackerOffsets[next] ?? 0);
-    pager.current?.setPageWithoutAnimation(trackerTabs.indexOf(next));
-  };
   const wideTracker = layout.isExpanded;
   const trackerHeaderHeight =
     (wideTracker ? expandedTrackerHeaderHeight(layout.isTablet, fontScale) : desktop ? 280 : 300) +
     insets.top;
-  const trackerTabHeight = wideTracker ? 68 : 54;
+  const trackerTabHeight = wideTracker ? 68 : 60;
   const searchVillage =
     tab === 'home' ? UpgradeVillage.home : tab === 'builder' ? UpgradeVillage.builderBase : null;
   const searchBinding = searchVillage ? trackerSearches[searchVillage] : null;
@@ -266,16 +266,102 @@ export function UpgradeTrackerScreen(props: UpgradeTrackerScreenProps) {
     outputRange: [0, -trackerCollapseDistance],
     extrapolate: 'clamp',
   });
-  const handleTrackerScroll = (_page: TrackerTab) =>
-    Animated.event([{ nativeEvent: { contentOffset: { y: trackerScrollY } } }], {
-      useNativeDriver: Platform.OS !== 'web' && process.env.NODE_ENV !== 'test',
-    });
-  const commitTrackerScroll =
+  const selectTab = (next: TrackerTab) => {
+    if (next === tab) return;
+    const offset = sectionScrollOffset(
+      trackerOffsets.current[contentTab] ?? 0,
+      trackerCollapseDistance,
+    );
+    trackerOffsets.current[next] = offset;
+    selection.select(next, () => setPageOffsets((current) => ({ ...current, [next]: offset })));
+  };
+  useLayoutEffect(() => {
+    const previous = activeTrackerTab.current;
+    if (previous === contentTab) return;
+    const offset = sectionScrollOffset(
+      trackerOffsets.current[previous] ?? 0,
+      trackerCollapseDistance,
+    );
+    trackerOffsets.current[contentTab] = offset;
+    if (pageOffsets[contentTab] !== offset) {
+      // A cold section may finish after another scroll on the old page. Commit
+      // its current offset first, then expose it, keeping page and header aligned.
+      setPageOffsets((current) => ({ ...current, [contentTab]: offset }));
+      return;
+    }
+    activeTrackerTab.current = contentTab;
+    trackerScrollY.setValue(offset);
+    // Mount and align the chosen page before the pager exposes it.
+    pager.current?.setPageWithoutAnimation(trackerTabs.indexOf(contentTab));
+  }, [contentTab, pageOffsets, trackerCollapseDistance, trackerScrollY]);
+  const recordTrackerOffset = useCallback((page: TrackerTab, offset: number) => {
+    if (activeTrackerTab.current !== page) return;
+    trackerOffsets.current[page] = Math.max(0, offset);
+  }, []);
+  const handleTrackerScroll = useCallback(
+    (page: TrackerTab) =>
+      page === contentTab
+        ? Animated.event([{ nativeEvent: { contentOffset: { y: trackerScrollY } } }], {
+            useNativeDriver: Platform.OS !== 'web',
+            listener: (event: NativeSyntheticEvent<NativeScrollEvent>) => {
+              recordTrackerOffset(page, event.nativeEvent.contentOffset.y);
+            },
+          })
+        : () => {},
+    [contentTab, trackerScrollY, recordTrackerOffset],
+  );
+  const commitTrackerScroll = useCallback(
     (page: TrackerTab) => (event: NativeSyntheticEvent<NativeScrollEvent>) => {
+      // A native momentum-end callback can outlive the page that created it.
+      // Never let that old page move the currently visible header.
+      if (activeTrackerTab.current !== page) return;
       const offset = Math.max(0, event.nativeEvent.contentOffset.y);
-      setTrackerOffsets((current) => ({ ...current, [page]: offset }));
-      if (page === tab) trackerScrollY.setValue(offset);
-    };
+      trackerOffsets.current[page] = offset;
+      trackerScrollY.setValue(offset);
+    },
+    [trackerScrollY],
+  );
+  const openPriorities = useCallback(() => setSettingsOpen(true), []);
+  const openGoldPass = useCallback(() => setGoldPassOpen(true), []);
+  const trackerContent = useMemo(
+    () =>
+      snapshot ? (
+        <TrackerPager
+          pager={pager}
+          tab={contentTab}
+          retainedPages={selection.retainedKeys}
+          snapshot={snapshot}
+          plan={plan!}
+          now={clock}
+          contentInset={trackerChromeInset}
+          initialOffsets={pageOffsets}
+          minimumContentHeight={trackerViewportHeight + trackerCollapseDistance}
+          onScroll={handleTrackerScroll}
+          onScrollSettled={commitTrackerScroll}
+          onPriorities={openPriorities}
+          onGoldPass={openGoldPass}
+          goldPassPercent={props.goldPassPercent}
+          registerSearch={registerTrackerSearch}
+        />
+      ) : null,
+    [
+      contentTab,
+      selection.retainedKeys,
+      snapshot,
+      plan,
+      clock,
+      trackerChromeInset,
+      trackerViewportHeight,
+      trackerCollapseDistance,
+      pageOffsets,
+      handleTrackerScroll,
+      commitTrackerScroll,
+      openPriorities,
+      openGoldPass,
+      props.goldPassPercent,
+      registerTrackerSearch,
+    ],
+  );
   const importSnapshot = async (json: string) => {
     await props.onImport(json);
     selectTab('home');
@@ -356,27 +442,12 @@ export function UpgradeTrackerScreen(props: UpgradeTrackerScreenProps) {
           ) : null}
         </View>
       ) : (
-        <View style={styles.trackerBody}>
+        <View
+          style={styles.trackerBody}
+          onLayout={(event) => setTrackerViewportHeight(event.nativeEvent.layout.height)}
+        >
           <SkeletonContent loading={pending} style={{ flex: 1 }}>
-            <TrackerPager
-              pager={pager}
-              tab={tab}
-              snapshot={snapshot}
-              plan={plan!}
-              now={clock}
-              contentInset={trackerChromeInset}
-              initialOffsets={trackerOffsets}
-              onScroll={handleTrackerScroll}
-              onScrollSettled={commitTrackerScroll}
-              onPriorities={() => setSettingsOpen(true)}
-              onGoldPass={() => setGoldPassOpen(true)}
-              goldPassPercent={props.goldPassPercent}
-              registerSearch={registerTrackerSearch}
-              onSelect={(next) => {
-                setTab(next);
-                trackerScrollY.setValue(trackerOffsets[next] ?? 0);
-              }}
-            />
+            {trackerContent}
           </SkeletonContent>
           <Animated.View
             testID="upgrade-tracker-collapsible-header"
@@ -429,6 +500,8 @@ export function UpgradeTrackerScreen(props: UpgradeTrackerScreenProps) {
                 ) : null}
                 <View style={[styles.tabControl, styles.expandedTabControl]}>
                   <ProfileTabs
+                    variant="underline"
+                    overflow="scroll"
                     tabs={tabs}
                     selectedKey={tab}
                     onSelect={(key) => selectTab(key as TrackerTab)}
@@ -438,6 +511,8 @@ export function UpgradeTrackerScreen(props: UpgradeTrackerScreenProps) {
             ) : (
               <View style={styles.tabControl}>
                 <ProfileTabs
+                  variant="underline"
+                  overflow="scroll"
                   tabs={tabs}
                   selectedKey={tab}
                   onSelect={(key) => selectTab(key as TrackerTab)}
@@ -1090,9 +1165,28 @@ function useCachedPageState<T>(
   return [value, setCachedValue];
 }
 
-function useInitialScrollOffset(initialOffset: number) {
-  const [offset] = useState(() => ({ x: 0, y: initialOffset }));
-  return offset;
+type TrackerPageScrollHandle = {
+  scrollTo?: (options: { x?: number; y?: number; animated?: boolean }) => void;
+  scrollToOffset?: (options: { offset: number; animated?: boolean }) => void;
+};
+
+function useTrackerPageScroll(initialOffset: number, isActive: boolean) {
+  const scroll = useRef<TrackerPageScrollHandle | null>(null);
+  const attachScroll = useCallback((instance: TrackerPageScrollHandle | null) => {
+    scroll.current = instance;
+  }, []);
+  const initialContentOffset = useMemo(() => ({ x: 0, y: initialOffset }), [initialOffset]);
+  useLayoutEffect(() => {
+    if (!isActive) return;
+    // An equal contentOffset prop does not reset a retained native scroller.
+    // Reapply on activation even when two visits have the same header offset.
+    if (scroll.current?.scrollToOffset) {
+      scroll.current.scrollToOffset({ offset: initialOffset, animated: false });
+    } else {
+      scroll.current?.scrollTo?.({ x: 0, y: initialOffset, animated: false });
+    }
+  }, [initialOffset, isActive]);
+  return { attachScroll, initialContentOffset };
 }
 
 function upgradeItemRenderIdentity(item: UpgradeTrackerItem) {
@@ -1179,14 +1273,15 @@ function nextTrackerTick(snapshot: UpgradeTrackerSnapshot, now: Date): Date | nu
 function TrackerPager({
   pager,
   tab,
+  retainedPages,
   snapshot,
   plan,
   now,
   contentInset,
   initialOffsets,
+  minimumContentHeight,
   onScroll,
   onScrollSettled,
-  onSelect,
   onPriorities,
   onGoldPass,
   goldPassPercent,
@@ -1194,33 +1289,36 @@ function TrackerPager({
 }: {
   pager: React.RefObject<PagerViewHandle | null>;
   tab: TrackerTab;
+  retainedPages: readonly TrackerTab[];
   snapshot: UpgradeTrackerSnapshot;
   plan: ReturnType<typeof buildTrackerPlanData>;
   now: Date;
   contentInset: number;
   initialOffsets: Partial<Record<TrackerTab, number>>;
+  minimumContentHeight: number;
   onScroll: (page: TrackerTab) => (event: NativeSyntheticEvent<NativeScrollEvent>) => void;
   onScrollSettled: (page: TrackerTab) => (event: NativeSyntheticEvent<NativeScrollEvent>) => void;
-  onSelect: (tab: TrackerTab) => void;
   onPriorities: () => void;
   onGoldPass: () => void;
   goldPassPercent: number;
   registerSearch: (village: UpgradeVillageValue, binding: TrackerSearchBinding | null) => void;
 }) {
-  const previousTab = useRef(tab);
-  const [pageStateStore] = useState(() => new Map<string, unknown>());
-  const [mountedPages, setMountedPages] = useState<ReadonlySet<TrackerTab>>(
+  // Register one handler pair per page, not a new native event binding on
+  // every clock, modal, or parent render. Inactive pages receive detached maps.
+  const handlers = useMemo(
     () =>
-      new Set([tab, trackerTabs[Math.min(trackerTabs.length - 1, trackerTabs.indexOf(tab) + 1)]!]),
+      new Map(
+        trackerTabs.map((page) => [
+          page,
+          {
+            scroll: onScroll(page),
+            settled: onScrollSettled(page),
+          },
+        ]),
+      ),
+    [onScroll, onScrollSettled],
   );
-  useEffect(() => {
-    setMountedPages((current) => boundedTrackerPageCache(current, previousTab.current, tab));
-    previousTab.current = tab;
-  }, [tab]);
-  const handlePageSelected = (event: PagerViewOnPageSelectedEvent) => {
-    const next = trackerTabs[event.nativeEvent.position];
-    if (next && next !== tab) onSelect(next);
-  };
+  const [pageStateStore] = useState(() => new Map<string, unknown>());
   const pages: Readonly<Record<TrackerTab, ReactNode>> = {
     home: (
       <UpgradesTab
@@ -1230,8 +1328,10 @@ function TrackerPager({
         registerSearch={registerSearch}
         contentInset={contentInset}
         initialOffset={initialOffsets.home ?? 0}
-        onScroll={onScroll('home')}
-        onScrollSettled={onScrollSettled('home')}
+        isActive={tab === 'home'}
+        minimumContentHeight={minimumContentHeight}
+        onScroll={handlers.get('home')!.scroll}
+        onScrollSettled={handlers.get('home')!.settled}
       />
     ),
     builder: (
@@ -1242,8 +1342,10 @@ function TrackerPager({
         registerSearch={registerSearch}
         contentInset={contentInset}
         initialOffset={initialOffsets.builder ?? 0}
-        onScroll={onScroll('builder')}
-        onScrollSettled={onScrollSettled('builder')}
+        isActive={tab === 'builder'}
+        minimumContentHeight={minimumContentHeight}
+        onScroll={handlers.get('builder')!.scroll}
+        onScrollSettled={handlers.get('builder')!.settled}
       />
     ),
     calendar: (
@@ -1254,8 +1356,10 @@ function TrackerPager({
         stateStore={pageStateStore}
         contentInset={contentInset}
         initialOffset={initialOffsets.calendar ?? 0}
-        onScroll={onScroll('calendar')}
-        onScrollSettled={onScrollSettled('calendar')}
+        isActive={tab === 'calendar'}
+        minimumContentHeight={minimumContentHeight}
+        onScroll={handlers.get('calendar')!.scroll}
+        onScrollSettled={handlers.get('calendar')!.settled}
       />
     ),
     plan: (
@@ -1267,8 +1371,10 @@ function TrackerPager({
         stateStore={pageStateStore}
         contentInset={contentInset}
         initialOffset={initialOffsets.plan ?? 0}
-        onScroll={onScroll('plan')}
-        onScrollSettled={onScrollSettled('plan')}
+        isActive={tab === 'plan'}
+        minimumContentHeight={minimumContentHeight}
+        onScroll={handlers.get('plan')!.scroll}
+        onScrollSettled={handlers.get('plan')!.settled}
       />
     ),
     collection: (
@@ -1277,8 +1383,10 @@ function TrackerPager({
         stateStore={pageStateStore}
         contentInset={contentInset}
         initialOffset={initialOffsets.collection ?? 0}
-        onScroll={onScroll('collection')}
-        onScrollSettled={onScrollSettled('collection')}
+        isActive={tab === 'collection'}
+        minimumContentHeight={minimumContentHeight}
+        onScroll={handlers.get('collection')!.scroll}
+        onScrollSettled={handlers.get('collection')!.settled}
       />
     ),
   };
@@ -1287,10 +1395,11 @@ function TrackerPager({
       ref={pager}
       initialPage={trackerTabs.indexOf(tab)}
       keyboardDismissMode="on-drag"
-      onPageSelected={handlePageSelected}
       orientation="horizontal"
       overdrag={false}
       overScrollMode="never"
+      // Tabs are the only section switch. Do not re-enable horizontal paging:
+      // item sliders, carousels and back gestures own their horizontal drags.
       scrollEnabled={false}
       style={styles.trackerPager}
       testID="upgrade-tracker-pager"
@@ -1302,7 +1411,9 @@ function TrackerPager({
           importantForAccessibility={page === tab ? 'auto' : 'no-hide-descendants'}
           style={styles.trackerPage}
         >
-          {mountedPages.has(page) ? pages[page] : null}
+          {retainedPages.includes(page) ? (
+            <RetainedSection active={page === tab} style={{ flex: 1 }} render={() => pages[page]} />
+          ) : null}
         </View>
       ))}
     </PagerView>
@@ -1314,14 +1425,7 @@ export function boundedTrackerPageCache(
   previous: TrackerTab,
   next: TrackerTab,
 ) {
-  const nextIndex = trackerTabs.indexOf(next);
-  const candidates = [
-    next,
-    previous,
-    trackerTabs[nextIndex - 1],
-    trackerTabs[nextIndex + 1],
-    ...Array.from(current).reverse(),
-  ];
+  const candidates = [next, previous, ...Array.from(current).reverse()];
   return new Set(
     Array.from(new Set(candidates.filter((page): page is TrackerTab => page !== undefined))).slice(
       0,
@@ -1330,13 +1434,17 @@ export function boundedTrackerPageCache(
   );
 }
 
-function UpgradesTab({
+const UpgradesTab = memo(UpgradesTabContent);
+
+function UpgradesTabContent({
   snapshot,
   village,
   stateStore,
   registerSearch,
   contentInset,
   initialOffset,
+  isActive,
+  minimumContentHeight,
   onScroll,
   onScrollSettled,
 }: {
@@ -1346,6 +1454,8 @@ function UpgradesTab({
   registerSearch: (village: UpgradeVillageValue, binding: TrackerSearchBinding | null) => void;
   contentInset: number;
   initialOffset: number;
+  isActive: boolean;
+  minimumContentHeight: number;
   onScroll: (event: NativeSyntheticEvent<NativeScrollEvent>) => void;
   onScrollSettled: (event: NativeSyntheticEvent<NativeScrollEvent>) => void;
 }) {
@@ -1372,7 +1482,7 @@ function UpgradesTab({
     `${cachePrefix}.expanded`,
     () => new Set(),
   );
-  const initialContentOffset = useInitialScrollOffset(initialOffset);
+  const { attachScroll, initialContentOffset } = useTrackerPageScroll(initialOffset, isActive);
   const active = useMemo(
     () =>
       uniqueUpgradeItems(activeTrackerItems(snapshot).filter((item) => item.village === village)),
@@ -1391,9 +1501,10 @@ function UpgradesTab({
       }
       contentContainerStyle={[
         styles.content,
-        { paddingTop: contentInset + 12 },
+        { paddingTop: contentInset + 12, minHeight: minimumContentHeight },
         layout.isExpanded && { maxWidth: layout.contentMaxWidth },
       ]}
+      ref={attachScroll}
       contentOffset={initialContentOffset}
       keyboardShouldPersistTaps="handled"
       onScroll={onScroll}
@@ -1552,9 +1663,11 @@ function UpgradeSummaryMetrics({
         flexWrap: layout.isExpanded ? 'wrap' : 'nowrap',
       }}
     >
-      {showLevels ? <CKText role="bodyMedium" muted numberOfLines={1} style={{ fontSize, flexShrink: 1 }}>
-        {label}
-      </CKText> : null}
+      {showLevels ? (
+        <CKText role="bodyMedium" muted numberOfLines={1} style={{ fontSize, flexShrink: 1 }}>
+          {label}
+        </CKText>
+      ) : null}
       {levels > 0 && seconds > 0 ? (
         <CKText
           role="bodyMedium"
@@ -1563,7 +1676,8 @@ function UpgradeSummaryMetrics({
           style={{ fontSize, flexShrink: 1 }}
           accessibilityLabel={`${t('gameItemUpgradeTime')}: ${formatTrackerDuration(seconds)}`}
         >
-          {showLevels ? '· ' : ''}{formatTrackerDuration(seconds)}
+          {showLevels ? '· ' : ''}
+          {formatTrackerDuration(seconds)}
         </CKText>
       ) : null}
       {resources.map(([resource, amount]) => (
@@ -1704,8 +1818,22 @@ function CraftedDefenseGroups({
               />
               <View style={styles.grow}>
                 <CKText role="rowTitle">{name}</CKText>
-                <View style={{ height: 4, marginTop: 8, borderRadius: 2, backgroundColor: theme.surfaceContainerHighest, overflow: 'hidden' }}>
-                  <View style={{ width: `${target ? Math.min(100, current / target * 100) : 0}%`, height: 4, backgroundColor: theme.primary }} />
+                <View
+                  style={{
+                    height: 4,
+                    marginTop: 8,
+                    borderRadius: 2,
+                    backgroundColor: theme.surfaceContainerHighest,
+                    overflow: 'hidden',
+                  }}
+                >
+                  <View
+                    style={{
+                      width: `${target ? Math.min(100, (current / target) * 100) : 0}%`,
+                      height: 4,
+                      backgroundColor: theme.primary,
+                    }}
+                  />
                 </View>
               </View>
               <ChevronDown
@@ -2109,7 +2237,9 @@ function UpgradeTile({
   const theme = useCKTheme();
   const themeMode = useCKThemeMode();
   const containedArt = usesContainedUpgradeArt(item.category);
-  const lockedEquipment = item.isUnbuilt && (item.category === UpgradeCategory.equipment || item.queue === UpgradeQueue.laboratory);
+  const lockedEquipment =
+    item.isUnbuilt &&
+    (item.category === UpgradeCategory.equipment || item.queue === UpgradeQueue.laboratory);
   const frameBackground =
     item.category === UpgradeCategory.equipment
       ? String(item.meta?.rarity ?? '') === '2'
@@ -2198,13 +2328,17 @@ export function usesContainedUpgradeArt(category: string): boolean {
   ]).has(category);
 }
 
-function CalendarTab({
+const CalendarTab = memo(CalendarTabContent);
+
+function CalendarTabContent({
   snapshot,
   plan,
   now,
   stateStore,
   contentInset,
   initialOffset,
+  isActive,
+  minimumContentHeight,
   onScroll,
   onScrollSettled,
 }: {
@@ -2214,6 +2348,8 @@ function CalendarTab({
   stateStore: Map<string, unknown>;
   contentInset: number;
   initialOffset: number;
+  isActive: boolean;
+  minimumContentHeight: number;
   onScroll: (event: NativeSyntheticEvent<NativeScrollEvent>) => void;
   onScrollSettled: (event: NativeSyntheticEvent<NativeScrollEvent>) => void;
 }) {
@@ -2232,7 +2368,7 @@ function CalendarTab({
     'calendar.horizontalOffset',
     0,
   );
-  const initialContentOffset = useInitialScrollOffset(initialOffset);
+  const { attachScroll, initialContentOffset } = useTrackerPageScroll(initialOffset, isActive);
   const [initialHorizontalContentOffset] = useState(() => ({ x: horizontalOffset, y: 0 }));
   const [visibleHorizontalOffset, setVisibleHorizontalOffset] = useState(horizontalOffset);
   const viewportWidth = useWindowDimensions().width;
@@ -2340,13 +2476,14 @@ function CalendarTab({
       testID="upgrade-tracker-calendar-scroll"
       contentContainerStyle={[
         styles.calendarRoot,
-        { paddingTop: contentInset + 4 },
+        { paddingTop: contentInset + 4, minHeight: minimumContentHeight },
         layout.isExpanded && {
           maxWidth: layout.contentMaxWidth,
           width: '100%',
           alignSelf: 'center',
         },
       ]}
+      ref={attachScroll}
       contentOffset={initialContentOffset}
       onScroll={onScroll}
       onMomentumScrollEnd={onScrollSettled}
@@ -2884,7 +3021,46 @@ function TimelineDetailMetric({ label, value }: { label: string; value: string }
   );
 }
 
-function PlanTab({
+function selectPlanUpgrades(
+  upgrades: readonly PlannedUpgrade[],
+  village: 'all' | 'home' | 'builderBase',
+  queue: 'all' | 'builders' | 'laboratory' | 'pets' | 'walls',
+  sort: 'scheduled' | 'name' | 'long' | 'short',
+) {
+  return upgrades
+    .filter((upgrade) => {
+      const villageMatch =
+        village === 'all' ||
+        upgrade.item.village ===
+          (village === 'home' ? UpgradeVillage.home : UpgradeVillage.builderBase);
+      const queueMatch =
+        queue === 'all' ||
+        (queue === 'walls'
+          ? upgrade.item.category === UpgradeCategory.walls
+          : queue === 'builders'
+            ? upgrade.item.queue === UpgradeQueue.builders &&
+              upgrade.item.category !== UpgradeCategory.walls
+            : upgrade.item.queue === queue);
+      return villageMatch && queueMatch;
+    })
+    .sort((left, right) => {
+      const duration = (upgrade: PlannedUpgrade) =>
+        upgrade.endsAt.getTime() - upgrade.startsAt.getTime();
+      const primary =
+        sort === 'scheduled'
+          ? left.startsAt.getTime() - right.startsAt.getTime()
+          : sort === 'name'
+            ? left.item.name.localeCompare(right.item.name)
+            : sort === 'long'
+              ? duration(right) - duration(left)
+              : duration(left) - duration(right);
+      return primary || left.endsAt.getTime() - right.endsAt.getTime();
+    });
+}
+
+const PlanTab = memo(PlanTabContent);
+
+function PlanTabContent({
   plan,
   onPriorities,
   onGoldPass,
@@ -2892,6 +3068,8 @@ function PlanTab({
   stateStore,
   contentInset,
   initialOffset,
+  isActive,
+  minimumContentHeight,
   onScroll,
   onScrollSettled,
 }: {
@@ -2902,6 +3080,8 @@ function PlanTab({
   stateStore: Map<string, unknown>;
   contentInset: number;
   initialOffset: number;
+  isActive: boolean;
+  minimumContentHeight: number;
   onScroll: (event: NativeSyntheticEvent<NativeScrollEvent>) => void;
   onScrollSettled: (event: NativeSyntheticEvent<NativeScrollEvent>) => void;
 }) {
@@ -2924,39 +3104,14 @@ function PlanTab({
     'plan.sort',
     'scheduled',
   );
-  const initialContentOffset = useInitialScrollOffset(initialOffset);
+  const { attachScroll, initialContentOffset } = useTrackerPageScroll(initialOffset, isActive);
   const [selectedUpgrade, setSelectedUpgrade] = useState<PlannedUpgrade | null>(null);
   const [visibleCount, setVisibleCount] = useState(40);
-  const upgrades = plan.upgrades
-    .filter((upgrade) => {
-      const villageMatch =
-        village === 'all' ||
-        upgrade.item.village ===
-          (village === 'home' ? UpgradeVillage.home : UpgradeVillage.builderBase);
-      const queueMatch =
-        queue === 'all' ||
-        (queue === 'walls'
-          ? upgrade.item.category === UpgradeCategory.walls
-          : queue === 'builders'
-            ? upgrade.item.queue === UpgradeQueue.builders &&
-              upgrade.item.category !== UpgradeCategory.walls
-            : upgrade.item.queue === queue);
-      return villageMatch && queueMatch;
-    })
-    .sort((left, right) => {
-      const duration = (upgrade: (typeof plan.upgrades)[number]) =>
-        upgrade.endsAt.getTime() - upgrade.startsAt.getTime();
-      const primary =
-        sort === 'scheduled'
-          ? left.startsAt.getTime() - right.startsAt.getTime()
-          : sort === 'name'
-            ? left.item.name.localeCompare(right.item.name)
-            : sort === 'long'
-              ? duration(right) - duration(left)
-              : duration(left) - duration(right);
-      return primary || left.endsAt.getTime() - right.endsAt.getTime();
-    });
-  const groups = groupPlannedUpgrades(upgrades);
+  const upgrades = useMemo(
+    () => selectPlanUpgrades(plan.upgrades, village, queue, sort),
+    [plan.upgrades, village, queue, sort],
+  );
+  const groups = useMemo(() => groupPlannedUpgrades(upgrades), [upgrades]);
   const villageLabels = {
     all: t('generalAll'),
     home: t('upgradeTrackerHomeVillage'),
@@ -2980,9 +3135,10 @@ function PlanTab({
       testID="upgrade-tracker-plan-scroll"
       contentContainerStyle={[
         styles.content,
-        { paddingTop: contentInset + 12 },
+        { paddingTop: contentInset + 12, minHeight: minimumContentHeight },
         layout.isExpanded && { maxWidth: layout.contentMaxWidth },
       ]}
+      ref={attachScroll}
       contentOffset={initialContentOffset}
       onScroll={onScroll}
       onMomentumScrollEnd={onScrollSettled}
@@ -3300,11 +3456,15 @@ function compactNumber(value: number, intlLocale: string) {
   return new Intl.NumberFormat(intlLocale).format(Math.round(value));
 }
 
-function CollectionTab({
+const CollectionTab = memo(CollectionTabContent);
+
+function CollectionTabContent({
   snapshot,
   stateStore,
   contentInset,
   initialOffset,
+  isActive,
+  minimumContentHeight,
   onScroll,
   onScrollSettled,
 }: {
@@ -3312,6 +3472,8 @@ function CollectionTab({
   stateStore: Map<string, unknown>;
   contentInset: number;
   initialOffset: number;
+  isActive: boolean;
+  minimumContentHeight: number;
   onScroll: (event: NativeSyntheticEvent<NativeScrollEvent>) => void;
   onScrollSettled: (event: NativeSyntheticEvent<NativeScrollEvent>) => void;
 }) {
@@ -3340,7 +3502,7 @@ function CollectionTab({
     null,
   );
   const [selected, setSelected] = useState<UpgradeCollectionItem | null>(null);
-  const initialContentOffset = useInitialScrollOffset(initialOffset);
+  const { attachScroll, initialContentOffset } = useTrackerPageScroll(initialOffset, isActive);
   const collectionItems = useMemo(
     () => uniqueCollectionItems(snapshot.collections),
     [snapshot.collections],
@@ -3350,7 +3512,12 @@ function CollectionTab({
     collectionItems.some((item) => item.village === UpgradeVillage.builderBase);
   const summaries = useMemo(
     () =>
-      [UpgradeCollectionType.emotes, ...Object.values(UpgradeCollectionType).filter((type) => type !== UpgradeCollectionType.emotes)].flatMap((type) => {
+      [
+        UpgradeCollectionType.emotes,
+        ...Object.values(UpgradeCollectionType).filter(
+          (type) => type !== UpgradeCollectionType.emotes,
+        ),
+      ].flatMap((type) => {
         const all = collectionItems.filter((item) => item.type === type);
         if (!all.length) return [];
         return [
@@ -3471,9 +3638,10 @@ function CollectionTab({
         testID="upgrade-tracker-collection-scroll"
         contentContainerStyle={[
           styles.content,
-          { paddingTop: contentInset + 12 },
+          { paddingTop: contentInset + 12, minHeight: minimumContentHeight },
           layout.isExpanded && { maxWidth: layout.contentMaxWidth },
         ]}
+        ref={attachScroll}
         contentOffset={initialContentOffset}
         onScroll={onScroll}
         onMomentumScrollEnd={onScrollSettled}
@@ -3688,11 +3856,19 @@ function CollectionDetailModal({
             ? t('upgradeTrackerFilterOwned')
             : t('upgradeTrackerFilterMissing')}
       </CKText>
-      {item.type === UpgradeCollectionType.emotes && !Array.isArray(item.meta?.required_emotes) && typeof item.meta?.cost === 'number' && item.meta.cost > 0 ? (
+      {item.type === UpgradeCollectionType.emotes &&
+      !Array.isArray(item.meta?.required_emotes) &&
+      typeof item.meta?.cost === 'number' &&
+      item.meta.cost > 0 ? (
         <View style={styles.detailLine}>
-          <CKText muted style={styles.grow}>{t('emoteCostLabel')}</CKText>
+          <CKText muted style={styles.grow}>
+            {t('emoteCostLabel')}
+          </CKText>
           <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
-            <MobileWebImage imageUrl={`${ImageAssets.baseUrl}/resources/ranked_medals.webp`} style={{ width: 20, height: 20 }} />
+            <MobileWebImage
+              imageUrl={`${ImageAssets.baseUrl}/resources/ranked_medals.webp`}
+              style={{ width: 20, height: 20 }}
+            />
             <CKText>{compactNumber(item.meta.cost, intlLocale)}</CKText>
           </View>
         </View>
@@ -3704,7 +3880,9 @@ function CollectionDetailModal({
             {row.label}
           </CKText>
           <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6, flexShrink: 1 }}>
-            {row.imageUrl ? <MobileWebImage imageUrl={row.imageUrl} style={{ width: 26, height: 26 }} /> : null}
+            {row.imageUrl ? (
+              <MobileWebImage imageUrl={row.imageUrl} style={{ width: 26, height: 26 }} />
+            ) : null}
             <CKText style={{ flexShrink: 1 }}>{row.value}</CKText>
           </View>
         </View>
@@ -3736,13 +3914,27 @@ function collectionInfo(item: UpgradeCollectionItem, locale: string, t: I18nValu
     const bundle = gameDataState.bundleData;
     const section = (key: string): Record<string, unknown>[] => {
       const value = bundle[key];
-      return (Array.isArray(value) ? value : isRecord(value) && Array.isArray(value.items) ? value.items : []).filter(isRecord);
+      return (
+        Array.isArray(value)
+          ? value
+          : isRecord(value) && Array.isArray(value.items)
+            ? value.items
+            : []
+      ).filter(isRecord);
     };
-    const league = section('league_tiers').find((entry) => entry.league_tier === meta.required_league_tier);
+    const league = section('league_tiers').find(
+      (entry) => entry.league_tier === meta.required_league_tier,
+    );
     const isSetBonus = Array.isArray(meta.required_emotes) && meta.required_emotes.length > 0;
     if (!isSetBonus && league && Number(meta.required_league_tier) > 0) {
       const tid = isRecord(league.TID) ? league.TID.name : undefined;
-      rows.push({ label: t('emoteRequiredLabel'), value: String(typeof tid === 'string' ? translationForTid(tid) ?? league.name : league.name), imageUrl: ImageAssets.getLeagueImage(String(league.name)) });
+      rows.push({
+        label: t('emoteRequiredLabel'),
+        value: String(
+          typeof tid === 'string' ? (translationForTid(tid) ?? league.name) : league.name,
+        ),
+        imageUrl: ImageAssets.getLeagueImage(String(league.name)),
+      });
     }
   } else if (item.type === UpgradeCollectionType.skins) {
     add(t('upgradeTrackerTier'), meta.tier);
@@ -3768,100 +3960,6 @@ function collectionInfo(item: UpgradeCollectionItem, locale: string, t: I18nValu
     add(t('upgradeTrackerPart'), meta.slot_type);
   }
   return rows;
-}
-
-function SceneryPlayer({ source }: { source: string }) {
-  const { t } = useI18n();
-  const theme = useCKTheme();
-  const [trackWidth, setTrackWidth] = useState(0);
-  const [state, setState] = useState<SceneryAudioState>({
-    checking: true,
-    available: false,
-    loading: false,
-    playing: false,
-    positionMilliseconds: 0,
-    durationMilliseconds: 0,
-  });
-  const service = useRef<SceneryAudioService | null>(null);
-  useEffect(() => {
-    let active = true;
-    let unsubscribe: () => void = () => undefined;
-    const runtimeImport =
-      Platform.OS === 'web'
-        ? import('../audio/expo-scenery-audio-runtime').then(
-            ({ ExpoSceneryAudioRuntime }) => new ExpoSceneryAudioRuntime(),
-          )
-        : import('../audio/native-scenery-audio-runtime').then(
-            ({ NativeSceneryAudioRuntime }) => new NativeSceneryAudioRuntime(),
-          );
-    void runtimeImport.then((runtime) => {
-      if (!active) return;
-      const next = new SceneryAudioService(
-        source,
-        Platform.OS === 'ios' ? 'ios' : Platform.OS === 'android' ? 'android' : 'web',
-        runtime,
-      );
-      service.current = next;
-      unsubscribe = next.subscribe(setState);
-      void next.checkAvailability();
-    });
-    return () => {
-      active = false;
-      unsubscribe();
-      void service.current?.dispose();
-      service.current = null;
-    };
-  }, [source]);
-  if (!state.checking && !state.available) return null;
-  const duration = Math.max(1, state.durationMilliseconds);
-  return (
-    <View style={styles.audio}>
-      <PressableSurface
-        accessibilityRole="button"
-        accessibilityLabel={
-          state.playing ? t('upgradeTrackerPauseSoundtrack') : t('upgradeTrackerPlaySoundtrack')
-        }
-        disabled={state.loading}
-        onPress={() => void service.current?.toggle()}
-        style={styles.audioButton}
-      >
-        {state.loading ? (
-          <Headphones color={theme.onSurface} />
-        ) : state.playing ? (
-          <Pause color={theme.onSurface} />
-        ) : (
-          <Play color={theme.onSurface} />
-        )}
-      </PressableSurface>
-      <View style={styles.audioTimeline}>
-        <Pressable
-          accessibilityRole="adjustable"
-          accessibilityLabel={t('upgradeTrackerSoundtrackPosition')}
-          disabled={state.durationMilliseconds <= 0}
-          onLayout={(event) => setTrackWidth(event.nativeEvent.layout.width)}
-          onPress={(event) =>
-            void service.current?.seek(
-              (Math.max(0, event.nativeEvent.locationX) / Math.max(1, trackWidth)) * duration,
-            )
-          }
-          style={styles.audioTrack}
-        >
-          <View
-            style={[
-              styles.audioTrackFill,
-              { width: `${Math.min(100, (state.positionMilliseconds * 100) / duration)}%` },
-            ]}
-          />
-        </Pressable>
-        <View style={styles.audioTimes}>
-          <CKText role="labelSmall">{formatAudio(state.positionMilliseconds)}</CKText>
-          <CKText role="labelSmall">
-            {state.durationMilliseconds ? formatAudio(state.durationMilliseconds) : '–:––'}
-          </CKText>
-        </View>
-      </View>
-    </View>
-  );
 }
 
 export { ImportModal as UpgradeImportModal };
@@ -4135,10 +4233,6 @@ function collectionDisplayName(item: UpgradeCollectionItem) {
   const name = item.name.replaceAll('\\q', '"');
   return item.type === UpgradeCollectionType.sceneries ? name.replace(/\s+Scenery$/i, '') : name;
 }
-function formatAudio(ms: number) {
-  const seconds = Math.max(0, Math.floor(ms / 1000));
-  return `${Math.floor(seconds / 60)}:${String(seconds % 60).padStart(2, '0')}`;
-}
 
 const styles = StyleSheet.create({
   safe: { flex: 1 },
@@ -4201,12 +4295,10 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
   },
   expandedTabControl: {
-    width: '34%',
-    minWidth: 220,
-    maxWidth: 320,
+    flex: 2,
+    minWidth: 0,
+    maxWidth: '100%',
     alignSelf: 'auto',
-    flexShrink: 0,
-    marginStart: 'auto',
   },
   expandedSearch: { flex: 1, minWidth: 0 },
   heroHeader: { height: 276, overflow: 'hidden' },
@@ -4254,7 +4346,7 @@ const styles = StyleSheet.create({
   quickStatImage: { width: 19, height: 19, resizeMode: 'contain' },
   header: { flexDirection: 'row', alignItems: 'center', gap: 8, padding: 12 },
   tabWrap: {
-    height: 54,
+    height: 60,
     paddingHorizontal: 12,
     paddingTop: 8,
     paddingBottom: 2,
@@ -4548,17 +4640,6 @@ const styles = StyleSheet.create({
   detailImage: { width: 88, height: 88, resizeMode: 'contain' },
   detailLine: { minHeight: 44, flexDirection: 'row', alignItems: 'center', gap: 10, padding: 8 },
   collectionDetailImage: { width: '100%', height: 260, resizeMode: 'contain' },
-  audio: { flexDirection: 'row', alignItems: 'center', gap: 12, padding: 12 },
-  audioButton: { width: 44, height: 44, alignItems: 'center', justifyContent: 'center' },
-  audioTimeline: { flex: 1, gap: 4 },
-  audioTrack: {
-    height: 28,
-    justifyContent: 'center',
-    borderRadius: 999,
-    backgroundColor: '#80808044',
-  },
-  audioTrackFill: { height: 3, borderRadius: 999, backgroundColor: '#D32F2F' },
-  audioTimes: { flexDirection: 'row', justifyContent: 'space-between' },
   primaryButton: {
     minHeight: 48,
     flexDirection: 'row',
