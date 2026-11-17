@@ -1,6 +1,8 @@
 import { classifyClashResponse } from '@clashking/clash-contract/outcomes';
 import {
   ClanChangesEndpoint,
+  ClanMemberActivityEndpoint,
+  ClanMemberJoinsEndpoint,
   ClanCurrentRankingsEndpoint,
   type ClanRankingsResponse,
   ClanCwlSeasonsEndpoint,
@@ -75,6 +77,34 @@ export class ClanService {
   warStatsList: ClanWarStats[] = [];
 
   constructor(private readonly api: ContractApiService) {}
+
+  async getMemberActivity(clanTag: string) {
+    return Effect.runPromise(
+      this.api.execute(
+        ClanMemberActivityEndpoint,
+        {
+          path: { clanTag: canonicalTag(clanTag) },
+          query: {},
+          body: {},
+        },
+        { expectedStatuses: [401, 403, 404, 503], retryTransientRead: false },
+      ),
+    );
+  }
+
+  async getMemberJoins(clanTag: string) {
+    return Effect.runPromise(
+      this.api.execute(
+        ClanMemberJoinsEndpoint,
+        {
+          path: { clanTag: canonicalTag(clanTag) },
+          query: {},
+          body: {},
+        },
+        { expectedStatuses: [404, 503], retryTransientRead: false },
+      ),
+    );
+  }
 
   async getCurrentRankings(tag: string): Promise<ClanCurrentRankings> {
     return Effect.runPromise(

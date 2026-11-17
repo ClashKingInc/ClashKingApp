@@ -3087,7 +3087,7 @@
   "drawerCalculators": "Kalkulatory",
   "drawerUpgradeTracker": "Uaktualnij moduł śledzący",
   "drawerBasesArmies": "Bazy i armie",
-  "drawerGameAssets": "Zasoby gry",
+  "drawerGameAssets": "Wiki",
   "drawerManageAccounts": "Zarządzaj kontami",
   "playersLinked": "Połączony",
   "playersBookmarked": "Dodane do zakładek",
@@ -3559,8 +3559,8 @@
   "sideSavedArmies": "Zapisane armie",
   "sideArmyLinks": "Linki armii",
   "sideArmyLinksBody": "Kompozycja, zaklęcia, machina oblężnicza, notatki i link do udostępnienia.",
-  "sideGameAssetsTitle": "Zasoby gry",
-  "sideGameAssetsSubtitle": "Hostowane zasoby ClashKing pogrupowane według folderów.",
+  "sideGameAssetsTitle": "Wiki",
+  "sideGameAssetsSubtitle": "Search · Statystyki",
   "gameAssetsLoadError": "Nie udało się pobrać zasobów graficznych",
   "gameAssetsEmptyTitle": "Brak dostępnych grafik z gry",
   "gameAssetsEmptyBody": "Udostępniony manifest nie zawiera obsługiwanych obrazów.",
@@ -5212,5 +5212,106 @@
   "emoteRequiredLabel": "Wymagane:",
   "searchMinimumCharacters": "Wpisz co najmniej 3 znaki, aby wyszukać.",
   "homeCreatorCodeInGame": "W Clash of Clans",
-  "homeCreatorCodeOpenFailed": "Nie udało się otworzyć linku. Spróbuj ponownie."
+  "homeCreatorCodeOpenFailed": "Nie udało się otworzyć linku. Spróbuj ponownie.",
+  "wikiStarBonus": "Premia gwiezdna",
+  "wikiBattleModes": "Tryby walki",
+  "wikiMagicItems": "Magiczne przedmioty",
+  "wikiMagicSnacks": "Magiczne przekąski",
+  "wikiPositionDifference": "Za pozycję",
+  "wikiBonusMedals": "Medale bonusowe",
+  "wikiMinimumBonuses": "Minimum premii",
+  "wikiGroupSize": "Wielkość grupy",
+  "wikiBoost": "Wzmocnienie",
+  "wikiDamage": "Obrażenia",
+  "wikiSquadMembers": "Członkowie oddziału",
+  "wikiRankedMedals": "Medale rankingowe",
+  "wikiPlayerTroopLevels": "Używa poziomów twoich jednostek",
+  "wikiJoined": "Dołączył",
+  "wikiArmyVillage": "Armia i wioska",
+  "wikiLeaguesRewards": "Ligi i nagrody",
+  "wikiItemsModes": "Inne i tryby walki",
+  "wikiArtwork": "Galeria",
+  "wikiTableScrollHint": "Przesuń tabelę, aby zobaczyć więcej",
+  "wikiPlacementMedals": "Medale za miejsce",
+  "wikiWarSize": "Rozmiar wojny",
+  "wikiByPlacement": "Według miejsca",
+  "wikiClanPlacement": "Miejsce klanu",
+  "wikiCwlBaselineNote": "Podstawowa nagroda za miejsce przed uwzględnieniem udziału. Dodatkowe medale są liczone osobno.",
+  "wikiPlacement": "Miejsce",
+  "wikiIntroTitle": "W sercu wioski",
+  "wikiIntroBody": "Poznaj swoją armię, ligi i nagrody.",
+  "wikiSquads": "Oddziały",
+  "wikiCosmetics": "Przedmioty kosmetyczne",
+  "wikiStatsByLevel": "Statystyki według poziomu",
+  "wikiLevel": "Poziom",
+  "wikiSort": "Sortuj",
+  "wikiNewest": "Najnowsze",
+  "wikiOldest": "Najstarsze",
+  "wikiNameOrder": "Nazwa",
+  "wikiOwnership": "Posiadanie",
+  "wikiOwned": "Posiadane",
+  "wikiNotOwned": "Nieposiadane",
+  "wikiCapacity": "Limit przechowywania",
+  "wikiSellGems": "Sprzedaż za klejnoty",
+  "wikiProductionBuilding": "Budynek produkcyjny",
+  "wikiBooks": "Księgi",
+  "wikiHammers": "Młoty",
+  "wikiPotions": "Mikstury",
+  "wikiRunes": "Runy",
+  "wikiType": "Typ",
+  "wikiClanCapital": "Stolica klanu",
+  "wikiMinimumTownHall": "Minimalny ratusz",
+  "wikiLeagueBonus": "Bonus ligowy",
+  "wikiEsportsMode": "Tryb esportowy",
+  "wikiSide": "Strona",
+  "wikiBattles": "Bitwy",
+  "wikiNextTownHall": "Następny ratusz",
+  "wikiTownHallGate": "Ratusz {townhall} · Poziom {level}",
+  "@wikiTownHallGate": {
+    "placeholders": {
+      "townhall": {
+        "type": "int"
+      },
+      "level": {
+        "type": "int"
+      }
+    }
+  },
+  "generalYes": "Tak",
+  "generalNo": "Nie",
+  "wikiCommon": "Zwykłe",
+  "wikiEpic": "Epickie",
+  "wikiUpgradeOres": "Rudy ulepszenia",
+  "gameBuilderHall": "Chata budowniczego",
+  "gameBuilderHallLevelNumber": "Chata budowniczego {level}",
+  "wikiSuperTroops": "Superjednostki",
+  "wikiSeasonalTroops": "Jednostki sezonowe",
+  "wikiElixirSpells": "Zaklęcia eliksiru",
+  "wikiDarkSpells": "Mroczne zaklęcia",
+  "wikiSeasonalSpells": "Zaklęcia sezonowe",
+  "@gameBuilderHallLevelNumber": {
+    "placeholders": {
+      "level": {
+        "type": "int"
+      }
+    }
+  },
+  "wikiBuilderHallGate": "Chata budowniczego {townhall} · Poziom {level}",
+  "@wikiBuilderHallGate": {
+    "placeholders": {
+      "townhall": {
+        "type": "int"
+      },
+      "level": {
+        "type": "int"
+      }
+    }
+  },
+  "wikiUnlocks": "Odblokowania",
+  "clanMemberLastActive": "Ostatnia aktywność",
+  "clanMemberSortOrder": "Kolejność sortowania",
+  "clanMemberDescending": "Malejąco",
+  "clanMemberAscending": "Rosnąco",
+  "clanMemberNoObservation": "Brak danych",
+  "wikiSeasonal": "Sezonowe"
 }

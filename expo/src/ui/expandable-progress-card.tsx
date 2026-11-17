@@ -1,4 +1,4 @@
-import { useEffect, useState, type ReactNode } from 'react';
+import { useEffect, useRef, useState, type ReactNode } from 'react';
 import { Pressable, StyleSheet, View } from 'react-native';
 import Reanimated, {
   Easing,
@@ -44,14 +44,31 @@ export function ExpandableProgressCard({
   const [bodyHeight, setBodyHeight] = useState(0);
   const [hasOpened, setHasOpened] = useState(open);
   if (open && !hasOpened) setHasOpened(true);
-  const height = useSharedValue(0);
+  const [hasToggled, setHasToggled] = useState(false);
+  const openness = useSharedValue(open ? 1 : 0);
   const rotation = useSharedValue(open ? 90 : 0);
+  const previousTarget = useRef({ open, reduceMotion });
   useEffect(() => {
+    if (!hasToggled) {
+      openness.value = Number(open);
+      rotation.value = open ? 90 : 0;
+      previousTarget.current = { open, reduceMotion };
+      return;
+    }
+    // A first opening waits only for its own body measurement. Retained panes
+    // can report zero while hidden; those values must not collapse known content.
+    if (open && bodyHeight <= 0) return;
+    if (
+      previousTarget.current.open === open &&
+      previousTarget.current.reduceMotion === reduceMotion
+    )
+      return;
+    previousTarget.current = { open, reduceMotion };
     const config = { duration: reduceMotion ? 0 : 220, easing: Easing.out(Easing.cubic) };
-    height.value = withTiming(open ? bodyHeight : 0, config);
+    openness.value = withTiming(Number(open), config);
     rotation.value = withTiming(open ? 90 : 0, config);
-  }, [open, bodyHeight, reduceMotion, height, rotation]);
-  const bodyStyle = useAnimatedStyle(() => ({ height: height.value }));
+  }, [open, bodyHeight, hasToggled, reduceMotion, openness, rotation]);
+  const bodyStyle = useAnimatedStyle(() => ({ height: bodyHeight * openness.value }));
   const arrowStyle = useAnimatedStyle(() => ({ transform: [{ rotate: `${rotation.value}deg` }] }));
   const boundedPercent = Math.max(0, Math.min(100, percent));
   // Do not round unfinished sections up to 100%; completion text and color must agree.
@@ -64,7 +81,10 @@ export function ExpandableProgressCard({
           accessibilityRole="button"
           accessibilityLabel={title}
           accessibilityState={{ expanded: open }}
-          onPress={onToggle}
+          onPress={() => {
+            setHasToggled(true);
+            onToggle();
+          }}
           style={styles.trigger}
         >
           <MobileWebImage
@@ -109,11 +129,17 @@ export function ExpandableProgressCard({
         pointerEvents={open ? 'auto' : 'none'}
         accessibilityElementsHidden={!open}
         importantForAccessibility={open ? 'auto' : 'no-hide-descendants'}
-        style={[styles.body, bodyStyle]}
+        // Already-open content uses natural flow on first paint. Only a real
+        // toggle switches to a measured height, so revisiting a tab never runs
+        // an automatic zero-to-full expansion or waits for its first onLayout.
+        style={[styles.body, hasToggled ? bodyStyle : !open && { height: 0 }]}
       >
         <View
-          onLayout={(event) => setBodyHeight(event.nativeEvent.layout.height)}
-          style={styles.measuredBody}
+          onLayout={(event) => {
+            const next = event.nativeEvent.layout.height;
+            if (next > 0) setBodyHeight((current) => (current === next ? current : next));
+          }}
+          style={hasToggled ? styles.measuredBody : undefined}
         >
           {hasOpened && children ? <View style={styles.content}>{children}</View> : null}
         </View>

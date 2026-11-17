@@ -63,6 +63,9 @@ export function subscribeBadgeTokens(listener: () => void): () => void {
 }
 
 export function badgeTokenForUrl(url: string): string | undefined {
+  // Most callers render game artwork, not clan badges. Do not run the URL
+  // parser for every image and every external-store snapshot on those pages.
+  if (!url.startsWith('https://badges.clashk.ing/')) return;
   try {
     const parsed = new URL(url);
     if (parsed.origin !== 'https://badges.clashk.ing' || parsed.username || parsed.password) return;

@@ -10,6 +10,8 @@ export class ImageAssets {
   static readonly thinkingBuilder = `${ImageAssets.baseUrl}/stickers/thinking_bk.webp`;
   static readonly goldPass = `${ImageAssets.baseUrl}/icons/Icon_HV_Gold_Pass.png`;
   static readonly calendar = `${ImageAssets.baseUrl}/bot/icons/calendar.png`;
+  static readonly donationArrow = `${ImageAssets.baseUrl}/bot/icons/up_green_arrow.png`;
+  static readonly receivedArrow = `${ImageAssets.baseUrl}/bot/icons/down_red_arrow.png`;
   static readonly hitpoints = `${ImageAssets.baseUrl}/bot/icons/heart.png`;
 
   static readonly darkModeLogo = `${ImageAssets.baseUrl}/logos/crown-arrow-dark-bg/ClashKing-1.png`;

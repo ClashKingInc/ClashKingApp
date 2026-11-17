@@ -2992,7 +2992,7 @@
   "drawerCalculators": "Calcolatrici",
   "drawerUpgradeTracker": "Monitoraggio degli aggiornamenti",
   "drawerBasesArmies": "Basi ed eserciti",
-  "drawerGameAssets": "Risorse di gioco",
+  "drawerGameAssets": "Wiki",
   "drawerManageAccounts": "Gestisci account",
   "playersLinked": "Collegato",
   "playersBookmarked": "Segnato",
@@ -3464,8 +3464,8 @@
   "sideSavedArmies": "Armate salvate",
   "sideArmyLinks": "Link armate",
   "sideArmyLinksBody": "Composizione, incantesimi, macchina d’assedio, note e link di condivisione.",
-  "sideGameAssetsTitle": "Risorse di gioco",
-  "sideGameAssetsSubtitle": "Risorse ClashKing ospitate, raggruppate per cartella.",
+  "sideGameAssetsTitle": "Wiki",
+  "sideGameAssetsSubtitle": "Search · Statistiche",
   "gameAssetsLoadError": "Impossibile caricare le risorse di gioco",
   "gameAssetsEmptyTitle": "Nessuna risorsa di gioco disponibile",
   "gameAssetsEmptyBody": "Il manifest ospitato non conteneva immagini supportate.",
@@ -5117,5 +5117,106 @@
   "emoteRequiredLabel": "Richiesto:",
   "searchMinimumCharacters": "Digita almeno 3 caratteri per cercare.",
   "homeCreatorCodeInGame": "In Clash of Clans",
-  "homeCreatorCodeOpenFailed": "Impossibile aprire il link. Riprova."
+  "homeCreatorCodeOpenFailed": "Impossibile aprire il link. Riprova.",
+  "wikiStarBonus": "Bonus stella",
+  "wikiBattleModes": "Modalità di battaglia",
+  "wikiMagicItems": "Oggetti magici",
+  "wikiMagicSnacks": "Snack magici",
+  "wikiPositionDifference": "Per posizione",
+  "wikiBonusMedals": "Medaglie bonus",
+  "wikiMinimumBonuses": "Bonus minimi",
+  "wikiGroupSize": "Dimensione del gruppo",
+  "wikiBoost": "Potenziamento",
+  "wikiDamage": "Danni",
+  "wikiSquadMembers": "Membri della squadra",
+  "wikiRankedMedals": "Medaglie classificate",
+  "wikiPlayerTroopLevels": "Usa i livelli delle tue truppe",
+  "wikiJoined": "Entrato",
+  "wikiArmyVillage": "Esercito e villaggio",
+  "wikiLeaguesRewards": "Leghe e ricompense",
+  "wikiItemsModes": "Altro e modalità di battaglia",
+  "wikiArtwork": "Galleria",
+  "wikiTableScrollHint": "Scorri la tabella per vedere altro",
+  "wikiPlacementMedals": "Medaglie per posizione",
+  "wikiWarSize": "Dimensione della guerra",
+  "wikiByPlacement": "Per posizione",
+  "wikiClanPlacement": "Posizione del clan",
+  "wikiCwlBaselineNote": "Ricompensa base per posizione prima degli adeguamenti per la partecipazione. Le medaglie bonus sono separate.",
+  "wikiPlacement": "Posizione",
+  "wikiIntroTitle": "Dentro il villaggio",
+  "wikiIntroBody": "Esplora il tuo esercito, le leghe e le ricompense.",
+  "wikiSquads": "Squadre",
+  "wikiCosmetics": "Cosmetici",
+  "wikiStatsByLevel": "Statistiche per livello",
+  "wikiLevel": "Livello",
+  "wikiSort": "Ordina",
+  "wikiNewest": "Più recenti",
+  "wikiOldest": "Meno recenti",
+  "wikiNameOrder": "Nome",
+  "wikiOwnership": "Possesso",
+  "wikiOwned": "Posseduto",
+  "wikiNotOwned": "Non posseduto",
+  "wikiCapacity": "Limite di deposito",
+  "wikiSellGems": "Vendita in gemme",
+  "wikiProductionBuilding": "Edificio di produzione",
+  "wikiBooks": "Libri",
+  "wikiHammers": "Martelli",
+  "wikiPotions": "Pozioni",
+  "wikiRunes": "Rune",
+  "wikiType": "Tipo",
+  "wikiClanCapital": "Capitale del clan",
+  "wikiMinimumTownHall": "Municipio minimo",
+  "wikiLeagueBonus": "Bonus lega",
+  "wikiEsportsMode": "Modalità esport",
+  "wikiSide": "Lato",
+  "wikiBattles": "Battaglie",
+  "wikiNextTownHall": "Prossimo Municipio",
+  "wikiTownHallGate": "Municipio {townhall} · Livello {level}",
+  "@wikiTownHallGate": {
+    "placeholders": {
+      "townhall": {
+        "type": "int"
+      },
+      "level": {
+        "type": "int"
+      }
+    }
+  },
+  "generalYes": "Sì",
+  "generalNo": "No",
+  "wikiCommon": "Comune",
+  "wikiEpic": "Epico",
+  "wikiUpgradeOres": "Minerali per migliorare",
+  "gameBuilderHall": "Sala del costruttore",
+  "gameBuilderHallLevelNumber": "Sala del costruttore {level}",
+  "wikiSuperTroops": "Supertruppe",
+  "wikiSeasonalTroops": "Truppe stagionali",
+  "wikiElixirSpells": "Incantesimi di elisir",
+  "wikiDarkSpells": "Incantesimi oscuri",
+  "wikiSeasonalSpells": "Incantesimi stagionali",
+  "@gameBuilderHallLevelNumber": {
+    "placeholders": {
+      "level": {
+        "type": "int"
+      }
+    }
+  },
+  "wikiBuilderHallGate": "Sala del costruttore {townhall} · Livello {level}",
+  "@wikiBuilderHallGate": {
+    "placeholders": {
+      "townhall": {
+        "type": "int"
+      },
+      "level": {
+        "type": "int"
+      }
+    }
+  },
+  "wikiUnlocks": "Sblocchi",
+  "clanMemberLastActive": "Ultima attività",
+  "clanMemberSortOrder": "Ordinamento",
+  "clanMemberDescending": "Decrescente",
+  "clanMemberAscending": "Crescente",
+  "clanMemberNoObservation": "Non registrato",
+  "wikiSeasonal": "Stagionale"
 }

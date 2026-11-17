@@ -3087,7 +3087,7 @@
   "drawerCalculators": "계산기",
   "drawerUpgradeTracker": "업그레이드 추적기",
   "drawerBasesArmies": "기지 및 군대",
-  "drawerGameAssets": "게임 자산",
+  "drawerGameAssets": "Wiki",
   "drawerManageAccounts": "계정 관리",
   "playersLinked": "연결됨",
   "playersBookmarked": "북마크됨",
@@ -3559,8 +3559,8 @@
   "sideSavedArmies": "저장된 군대",
   "sideArmyLinks": "군대 링크",
   "sideArmyLinksBody": "구성, 마법, 시즈, 메모, 공유 링크.",
-  "sideGameAssetsTitle": "게임 에셋",
-  "sideGameAssetsSubtitle": "폴더별로 묶인 호스팅 ClashKing 에셋.",
+  "sideGameAssetsTitle": "Wiki",
+  "sideGameAssetsSubtitle": "Search · 통계",
   "gameAssetsLoadError": "게임 에셋을 불러오지 못했습니다",
   "gameAssetsEmptyTitle": "사용 가능한 게임 에셋이 없습니다",
   "gameAssetsEmptyBody": "호스팅된 매니페스트에 지원되는 이미지가 없습니다.",
@@ -5212,5 +5212,106 @@
   "emoteRequiredLabel": "필요 조건:",
   "searchMinimumCharacters": "검색하려면 3자 이상 입력하세요.",
   "homeCreatorCodeInGame": "Clash of Clans에서 사용",
-  "homeCreatorCodeOpenFailed": "링크를 열 수 없습니다. 다시 시도해 주세요."
+  "homeCreatorCodeOpenFailed": "링크를 열 수 없습니다. 다시 시도해 주세요.",
+  "wikiStarBonus": "별 보너스",
+  "wikiBattleModes": "전투 모드",
+  "wikiMagicItems": "마법 아이템",
+  "wikiMagicSnacks": "마법 간식",
+  "wikiPositionDifference": "순위당",
+  "wikiBonusMedals": "보너스 메달",
+  "wikiMinimumBonuses": "최소 보너스",
+  "wikiGroupSize": "그룹 인원",
+  "wikiBoost": "부스트",
+  "wikiDamage": "피해량",
+  "wikiSquadMembers": "분대 구성원",
+  "wikiRankedMedals": "랭크 메달",
+  "wikiPlayerTroopLevels": "내 유닛 레벨 사용",
+  "wikiJoined": "가입",
+  "wikiArmyVillage": "병력과 마을",
+  "wikiLeaguesRewards": "리그와 보상",
+  "wikiItemsModes": "기타 및 전투 모드",
+  "wikiArtwork": "이미지 갤러리",
+  "wikiTableScrollHint": "표를 밀어서 더 보기",
+  "wikiPlacementMedals": "순위 메달",
+  "wikiWarSize": "전쟁 규모",
+  "wikiByPlacement": "순위별",
+  "wikiClanPlacement": "클랜 순위",
+  "wikiCwlBaselineNote": "참여도 조정 전의 순위별 기본 보상입니다. 보너스 메달은 별도입니다.",
+  "wikiPlacement": "순위",
+  "wikiIntroTitle": "마을 속으로",
+  "wikiIntroBody": "병력, 리그, 보상을 살펴보세요.",
+  "wikiSquads": "분대",
+  "wikiCosmetics": "꾸미기 아이템",
+  "wikiStatsByLevel": "레벨별 능력치",
+  "wikiLevel": "레벨",
+  "wikiSort": "정렬",
+  "wikiNewest": "최신순",
+  "wikiOldest": "오래된순",
+  "wikiNameOrder": "이름",
+  "wikiOwnership": "보유 여부",
+  "wikiOwned": "보유",
+  "wikiNotOwned": "미보유",
+  "wikiCapacity": "보관 한도",
+  "wikiSellGems": "판매 보석",
+  "wikiProductionBuilding": "생산 건물",
+  "wikiBooks": "책",
+  "wikiHammers": "망치",
+  "wikiPotions": "포션",
+  "wikiRunes": "룬",
+  "wikiType": "유형",
+  "wikiClanCapital": "클랜 캐피탈",
+  "wikiMinimumTownHall": "최소 마을회관",
+  "wikiLeagueBonus": "리그 보너스",
+  "wikiEsportsMode": "e스포츠 모드",
+  "wikiSide": "진영",
+  "wikiBattles": "전투",
+  "wikiNextTownHall": "다음 마을회관",
+  "wikiTownHallGate": "마을회관 {townhall} · 레벨 {level}",
+  "@wikiTownHallGate": {
+    "placeholders": {
+      "townhall": {
+        "type": "int"
+      },
+      "level": {
+        "type": "int"
+      }
+    }
+  },
+  "generalYes": "예",
+  "generalNo": "아니요",
+  "wikiCommon": "일반",
+  "wikiEpic": "영웅",
+  "wikiUpgradeOres": "업그레이드 광석",
+  "gameBuilderHall": "장인회관",
+  "gameBuilderHallLevelNumber": "장인회관 {level}",
+  "wikiSuperTroops": "슈퍼 유닛",
+  "wikiSeasonalTroops": "기간 한정 유닛",
+  "wikiElixirSpells": "엘릭서 마법",
+  "wikiDarkSpells": "암흑 마법",
+  "wikiSeasonalSpells": "기간 한정 마법",
+  "@gameBuilderHallLevelNumber": {
+    "placeholders": {
+      "level": {
+        "type": "int"
+      }
+    }
+  },
+  "wikiBuilderHallGate": "장인회관 {townhall} · 레벨 {level}",
+  "@wikiBuilderHallGate": {
+    "placeholders": {
+      "townhall": {
+        "type": "int"
+      },
+      "level": {
+        "type": "int"
+      }
+    }
+  },
+  "wikiUnlocks": "잠금 해제",
+  "clanMemberLastActive": "최근 활동",
+  "clanMemberSortOrder": "정렬 순서",
+  "clanMemberDescending": "내림차순",
+  "clanMemberAscending": "오름차순",
+  "clanMemberNoObservation": "기록 없음",
+  "wikiSeasonal": "기간 한정"
 }

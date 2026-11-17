@@ -3087,7 +3087,7 @@
   "drawerCalculators": "计算器",
   "drawerUpgradeTracker": "升级追踪器",
   "drawerBasesArmies": "基地和军队",
-  "drawerGameAssets": "游戏资产",
+  "drawerGameAssets": "Wiki",
   "drawerManageAccounts": "管理账户",
   "playersLinked": "链接",
   "playersBookmarked": "已添加书签",
@@ -3559,8 +3559,8 @@
   "sideSavedArmies": "已保存军队",
   "sideArmyLinks": "军队链接",
   "sideArmyLinksBody": "配置、法术、攻城机器、备注和分享链接。",
-  "sideGameAssetsTitle": "游戏素材",
-  "sideGameAssetsSubtitle": "托管的 ClashKing 素材，按文件夹分组。",
+  "sideGameAssetsTitle": "Wiki",
+  "sideGameAssetsSubtitle": "Search · 统计数据",
   "gameAssetsLoadError": "无法加载游戏素材",
   "gameAssetsEmptyTitle": "无可用游戏素材",
   "gameAssetsEmptyBody": "托管的清单中没有找到任何支持的图片。",
@@ -5212,5 +5212,106 @@
   "emoteRequiredLabel": "要求：",
   "searchMinimumCharacters": "输入至少 3 个字符以搜索。",
   "homeCreatorCodeInGame": "在 Clash of Clans 中使用",
-  "homeCreatorCodeOpenFailed": "无法打开链接，请重试。"
+  "homeCreatorCodeOpenFailed": "无法打开链接，请重试。",
+  "wikiStarBonus": "胜利之星奖励",
+  "wikiBattleModes": "战斗模式",
+  "wikiMagicItems": "魔法物品",
+  "wikiMagicSnacks": "魔法零食",
+  "wikiPositionDifference": "每个名次",
+  "wikiBonusMedals": "额外奖章",
+  "wikiMinimumBonuses": "最低奖励数",
+  "wikiGroupSize": "小组人数",
+  "wikiBoost": "加成",
+  "wikiDamage": "伤害",
+  "wikiSquadMembers": "小队成员",
+  "wikiRankedMedals": "排位奖章",
+  "wikiPlayerTroopLevels": "使用你的兵种等级",
+  "wikiJoined": "加入",
+  "wikiArmyVillage": "军队与村庄",
+  "wikiLeaguesRewards": "联赛与奖励",
+  "wikiItemsModes": "其他与战斗模式",
+  "wikiArtwork": "图片集",
+  "wikiTableScrollHint": "滑动表格查看更多",
+  "wikiPlacementMedals": "排名奖章",
+  "wikiWarSize": "对战规模",
+  "wikiByPlacement": "按排名",
+  "wikiClanPlacement": "部落排名",
+  "wikiCwlBaselineNote": "根据排名计算的基础奖励，尚未按参战情况调整。额外奖章另计。",
+  "wikiPlacement": "排名",
+  "wikiIntroTitle": "走进村庄",
+  "wikiIntroBody": "探索军队、联赛与奖励。",
+  "wikiSquads": "小队",
+  "wikiCosmetics": "外观物品",
+  "wikiStatsByLevel": "各等级属性",
+  "wikiLevel": "等级",
+  "wikiSort": "排序",
+  "wikiNewest": "最新",
+  "wikiOldest": "最早",
+  "wikiNameOrder": "名称",
+  "wikiOwnership": "拥有状态",
+  "wikiOwned": "已拥有",
+  "wikiNotOwned": "未拥有",
+  "wikiCapacity": "存储上限",
+  "wikiSellGems": "出售宝石数",
+  "wikiProductionBuilding": "生产建筑",
+  "wikiBooks": "书",
+  "wikiHammers": "锤",
+  "wikiPotions": "药水",
+  "wikiRunes": "符石",
+  "wikiType": "类型",
+  "wikiClanCapital": "部落都城",
+  "wikiMinimumTownHall": "最低大本营",
+  "wikiLeagueBonus": "联赛奖励",
+  "wikiEsportsMode": "电竞模式",
+  "wikiSide": "阵营",
+  "wikiBattles": "战斗",
+  "wikiNextTownHall": "下一大本营",
+  "wikiTownHallGate": "大本营 {townhall} · 等级 {level}",
+  "@wikiTownHallGate": {
+    "placeholders": {
+      "townhall": {
+        "type": "int"
+      },
+      "level": {
+        "type": "int"
+      }
+    }
+  },
+  "generalYes": "是",
+  "generalNo": "否",
+  "wikiCommon": "普通",
+  "wikiEpic": "史诗",
+  "wikiUpgradeOres": "升级矿石",
+  "gameBuilderHall": "建筑大师大本营",
+  "gameBuilderHallLevelNumber": "建筑大师大本营 {level}",
+  "wikiSuperTroops": "超级部队",
+  "wikiSeasonalTroops": "限时部队",
+  "wikiElixirSpells": "圣水法术",
+  "wikiDarkSpells": "暗黑法术",
+  "wikiSeasonalSpells": "限时法术",
+  "@gameBuilderHallLevelNumber": {
+    "placeholders": {
+      "level": {
+        "type": "int"
+      }
+    }
+  },
+  "wikiBuilderHallGate": "建筑大师大本营 {townhall} · 等级 {level}",
+  "@wikiBuilderHallGate": {
+    "placeholders": {
+      "townhall": {
+        "type": "int"
+      },
+      "level": {
+        "type": "int"
+      }
+    }
+  },
+  "wikiUnlocks": "解锁内容",
+  "clanMemberLastActive": "最后活跃",
+  "clanMemberSortOrder": "排序顺序",
+  "clanMemberDescending": "降序",
+  "clanMemberAscending": "升序",
+  "clanMemberNoObservation": "暂无记录",
+  "wikiSeasonal": "季节限定"
 }

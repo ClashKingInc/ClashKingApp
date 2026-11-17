@@ -2992,7 +2992,7 @@
   "drawerCalculators": "Laskimet",
   "drawerUpgradeTracker": "Päivitä Tracker",
   "drawerBasesArmies": "Tukikohdat ja armeijat",
-  "drawerGameAssets": "Pelin omaisuus",
+  "drawerGameAssets": "Wiki",
   "drawerManageAccounts": "Hallinnoi tilejä",
   "playersLinked": "Linkitetty",
   "playersBookmarked": "Lisätty kirjanmerkkeihin",
@@ -3464,8 +3464,8 @@
   "sideSavedArmies": "Tallennetut armeijat",
   "sideArmyLinks": "Armeijalinkit",
   "sideArmyLinksBody": "Kokoonpano, loitsut, piirityskone, muistiinpanot ja jakolinkki.",
-  "sideGameAssetsTitle": "Peliassetit",
-  "sideGameAssetsSubtitle": "Hostatut ClashKing-assetit kansioittain ryhmiteltynä.",
+  "sideGameAssetsTitle": "Wiki",
+  "sideGameAssetsSubtitle": "Search · Tilastot",
   "gameAssetsLoadError": "Pelisisältöjen lataaminen epäonnistui",
   "gameAssetsEmptyTitle": "Pelisisältöjä ei ole saatavilla",
   "gameAssetsEmptyBody": "Palvelimella oleva luettelo ei sisältänyt tuettuja kuvia.",
@@ -5117,5 +5117,106 @@
   "emoteRequiredLabel": "Vaaditaan:",
   "searchMinimumCharacters": "Hae kirjoittamalla vähintään 3 merkkiä.",
   "homeCreatorCodeInGame": "Clash of Clansissa",
-  "homeCreatorCodeOpenFailed": "Linkkiä ei voitu avata. Yritä uudelleen."
+  "homeCreatorCodeOpenFailed": "Linkkiä ei voitu avata. Yritä uudelleen.",
+  "wikiStarBonus": "Tähtibonus",
+  "wikiBattleModes": "Taistelutilat",
+  "wikiMagicItems": "Taikaesineet",
+  "wikiMagicSnacks": "Taikaherkut",
+  "wikiPositionDifference": "Sijoitusta kohden",
+  "wikiBonusMedals": "Bonusmitalit",
+  "wikiMinimumBonuses": "Bonusten vähimmäismäärä",
+  "wikiGroupSize": "Ryhmän koko",
+  "wikiBoost": "Tehostus",
+  "wikiDamage": "Vahinko",
+  "wikiSquadMembers": "Ryhmän jäsenet",
+  "wikiRankedMedals": "Sijoitusmitalit",
+  "wikiPlayerTroopLevels": "Käyttää joukkojesi tasoja",
+  "wikiJoined": "Liittyi",
+  "wikiArmyVillage": "Armeija ja kylä",
+  "wikiLeaguesRewards": "Liigat ja palkinnot",
+  "wikiItemsModes": "Muut ja taistelutilat",
+  "wikiArtwork": "Kuvagalleria",
+  "wikiTableScrollHint": "Näet lisää pyyhkäisemällä taulukkoa",
+  "wikiPlacementMedals": "Sijoitusmitalit",
+  "wikiWarSize": "Sodan koko",
+  "wikiByPlacement": "Sijoituksen mukaan",
+  "wikiClanPlacement": "Klaanin sijoitus",
+  "wikiCwlBaselineNote": "Sijoituksen mukainen peruspalkinto ennen osallistumisen huomioimista. Bonusmitalit lasketaan erikseen.",
+  "wikiPlacement": "Sijoitus",
+  "wikiIntroTitle": "Kylän sisällä",
+  "wikiIntroBody": "Tutustu armeijaasi, liigoihin ja palkintoihin.",
+  "wikiSquads": "Joukot",
+  "wikiCosmetics": "Ulkoasut",
+  "wikiStatsByLevel": "Tilastot tasoittain",
+  "wikiLevel": "Taso",
+  "wikiSort": "Järjestä",
+  "wikiNewest": "Uusimmat",
+  "wikiOldest": "Vanhimmat",
+  "wikiNameOrder": "Nimi",
+  "wikiOwnership": "Omistus",
+  "wikiOwned": "Omistettu",
+  "wikiNotOwned": "Ei omistettu",
+  "wikiCapacity": "Varastoraja",
+  "wikiSellGems": "Myy jalokivillä",
+  "wikiProductionBuilding": "Tuotantorakennus",
+  "wikiBooks": "Kirjat",
+  "wikiHammers": "Vasarat",
+  "wikiPotions": "Juomat",
+  "wikiRunes": "Riimut",
+  "wikiType": "Tyyppi",
+  "wikiClanCapital": "Klaanin pääkaupunki",
+  "wikiMinimumTownHall": "Vähimmäisraatihuone",
+  "wikiLeagueBonus": "Liigabonus",
+  "wikiEsportsMode": "Esports-tila",
+  "wikiSide": "Puoli",
+  "wikiBattles": "Taistelut",
+  "wikiNextTownHall": "Seuraava raatihuone",
+  "wikiTownHallGate": "Raatihuone {townhall} · Taso {level}",
+  "@wikiTownHallGate": {
+    "placeholders": {
+      "townhall": {
+        "type": "int"
+      },
+      "level": {
+        "type": "int"
+      }
+    }
+  },
+  "generalYes": "Kyllä",
+  "generalNo": "Ei",
+  "wikiCommon": "Tavallinen",
+  "wikiEpic": "Eeppinen",
+  "wikiUpgradeOres": "Päivitysmalmit",
+  "gameBuilderHall": "Rakentajantalo",
+  "gameBuilderHallLevelNumber": "Rakentajantalo {level}",
+  "wikiSuperTroops": "Superjoukot",
+  "wikiSeasonalTroops": "Kausijoukot",
+  "wikiElixirSpells": "Eliksiiriloitsut",
+  "wikiDarkSpells": "Pimeän eliksiirin loitsut",
+  "wikiSeasonalSpells": "Kausiloitsut",
+  "@gameBuilderHallLevelNumber": {
+    "placeholders": {
+      "level": {
+        "type": "int"
+      }
+    }
+  },
+  "wikiBuilderHallGate": "Rakentajantalo {townhall} · Taso {level}",
+  "@wikiBuilderHallGate": {
+    "placeholders": {
+      "townhall": {
+        "type": "int"
+      },
+      "level": {
+        "type": "int"
+      }
+    }
+  },
+  "wikiUnlocks": "Avattavat kohteet",
+  "clanMemberLastActive": "Viimeksi aktiivinen",
+  "clanMemberSortOrder": "Lajittelujärjestys",
+  "clanMemberDescending": "Laskeva",
+  "clanMemberAscending": "Nouseva",
+  "clanMemberNoObservation": "Ei tallennettu",
+  "wikiSeasonal": "Kausittainen"
 }

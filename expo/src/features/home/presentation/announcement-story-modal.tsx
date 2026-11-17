@@ -37,10 +37,12 @@ export function AnnouncementStoryModal({
   announcement,
   preparedUri,
   onFinish,
+  onViewed,
 }: {
   announcement: AppAnnouncement;
   preparedUri: string;
   onFinish: (result: AnnouncementStoryResult) => void;
+  onViewed?: () => void;
 }) {
   const { t } = useI18n();
   const sharing = useRef(false);
@@ -135,6 +137,7 @@ export function AnnouncementStoryModal({
     if (revealTimer.current) clearTimeout(revealTimer.current);
     revealTimer.current = setTimeout(() => {
       setReady(true);
+      onViewed?.();
       Animated.timing(reveal, {
         toValue: 1,
         duration: reduceMotion ? 0 : 180,

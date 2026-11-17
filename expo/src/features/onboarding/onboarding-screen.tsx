@@ -56,6 +56,14 @@ export function OnboardingScreen({
   const { width } = useWindowDimensions();
   const pager = useRef<PagerViewHandle>(null);
   const finishing = useRef(false);
+  const permissionRequest = useRef(0);
+  const permissionPending = useRef(false);
+  useEffect(
+    () => () => {
+      permissionRequest.current += 1;
+    },
+    [],
+  );
   const [page, setPage] = useState(0);
   const [avatarConfirmed, setAvatarConfirmed] = useState(false);
   const [avatarRequested, setAvatarRequested] = useState(false);
@@ -73,6 +81,7 @@ export function OnboardingScreen({
   const finish = async (skip = false) => {
     if (finishing.current) return;
     finishing.current = true;
+    permissionRequest.current += 1;
     setBusy(true);
     setFailed(null);
     try {
@@ -86,8 +95,9 @@ export function OnboardingScreen({
     }
   };
   const enableNotifications = async () => {
-    if (finishing.current) return;
-    finishing.current = true;
+    if (permissionPending.current || finishing.current) return;
+    permissionPending.current = true;
+    const request = ++permissionRequest.current;
     setBusy(true);
     setFailed(null);
     try {
@@ -98,9 +108,10 @@ export function OnboardingScreen({
       // Request the system prompt from this explicit action. Registration does
       // not choose accounts or opt the user into war/upgrade reminder types.
       const result = await runtime.push.requestPermissionAndRegister();
+      // Skipping owns navigation even if registration finishes afterward.
+      if (request !== permissionRequest.current) return;
       if (result.state === 'ready') {
-        await onboarding.finish();
-        onComplete();
+        await finish();
       } else if (result.state === 'permissionDenied') {
         // iOS will not repeat a denied prompt. Offer Settings only after the
         // user makes another explicit choice; Not now always remains available.
@@ -117,10 +128,10 @@ export function OnboardingScreen({
         setFailed(errors[result.state]);
       }
     } catch {
-      setFailed('generalError');
+      if (request === permissionRequest.current) setFailed('generalError');
     } finally {
-      finishing.current = false;
-      setBusy(false);
+      permissionPending.current = false;
+      if (request === permissionRequest.current) setBusy(false);
     }
   };
   const select = (next: number) => {
@@ -237,7 +248,20 @@ export function OnboardingScreen({
                   />
                 ))}
               </View>
-              <View style={styles.skip} />
+              {finalPage ? (
+                <Pressable
+                  testID="onboarding-not-now"
+                  onPress={() => void finish()}
+                  accessibilityRole="button"
+                  style={({ pressed }) => [styles.skip, { opacity: pressed ? 0.65 : 1 }]}
+                >
+                  <CKText role="bodyMedium" skeleton={false} style={styles.skipText}>
+                    {t('notificationPrimerNotNow')}
+                  </CKText>
+                </Pressable>
+              ) : (
+                <View style={styles.skip} />
+              )}
             </View>
             <PagerView
               ref={pager}
@@ -331,20 +355,6 @@ export function OnboardingScreen({
                     : materialContinueLabel(locale)}
                 </CKText>
               </Pressable>
-              {finalPage ? (
-                <Pressable
-                  disabled={busy}
-                  onPress={() => void finish(false)}
-                  accessibilityRole="button"
-                  style={styles.secondary}
-                >
-                  <CKText role="bodyMedium" muted skeleton={false}>
-                    {t('notificationPrimerNotNow')}
-                  </CKText>
-                </Pressable>
-              ) : (
-                <View style={styles.secondary} />
-              )}
             </View>
           </SafeAreaView>
         </SafeAreaProvider>
@@ -357,14 +367,23 @@ const styles = StyleSheet.create({
   top: {
     flexDirection: 'row',
     alignItems: 'center',
-    height: 54,
+    minHeight: 54,
     paddingHorizontal: 15,
     justifyContent: 'space-between',
   },
   avatarBack: { width: 48, height: 48, alignItems: 'center', justifyContent: 'center' },
-  back: { width: 70, height: 44, justifyContent: 'center', alignItems: 'flex-start' },
-  skip: { minHeight: 44, minWidth: 70, alignItems: 'flex-end', justifyContent: 'center' },
-  progress: { flexDirection: 'row', alignItems: 'center', gap: 6 },
+  back: { flex: 1, minWidth: 44, height: 44, justifyContent: 'center', alignItems: 'flex-start' },
+  skip: {
+    flex: 1,
+    minHeight: 44,
+    minWidth: 44,
+    paddingVertical: 10,
+    paddingStart: 8,
+    alignItems: 'flex-end',
+    justifyContent: 'center',
+  },
+  skipText: { textAlign: 'right' },
+  progress: { flexShrink: 0, flexDirection: 'row', alignItems: 'center', gap: 6 },
   progressPart: { height: 7, borderRadius: 5 },
   scroll: { flexGrow: 1, justifyContent: 'center', alignItems: 'center', paddingBottom: 8 },
   copy: { width: '100%', maxWidth: 448, paddingHorizontal: 29, marginTop: 12, gap: 15 },
@@ -373,7 +392,7 @@ const styles = StyleSheet.create({
   footer: {
     paddingHorizontal: 27,
     paddingTop: 12,
-    paddingBottom: 3,
+    paddingBottom: 12,
     width: '100%',
     maxWidth: 488,
     alignSelf: 'center',
@@ -386,6 +405,5 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     borderRadius: 19,
   },
-  secondary: { minHeight: 42, justifyContent: 'center', alignItems: 'center' },
   error: { textAlign: 'center', marginBottom: 8 },
 });

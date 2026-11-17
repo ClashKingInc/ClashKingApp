@@ -1,7 +1,14 @@
 import { useAdaptiveLayout } from '../../../ui/adaptive-layout';
-import { useMemo, useState, type ReactNode } from 'react';
+import { useEffect, useMemo, useState, type ReactNode } from 'react';
 import { Platform, Pressable, StyleSheet, View, useWindowDimensions } from 'react-native';
-import { ArrowDown, ArrowUp, Star, Users } from 'lucide-react-native';
+import {
+  ArrowDownWideNarrow,
+  ArrowUpNarrowWide,
+  ChevronRight,
+  SlidersHorizontal,
+  Star,
+  Users,
+} from 'lucide-react-native';
 
 import { ImageAssets } from '../../../core/assets/image-assets';
 import { toIntlLocale, useI18n } from '../../../i18n';
@@ -13,21 +20,27 @@ import {
   PillSurface,
   ResponsiveGrid,
   SelectionPicker,
-  SelectionPickerModal,
   Surface,
   colorWithAlpha,
   useCKTheme,
 } from '../../../ui';
+import { MorphFilterSheet } from '../../../ui/morph-filter-sheet';
 import type { ClanMember } from '../models';
-import type { ClanInfoPresentationActions, ClanInfoPresentationModel } from './clan-info-contracts';
+import { formatPlayerActivity } from '../../player/presentation/presentation-utils';
+import type {
+  ClanMemberActivity,
+  ClanInfoPresentationActions,
+  ClanInfoPresentationModel,
+} from './clan-info-contracts';
 
 type MemberSort =
+  | 'lastObservedAt'
+  | 'joinedAt'
   | 'league'
   | 'townHallLevel'
   | 'role'
   | 'donations'
   | 'donationsReceived'
-  | 'donationsRatio'
   | 'builderBaseTrophies'
   | 'expLevel';
 
@@ -45,28 +58,105 @@ export function ClanMembersTab({
   const desktop = (Platform.OS === 'web' && width >= 900) || layout.isExpanded;
   const [sort, setSort] = useState<MemberSort>('league');
   const [showSort, setShowSort] = useState(false);
+  const [order, setOrder] = useState<'desc' | 'asc'>('desc');
+  const [draft, setDraft] = useState({ sort, order });
   const [showTotals, setShowTotals] = useState(false);
   const [loadingPlayer, setLoadingPlayer] = useState(false);
+  const [now, setNow] = useState(() => Date.now());
+  useEffect(() => {
+    const timer = setInterval(() => setNow(Date.now()), 30_000);
+    return () => clearInterval(timer);
+  }, []);
   const allMembers = model.clan.memberList;
+  const activeSort = sort === 'lastObservedAt' && !model.canViewMemberActivity ? 'league' : sort;
   const members = useMemo(() => {
     const result = [...allMembers];
-    result.sort((a, b) => compareMembers(a, b, sort));
+    result.sort((a, b) => {
+      if (activeSort === 'lastObservedAt' || activeSort === 'joinedAt') {
+        const left = Date.parse(model.memberActivity?.get(a.tag)?.[activeSort] ?? '');
+        const right = Date.parse(model.memberActivity?.get(b.tag)?.[activeSort] ?? '');
+        // Unknown dates remain last in both directions; reversing the whole
+        // array would incorrectly promote missing observations to the top.
+        if (!Number.isFinite(left) || !Number.isFinite(right)) {
+          return Number.isFinite(left)
+            ? -1
+            : Number.isFinite(right)
+              ? 1
+              : a.tag.localeCompare(b.tag);
+        }
+        return (order === 'desc' ? right - left : left - right) || a.tag.localeCompare(b.tag);
+      }
+      return (
+        compareMembers(a, b, activeSort) * (order === 'desc' ? 1 : -1) || a.tag.localeCompare(b.tag)
+      );
+    });
     return result;
-  }, [allMembers, sort]);
-  const sortOptions: readonly { value: MemberSort; label: string }[] = [
-    { value: 'league', label: `${t('gameLeague')} & ${t('gameTrophies')}` },
-    { value: 'townHallLevel', label: t('gameTownHallLevel') },
-    { value: 'role', label: t('generalRole') },
-    { value: 'donations', label: t('gameDonations') },
-    { value: 'donationsReceived', label: t('gameDonationsReceived') },
-    { value: 'donationsRatio', label: t('gameDonationsRatio') },
-    { value: 'builderBaseTrophies', label: t('gameBuilderBaseTrophies') },
-    { value: 'expLevel', label: t('gameExpLevel') },
-  ];
-  const selectedSort = sortOptions.find((option) => option.value === sort)?.label ?? '';
+  }, [allMembers, activeSort, order, model.memberActivity]);
   const averageTownHall = allMembers.length
     ? allMembers.reduce((sum, member) => sum + member.townHallLevel, 0) / allMembers.length
     : 0;
+  const sortOptions: readonly {
+    value: MemberSort;
+    label: string;
+    imageUrl?: string;
+    icon?: ReactNode;
+  }[] = [
+    {
+      value: 'league',
+      label: `${t('gameLeague')} & ${t('gameTrophies')}`,
+      icon: <MobileWebImage imageUrl={ImageAssets.trophies} style={styles.metricImage} />,
+    },
+    {
+      value: 'townHallLevel',
+      label: t('gameTownHallLevel'),
+      icon: (
+        <MobileWebImage
+          imageUrl={ImageAssets.townHall(Math.max(1, Math.round(averageTownHall)))}
+          style={styles.metricImage}
+        />
+      ),
+    },
+    {
+      value: 'role',
+      label: t('generalRole'),
+      icon: <MobileWebImage imageUrl={ImageAssets.clanCastle} style={styles.metricImage} />,
+    },
+    {
+      value: 'donations',
+      label: t('gameDonations'),
+      icon: <MobileWebImage imageUrl={ImageAssets.donationArrow} style={styles.metricImage} />,
+    },
+    {
+      value: 'donationsReceived',
+      label: t('gameDonationsReceived'),
+      icon: <MobileWebImage imageUrl={ImageAssets.receivedArrow} style={styles.metricImage} />,
+    },
+    {
+      value: 'builderBaseTrophies',
+      label: t('gameBuilderBaseTrophies'),
+      icon: <MobileWebImage imageUrl={ImageAssets.builderBaseTrophy} style={styles.metricImage} />,
+    },
+    {
+      value: 'expLevel',
+      label: t('gameExpLevel'),
+      icon: <MobileWebImage imageUrl={ImageAssets.xp} style={styles.metricImage} />,
+    },
+    {
+      value: 'joinedAt',
+      label: t('wikiJoined'),
+      icon: <MobileWebImage imageUrl={ImageAssets.calendar} style={styles.metricImage} />,
+    },
+    ...(model.canViewMemberActivity
+      ? [
+          {
+            value: 'lastObservedAt' as const,
+            label: t('clanMemberLastActive'),
+            icon: <MobileWebImage imageUrl={ImageAssets.calendar} style={styles.metricImage} />,
+          },
+        ]
+      : []),
+  ];
+  const selectedSort = sortOptions.find((option) => option.value === activeSort)?.label ?? '';
   const openMember = async (member: ClanMember) => {
     if (actions.openPlayerTag) return actions.openPlayerTag(member.tag);
     if (loadingPlayer) return;
@@ -84,8 +174,10 @@ export function ClanMembersTab({
       key={member.tag}
       member={member}
       index={index + 1}
-      sort={sort}
+      sort={activeSort}
       linked={model.activeUserTags.has(member.tag)}
+      activity={model.memberActivity?.get(member.tag)}
+      now={now}
       onPress={() => void openMember(member)}
     />
   ));
@@ -113,12 +205,15 @@ export function ClanMembersTab({
         </ArtworkToggleButton>
         <View style={styles.sortControl}>
           <SelectionPicker
-            options={sortOptions.map(({ value, label }) => ({ key: value, label }))}
-            selectedKey={sort}
+            options={sortOptions.map(({ value, label, icon }) => ({ key: value, label, icon }))}
+            selectedKey={activeSort}
             onSelect={setSort}
             title={selectedSort}
             externallyManaged
-            onOpen={() => setShowSort(true)}
+            onOpen={() => {
+              setDraft({ sort: activeSort, order });
+              setShowSort(true);
+            }}
           />
         </View>
       </View>
@@ -141,38 +236,82 @@ export function ClanMembersTab({
       ) : (
         <View style={styles.list}>{cards}</View>
       )}
-      <SelectionPickerModal
-        visible={showSort}
-        title={selectedSort}
-        options={sortOptions.map((option) => ({
-          key: option.value,
-          label: option.label,
-          icon: (
-            <MobileWebImage
-              imageUrl={
-                option.value === 'townHallLevel'
-                  ? ImageAssets.townHall(Math.max(1, Math.round(averageTownHall)))
-                  : option.value === 'expLevel'
-                    ? ImageAssets.xp
-                    : option.value === 'builderBaseTrophies'
-                      ? ImageAssets.builderBaseTrophy
-                      : option.value === 'role'
-                        ? ImageAssets.clanCastle
-                        : option.value === 'league'
-                          ? ImageAssets.trophies
-                          : ImageAssets.clanCastle
-              }
-              style={styles.metricImage}
-            />
-          ),
-        }))}
-        selectedKey={sort}
-        onSelect={(value) => {
-          setSort(value);
-          setShowSort(false);
-        }}
-        onClose={() => setShowSort(false)}
-      />
+      {showSort ? (
+        <MorphFilterSheet
+          title={t('generalFilters')}
+          applyLabel={t('generalApply')}
+          onClose={() => setShowSort(false)}
+          onReset={() => setDraft({ sort: 'league', order: 'desc' })}
+          onApply={() => {
+            setSort(draft.sort);
+            setOrder(draft.order);
+          }}
+        >
+          {(open) => (
+            <>
+              <Pressable
+                accessibilityRole="button"
+                style={styles.filterRow}
+                onPress={() =>
+                  open({
+                    title: t('calcSort'),
+                    value: draft.sort,
+                    options: sortOptions,
+                    onChange: (value) =>
+                      setDraft((current) => ({ ...current, sort: value as MemberSort })),
+                  })
+                }
+              >
+                <View style={{ width: 22, alignItems: 'center', justifyContent: 'center' }}>
+                  {sortOptions.find((option) => option.value === draft.sort)?.icon ?? (
+                    <SlidersHorizontal size={22} color={theme.onSurface} />
+                  )}
+                </View>
+                <CKText style={{ flex: 1 }}>{t('calcSort')}</CKText>
+                <CKText muted style={styles.filterValue}>
+                  {sortOptions.find((option) => option.value === draft.sort)?.label}
+                </CKText>
+                <ChevronRight size={20} color={theme.onSurfaceVariant} />
+              </Pressable>
+              <Pressable
+                accessibilityRole="button"
+                style={styles.filterRow}
+                onPress={() =>
+                  open({
+                    title: t('clanMemberSortOrder'),
+                    value: draft.order,
+                    options: [
+                      {
+                        value: 'desc',
+                        label: t('clanMemberDescending'),
+                        icon: <ArrowDownWideNarrow size={22} color={theme.onSurface} />,
+                      },
+                      {
+                        value: 'asc',
+                        label: t('clanMemberAscending'),
+                        icon: <ArrowUpNarrowWide size={22} color={theme.onSurface} />,
+                      },
+                    ],
+                    onChange: (value) =>
+                      setDraft((current) => ({ ...current, order: value as 'asc' | 'desc' })),
+                  })
+                }
+              >
+                {draft.order === 'desc' ? (
+                  <ArrowDownWideNarrow size={22} color={theme.onSurface} />
+                ) : (
+                  <ArrowUpNarrowWide size={22} color={theme.onSurface} />
+                )}
+                <CKText style={{ flex: 1 }}>{t('clanMemberSortOrder')}</CKText>
+                <CKText muted style={styles.filterValue}>
+                  {t(draft.order === 'desc' ? 'clanMemberDescending' : 'clanMemberAscending')}
+                </CKText>
+                <ChevronRight size={20} color={theme.onSurfaceVariant} />
+              </Pressable>
+            </>
+          )}
+        </MorphFilterSheet>
+      ) : null}
     </View>
   );
 }
@@ -184,7 +323,6 @@ function compareMembers(a: ClanMember, b: ClanMember, sort: MemberSort): number 
   if (sort === 'builderBaseTrophies') return b.builderBaseTrophies - a.builderBaseTrophies;
   if (sort === 'donations') return b.donations - a.donations;
   if (sort === 'donationsReceived') return b.donationsReceived - a.donationsReceived;
-  if (sort === 'donationsRatio') return donationRatio(b) - donationRatio(a);
   const league = b.league.id - a.league.id;
   return league || b.trophies - a.trophies;
 }
@@ -192,21 +330,22 @@ function compareMembers(a: ClanMember, b: ClanMember, sort: MemberSort): number 
 function roleWeight(role: string): number {
   return role === 'leader' ? 4 : role === 'coLeader' ? 3 : role === 'admin' ? 2 : 1;
 }
-function donationRatio(member: ClanMember): number {
-  return member.donations / (member.donationsReceived || 1);
-}
 
 function MemberCard({
   member,
   index,
   sort,
   linked,
+  activity,
+  now,
   onPress,
 }: {
   member: ClanMember;
   index: number;
   sort: MemberSort;
   linked: boolean;
+  activity?: ClanMemberActivity;
+  now: number;
   onPress: () => void;
 }) {
   const { t, locale } = useI18n();
@@ -219,6 +358,17 @@ function MemberCard({
         : member.role === 'admin'
           ? t('clanRoleElder')
           : t('clanRoleMember');
+  const seen = activity?.lastObservedAt ? Date.parse(activity.lastObservedAt) : NaN;
+  const joined = activity?.joinedAt ? Date.parse(activity.joinedAt) : NaN;
+  const newWindow = 24 * 60 * 60 * 1000;
+  const isNew =
+    (sort === 'league' || sort === 'joinedAt') &&
+    Number.isFinite(joined) &&
+    joined <= now &&
+    now - joined < newWindow;
+  const dateView = sort === 'joinedAt' || sort === 'lastObservedAt';
+  const date = sort === 'joinedAt' ? joined : seen;
+  const hasDate = Number.isFinite(date) && date <= now;
   const metric = memberMetric(member, sort, theme.onSurfaceVariant, locale);
   return (
     <Pressable accessibilityRole="button" accessibilityLabel={member.name} onPress={onPress}>
@@ -229,25 +379,56 @@ function MemberCard({
           { borderColor: linked ? '#22A35AB3' : colorWithAlpha(theme.outlineVariant, 0.32) },
         ]}
       >
-        <CKText muted role="labelMedium" style={styles.index}>
-          {index}
-        </CKText>
-        <MobileWebImage
-          imageUrl={ImageAssets.townHall(member.townHallLevel)}
-          style={styles.townHall}
-        />
-        <View style={styles.memberCopy}>
-          <CKText numberOfLines={1} style={styles.memberName}>
-            {member.name}
+        <View style={styles.memberIdentity}>
+          <CKText muted role="labelMedium" style={styles.index}>
+            {index}
           </CKText>
-          <CKText muted role="labelMedium">
-            {role}
-          </CKText>
+          <MobileWebImage
+            imageUrl={ImageAssets.townHall(member.townHallLevel)}
+            style={styles.townHall}
+          />
+          <View style={styles.memberCopy}>
+            <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
+              <CKText numberOfLines={1} style={[styles.memberName, { flexShrink: 1 }]}>
+                {member.name}
+              </CKText>
+              {isNew ? (
+                <View style={styles.newPill}>
+                  <CKText role="labelSmall" style={{ color: '#A7ECC4' }}>
+                    {t('homeNewMarker')}
+                  </CKText>
+                </View>
+              ) : null}
+            </View>
+            <CKText muted role="labelMedium">
+              {role}
+            </CKText>
+          </View>
+          <PillSurface
+            style={[styles.metric, dateView && styles.dateMetric]}
+            accessibilityLabel={
+              dateView
+                ? `${t(sort === 'joinedAt' ? 'wikiJoined' : 'clanMemberLastActive')}: ${hasDate ? formatPlayerActivity(new Date(date), t, new Date(now)) : t('clanMemberNoObservation')}`
+                : undefined
+            }
+          >
+            {dateView ? (
+              <MobileWebImage imageUrl={ImageAssets.calendar} style={styles.metricImage} />
+            ) : (
+              metric.leading
+            )}
+            <CKText
+              role="labelLarge"
+              style={dateView ? { textAlign: 'right', flexShrink: 1 } : undefined}
+            >
+              {dateView
+                ? hasDate
+                  ? formatPlayerActivity(new Date(date), t, new Date(now))
+                  : t('clanMemberNoObservation')
+                : metric.value}
+            </CKText>
+          </PillSurface>
         </View>
-        <PillSurface style={styles.metric}>
-          {metric.leading}
-          <CKText role="labelLarge">{metric.value}</CKText>
-        </PillSurface>
       </Surface>
     </Pressable>
   );
@@ -273,22 +454,14 @@ function memberMetric(
     };
   if (sort === 'donations')
     return {
-      leading: <ArrowUp size={18} color="#22A35A" />,
+      leading: <MobileWebImage imageUrl={ImageAssets.donationArrow} style={styles.metricImage} />,
       value: member.donations.toLocaleString(toIntlLocale(locale)),
     };
   if (sort === 'donationsReceived')
     return {
-      leading: <ArrowDown size={18} color="#E35D4F" />,
+      leading: <MobileWebImage imageUrl={ImageAssets.receivedArrow} style={styles.metricImage} />,
       value: member.donationsReceived.toLocaleString(toIntlLocale(locale)),
     };
-  if (sort === 'donationsRatio') {
-    const ratio = donationRatio(member);
-    return {
-      leading: <ArrowUp size={18} color={iconColor} />,
-      value:
-        ratio > 100 ? `${Math.trunc(ratio)}` : ratio > 10 ? ratio.toFixed(1) : ratio.toFixed(2),
-    };
-  }
   if (sort === 'role')
     return { leading: <Star size={18} color={iconColor} />, value: `${member.trophies}` };
   return {
@@ -364,6 +537,16 @@ const styles = StyleSheet.create({
     gap: 8,
   },
   sortControl: { flexShrink: 1, maxWidth: 260 },
+  filterRow: { flexDirection: 'row', alignItems: 'center', minHeight: 62, gap: 10 },
+  filterValue: { maxWidth: '48%', textAlign: 'right' },
+  memberIdentity: { flexDirection: 'row', alignItems: 'center' },
+  dateMetric: { maxWidth: '45%', flexShrink: 1 },
+  newPill: {
+    borderRadius: 7,
+    backgroundColor: '#1B613D',
+    paddingHorizontal: 7,
+    paddingVertical: 3,
+  },
   splitIcon: { width: 32, height: 32, flexDirection: 'row' },
   iconHalf: { width: 16, height: 32, overflow: 'hidden' },
   splitImage: { width: 32, height: 32 },
@@ -371,10 +554,8 @@ const styles = StyleSheet.create({
   list: { gap: 6 },
   memberCard: {
     minHeight: 58,
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingHorizontal: 10,
-    paddingVertical: 7,
+    paddingHorizontal: 12,
+    paddingVertical: 11,
     borderWidth: 1,
   },
   index: { width: 19, fontWeight: '800' },

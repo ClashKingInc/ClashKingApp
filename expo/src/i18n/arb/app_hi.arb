@@ -3087,7 +3087,7 @@
   "drawerCalculators": "कैलकुलेटर",
   "drawerUpgradeTracker": "ट्रैकर को अपग्रेड करें",
   "drawerBasesArmies": "अड्डे और सेनाएँ",
-  "drawerGameAssets": "खेल संपत्ति",
+  "drawerGameAssets": "Wiki",
   "drawerManageAccounts": "खातों का प्रबंधन",
   "playersLinked": "जुड़ा हुआ",
   "playersBookmarked": "बुकमार्क",
@@ -3559,8 +3559,8 @@
   "sideSavedArmies": "सहेजी गई आर्मी",
   "sideArmyLinks": "आर्मी लिंक",
   "sideArmyLinksBody": "कंपोज़िशन, स्पेल, सीज, नोट्स और शेयर लिंक।",
-  "sideGameAssetsTitle": "गेम एसेट्स",
-  "sideGameAssetsSubtitle": "ClashKing पर होस्ट किए गए एसेट्स, फ़ोल्डर के अनुसार समूहित।",
+  "sideGameAssetsTitle": "Wiki",
+  "sideGameAssetsSubtitle": "Search · आँकड़े",
   "gameAssetsLoadError": "गेम एसेट लोड नहीं हो सके",
   "gameAssetsEmptyTitle": "कोई गेम एसेट उपलब्ध नहीं",
   "gameAssetsEmptyBody": "होस्ट किए मैनिफ़ेस्ट में कोई समर्थित चित्र नहीं था।",
@@ -5212,5 +5212,106 @@
   "emoteRequiredLabel": "आवश्यक:",
   "searchMinimumCharacters": "खोजने के लिए कम से कम 3 अक्षर टाइप करें।",
   "homeCreatorCodeInGame": "Clash of Clans में",
-  "homeCreatorCodeOpenFailed": "लिंक नहीं खुल सका। फिर से कोशिश करें।"
+  "homeCreatorCodeOpenFailed": "लिंक नहीं खुल सका। फिर से कोशिश करें।",
+  "wikiStarBonus": "स्टार बोनस",
+  "wikiBattleModes": "युद्ध मोड",
+  "wikiMagicItems": "जादुई वस्तुएँ",
+  "wikiMagicSnacks": "जादुई स्नैक्स",
+  "wikiPositionDifference": "प्रति स्थान",
+  "wikiBonusMedals": "बोनस पदक",
+  "wikiMinimumBonuses": "न्यूनतम बोनस",
+  "wikiGroupSize": "समूह का आकार",
+  "wikiBoost": "बूस्ट",
+  "wikiDamage": "क्षति",
+  "wikiSquadMembers": "दस्ते के सदस्य",
+  "wikiRankedMedals": "रैंक वाले पदक",
+  "wikiPlayerTroopLevels": "आपकी सेना के स्तरों का उपयोग करता है",
+  "wikiJoined": "शामिल हुआ",
+  "wikiArmyVillage": "सेना और गाँव",
+  "wikiLeaguesRewards": "लीग और पुरस्कार",
+  "wikiItemsModes": "अन्य और युद्ध मोड",
+  "wikiArtwork": "चित्र संग्रह",
+  "wikiTableScrollHint": "और देखने के लिए तालिका स्वाइप करें",
+  "wikiPlacementMedals": "स्थान के अनुसार पदक",
+  "wikiWarSize": "युद्ध का आकार",
+  "wikiByPlacement": "स्थान के अनुसार",
+  "wikiClanPlacement": "क्लैन का स्थान",
+  "wikiCwlBaselineNote": "भागीदारी के समायोजन से पहले स्थान के अनुसार मूल पुरस्कार। बोनस पदक अलग हैं।",
+  "wikiPlacement": "स्थान",
+  "wikiIntroTitle": "गाँव के अंदर",
+  "wikiIntroBody": "अपनी सेना, लीग और पुरस्कारों के बारे में जानें।",
+  "wikiSquads": "दस्ते",
+  "wikiCosmetics": "सजावटी आइटम",
+  "wikiStatsByLevel": "स्तर के अनुसार आँकड़े",
+  "wikiLevel": "स्तर",
+  "wikiSort": "क्रम",
+  "wikiNewest": "नवीनतम",
+  "wikiOldest": "सबसे पुराने",
+  "wikiNameOrder": "नाम",
+  "wikiOwnership": "स्वामित्व",
+  "wikiOwned": "आपके पास",
+  "wikiNotOwned": "आपके पास नहीं",
+  "wikiCapacity": "भंडारण सीमा",
+  "wikiSellGems": "रत्नों में बेचें",
+  "wikiProductionBuilding": "उत्पादन भवन",
+  "wikiBooks": "पुस्तकें",
+  "wikiHammers": "हथौड़े",
+  "wikiPotions": "औषधियाँ",
+  "wikiRunes": "रून",
+  "wikiType": "प्रकार",
+  "wikiClanCapital": "क्लैन राजधानी",
+  "wikiMinimumTownHall": "न्यूनतम टाउन हॉल",
+  "wikiLeagueBonus": "लीग बोनस",
+  "wikiEsportsMode": "ईस्पोर्ट्स मोड",
+  "wikiSide": "पक्ष",
+  "wikiBattles": "लड़ाइयाँ",
+  "wikiNextTownHall": "अगला टाउन हॉल",
+  "wikiTownHallGate": "टाउन हॉल {townhall} · स्तर {level}",
+  "@wikiTownHallGate": {
+    "placeholders": {
+      "townhall": {
+        "type": "int"
+      },
+      "level": {
+        "type": "int"
+      }
+    }
+  },
+  "generalYes": "हाँ",
+  "generalNo": "नहीं",
+  "wikiCommon": "सामान्य",
+  "wikiEpic": "एपिक",
+  "wikiUpgradeOres": "अपग्रेड अयस्क",
+  "gameBuilderHall": "बिल्डर हॉल",
+  "gameBuilderHallLevelNumber": "बिल्डर हॉल {level}",
+  "wikiSuperTroops": "सुपर सैनिक",
+  "wikiSeasonalTroops": "मौसमी सैनिक",
+  "wikiElixirSpells": "एलिक्सिर मंत्र",
+  "wikiDarkSpells": "डार्क एलिक्सिर मंत्र",
+  "wikiSeasonalSpells": "मौसमी मंत्र",
+  "@gameBuilderHallLevelNumber": {
+    "placeholders": {
+      "level": {
+        "type": "int"
+      }
+    }
+  },
+  "wikiBuilderHallGate": "बिल्डर हॉल {townhall} · स्तर {level}",
+  "@wikiBuilderHallGate": {
+    "placeholders": {
+      "townhall": {
+        "type": "int"
+      },
+      "level": {
+        "type": "int"
+      }
+    }
+  },
+  "wikiUnlocks": "अनलॉक होने वाली चीज़ें",
+  "clanMemberLastActive": "अंतिम सक्रियता",
+  "clanMemberSortOrder": "क्रमबद्ध करने का क्रम",
+  "clanMemberDescending": "घटता क्रम",
+  "clanMemberAscending": "बढ़ता क्रम",
+  "clanMemberNoObservation": "दर्ज नहीं है",
+  "wikiSeasonal": "मौसमी"
 }

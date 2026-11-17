@@ -13,7 +13,7 @@ import type { Player } from '../../player/models/player';
 import type { WarCwl, WarInfo } from '../../war/models';
 import type { Clan } from '../models';
 import { ClanInfoScreen } from './clan-info-screen';
-import type { ClanInfoPresentationActions } from './clan-info-contracts';
+import type { ClanMemberActivity, ClanInfoPresentationActions } from './clan-info-contracts';
 import {
   buildClanInfoPresentationModel,
   buildClansPresentationModel,
@@ -145,6 +145,7 @@ export function ClanInfoRoot({
   useEffect(() => {
     const changed = () => setRevision((value) => value + 1);
     const unsubscribe = [
+      runtime.auth.subscribe(changed),
       runtime.accounts.subscribe(changed),
       runtime.bookmarks.subscribe(changed),
       runtime.clans.subscribe(changed),
@@ -154,18 +155,87 @@ export function ClanInfoRoot({
   }, [runtime]);
 
   const currentClan = runtime.clans.getClanByTag(clan.tag) ?? clan;
+  const userId = runtime.auth.state.currentUser?.userId;
+  const sessionVersion = runtime.tokens.sessionVersion;
+  const [activityState, setActivityState] = useState<{
+    userId: string;
+    sessionVersion: number;
+    clanTag: string;
+    items: ReadonlyMap<string, ClanMemberActivity>;
+    canViewActivity: boolean;
+  }>();
+  useEffect(() => {
+    let active = true;
+    let loading = false;
+    const load = async () => {
+      if (loading) return;
+      loading = true;
+      try {
+        // Public joins must survive a denied private activity request. Never
+        // infer online access from the existence of public member rows.
+        const [joins, activity] = await Promise.allSettled([
+          runtime.clans.getMemberJoins(clan.tag),
+          userId
+            ? runtime.clans.getMemberActivity(clan.tag)
+            : Promise.reject(new Error('Signed out')),
+        ]);
+        const items = new Map<string, ClanMemberActivity>();
+        if (joins.status === 'fulfilled') {
+          for (const item of joins.value.items)
+            items.set(item.tag, { ...item, lastObservedAt: null });
+        }
+        if (activity.status === 'fulfilled') {
+          for (const item of activity.value.items)
+            items.set(item.tag, {
+              ...item,
+              joinedAt: items.get(item.tag)?.joinedAt ?? item.joinedAt,
+            });
+        }
+        if (active)
+          setActivityState({
+            userId: userId ?? '',
+            sessionVersion,
+            clanTag: clan.tag,
+            items,
+            canViewActivity: activity.status === 'fulfilled',
+          });
+      } catch {
+        // Activity is optional. Authorization loss or an outage must clear any
+        // previously visible private data without blocking the clan screen.
+        if (active) setActivityState(undefined);
+      } finally {
+        loading = false;
+      }
+    };
+    void load();
+    const timer = setInterval(() => void load(), 60_000);
+    return () => {
+      active = false;
+      clearInterval(timer);
+    };
+  }, [runtime, clan.tag, userId, sessionVersion]);
+  const memberActivity =
+    activityState?.userId === (userId ?? '') &&
+    activityState?.sessionVersion === sessionVersion &&
+    activityState?.clanTag === clan.tag
+      ? activityState.items
+      : undefined;
+
   const war = runtime.wars.getWarCwlByTag(currentClan.tag);
   const model = useMemo(
-    () =>
-      buildClanInfoPresentationModel({
+    () => ({
+      ...buildClanInfoPresentationModel({
         clan: currentClan,
         bookmarked: runtime.bookmarks.isClanBookmarked(currentClan.tag),
         accounts: runtime.accounts.accounts,
         war,
       }),
+      memberActivity,
+      canViewMemberActivity: Boolean(memberActivity && activityState?.canViewActivity),
+    }),
     // Revision intentionally invalidates stable service-owned objects.
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [clan, revision, runtime],
+    [clan, revision, runtime, memberActivity, activityState?.canViewActivity],
   );
   const actions = useMemo<ClanInfoPresentationActions>(
     () => ({

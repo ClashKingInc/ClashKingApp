@@ -54,11 +54,16 @@ export function PostsScreen({ service, readHistory, onBack, initialPostId }: Pos
   const [readKeys, setReadKeys] = useState<ReadonlySet<string>>(new Set());
   useEffect(() => {
     let active = true;
-    void readHistory.getReadKeys().then((keys) => {
-      if (active) setReadKeys((current) => new Set([...keys, ...current]));
-    });
+    const refreshReadKeys = () => {
+      void readHistory.getReadKeys().then((keys) => {
+        if (active) setReadKeys((current) => new Set([...keys, ...current]));
+      });
+    };
+    refreshReadKeys();
+    const unsubscribe = readHistory.subscribe(refreshReadKeys);
     return () => {
       active = false;
+      unsubscribe();
     };
   }, [readHistory]);
   const markRead = useCallback(
@@ -79,6 +84,8 @@ export function PostsScreen({ service, readHistory, onBack, initialPostId }: Pos
   const [hasMore, setHasMore] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const displayedIds = useRef(new Set<string>());
+  const pendingOwn = useRef<AppAnnouncement[]>([]);
+  const pendingOfficial = useRef<AppAnnouncement[]>([]);
   const feedStarted = useRef(false);
   const nextOffset = useRef(0);
   const [error, setError] = useState<unknown>();
@@ -124,6 +131,8 @@ export function PostsScreen({ service, readHistory, onBack, initialPostId }: Pos
         setRefreshing(true);
         displayedIds.current = new Set();
         feedStarted.current = false;
+        pendingOwn.current = [];
+        pendingOfficial.current = [];
         setStoriesLoading(true);
         setStoryError(false);
         void service
@@ -143,59 +152,94 @@ export function PostsScreen({ service, readHistory, onBack, initialPostId }: Pos
         nextOffset.current = 0;
         setHasMore(true);
       }
-      // Publish each successful source immediately. Sorting is limited to its
-      // new batch: a late source must never move cards already on screen.
-      const publish = (items: readonly AppAnnouncement[]) => {
-        if (!current()) return;
-        const next = [...items]
-          .sort((a, b) => (b.publishedAt?.getTime() ?? 0) - (a.publishedAt?.getTime() ?? 0))
-          .filter((item) => {
-            if (displayedIds.current.has(item.id)) return false;
-            displayedIds.current.add(item.id);
-            return true;
-          });
-        if (!next.length) return;
-        const append = feedStarted.current;
-        feedStarted.current = true;
-        setPosts((previous) => (append ? [...previous, ...next] : next));
-        setRefreshing(false);
-      };
+      const newestFirst = (a: AppAnnouncement, b: AppAnnouncement) =>
+        (b.publishedAt?.getTime() ?? 0) - (a.publishedAt?.getTime() ?? 0) ||
+        a.id.localeCompare(b.id);
+      const next: AppAnnouncement[] = [];
       let ownError: unknown;
-      await Promise.all([
-        ownHasMore.current
-          ? service
-              .getPublishedPosts(20, nextOffset.current, 'article')
-              .then((page) => {
-                if (!current()) return;
-                nextOffset.current = page.nextOffset;
-                ownHasMore.current = page.hasMore;
-                publish(page.items.filter((item) => !item.isStory));
-              })
-              .catch((reason: unknown) => {
-                if (current()) ownError = reason;
-              })
-          : Promise.resolve(),
-        officialHasMore.current
-          ? officialBlog
-              .getPage(officialPage.current, locale)
-              .then((page) => {
-                if (!current()) return;
-                officialPage.current += 1;
-                officialHasMore.current = page.hasMore;
-                publish(page.items);
-              })
-              .catch(() => {
-                // Keep already displayed articles; try this source again on refresh.
-                if (current()) officialHasMore.current = false;
-              })
-          : Promise.resolve(),
-      ]);
+      // Each source is newest-first. Keep its unused tail until its next page
+      // is needed: publishing all of a fast source first puts old posts above
+      // newer Supercell articles. Nothing is persisted or synced here.
+      while (current() && next.length < 20) {
+        await Promise.all([
+          !pendingOwn.current.length && ownHasMore.current
+            ? service
+                .getPublishedPosts(20, nextOffset.current, 'article')
+                .then((page) => {
+                  if (!current()) return;
+                  nextOffset.current = page.nextOffset;
+                  pendingOwn.current = page.items.filter((item) => !item.isStory).sort(newestFirst);
+                  ownHasMore.current = page.hasMore && pendingOwn.current.length > 0;
+                })
+                .catch((reason: unknown) => {
+                  if (!current()) return;
+                  ownError = reason;
+                  ownHasMore.current = false;
+                })
+            : Promise.resolve(),
+          !pendingOfficial.current.length && officialHasMore.current
+            ? officialBlog
+                .getPage(officialPage.current, locale)
+                .then((page) => {
+                  if (!current()) return;
+                  officialPage.current += 1;
+                  pendingOfficial.current = [...page.items].sort(newestFirst);
+                  officialHasMore.current = page.hasMore && pendingOfficial.current.length > 0;
+                })
+                .catch(() => {
+                  // A failed source does not block the other one. Retry it on refresh.
+                  if (current()) officialHasMore.current = false;
+                })
+            : Promise.resolve(),
+        ]);
+        if (!current()) return;
+        // Stop as soon as a live source needs another page. Its unseen head
+        // must be known before choosing the next chronological item.
+        while (next.length < 20) {
+          if (
+            (!pendingOwn.current.length && ownHasMore.current) ||
+            (!pendingOfficial.current.length && officialHasMore.current)
+          )
+            break;
+          const own = pendingOwn.current[0];
+          const official = pendingOfficial.current[0];
+          if (!own && !official) break;
+          const queue =
+            own && (!official || newestFirst(own, official) <= 0)
+              ? pendingOwn.current
+              : pendingOfficial.current;
+          const item = queue.shift()!;
+          if (!displayedIds.current.has(item.id)) {
+            displayedIds.current.add(item.id);
+            next.push(item);
+          }
+        }
+        // Publish the safe prefix now; scrolling will fetch the next source
+        // head. Do not wait for extra pages merely to fill a 20-card batch.
+        if (next.length > 0) break;
+        if (
+          !pendingOwn.current.length &&
+          !ownHasMore.current &&
+          !pendingOfficial.current.length &&
+          !officialHasMore.current
+        )
+          break;
+      }
       if (current()) {
-        // An empty refresh replaces stale content only after both sources
-        // settle; an empty fast source must not hide the still-pending one.
-        if (!feedStarted.current) setPosts([]);
+        // Commit one merged batch; a refresh keeps the old feed in place
+        // until the replacement is ready, instead of inserting one source early.
+        const append = feedStarted.current;
+        if (next.length || !append) {
+          setPosts((previous) => (append ? [...previous, ...next] : next));
+          feedStarted.current = true;
+        }
         setError(ownError);
-        setHasMore(ownHasMore.current || officialHasMore.current);
+        setHasMore(
+          ownHasMore.current ||
+            officialHasMore.current ||
+            pendingOwn.current.length > 0 ||
+            pendingOfficial.current.length > 0,
+        );
         setLoading(false);
         setRefreshing(false);
         loadingRef.current = false;
@@ -236,7 +280,9 @@ export function PostsScreen({ service, readHistory, onBack, initialPostId }: Pos
     try {
       // Revalidate public availability before replaying cached HTML.
       const current = await service.getAnnouncement(id);
-      if (!current || !(await openAnnouncement(current))) {
+      if (current && (await openAnnouncement(current))) {
+        markRead(current);
+      } else {
         setStoryError(true);
         // The service also returns null for transport failures. Keep the cached row
         // so a temporary outage does not erase a story the user can retry.
@@ -461,7 +507,10 @@ export function PostsScreen({ service, readHistory, onBack, initialPostId }: Pos
                             style={[
                               styles.storyImage,
                               {
-                                borderColor: theme.primary,
+                                // Read stories retain their layout and title but lose the bright ring.
+                                borderColor: readKeys.has(story.presentationKey)
+                                  ? 'transparent'
+                                  : theme.primary,
                                 backgroundColor: theme.surfaceContainerHighest,
                               },
                             ]}

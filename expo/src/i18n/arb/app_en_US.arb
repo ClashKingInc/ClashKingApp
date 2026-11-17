@@ -2992,7 +2992,7 @@
   "drawerCalculators": "Calculators",
   "drawerUpgradeTracker": "Upgrade Tracker",
   "drawerBasesArmies": "Bases & Armies",
-  "drawerGameAssets": "Game Assets",
+  "drawerGameAssets": "Wiki",
   "drawerManageAccounts": "Manage Accounts",
   "playersLinked": "Linked",
   "playersBookmarked": "Bookmarked",
@@ -3464,8 +3464,8 @@
   "sideSavedArmies": "Saved armies",
   "sideArmyLinks": "Army links",
   "sideArmyLinksBody": "Composition, spells, siege, notes, and share link.",
-  "sideGameAssetsTitle": "Game Assets",
-  "sideGameAssetsSubtitle": "Hosted ClashKing assets, grouped by folder.",
+  "sideGameAssetsTitle": "Wiki",
+  "sideGameAssetsSubtitle": "Search · Stats",
   "gameAssetsLoadError": "Could not load game assets",
   "gameAssetsEmptyTitle": "No game assets available",
   "gameAssetsEmptyBody": "The hosted manifest did not contain any supported images.",
@@ -5117,5 +5117,106 @@
   "emoteRequiredLabel": "Required:",
   "searchMinimumCharacters": "Type at least 3 characters to search.",
   "homeCreatorCodeInGame": "In Clash of Clans",
-  "homeCreatorCodeOpenFailed": "Could not open the link. Try again."
+  "homeCreatorCodeOpenFailed": "Could not open the link. Try again.",
+  "wikiStarBonus": "Star Bonus",
+  "wikiBattleModes": "Battle modes",
+  "wikiMagicItems": "Magic items",
+  "wikiMagicSnacks": "Magic Snacks",
+  "wikiPositionDifference": "Per position",
+  "wikiBonusMedals": "Bonus medals",
+  "wikiMinimumBonuses": "Minimum bonuses",
+  "wikiGroupSize": "Group size",
+  "wikiBoost": "Boost",
+  "wikiDamage": "Damage",
+  "wikiSquadMembers": "Squad members",
+  "wikiRankedMedals": "Ranked Medals",
+  "wikiPlayerTroopLevels": "Uses your troop levels",
+  "wikiJoined": "Joined",
+  "wikiArmyVillage": "Army & village",
+  "wikiLeaguesRewards": "Leagues & rewards",
+  "wikiItemsModes": "Other & battle modes",
+  "wikiArtwork": "Artwork",
+  "wikiTableScrollHint": "Swipe the table to see more",
+  "wikiPlacementMedals": "Placement medals",
+  "wikiWarSize": "War size",
+  "wikiByPlacement": "By placement",
+  "wikiClanPlacement": "Clan placement",
+  "wikiCwlBaselineNote": "Placement baseline before participation adjustments. Bonus medals are separate.",
+  "wikiPlacement": "Placement",
+  "wikiIntroTitle": "Inside the village",
+  "wikiIntroBody": "Explore your army, leagues and rewards.",
+  "wikiSquads": "Squads",
+  "wikiCosmetics": "Cosmetics",
+  "wikiStatsByLevel": "Stats by level",
+  "wikiLevel": "Level",
+  "wikiSort": "Sort",
+  "wikiNewest": "Newest",
+  "wikiOldest": "Oldest",
+  "wikiNameOrder": "Name",
+  "wikiOwnership": "Ownership",
+  "wikiOwned": "Owned",
+  "wikiNotOwned": "Not owned",
+  "wikiCapacity": "Storage limit",
+  "wikiSellGems": "Sell for gems",
+  "wikiProductionBuilding": "Production building",
+  "wikiBooks": "Books",
+  "wikiHammers": "Hammers",
+  "wikiPotions": "Potions",
+  "wikiRunes": "Runes",
+  "wikiType": "Type",
+  "wikiClanCapital": "Clan Capital",
+  "wikiMinimumTownHall": "Minimum TH",
+  "wikiLeagueBonus": "League bonus",
+  "wikiEsportsMode": "Esports mode",
+  "wikiSide": "Side",
+  "wikiBattles": "Battles",
+  "wikiNextTownHall": "Next Town Hall",
+  "wikiTownHallGate": "Town Hall {townhall} · Level {level}",
+  "@wikiTownHallGate": {
+    "placeholders": {
+      "townhall": {
+        "type": "int"
+      },
+      "level": {
+        "type": "int"
+      }
+    }
+  },
+  "generalYes": "Yes",
+  "generalNo": "No",
+  "wikiCommon": "Common",
+  "wikiEpic": "Epic",
+  "wikiUpgradeOres": "Upgrade ores",
+  "gameBuilderHall": "Builder Hall",
+  "gameBuilderHallLevelNumber": "Builder Hall {level}",
+  "wikiSuperTroops": "Super Troops",
+  "wikiSeasonalTroops": "Seasonal Troops",
+  "wikiElixirSpells": "Elixir Spells",
+  "wikiDarkSpells": "Dark Spells",
+  "wikiSeasonalSpells": "Seasonal Spells",
+  "@gameBuilderHallLevelNumber": {
+    "placeholders": {
+      "level": {
+        "type": "int"
+      }
+    }
+  },
+  "wikiBuilderHallGate": "Builder Hall {townhall} · Level {level}",
+  "@wikiBuilderHallGate": {
+    "placeholders": {
+      "townhall": {
+        "type": "int"
+      },
+      "level": {
+        "type": "int"
+      }
+    }
+  },
+  "wikiUnlocks": "Unlocks",
+  "clanMemberLastActive": "Last active",
+  "clanMemberSortOrder": "Sort order",
+  "clanMemberDescending": "Descending",
+  "clanMemberAscending": "Ascending",
+  "clanMemberNoObservation": "Not recorded",
+  "wikiSeasonal": "Seasonal"
 }
