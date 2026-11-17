@@ -194,7 +194,11 @@ export function WikiComparisons({
           group: fmt(e.meta.group_size),
           up: percent(e.meta.promote_percentage),
           down: percent(e.meta.demote_percentage),
-          th: fmt(e.meta.minimum_townhall),
+          th: fmt(
+            Array.isArray(e.meta.rewards)
+              ? e.meta.rewards.filter(isRecord)[0]?.townhall_level
+              : undefined,
+          ),
           mode: modeName(e.meta.battle_modifier, entries, t),
         },
       }));
