@@ -804,7 +804,7 @@ function WikiUnitStats({
             ) : null}
             <View style={{ flex: 1, gap: 3 }}>
               <CKText style={{ fontSize: 19, lineHeight: 25, fontVariant: ['tabular-nums'] }}>
-                {row.value}
+                {detailStatValue(row.value, t)}
               </CKText>
               <CKText muted style={{ fontSize: 11, lineHeight: 16 }}>
                 {detailStatLabel(row.label, t)}
@@ -843,8 +843,9 @@ function detailTableRows(
       if (research && isRecord(stats.upgrade_cost))
         for (const [resource, amount] of Object.entries(stats.upgrade_cost))
           if (typeof amount === 'number') cells.set(`ore:${resource}`, number.format(amount));
-      if (research && typeof stats.upgrade_time === 'number')
-        cells.set('upgrade-time', formatTrackerDuration(stats.upgrade_time));
+      const upgradeSeconds = stats.build_time ?? stats.upgrade_time;
+      if (research && typeof upgradeSeconds === 'number')
+        cells.set('upgrade-time', formatTrackerDuration(upgradeSeconds));
       if (research && typeof stats.required_lab_level === 'number')
         cells.set('Laboratory', number.format(stats.required_lab_level));
       if (typeof stats.required_hero_tavern_level === 'number')
@@ -868,7 +869,9 @@ function detailTableRows(
         // Only qualify collisions between genuinely distinct effects, not every
         // column with the equipment name (which makes mobile headers enormous).
         cells.set(
-          cells.has(label) ? `${String(ability.name)} · ${label}` : label,
+          cells.has(label)
+            ? `${localizedNameForItem(ability) || String(ability.name)} · ${label}`
+            : label,
           formatAbilityValue(key, value, number),
         );
       }
@@ -983,7 +986,9 @@ function LevelStatsTable({
         selected: row.level === selected,
         label: number.format(row.level),
         values: {
-          ...Object.fromEntries(row.cells),
+          ...Object.fromEntries(
+            [...row.cells].map(([key, value]) => [key, detailStatValue(value, t)]),
+          ),
           ...(showUnlocks
             ? {
                 unlocks: tableUnlocks.get(row.level)?.length ? (
@@ -1464,8 +1469,61 @@ export function unlocksAtLevel(item: UpgradeTrackerItem, level: number): readonl
   }
   return result;
 }
+function detailStatValue(value: string, t: ReturnType<typeof useI18n>['t']): string {
+  switch (value) {
+    case 'Yes':
+      return t('generalYes');
+    case 'No':
+      return t('generalNo');
+    case 'Air':
+      return t('gameItemTargetsAir');
+    case 'Ground':
+      return t('gameItemTargetsGround');
+    case 'Air & ground':
+      return `${t('gameItemTargetsAir')} / ${t('gameItemTargetsGround')}`;
+    case 'Shared targeting':
+      return t('wikiSharedTargeting');
+    default:
+      return value;
+  }
+}
+
 function detailStatLabel(label: string, t: ReturnType<typeof useI18n>['t']): string {
+  // Labels are also stable data keys. Translate only at the rendering boundary
+  // so localization cannot change column identity or the invariant-stat checks.
+  const separator = label.indexOf(' · ');
+  if (separator >= 0)
+    return `${label.slice(0, separator)} · ${detailStatLabel(label.slice(separator + 3), t)}`;
+  if (label === 'Hero Hall') {
+    const buildings = gameDataState.bundleData.buildings;
+    const hall = Array.isArray(buildings)
+      ? buildings.find((entry) => isRecord(entry) && entry.name === 'Hero Hall')
+      : undefined;
+    return isRecord(hall) ? localizedNameForItem(hall) : t('gameItemHero');
+  }
+  for (const prefix of ['Summoned unit ', 'Spawned unit ']) {
+    if (label.startsWith(prefix)) {
+      const rest = label.slice(prefix.length);
+      return `${t('wikiSummonedUnit')} · ${detailStatLabel(rest.charAt(0).toUpperCase() + rest.slice(1), t)}`;
+    }
+  }
   const keys = {
+    'Minimum range': 'wikiMinimumRange',
+    'Effect range': 'wikiEffectRange',
+    'Building size': 'wikiBuildingSize',
+    Ability: 'wikiAbility',
+    'Units summoned': 'wikiUnitsSummoned',
+    'Summoned unit': 'wikiSummonedUnit',
+    'Trigger radius': 'wikiTriggerRadius',
+    'Damage radius': 'wikiDamageRadius',
+    'Cone angle': 'wikiConeAngle',
+    'Splash damage cap': 'wikiSplashDamageCap',
+    'Trap damage reduction': 'wikiTrapDamageReduction',
+    'Damage reduction': 'wikiDamageReduction',
+    'Damage increase': 'wikiDamageIncrease',
+    'Shared targeting': 'wikiSharedTargeting',
+    'Ability duration': 'warAttacksDetailsDuration',
+    Laboratory: 'upgradeTrackerLaboratory',
     'Attack speed': 'gameItemAttackSpeed',
     'Attack range': 'gameItemAttackRange',
     'Movement speed': 'gameItemMovementSpeed',
@@ -1482,9 +1540,97 @@ function detailStatLabel(label: string, t: ReturnType<typeof useI18n>['t']): str
     Damage: 'wikiDamage',
     Boost: 'wikiBoost',
     Duration: 'warAttacksDetailsDuration',
+    Cooldown: 'wikiStatCooldown',
+    Uses: 'wikiStatUses',
+    Landings: 'wikiStatLandings',
+    'Empowered attacks': 'wikiStatEmpoweredAttacks',
+    'Destroys walls': 'wikiStatDestroysWalls',
+    'Chain targets': 'wikiStatChainTargets',
+    'Damage lost per chain': 'wikiStatChainLoss',
+    Interval: 'wikiStatInterval',
+    Slowdown: 'wikiStatSlowdown',
+    Stun: 'wikiStatStun',
+    Aura: 'wikiStatAura',
+    Projectile: 'wikiStatProjectile',
+    Reflection: 'wikiStatReflection',
+    Recall: 'wikiStatRecall',
+    Untargetable: 'wikiStatUntargetable',
+    'Immune to friendly spells': 'wikiStatFriendlySpellImmunity',
+    'Jumps walls': 'wikiStatJumpsWalls',
+    'Housing space lost': 'wikiStatLostHousing',
+    Proximity: 'wikiStatProximity',
+    Altitude: 'wikiStatAltitude',
+    'Units per wave': 'wikiStatUnitsPerWave',
+    'Spawn distance': 'wikiStatSpawnDistance',
+    'Affects owner': 'wikiStatAffectsOwner',
+    'Affected by damage boosts': 'wikiStatDamageBoostsApply',
+    Invisibility: 'wikiStatInvisibility',
+    Radius: 'wikiStatRadius',
+    Hits: 'wikiStatHits',
+    Lifetime: 'warAttacksDetailsDuration',
   } as const;
   const key = keys[label as keyof typeof keys];
-  return key ? t(key) : label;
+  if (key) return t(key);
+  const pair = (a: string, b: string) => `${a} · ${b}`;
+  const per = (a: string, b: string) => `${a} / ${b}`;
+  const damage = t('wikiDamage'),
+    heal = t('gameItemHealOnActivation');
+  const duration = t('warAttacksDetailsDuration'),
+    radius = t('wikiStatRadius');
+  const named: Record<string, string> = {
+    Invisible: t('wikiStatInvisibility'),
+    'Invisibility duration': pair(t('wikiStatInvisibility'), duration),
+    'Min damage': `${damage} ≥`,
+    'Extra damage': `${damage} +`,
+    Speed: t('gameItemMovementSpeed'),
+    Health: t('gameItemHitpoints'),
+    'Health increase': `${t('gameItemHitpoints')} +`,
+    'Max health increase': `${t('gameItemHitpoints')} + ≤`,
+    'Summon interval': pair(t('wikiSummonedUnit'), t('wikiStatInterval')),
+    'Spawn interval': pair(t('wikiSummonedUnit'), t('wikiStatInterval')),
+    'Proximity radius': pair(t('wikiStatProximity'), radius),
+    'Proximity deactivate radius': `${pair(t('wikiStatProximity'), radius)} (−)`,
+    'Proximity altitude': pair(t('wikiStatProximity'), t('wikiStatAltitude')),
+    'Proximity requires can open cc': `${t('wikiStatProximity')} ⇒ ${t('legendsClanCastle')}`,
+    'Stun duration': pair(t('wikiStatStun'), duration),
+    'Slowdown percent': `${t('wikiStatSlowdown')} (%)`,
+    'Slowdown duration': pair(t('wikiStatSlowdown'), duration),
+    'Aura radius': pair(t('wikiStatAura'), radius),
+    'Projectile radius': pair(t('wikiStatProjectile'), radius),
+    'Projectile range': pair(t('wikiStatProjectile'), t('gameItemAttackRange')),
+    'DPS stage 2': pair(t('gameItemDps'), 'II'),
+    'DPS stage 3': pair(t('gameItemDps'), 'III'),
+    'Stage 2 after': pair('II', duration),
+    'Stage 3 after': pair('III', duration),
+    'Housing limit': `${t('gameItemHousingSpace')} ≤`,
+    'Targets hit': pair(t('gameItemTargets'), t('wikiStatHits')),
+    'Target damage multiplier': `${pair(t('gameItemTargets'), damage)} ×`,
+    'Bonus damage target': `${pair(t('gameItemTargets'), damage)} +`,
+    'Building damage percent per hit': per(
+      pair(t('gameAssetsCategoryBuildings'), damage),
+      t('wikiStatHits'),
+    ),
+    'Troop damage percent per hit': per(pair(t('gameTroops'), damage), t('wikiStatHits')),
+    'Hit interval': pair(t('wikiStatHits'), t('wikiStatInterval')),
+    'Healing per second': `${heal} / s`,
+    'Healing per attack': per(heal, t('wikiStatHits')),
+    'Damage (% of target HP)': `${damage} / ${pair(t('gameItemTargets'), t('gameItemHitpoints'))} (%)`,
+    'Deactivates at housing space': `${t('gameItemHousingSpace')} ≤`,
+    'Housing space lost required': `${t('wikiStatLostHousing')} ≥`,
+    'Damage taken per activation': per(`${t('gameItemHitpoints')} −`, t('wikiStatUses')),
+    'Hero damage percent': `${pair(t('gameItemHero'), damage)} (%)`,
+    'Reflected damage': pair(t('wikiStatReflection'), damage),
+    'Healing per reflection': per(heal, t('wikiStatReflection')),
+    'Reflection cooldown': pair(t('wikiStatReflection'), t('wikiStatCooldown')),
+    'Recall speed boost': `${pair(t('wikiStatRecall'), t('gameItemMovementSpeed'))} +`,
+    'Recall healing percent': `${pair(t('wikiStatRecall'), heal)} (%)`,
+    'Recall housing space': pair(t('wikiStatRecall'), t('gameItemHousingSpace')),
+    'Recall speed boost duration': pair(pair(t('wikiStatRecall'), t('wikiBoost')), duration),
+    'Recall radius': pair(t('wikiStatRecall'), radius),
+  };
+  if (named[label]) return named[label];
+  if (label.endsWith(' increase')) return `${detailStatLabel(label.slice(0, -9), t)} +`;
+  return label;
 }
 
 function trackerStatRows(
