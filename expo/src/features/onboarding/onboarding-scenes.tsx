@@ -9,13 +9,11 @@ import Animated, {
   useAnimatedStyle,
   useSharedValue,
   withDelay,
-  withSpring,
   withTiming,
 } from 'react-native-reanimated';
 import Svg, { Circle, Defs, LinearGradient, Path, RadialGradient, Stop } from 'react-native-svg';
 import { useI18n } from '../../i18n';
-import { CKText, colorWithAlpha, useCKTheme, useCKThemeMode } from '../../ui';
-import { GlassSurface } from '../../ui/glass';
+import { CKText, Surface, colorWithAlpha, useCKTheme, useCKThemeMode } from '../../ui';
 
 const art = {
   king: require('../../../assets/clashking/onboarding/king.webp'),
@@ -56,16 +54,17 @@ function Arrival({
       return;
     }
     progress.value = 0;
-    progress.value = withDelay(delay, withSpring(1, { damping: 19, stiffness: 145, mass: 0.8 }));
+    // Keep text at its final raster size during entry. Do not scale a whole
+    // demo card through intermediate sizes while the pager is also moving.
+    progress.value = withDelay(
+      delay,
+      withTiming(1, { duration: 200, easing: Easing.out(Easing.cubic) }),
+    );
     return () => cancelAnimation(progress);
   }, [active, reduceMotion, delay, progress]);
   const animated = useAnimatedStyle(() => ({
     opacity: interpolate(progress.value, [0, 0.35, 1], [0, 1, 1]),
-    transform: [
-      { translateY: (1 - progress.value) * 28 },
-      { scale: 0.9 + progress.value * 0.1 },
-      { rotate: `${turn * progress.value}deg` },
-    ],
+    transform: [{ translateY: (1 - progress.value) * 28 }, { rotate: `${turn}deg` }],
   }));
   return <Animated.View style={[style, animated]}>{children}</Animated.View>;
 }
@@ -191,7 +190,13 @@ function VillageScene(props: SceneProps) {
   return (
     <>
       <Arrival {...props} delay={60} style={{ position: 'absolute', left: 90, top: 20 }}>
-        <Image source={art.townHall} style={{ width: 185, height: 200 }} contentFit="contain" />
+        <Image
+          transition={0}
+          allowDownscaling={false}
+          source={art.townHall}
+          style={{ width: 185, height: 200 }}
+          contentFit="contain"
+        />
       </Arrival>
       <HeroToken
         {...props}
@@ -215,11 +220,17 @@ function VillageScene(props: SceneProps) {
         turn={-3}
         style={{ position: 'absolute', left: 18, top: 215 }}
       >
-        <GlassSurface
-          cornerRadius={27}
+        <Surface
+          radius={27}
           style={{ width: 324, padding: 17, flexDirection: 'row', alignItems: 'center', gap: 15 }}
         >
-          <Image source={art.queen} style={{ width: 68, height: 78 }} contentFit="contain" />
+          <Image
+            transition={0}
+            allowDownscaling={false}
+            source={art.queen}
+            style={{ width: 68, height: 78 }}
+            contentFit="contain"
+          />
           <View style={{ flex: 1, gap: 8 }}>
             <View style={{ height: 18 }}>
               <Animated.View style={[StyleSheet.absoluteFill, ongoing]}>
@@ -251,7 +262,7 @@ function VillageScene(props: SceneProps) {
               />
             </View>
           </View>
-        </GlassSurface>
+        </Surface>
       </Arrival>
     </>
   );
@@ -287,7 +298,12 @@ function StatsScene(props: SceneProps) {
           ]}
         >
           <View style={styles.line}>
-            <Image source={art.star} style={styles.smallArt} />
+            <Image
+              transition={0}
+              allowDownscaling={false}
+              source={art.star}
+              style={styles.smallArt}
+            />
             <DemoText style={{ color: theme.onSurfaceVariant }}>{t('legendsHitrate')}</DemoText>
           </View>
           <DemoText style={[styles.demoMetric, { color: theme.onSurface }]}>
@@ -330,7 +346,13 @@ function StatsScene(props: SceneProps) {
         </View>
       </Arrival>
       <Arrival {...props} delay={230} turn={11} style={{ position: 'absolute', right: 9, top: 20 }}>
-        <Image source={art.league} style={{ width: 88, height: 100 }} contentFit="contain" />
+        <Image
+          transition={0}
+          allowDownscaling={false}
+          source={art.league}
+          style={{ width: 88, height: 100 }}
+          contentFit="contain"
+        />
       </Arrival>
       <Arrival
         {...props}
@@ -338,7 +360,13 @@ function StatsScene(props: SceneProps) {
         turn={9}
         style={{ position: 'absolute', right: 13, bottom: 17 }}
       >
-        <Image source={art.trophy} style={{ width: 74, height: 94 }} contentFit="contain" />
+        <Image
+          transition={0}
+          allowDownscaling={false}
+          source={art.trophy}
+          style={{ width: 74, height: 94 }}
+          contentFit="contain"
+        />
       </Arrival>
     </>
   );
@@ -361,21 +389,44 @@ function WidgetScene(props: SceneProps) {
           ]}
         >
           <View style={styles.line}>
-            <Image source={art.swords} style={styles.smallArt} />
+            <Image
+              transition={0}
+              allowDownscaling={false}
+              source={art.swords}
+              style={styles.smallArt}
+            />
             <DemoText style={styles.identityText}>{t('warTitle')}</DemoText>
             <View style={{ flex: 1 }} />
             <DemoText style={{ fontSize: 11, color: '#7BB7F9' }}>{t('warInWar')}</DemoText>
           </View>
           <View style={[styles.line, { marginTop: 14, justifyContent: 'space-between', gap: 8 }]}>
-            <Image source={art.clanOne} style={{ width: 45, height: 55 }} contentFit="contain" />
+            <Image
+              transition={0}
+              allowDownscaling={false}
+              source={art.clanOne}
+              style={{ width: 45, height: 55 }}
+              contentFit="contain"
+            />
             <View style={{ alignItems: 'center', gap: 3 }}>
               <DemoText style={{ fontSize: 32, fontWeight: '700' }}>
                 105 <DemoText style={{ color: theme.onSurfaceVariant, fontSize: 22 }}>–</DemoText>{' '}
                 102
               </DemoText>
-              <Image source={art.star} style={{ width: 17, height: 17 }} contentFit="contain" />
+              <Image
+                transition={0}
+                allowDownscaling={false}
+                source={art.star}
+                style={{ width: 17, height: 17 }}
+                contentFit="contain"
+              />
             </View>
-            <Image source={art.clanTwo} style={{ width: 45, height: 55 }} contentFit="contain" />
+            <Image
+              transition={0}
+              allowDownscaling={false}
+              source={art.clanTwo}
+              style={{ width: 45, height: 55 }}
+              contentFit="contain"
+            />
           </View>
         </View>
       </Arrival>
@@ -385,8 +436,8 @@ function WidgetScene(props: SceneProps) {
         turn={7}
         style={{ position: 'absolute', right: 10, top: 213 }}
       >
-        <GlassSurface
-          cornerRadius={27}
+        <Surface
+          radius={27}
           style={{
             width: 234,
             height: 106,
@@ -396,7 +447,13 @@ function WidgetScene(props: SceneProps) {
             gap: 12,
           }}
         >
-          <Image source={art.builder} contentFit="contain" style={{ width: 57, height: 72 }} />
+          <Image
+            transition={0}
+            allowDownscaling={false}
+            source={art.builder}
+            contentFit="contain"
+            style={{ width: 57, height: 72 }}
+          />
           <View style={{ flex: 1, gap: 8 }}>
             <DemoText style={{ fontSize: 13 }}>{t('notifGroupProgress')}</DemoText>
             <DemoText style={{ fontSize: 23, fontWeight: '700', color: '#7BB7F9' }}>
@@ -414,7 +471,7 @@ function WidgetScene(props: SceneProps) {
               />
             </View>
           </View>
-        </GlassSurface>
+        </Surface>
       </Arrival>
     </>
   );
@@ -426,11 +483,19 @@ function ReminderScene(props: SceneProps) {
   return (
     <>
       <Arrival {...props} delay={40} turn={-12} style={{ position: 'absolute', left: 85, top: 20 }}>
-        <Image source={art.swords} style={{ width: 190, height: 190 }} contentFit="contain" />
+        <Image
+          transition={0}
+          allowDownscaling={false}
+          source={art.swords}
+          style={{ width: 190, height: 190 }}
+          contentFit="contain"
+        />
       </Arrival>
       <Arrival {...props} delay={280} style={{ position: 'absolute', left: 15, top: 207 }}>
-        <GlassSurface cornerRadius={25} style={styles.alert}>
+        <Surface radius={25} style={styles.alert}>
           <Image
+            transition={0}
+            allowDownscaling={false}
             source={require('../../../assets/clashking/icons/app_icon_ios_default.png')}
             style={{ width: 38, height: 38, borderRadius: 10 }}
           />
@@ -443,7 +508,7 @@ function ReminderScene(props: SceneProps) {
               {t('onboardingAlertBody')}
             </DemoText>
           </View>
-        </GlassSurface>
+        </Surface>
       </Arrival>
     </>
   );

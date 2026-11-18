@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { View } from 'react-native';
 
 import type {
@@ -58,77 +58,125 @@ function PlayerDetailRootState({
   );
   const [loadingTabs, setLoadingTabs] = useState<ReadonlySet<PlayerDetailTabKey>>(new Set());
   const [errorByTab, setErrorByTab] = useState<Partial<Record<PlayerDetailTabKey, string>>>({});
-  const [, setLoadedTabs] = useState<ReadonlySet<PlayerDetailTabKey>>(
-    new Set(['home', 'builder', 'achievements']),
-  );
   const loadedTabsRef = useRef<ReadonlySet<PlayerDetailTabKey>>(
     new Set(['home', 'builder', 'achievements']),
   );
-  const loadingTabsRef = useRef<ReadonlySet<PlayerDetailTabKey>>(new Set());
+  const pendingRequests = useRef(new Map<PlayerDetailTabKey, Promise<void>>());
+  const requestGenerations = useRef(new Map<PlayerDetailTabKey, number>());
+  const currentJoinLeave = useRef(joinLeave);
+  const mounted = useRef(true);
+  useLayoutEffect(() => {
+    currentJoinLeave.current = joinLeave;
+  }, [joinLeave]);
+  useEffect(() => {
+    mounted.current = true;
+    return () => {
+      mounted.current = false;
+    };
+  }, []);
   const warFilterRef = useRef(new WarStatsFilterModel(warHistoryRangeFilter('days:90')));
-  const warRequestId = useRef(0);
   const activityTypeRef = useRef<PlayerHistoryTypeValue>('troop_level');
 
-  const loadTab = useCallback(
-    async (tab: PlayerDetailTabKey, force = false) => {
-      if (loading) return;
-      if (!force && loadedTabsRef.current.has(tab)) return;
-      if (!force && loadingTabsRef.current.has(tab)) return;
-      const warGeneration = tab === 'war' ? ++warRequestId.current : null;
-      loadingTabsRef.current = new Set(loadingTabsRef.current).add(tab);
-      setLoadingTabs((current) => new Set(current).add(tab));
-      setErrorByTab((current) => ({ ...current, [tab]: undefined }));
-      try {
-        if (tab === 'battles') setBattlelog(await service.loadPlayerBattlelog(player.tag, force));
-        else if (tab === 'history')
-          setActivity(await service.loadPlayerActivity(player.tag, activityTypeRef.current, force));
-        else if (tab === 'legendHistory')
-          setLegendHistory(await service.loadPlayerLegendHistory(player.tag));
-        else if (tab === 'cwl')
-          setCwlHistory(await service.loadPlayerCwlHistory(player.tag, force));
-        else if (tab === 'war') {
-          const result = await service.loadPlayerWarStatsWithFilter(
-            player.tag,
-            warFilterRef.current,
-          );
-          if (warGeneration === warRequestId.current) setWarStats(result);
-        } else if (tab === 'joinLeave') {
-          const [page, totals] = await Promise.all([
-            service.loadPlayerJoinLeave(player.tag),
-            service.loadPlayerJoinLeaveTotals(player.tag),
-          ]);
-          setJoinLeave(page);
-          setJoinLeaveTotals(totals);
+  // One request owner per data section. A newer filter/refresh invalidates an
+  // older response, and pagination reads the latest page without making every
+  // unrelated loading update recreate all of the screen's actions.
+  const runRequest = useCallback(
+    (
+      tab: PlayerDetailTabKey,
+      request: (isCurrent: () => boolean) => Promise<void>,
+      replace = false,
+      rethrow = false,
+    ): Promise<void> => {
+      if (!mounted.current) return Promise.resolve();
+      const existing = pendingRequests.current.get(tab);
+      if (existing && !replace) return existing;
+      const generation = (requestGenerations.current.get(tab) ?? 0) + 1;
+      requestGenerations.current.set(tab, generation);
+      const isCurrent = () => mounted.current && requestGenerations.current.get(tab) === generation;
+      setLoadingTabs((current) => (current.has(tab) ? current : new Set(current).add(tab)));
+      setErrorByTab((current) =>
+        current[tab] === undefined ? current : { ...current, [tab]: undefined },
+      );
+      const pending = (async () => {
+        try {
+          await request(isCurrent);
+          if (isCurrent()) loadedTabsRef.current = new Set(loadedTabsRef.current).add(tab);
+        } catch (error) {
+          if (isCurrent()) {
+            setErrorByTab((current) => ({
+              ...current,
+              [tab]: error instanceof Error ? error.message : String(error),
+            }));
+            if (rethrow) throw error;
+          }
+        } finally {
+          if (isCurrent()) {
+            pendingRequests.current.delete(tab);
+            setLoadingTabs((current) => {
+              if (!current.has(tab)) return current;
+              const next = new Set(current);
+              next.delete(tab);
+              return next;
+            });
+          }
         }
-        setLoadedTabs((current) => {
-          const next = new Set(current).add(tab);
-          loadedTabsRef.current = next;
-          return next;
-        });
-      } catch (error) {
-        if (tab !== 'war' || warGeneration === warRequestId.current)
-          setErrorByTab((current) => ({
-            ...current,
-            [tab]: error instanceof Error ? error.message : String(error),
-          }));
-      } finally {
-        if (tab !== 'war' || warGeneration === warRequestId.current) {
-          const loading = new Set(loadingTabsRef.current);
-          loading.delete(tab);
-          loadingTabsRef.current = loading;
-          setLoadingTabs((current) => {
-            const next = new Set(current);
-            next.delete(tab);
-            return next;
-          });
-        }
-      }
+      })();
+      pendingRequests.current.set(tab, pending);
+      return pending;
     },
-    [loading, player.tag, service],
+    [],
   );
 
-  // PlayerDetailScreen loads the visible tab first and warms remaining tabs
-  // when idle. A second eager fan-out here competed with the opening screen.
+  const loadTab = useCallback(
+    (tab: PlayerDetailTabKey, force = false): Promise<void> => {
+      if (loading || ['home', 'builder', 'achievements'].includes(tab)) return Promise.resolve();
+      if (!force && loadedTabsRef.current.has(tab)) return Promise.resolve();
+      return runRequest(
+        tab,
+        async (isCurrent) => {
+          if (tab === 'battles') {
+            const value = await service.loadPlayerBattlelog(player.tag, force);
+            if (isCurrent()) setBattlelog(value);
+          } else if (tab === 'history') {
+            const value = await service.loadPlayerActivity(
+              player.tag,
+              activityTypeRef.current,
+              force,
+            );
+            if (isCurrent()) setActivity(value);
+          } else if (tab === 'legendHistory') {
+            const value = await service.loadPlayerLegendHistory(player.tag);
+            if (isCurrent()) setLegendHistory(value);
+          } else if (tab === 'cwl') {
+            const value = await service.loadPlayerCwlHistory(player.tag, force);
+            if (isCurrent()) setCwlHistory(value);
+          } else if (tab === 'war') {
+            const value = await service.loadPlayerWarStatsWithFilter(
+              player.tag,
+              warFilterRef.current,
+            );
+            if (isCurrent()) setWarStats(value);
+          } else if (tab === 'joinLeave') {
+            const [page, totals] = await Promise.all([
+              service.loadPlayerJoinLeave(player.tag),
+              service.loadPlayerJoinLeaveTotals(player.tag),
+            ]);
+            if (isCurrent()) {
+              currentJoinLeave.current = page;
+              setJoinLeave(page);
+              setJoinLeaveTotals(totals);
+            }
+          }
+        },
+        force,
+      );
+    },
+    [loading, player.tag, runRequest, service],
+  );
+
+  // PlayerDetailScreen loads the selected section and checks only legend-history
+  // availability in the background. Other sections load on demand; a response
+  // train for unopened sections would compete with navigation and rendering.
 
   useEffect(() => {
     let active = true;
@@ -144,76 +192,51 @@ function PlayerDetailRootState({
   }, [player.tag, service]);
 
   const updateWarFilter = useCallback(
-    async (filter: WarStatsFilter) => {
-      const requestId = ++warRequestId.current;
+    (filter: WarStatsFilter) => {
       warFilterRef.current = filter;
-      setLoadingTabs((current) => new Set(current).add('war'));
-      try {
-        const result = await service.loadPlayerWarStatsWithFilter(player.tag, filter);
-        if (requestId === warRequestId.current) {
-          setWarStats(result);
-          setErrorByTab((current) => ({ ...current, war: undefined }));
-        }
-      } catch (error) {
-        if (requestId === warRequestId.current) throw error;
-      } finally {
-        if (requestId === warRequestId.current)
-          setLoadingTabs((current) => {
-            const next = new Set(current);
-            next.delete('war');
-            return next;
-          });
-      }
+      return runRequest(
+        'war',
+        async (isCurrent) => {
+          const value = await service.loadPlayerWarStatsWithFilter(player.tag, filter);
+          if (isCurrent()) setWarStats(value);
+        },
+        true,
+        true,
+      );
     },
-    [player.tag, service],
+    [player.tag, runRequest, service],
   );
-  const loadMoreJoinLeave = useCallback(async () => {
-    if (
-      !joinLeave?.items.length ||
-      joinLeave.items.length >= joinLeave.available ||
-      loadingTabs.has('joinLeave')
-    )
-      return;
-    setLoadingTabs((current) => new Set(current).add('joinLeave'));
-    try {
-      const before = new Date(joinLeave.items[joinLeave.items.length - 1]!.time.getTime() - 1);
-      const page = await service.loadPlayerJoinLeave(player.tag, before);
-      setJoinLeave(mergeJoinLeavePages(joinLeave, page));
-    } catch (error) {
-      setErrorByTab((current) => ({
-        ...current,
-        joinLeave: error instanceof Error ? error.message : String(error),
-      }));
-    } finally {
-      setLoadingTabs((current) => {
-        const next = new Set(current);
-        next.delete('joinLeave');
-        return next;
-      });
-    }
-  }, [joinLeave, loadingTabs, player.tag, service]);
+
+  const loadMoreJoinLeave = useCallback((): Promise<void> => {
+    const page = currentJoinLeave.current;
+    if (!page?.items.length || page.items.length >= page.available) return Promise.resolve();
+    const pending = pendingRequests.current.get('joinLeave');
+    if (pending) return pending;
+    return runRequest('joinLeave', async (isCurrent) => {
+      const before = new Date(page.items[page.items.length - 1]!.time.getTime() - 1);
+      const next = await service.loadPlayerJoinLeave(player.tag, before);
+      if (isCurrent()) {
+        const merged = mergeJoinLeavePages(currentJoinLeave.current ?? page, next);
+        currentJoinLeave.current = merged;
+        setJoinLeave(merged);
+      }
+    });
+  }, [player.tag, runRequest, service]);
 
   const loadActivity = useCallback(
-    async (type: PlayerHistoryTypeValue, force = false) => {
+    (type: PlayerHistoryTypeValue, force = false) => {
       activityTypeRef.current = type;
-      setLoadingTabs((current) => new Set(current).add('history'));
-      try {
-        setActivity(await service.loadPlayerActivity(player.tag, type, force));
-        setErrorByTab((current) => ({ ...current, history: undefined }));
-      } catch (error) {
-        setErrorByTab((current) => ({
-          ...current,
-          history: error instanceof Error ? error.message : String(error),
-        }));
-      } finally {
-        setLoadingTabs((current) => {
-          const next = new Set(current);
-          next.delete('history');
-          return next;
-        });
-      }
+      // Changing the filter replaces an in-flight request for the previous type.
+      return runRequest(
+        'history',
+        async (isCurrent) => {
+          const value = await service.loadPlayerActivity(player.tag, type, force);
+          if (isCurrent()) setActivity(value);
+        },
+        true,
+      );
     },
-    [player.tag, service],
+    [player.tag, runRequest, service],
   );
 
   const actions = useMemo<PlayerDetailPresentationActions>(
@@ -258,30 +281,52 @@ function PlayerDetailRootState({
     ],
   );
 
+  const model = useMemo(
+    () => ({
+      player,
+      bookmarked: isBookmarked,
+      linkedAccount,
+      verifiedTracking,
+      battlelog,
+      activity,
+      cwlHistory,
+      legendHistory,
+      warStats,
+      currentWar,
+      currentCwl,
+      cachedClanTag,
+      joinLeave,
+      joinLeaveTotals,
+      loadingTabs,
+      errorByTab,
+    }),
+    [
+      player,
+      isBookmarked,
+      linkedAccount,
+      verifiedTracking,
+      battlelog,
+      activity,
+      cwlHistory,
+      legendHistory,
+      warStats,
+      currentWar,
+      currentCwl,
+      cachedClanTag,
+      joinLeave,
+      joinLeaveTotals,
+      loadingTabs,
+      errorByTab,
+    ],
+  );
+
   return (
     <View style={{ flex: 1 }}>
       <PlayerDetailScreen
         loading={loading}
         initialTab={initialTab}
         actions={actions}
-        model={{
-          player,
-          bookmarked: isBookmarked,
-          linkedAccount,
-          verifiedTracking,
-          battlelog,
-          activity,
-          cwlHistory,
-          legendHistory,
-          warStats,
-          currentWar,
-          currentCwl,
-          cachedClanTag,
-          joinLeave,
-          joinLeaveTotals,
-          loadingTabs,
-          errorByTab,
-        }}
+        model={model}
       />
       <ClashHandoffDialog
         visible={handoff.visible}

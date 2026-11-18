@@ -7,6 +7,16 @@ import { ckThemeColors, type CKThemeColors, type CKThemeMode } from './tokens';
 
 export type CKThemePreference = CKThemeMode | 'system';
 
+const CKThemeOverrideContext = createContext<CKThemeColors | null>(null);
+
+/** Scoped illustrated surfaces can supply a palette without changing app preferences. */
+export function CKThemeOverrideProvider({
+  colors,
+  children,
+}: PropsWithChildren<{ colors: CKThemeColors }>) {
+  return createElement(CKThemeOverrideContext.Provider, { value: colors }, children);
+}
+
 const CKThemePreferenceContext = createContext<CKThemePreference>('dark');
 
 export function CKThemeProvider({
@@ -14,8 +24,7 @@ export function CKThemeProvider({
   children,
 }: PropsWithChildren<{ preference: CKThemePreference }>) {
   const { width } = useWindowDimensions();
-  const tabletTypography =
-    isTabletDevice && width >= 640;
+  const tabletTypography = isTabletDevice && width >= 640;
   useEffect(() => {
     if (!isAdaptiveIOSDevice) return;
     // Native bars and sheets must follow the saved app theme. Reset the
@@ -41,5 +50,7 @@ export function useCKThemeMode(): CKThemeMode {
 }
 
 export function useCKTheme(): CKThemeColors {
-  return resolveCKTheme(useCKThemeMode());
+  const override = useContext(CKThemeOverrideContext);
+  const standard = resolveCKTheme(useCKThemeMode());
+  return override ?? standard;
 }

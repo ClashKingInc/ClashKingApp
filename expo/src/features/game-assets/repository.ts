@@ -77,6 +77,10 @@ export class GameAssetManifestService implements GameAssetManifestRepository {
     },
   ) {}
 
+  peek(): GameAssetManifest | null {
+    return this.memoryManifest;
+  }
+
   async load({
     forceRefresh = false,
   }: { forceRefresh?: boolean } = {}): Promise<GameAssetManifest> {

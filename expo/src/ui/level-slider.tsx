@@ -1,6 +1,6 @@
-import { useMemo, useRef, useState } from 'react';
+import { useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { PanResponder, Platform, Pressable, View, type KeyDownEvent } from 'react-native';
-import { Minus, Plus } from 'lucide-react-native';
+import { ChevronDown, ChevronUp, Minus, Plus } from 'lucide-react-native';
 import { useI18n } from '../i18n';
 import { CKText } from './text';
 import { useCKTheme } from './theme';
@@ -13,6 +13,8 @@ type LevelSliderProps = {
   label: string;
   accent?: string;
   showStepButtons?: boolean;
+  compact?: boolean;
+  valueLabel?: string;
   /** Optional exact milestones; omit for ordinary every-level controls. */
   steps?: readonly number[];
   /** Lightweight preview only; expensive work belongs in onChange on release. */
@@ -32,6 +34,8 @@ function LevelSliderControl({
   accent,
   steps,
   showStepButtons = false,
+  compact = false,
+  valueLabel,
   onPreviewChange,
   onChange,
 }: LevelSliderProps) {
@@ -43,8 +47,13 @@ function LevelSliderControl({
   const [fraction, setFraction] = useState(
     maximum > minimum ? (value - minimum) / (maximum - minimum) : 0,
   );
-  const startX = useRef(0);
+  const dragStartValue = useRef(value);
+  const dragging = useRef(false);
   const liveValue = useRef(value);
+  const callbacks = useRef({ onChange, onPreviewChange });
+  useLayoutEffect(() => {
+    callbacks.current = { onChange, onPreviewChange };
+  }, [onChange, onPreviewChange]);
   const allowed = useMemo(
     () =>
       steps
@@ -68,13 +77,14 @@ function LevelSliderControl({
   };
   const stepButton = (direction: -1 | 1) => {
     const disabled = direction < 0 ? preview <= minimum : preview >= maximum;
-    const Icon = direction < 0 ? Minus : Plus;
+    const Icon = compact ? (direction < 0 ? ChevronDown : ChevronUp) : direction < 0 ? Minus : Plus;
     return (
       <Pressable
         accessibilityRole="button"
         accessibilityLabel={t(direction < 0 ? 'sideDecrease' : 'sideIncrease')}
         accessibilityState={{ disabled }}
         disabled={disabled}
+        // eslint-disable-next-line react-hooks/refs -- adjust reads refs only when this press callback executes.
         onPress={() => adjust(direction)}
         style={{
           width: 44,
@@ -88,13 +98,20 @@ function LevelSliderControl({
       </Pressable>
     );
   };
-  // Read the grant position once, then use gesture displacement. locationX is
-  // relative to the touched child and jumps when the thumb crosses the track.
+  // Drag relative to the selected level, not the finger's landing position.
+  // Touching the 44pt target while scrolling must not seek. Dense hero ranges
+  // get at least 4pt per level; another drag can continue from the same level.
+  // Keep handlers stable when a lightweight preview re-renders its parent.
   /* eslint-disable react-hooks/refs -- PanResponder registers event callbacks here; refs are read only when a gesture fires. */
   const responder = useMemo(() => {
-    const move = (x: number) => {
-      const nextFraction = Math.max(0, Math.min(1, x / width));
-      const raw = minimum + nextFraction * (maximum - minimum);
+    const range = maximum - minimum;
+    const dragDistance = Math.max(width, range * 4);
+    const move = (dx: number) => {
+      const travel = Math.sign(dx) * Math.max(0, Math.abs(dx) - 6);
+      const raw = Math.max(
+        minimum,
+        Math.min(maximum, dragStartValue.current + (travel / dragDistance) * range),
+      );
       const next = allowed
         ? allowed.reduce((nearest, level) =>
             Math.abs(level - raw) < Math.abs(nearest - raw) ? level : nearest,
@@ -102,28 +119,47 @@ function LevelSliderControl({
         : Math.round(raw);
       const changed = liveValue.current !== next;
       liveValue.current = next;
-      setFraction(nextFraction);
+      setFraction(range > 0 ? (raw - minimum) / range : 0);
       setPreview(next);
-      if (changed) onPreviewChange?.(next);
+      if (changed) callbacks.current.onPreviewChange?.(next);
     };
     const finish = () => {
+      dragging.current = false;
       setFraction(maximum > minimum ? (liveValue.current - minimum) / (maximum - minimum) : 0);
-      onChange(liveValue.current);
+      if (liveValue.current !== dragStartValue.current)
+        callbacks.current.onChange(liveValue.current);
+    };
+    const cancel = () => {
+      dragging.current = false;
+      const changed = liveValue.current !== dragStartValue.current;
+      liveValue.current = dragStartValue.current;
+      setPreview(liveValue.current);
+      setFraction(range > 0 ? (liveValue.current - minimum) / range : 0);
+      if (changed) callbacks.current.onPreviewChange?.(liveValue.current);
     };
     return PanResponder.create({
       onStartShouldSetPanResponder: () => maximum > minimum,
       onMoveShouldSetPanResponder: (_, gesture) =>
-        maximum > minimum && Math.abs(gesture.dx) > Math.abs(gesture.dy),
-      onPanResponderGrant: (event) => {
-        startX.current = event.nativeEvent.locationX;
-        move(startX.current);
+        maximum > minimum &&
+        Math.abs(gesture.dx) > 6 &&
+        Math.abs(gesture.dx) > Math.abs(gesture.dy),
+      onPanResponderGrant: () => {
+        dragStartValue.current = liveValue.current;
+        dragging.current = false;
       },
-      onPanResponderMove: (_, gesture) => move(startX.current + gesture.dx),
+      onPanResponderMove: (_, gesture) => {
+        if (gesture.numberActiveTouches !== 1) return;
+        if (!dragging.current) {
+          if (Math.abs(gesture.dx) <= 6 || Math.abs(gesture.dx) <= Math.abs(gesture.dy)) return;
+          dragging.current = true;
+        }
+        move(gesture.dx);
+      },
       onPanResponderRelease: finish,
-      onPanResponderTerminate: finish,
-      onPanResponderTerminationRequest: () => false,
+      onPanResponderTerminate: cancel,
+      onPanResponderTerminationRequest: () => !dragging.current,
     });
-  }, [allowed, maximum, minimum, onChange, onPreviewChange, width]);
+  }, [allowed, maximum, minimum, width]);
   /* eslint-enable react-hooks/refs */
   return (
     <View style={{ gap: 4 }}>
@@ -132,7 +168,7 @@ function LevelSliderControl({
           {label}
         </CKText>
         <CKText role="rowTitle" style={{ color: controlColor }}>
-          {t('sideLevel', { level: preview })}
+          {valueLabel && preview === value ? valueLabel : t('sideLevel', { level: preview })}
         </CKText>
       </View>
       <View style={{ flexDirection: 'row', alignItems: 'center' }}>
@@ -143,12 +179,15 @@ function LevelSliderControl({
           accessibilityValue={{ min: minimum, max: maximum, now: preview }}
           accessibilityActions={[{ name: 'increment' }, { name: 'decrement' }]}
           onAccessibilityAction={(event) => {
-            const next = stepValue(event.nativeEvent.actionName === 'increment' ? 1 : -1);
-            setPreview(next);
-            onChange(next);
+            adjust(event.nativeEvent.actionName === 'increment' ? 1 : -1);
           }}
           onLayout={(event) => setWidth(Math.max(1, event.nativeEvent.layout.width))}
-          style={{ flex: 1, height: 44, justifyContent: 'center', marginHorizontal: 12 }}
+          style={{
+            flex: 1,
+            height: 44,
+            justifyContent: 'center',
+            marginHorizontal: compact ? 8 : 12,
+          }}
           {...(Platform.OS === 'web'
             ? {
                 tabIndex: 0,
@@ -164,7 +203,10 @@ function LevelSliderControl({
                   event.preventDefault();
                   const next =
                     key === 'Home' ? minimum : key === 'End' ? maximum : stepValue(delta);
+                  liveValue.current = next;
                   setPreview(next);
+                  setFraction(maximum > minimum ? (next - minimum) / (maximum - minimum) : 0);
+                  onPreviewChange?.(next);
                   onChange(next);
                 },
               }
@@ -190,9 +232,9 @@ function LevelSliderControl({
             style={{
               position: 'absolute',
               left: `${fraction * 100}%`,
-              marginLeft: -11,
-              width: 22,
-              height: 22,
+              marginLeft: compact ? -8 : -11,
+              width: compact ? 16 : 22,
+              height: compact ? 16 : 22,
               borderRadius: 11,
               backgroundColor: controlColor,
             }}

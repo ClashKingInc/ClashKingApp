@@ -84,9 +84,12 @@ export function AnnouncementWebView({
         setBuiltInZoomControls={!isTrustedLocalStory}
         setDisplayZoomControls={false}
         bounces={!isTrustedLocalStory}
-        // WKWebView's fast default stops a fling earlier than native lists.
-        // Articles should retain native list momentum; stories keep their own behavior.
-        decelerationRate={isTrustedLocalStory ? undefined : 'normal'}
+        // This is WKWebView-only: iOS converts "normal" to a number, but
+        // Android forwards it unchanged to a native Double and can fail while
+        // mounting the reader. Omit the prop entirely outside iOS articles.
+        {...(Platform.OS === 'ios' && !isTrustedLocalStory
+          ? { decelerationRate: 'normal' as const }
+          : {})}
         injectedJavaScriptBeforeContentLoaded={
           isTrustedLocalStory
             ? ANNOUNCEMENT_STORY_BRIDGE_JAVASCRIPT + ANNOUNCEMENT_STORY_VIEWPORT_JAVASCRIPT

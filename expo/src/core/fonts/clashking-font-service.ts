@@ -12,6 +12,12 @@ export function loadClashKingFont(): Promise<boolean> {
 async function loadOnce(): Promise<boolean> {
   try {
     await Font.loadAsync(CLASHKING_FONT_FAMILY, CLASHKING_FONT_SOURCE);
+    // Wiki headings must have their final metrics before a detail transition.
+    // This optional bundled face must not block startup if loading fails.
+    await Font.loadAsync(
+      'Supercell-Magic',
+      require('../../../assets/clashking/legend-poster/clash.ttf'),
+    ).catch(() => {});
     return true;
   } catch (error) {
     console.warn('ClashKing bundled font load failed; using system fallback', error);

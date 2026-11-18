@@ -68,6 +68,7 @@ export type RouteIconName =
   | 'arrow-up-circle'
   | 'shield'
   | 'images'
+  | 'book-open'
   | 'user-cog'
   | 'settings'
   | 'goal';
@@ -233,9 +234,9 @@ export const appRoutes = [
   },
   {
     id: 'gameAssets',
-    href: '/game-assets',
+    href: '/wiki',
     labelKey: 'drawerGameAssets',
-    icon: 'images',
+    icon: 'book-open',
     feature: 'game_assets',
     mobileDrawer: true,
     desktopSidebar: true,

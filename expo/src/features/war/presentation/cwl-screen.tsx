@@ -13,7 +13,6 @@ import {
 } from 'react';
 import {
   AccessibilityInfo,
-  Animated,
   Platform,
   Pressable,
   RefreshControl,
@@ -55,6 +54,7 @@ import { HeaderIconButton } from '../../../ui/header';
 import { ckColors, ckSpacing, colorWithAlpha } from '../../../ui/tokens';
 import { PagerView, type PagerViewHandle } from '../../../ui/pager';
 import { usePrimarySwipeGuard } from '../../../ui/primary-swipe-guard';
+import { useSectionScroll } from '../../../ui/use-section-selection';
 import { CwlLeagueBackdrop } from './cwl-league-backdrop';
 import { CompactWarScoreboard } from './war-components';
 import type { CwlClan, CwlMember, WarCwl, WarInfo } from '../models';
@@ -119,9 +119,6 @@ export function CwlScreen({
   const setPerspective = (tag: string) => setPerspectiveSelection({ origin: clanTag, tag });
   const [pageHeights, setPageHeights] = useState<Partial<Record<CwlTab, number>>>({});
   const pager = useRef<PagerViewHandle>(null);
-  const [tabPosition] = useState(
-    () => new Animated.Value(['rounds', 'teams', 'members'].indexOf(tab)),
-  );
   const [reduceMotion, setReduceMotion] = useState(false);
   useEffect(() => {
     let active = true;
@@ -134,25 +131,24 @@ export function CwlScreen({
       listener.remove();
     };
   }, []);
-  const [pagerSwipeEnabled, setPagerSwipeEnabled] = useState(true);
   const blockPrimarySwipe = usePrimarySwipeGuard();
   useEffect(() => () => blockPrimarySwipe(false), [blockPrimarySwipe]);
-  const scroll = useRef<ScrollViewInstance>(null);
-  const scrollY = useRef(0);
-  const headerHeight = useRef(0);
-  const tabStart = useRef(0);
-  useEffect(() => {
-    const frame = requestAnimationFrame(() =>
-      scroll.current?.scrollTo({ y: tabStart.current, animated: false }),
-    );
-    return () => cancelAnimationFrame(frame);
-  }, [tab]);
+  const {
+    attachScroll,
+    onViewportLayout,
+    onHeaderLayout,
+    onTabsLayout,
+    recordScroll,
+    prepareSwitch,
+    minimumContentHeight,
+  } = useSectionScroll(tab);
   const clan = summary.leagueInfo?.getClanDetails(perspective);
   const standings = useMemo(() => cwlStandings(summary), [summary]);
   const coverage = cwlCoverage(summary);
   const standing = standings.find((row) => row.tag === perspective);
   const select = (key: string) => {
-    tabStart.current = Math.max(0, Math.min(scrollY.current, headerHeight.current));
+    if (key === tab) return;
+    prepareSwitch();
     setTab(key as CwlTab);
   };
   if (!clan)
@@ -168,11 +164,12 @@ export function CwlScreen({
   return (
     <SafeAreaView edges={['left', 'right']} style={{ flex: 1, backgroundColor: theme.background }}>
       <ScrollView
-        ref={scroll}
+        ref={attachScroll}
+        onLayout={onViewportLayout}
         stickyHeaderIndices={[1]}
-        scrollEventThrottle={100}
+        scrollEventThrottle={16}
         onScroll={(event) => {
-          scrollY.current = event.nativeEvent.contentOffset.y;
+          recordScroll(event.nativeEvent.contentOffset.y);
         }}
         contentContainerStyle={{ paddingBottom: insets.bottom + ckSpacing.xl }}
         refreshControl={
@@ -186,11 +183,7 @@ export function CwlScreen({
           ) : undefined
         }
       >
-        <View
-          onLayout={(event) => {
-            headerHeight.current = event.nativeEvent.layout.height;
-          }}
-        >
+        <View onLayout={onHeaderLayout}>
           <CwlHero
             topInset={insets.top}
             loading={placeholderIdentity}
@@ -230,6 +223,7 @@ export function CwlScreen({
           />
         </View>
         <View
+          onLayout={onTabsLayout}
           style={[
             styles.tabs,
             // The sticky child pins at scroll-view y=0, independently of the hero.
@@ -240,8 +234,6 @@ export function CwlScreen({
         >
           <ProfileTabs
             variant="underline"
-            animatedPosition={tabPosition}
-            indicatorRtl={isRtl}
             selectedKey={tab}
             onSelect={(key) => {
               select(key);
@@ -328,15 +320,14 @@ export function CwlScreen({
               <PagerView
                 ref={pager}
                 initialPage={['rounds', 'teams', 'members'].indexOf(tab)}
-                scrollEnabled={pagerSwipeEnabled}
+                // Only a tab press changes sections. Round/table gestures stay local.
+                scrollEnabled={false}
+                overdrag={false}
+                overScrollMode="never"
                 layoutDirection={isRtl ? 'rtl' : 'ltr'}
-                onPageScroll={(event) =>
-                  tabPosition.setValue(event.nativeEvent.position + event.nativeEvent.offset)
-                }
-                style={{ height: pageHeights[tab] ?? 600 }}
-                onPageSelected={(event) =>
-                  select(['rounds', 'teams', 'members'][event.nativeEvent.position]!)
-                }
+                style={{
+                  height: Math.max(minimumContentHeight, pageHeights[tab] ?? 600),
+                }}
               >
                 {(['rounds', 'teams', 'members'] as const).map((key) => (
                   <View key={key} collapsable={false} style={{ flex: 1 }}>
@@ -349,7 +340,7 @@ export function CwlScreen({
                           );
                       }}
                     >
-                      {/* Adjacent pages must already exist while the finger moves the pager. */}
+                      {/* Keep adjacent pages ready for the tap-triggered transition. */}
                       {
                         <>
                           {key === 'rounds' ? (
@@ -358,7 +349,6 @@ export function CwlScreen({
                               summary={summary}
                               clanTag={perspective}
                               onOpenWar={onOpenWar}
-                              onRoundInteraction={(active) => setPagerSwipeEnabled(!active)}
                             />
                           ) : key === 'teams' ? (
                             <CwlClans
@@ -535,12 +525,10 @@ const CwlMatches = memo(function CwlMatches({
   summary,
   clanTag,
   onOpenWar,
-  onRoundInteraction,
 }: {
   summary: WarCwl;
   clanTag: string;
   onOpenWar: (war: WarInfo, round: number) => void;
-  onRoundInteraction?: (active: boolean) => void;
 }) {
   const { t } = useI18n();
   const theme = useCKTheme();
@@ -591,10 +579,6 @@ const CwlMatches = memo(function CwlMatches({
       </View>
       <ScrollView
         horizontal
-        // Horizontal round browsing must not also switch the main CWL section.
-        onTouchStart={() => onRoundInteraction?.(true)}
-        onTouchEnd={() => onRoundInteraction?.(false)}
-        onTouchCancel={() => onRoundInteraction?.(false)}
         style={{ flexGrow: 0 }}
         showsHorizontalScrollIndicator={false}
         contentContainerStyle={styles.roundRail}

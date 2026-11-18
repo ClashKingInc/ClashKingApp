@@ -67,12 +67,17 @@ export function translationForTid(tid: string | null | undefined): string | null
   return gameDataState.translationsData[tid] ?? null;
 }
 
+/** The game encodes quotation marks as \q, sometimes escaped twice in exports. */
+export function displayGameName(value: string): string {
+  return value.replace(/\\+q/g, '"');
+}
+
 export function localizedNameForItem(item: JsonRecord | null | undefined): string {
   const tid = item?.TID;
   if (isRecord(tid) && typeof tid.name === 'string') {
-    return translationForTid(tid.name) ?? stringValue(item?.name);
+    return displayGameName(translationForTid(tid.name) ?? stringValue(item?.name));
   }
-  return stringValue(item?.name);
+  return displayGameName(stringValue(item?.name));
 }
 
 export function localizedInfoForItem(item: JsonRecord | null | undefined): string {

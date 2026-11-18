@@ -1,4 +1,5 @@
 import {
+  BookOpen,
   Calculator,
   ChartNoAxesCombined,
   ChartPie,
@@ -40,6 +41,7 @@ const iconComponents: Record<RouteIconName, ComponentType<LucideProps>> = {
   'arrow-up-circle': CircleArrowUp,
   shield: Shield,
   images: Images,
+  'book-open': BookOpen,
   'user-cog': UserCog,
   settings: Settings,
   goal: Goal,

@@ -2,6 +2,8 @@ import { router, useLocalSearchParams, useNavigation, useRoute, useIsFocused } f
 import {
   useCallback,
   useEffect,
+  useLayoutEffect,
+  useMemo,
   useRef,
   useSyncExternalStore,
   useState,
@@ -12,7 +14,8 @@ import { SafeAreaProvider, useSafeAreaInsets } from 'react-native-safe-area-cont
 
 import {
   nativeSecondaryContent,
-  notifyNativeSecondaryRemoved,
+  notifyNativeSecondaryPopped,
+  removeNativeSecondaryLayer,
   subscribeNativeSecondaryLayer,
 } from '../core/app/native-secondary-navigation';
 import { LoadingIndicator, useCKTheme } from '../ui';
@@ -23,6 +26,7 @@ import { useAdaptiveLayout } from '../ui/adaptive-layout';
 import { ReservedRegionLayout } from '../ui/reserved-region-layout';
 import { AdaptiveViewportContext } from '../ui/adaptive-viewport';
 import { useDuoPortraitBottomBar } from '../shell/duo-navigation-mode';
+import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 
 export default function NativeSecondaryRoute() {
   const theme = useCKTheme();
@@ -69,7 +73,7 @@ export default function NativeSecondaryRoute() {
       setShare(deepestAction(shareActions.current.values()));
     };
   }, []);
-  const navigation = useNavigation();
+  const navigation = useNavigation<NativeStackNavigationProp<Record<string, object | undefined>>>();
   const route = useRoute();
   const params = useLocalSearchParams<{ layer?: string | string[] }>();
   const key = Array.isArray(params.layer) ? params.layer[0] : params.layer;
@@ -79,15 +83,39 @@ export default function NativeSecondaryRoute() {
     () => null,
   );
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (!key) return;
+    let popped = false;
+    const reconcile = () => {
+      const state = navigation.getState();
+      if (!popped && state && !state.routes.some((entry) => entry.key === route.key)) {
+        popped = true;
+        // A rapid return/reopen can reuse the card's layer key before the old
+        // native route unmounts. The new route now owns that retained content.
+        const reopened = state.routes.some(
+          (entry) => (entry.params as { layer?: string } | undefined)?.layer === key,
+        );
+        if (!reopened) notifyNativeSecondaryPopped(key);
+      }
+    };
+    // Passive unmount cleanup can lag behind the completed native return and
+    // leave the owner's stack blocking the next tap. Observe actual state now.
+    const unsubscribe = navigation.addListener('state', reconcile);
     // Fast Refresh and effect replay also run cleanup while this route remains
     // in the stack. Only a real native removal may discard its retained layer;
     // otherwise refreshing a detail screen also closes its parent clan page.
     return () => {
+      unsubscribe();
       const state = navigation.getState();
       if (state && !state.routes.some((entry) => entry.key === route.key)) {
-        notifyNativeSecondaryRemoved(key);
+        const reopened = state.routes.some(
+          (entry) => (entry.params as { layer?: string } | undefined)?.layer === key,
+        );
+        if (!reopened) {
+          if (!popped) notifyNativeSecondaryPopped(key);
+          // The native screen has finished using its content at unmount.
+          removeNativeSecondaryLayer(key);
+        }
       }
     };
   }, [key, navigation, route.key]);
@@ -102,19 +130,20 @@ export default function NativeSecondaryRoute() {
     return () => clearTimeout(timeout);
   }, [content, key]);
 
+  // Focus changes this route's chrome. Keep its
+  // context identity stable so those events do not rerender the entire table
+  // and every image on the retained Wiki page.
+  const railContext = useMemo(
+    () => ({ enabled: railEnabled, depth: 0, registerBack, registerShare }),
+    [railEnabled, registerBack, registerShare],
+  );
+
   return (
     <View
       style={[styles.root, { backgroundColor: theme.background }]}
       onLayout={({ nativeEvent: { layout } }) => setViewportHeight(layout.height)}
     >
-      <NativeRailBack.Provider
-        value={{
-          enabled: railEnabled,
-          depth: 0,
-          registerBack,
-          registerShare,
-        }}
-      >
+      <NativeRailBack.Provider value={railContext}>
         <ReservedRegionLayout>
           <SecondaryPageContent>
             {content ?? (
