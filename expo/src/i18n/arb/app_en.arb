@@ -4012,6 +4012,7 @@
     }
   },
   "appIconDefault": "Default",
+  "appIconWhiteMode": "White Mode",
   "appIconChristmas": "Christmas",
   "appIconHalloween": "Halloween",
   "appIconBlackWhite": "Black & White",

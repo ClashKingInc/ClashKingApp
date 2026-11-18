@@ -3903,6 +3903,7 @@
     }
   },
   "appIconDefault": "Domyślna",
+  "appIconWhiteMode": "Tryb biały",
   "appIconChristmas": "Świąteczna",
   "appIconHalloween": "Halloween",
   "appIconBlackWhite": "Czarno-biała",

@@ -3903,6 +3903,7 @@
     }
   },
   "appIconDefault": "Alapértelmezett",
+  "appIconWhiteMode": "Fehér mód",
   "appIconChristmas": "Karácsony",
   "appIconHalloween": "Halloween",
   "appIconBlackWhite": "Fekete-fehér",

@@ -1,7 +1,8 @@
 export type AppIconPlatform = 'ios' | 'android' | 'web';
 
 export interface AppIconOption {
-  readonly labelKey: 'default' | 'christmas' | 'halloween' | 'black_white' | 'dark_mode';
+  readonly labelKey:
+    'default' | 'white_mode' | 'christmas' | 'halloween' | 'black_white' | 'dark_mode';
   readonly iconName: string | null;
   readonly previewAsset: string;
 }
@@ -12,6 +13,7 @@ export interface NativeAppIconBridge {
   setAlternateIconName(iconName: string | null): Promise<void>;
 }
 
+export const WHITE_ICON_NAME = 'AppIconWhite';
 export const CHRISTMAS_ICON_NAME = 'AppIconChristmas';
 export const HALLOWEEN_ICON_NAME = 'AppIconHalloween';
 export const BLACK_WHITE_ICON_NAME = 'AppIconBlackWhite';
@@ -24,6 +26,21 @@ export const APP_ICON_OPTIONS: readonly AppIconOption[] = [
     previewAsset: 'assets/icons/app_icon_ios_default.png',
   },
   {
+    labelKey: 'white_mode',
+    iconName: WHITE_ICON_NAME,
+    previewAsset: 'assets/icons/app_icon_white.png',
+  },
+  {
+    labelKey: 'dark_mode',
+    iconName: DARK_LOGO_ICON_NAME,
+    previewAsset: 'assets/icons/app_icon_dark_logo.png',
+  },
+  {
+    labelKey: 'black_white',
+    iconName: BLACK_WHITE_ICON_NAME,
+    previewAsset: 'assets/icons/app_icon_black_white.png',
+  },
+  {
     labelKey: 'halloween',
     iconName: HALLOWEEN_ICON_NAME,
     previewAsset: 'assets/icons/app_icon_halloween.png',
@@ -32,16 +49,6 @@ export const APP_ICON_OPTIONS: readonly AppIconOption[] = [
     labelKey: 'christmas',
     iconName: CHRISTMAS_ICON_NAME,
     previewAsset: 'assets/icons/app_icon_christmas.png',
-  },
-  {
-    labelKey: 'black_white',
-    iconName: BLACK_WHITE_ICON_NAME,
-    previewAsset: 'assets/icons/app_icon_black_white.png',
-  },
-  {
-    labelKey: 'dark_mode',
-    iconName: DARK_LOGO_ICON_NAME,
-    previewAsset: 'assets/icons/app_icon_dark_logo.png',
   },
 ];
 

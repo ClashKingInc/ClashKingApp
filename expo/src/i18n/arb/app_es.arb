@@ -3808,6 +3808,7 @@
     }
   },
   "appIconDefault": "Predeterminado",
+  "appIconWhiteMode": "Modo blanco",
   "appIconChristmas": "Navidad",
   "appIconHalloween": "Halloween",
   "appIconBlackWhite": "Blanco y negro",
