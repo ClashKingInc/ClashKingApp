@@ -230,7 +230,7 @@ export function TodoScreen(props: TodoScreenProps) {
               >
                 <GlassSurface cornerRadius={22} interactive style={styles.filterButton}>
                   <CKText role="labelLarge" numberOfLines={1}>
-                    {filterLabel(props.filter, props.model)}
+                    {filterLabel(props.filter, props.model, t)}
                   </CKText>
                   <ChevronDown size={16} color={theme.onSurfaceVariant} />
                 </GlassSurface>
@@ -665,6 +665,7 @@ function FilterPopover({
   onClose: () => void;
 }) {
   const theme = useCKTheme();
+  const { t } = useI18n();
   return (
     <Modal
       supportedOrientations={modalOrientations}
@@ -700,7 +701,7 @@ function FilterPopover({
               ]}
             >
               <CKText style={[styles.flex, filter === selected && styles.heavy]} numberOfLines={1}>
-                {filterLabel(filter, model)}
+                {filterLabel(filter, model, t)}
               </CKText>
               {filter === selected ? <Check size={16} color={theme.onSurface} /> : null}
             </Pressable>
@@ -764,7 +765,7 @@ function Explanation({ title, body }: { title: string; body: string }) {
   );
 }
 
-function filterLabel(filter: TodoAccountFilter, model: TodoScreenModel) {
+function filterLabel(filter: TodoAccountFilter, model: TodoScreenModel, t: I18nValue['t']) {
   const count =
     filter === 'all'
       ? model.filterCounts.all
@@ -772,7 +773,11 @@ function filterLabel(filter: TodoAccountFilter, model: TodoScreenModel) {
         ? model.filterCounts.needsAction
         : model.filterCounts.done;
   const label =
-    filter === 'all' ? 'All accounts' : filter === 'needs_action' ? 'To do' : 'Completed';
+    filter === 'all'
+      ? t('todoAllAccounts')
+      : filter === 'needs_action'
+        ? t('todoFilterNeedsAction')
+        : t('todoFilterCompleted');
   return `${label} (${count})`;
 }
 

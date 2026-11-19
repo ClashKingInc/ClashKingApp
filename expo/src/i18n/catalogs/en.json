@@ -2504,5 +2504,12 @@
   "wikiStatDamageBoostsApply": "Affected by damage boosts",
   "wikiStatInvisibility": "Invisibility",
   "wikiStatRadius": "Radius",
-  "wikiStatHits": "Hits"
+  "wikiStatHits": "Hits",
+  "clanFamilyFriendly": "Family-friendly",
+  "upgradeTrackerOwnedByTier": "Owned by tier",
+  "upgradeTrackerOwnedBySize": "Owned by size",
+  "upgradeTrackerPercentComplete": "{percent}% complete",
+  "upgradeTrackerTimeLeft": "Time left",
+  "todoFilterNeedsAction": "To do",
+  "todoFilterCompleted": "Completed"
 }

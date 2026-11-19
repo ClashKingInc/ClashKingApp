@@ -157,9 +157,9 @@ export function ClanInfoHeader({
     ...(clan.isFamilyFriendly
       ? [
           {
-            value: 'Family-friendly',
+            value: t('clanFamilyFriendly'),
             iconElement: <Users size={19} color={theme.onSurface} />,
-            label: 'Family-friendly',
+            label: t('clanFamilyFriendly'),
           },
         ]
       : []),
