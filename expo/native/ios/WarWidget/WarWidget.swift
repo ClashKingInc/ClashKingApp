@@ -16,7 +16,7 @@ private func widgetBadgeURL(_ url: URL) -> URL? {
   guard url.host == "badges.clashk.ing" else { return url }
   var components = URLComponents(url: url, resolvingAgainstBaseURL: false)
   components?.path = url.deletingPathExtension().path + ".png"
-  components?.queryItems = [URLQueryItem(name: "size", value: "256")]
+  components?.queryItems = [URLQueryItem(name: "size", value: "medium")]
   components?.fragment = nil
   return components?.url
 }
@@ -26,7 +26,7 @@ private func widgetClanBadge(_ tag: String?) -> String? {
     .replacingOccurrences(of: "#", with: "").uppercased()
   guard !normalized.isEmpty,
         normalized.range(of: "^[A-Z0-9]+$", options: .regularExpression) != nil else { return nil }
-  return "https://badges.clashk.ing/\(normalized).png?size=256"
+  return "https://badges.clashk.ing/\(normalized).png?size=medium"
 }
 
 private func widgetDestination(tag: String?, upgrade: Bool) -> URL? {

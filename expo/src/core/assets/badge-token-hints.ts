@@ -82,7 +82,7 @@ export function badgeRequestHeaders(
 ): Record<string, string> | undefined {
   if (platform === 'web') return;
   const token = badgeTokenForUrl(url);
-  return token ? { 'X-ClashKing-Badge-Token': token, 'Cache-Control': 'no-cache' } : undefined;
+  return token ? { 'X-ClashKing-Badge-Token': token } : undefined;
 }
 
 export function badgeImageSource(url: string, platform: string) {
