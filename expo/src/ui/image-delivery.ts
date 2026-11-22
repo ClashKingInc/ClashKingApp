@@ -38,28 +38,48 @@ export function sizedAssetUrl(
   return value.toString();
 }
 
-/** Match supported badge variants to physical pixels, capped at the upstream 512px. */
+export type BadgeSizeName = 'small' | 'medium' | 'large';
+
+const BADGE_SIZE_ALIASES: Readonly<Record<string, BadgeSizeName>> = {
+  small: 'small',
+  medium: 'medium',
+  large: 'large',
+  '64': 'small',
+  '128': 'medium',
+  '256': 'medium',
+  '512': 'large',
+};
+
+function badgeSizeForPixels(pixels: number): BadgeSizeName {
+  if (pixels <= 70) return 'small';
+  if (pixels <= 256) return 'medium';
+  return 'large';
+}
+
+/** Match supported named badge variants (small/medium/large) to physical pixels. */
 export function sizedBadgeUrl(url: string, width: number, height: number, scale: number): string {
   if (!url.startsWith('https://badges.clashk.ing/')) return url;
   const pixels = [width, height, scale].every((value) => Number.isFinite(value) && value > 0)
-    ? Math.ceil(Math.max(width, height) * scale) : 512;
-  const size = [64, 128, 256, 512].find((bound) => bound >= pixels) ?? 512;
+    ? Math.ceil(Math.max(width, height) * scale)
+    : 512;
+  const size = badgeSizeForPixels(pixels);
   const value = new URL(url);
   value.pathname = value.pathname.replace(/\.(png|avif)$/i, '') + '.avif';
   value.search = '';
   value.hash = '';
-  value.searchParams.set('size', String(size));
+  value.searchParams.set('size', size);
   return value.toString();
 }
 
-/** PNG fallback uses the same size and never adds private hints to public URLs. */
+/** PNG fallback uses the same named size and never adds private hints to public URLs. */
 export function originalBadgeUrl(url: string): string {
   if (!url.startsWith('https://badges.clashk.ing/')) return url;
   const value = new URL(url);
   value.pathname = value.pathname.replace(/\.(png|avif)$/i, '') + '.png';
-  const size = value.searchParams.get('size') ?? '';
+  const requested = value.searchParams.get('size') ?? '';
+  const size = BADGE_SIZE_ALIASES[requested] ?? 'large';
   value.search = '';
   value.hash = '';
-  value.searchParams.set('size', ['small', 'medium', 'large', '64', '128', '256', '512'].includes(size) ? size : '512');
+  value.searchParams.set('size', size);
   return value.toString();
 }

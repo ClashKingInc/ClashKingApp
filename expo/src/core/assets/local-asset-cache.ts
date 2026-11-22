@@ -46,9 +46,13 @@ export const localImageCache = new ManagedImageCache(localFileIndex, {
     if (signal?.aborted) controller.abort();
     const timeout = setTimeout(() => controller.abort(), 30_000);
     try {
+      const badgeHeaders = badgeRequestHeaders(url, 'native');
+      const headers = url.startsWith('https://badges.clashk.ing/')
+        ? badgeHeaders
+        : { 'Cache-Control': 'no-cache', ...badgeHeaders };
       const response = await fetch(url, {
         signal: controller.signal,
-        headers: { 'Cache-Control': 'no-cache', ...badgeRequestHeaders(url, 'native') },
+        ...(headers ? { headers } : {}),
       });
       if (!response.ok || !response.headers.get('content-type')?.startsWith('image/'))
         throw new Error('Image download failed');

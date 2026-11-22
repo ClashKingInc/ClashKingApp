@@ -608,7 +608,7 @@ private fun loadWidgetBitmap(rawUrl: String): Bitmap? {
         val source = URL(rawUrl)
         if (source.protocol != "https") return null
         val resolved = if (source.host == "badges.clashk.ing") {
-            URL("https", source.host, source.path.replace(Regex("\\.[^/]+$"), "") + ".png?size=256")
+            URL("https", source.host, source.path.replace(Regex("\\.[^/]+$"), "") + ".png?size=medium")
         } else source
         connection = resolved.openConnection() as HttpURLConnection
         connection.connectTimeout = 5_000
