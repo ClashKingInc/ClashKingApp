@@ -1756,7 +1756,7 @@
   "notifUpgradeReadyTitle": "Το {name} είναι έτοιμο",
   "notifUpgradeCompleteBody": "Το επίπεδο {level} ολοκληρώθηκε για τον/την {player}. Η αναβάθμιση ολοκληρώθηκε.",
   "clanSearchLoadFailed": "Αποτυχία φόρτωσης δεδομένων clan: {error}",
-  "appIconDefault": "Προεπιλογή",
+  "appIconDefault": "Φωτεινό εικονίδιο (Προεπιλογή)",
   "appIconChristmas": "Χριστούγεννα",
   "appIconHalloween": "Χάλοουιν",
   "appIconBlackWhite": "Ασπρόμαυρο",

@@ -1756,7 +1756,7 @@
   "notifUpgradeReadyTitle": "{name} készen áll",
   "notifUpgradeCompleteBody": "A(z) {level}. szint elkészült {player} számára. Fejlesztés kész.",
   "clanSearchLoadFailed": "Nem sikerült betölteni a klánadatokat: {error}",
-  "appIconDefault": "Alapértelmezett",
+  "appIconDefault": "Világos ikon (Alapértelmezett)",
   "appIconChristmas": "Karácsony",
   "appIconHalloween": "Halloween",
   "appIconBlackWhite": "Fekete-fehér",

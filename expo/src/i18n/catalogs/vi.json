@@ -1756,7 +1756,7 @@
   "notifUpgradeReadyTitle": "{name} đã sẵn sàng",
   "notifUpgradeCompleteBody": "Cấp {level} đã hoàn tất cho {player}. Nâng cấp xong.",
   "clanSearchLoadFailed": "Không thể tải dữ liệu hội: {error}",
-  "appIconDefault": "Mặc định",
+  "appIconDefault": "Biểu tượng sáng (Mặc định)",
   "appIconChristmas": "Giáng sinh",
   "appIconHalloween": "Halloween",
   "appIconBlackWhite": "Đen trắng",

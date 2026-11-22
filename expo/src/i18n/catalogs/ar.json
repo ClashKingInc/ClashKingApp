@@ -1756,7 +1756,7 @@
   "notifUpgradeReadyTitle": "{name} جاهز",
   "notifUpgradeCompleteBody": "اكتمل المستوى {level} للاعب {player}. انتهت الترقية.",
   "clanSearchLoadFailed": "فشل تحميل بيانات القبيلة: {error}",
-  "appIconDefault": "افتراضي",
+  "appIconDefault": "الأيقونة الفاتحة (افتراضي)",
   "appIconChristmas": "عيد الميلاد",
   "appIconHalloween": "هالوين",
   "appIconBlackWhite": "أبيض وأسود",

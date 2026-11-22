@@ -1756,7 +1756,7 @@
   "notifUpgradeReadyTitle": "{name} ist bereit",
   "notifUpgradeCompleteBody": "Level {level} für {player} abgeschlossen. Verbesserung fertig.",
   "clanSearchLoadFailed": "Clandaten konnten nicht geladen werden: {error}",
-  "appIconDefault": "Standard",
+  "appIconDefault": "Helles Symbol (Standard)",
   "appIconChristmas": "Weihnachten",
   "appIconHalloween": "Halloween",
   "appIconBlackWhite": "Schwarz-Weiß",

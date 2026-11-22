@@ -1756,7 +1756,7 @@
   "notifUpgradeReadyTitle": "{name}の準備ができました",
   "notifUpgradeCompleteBody": "{player}のレベル{level}が完了しました。アップグレード完了。",
   "clanSearchLoadFailed": "クランデータの読み込みに失敗しました: {error}",
-  "appIconDefault": "デフォルト",
+  "appIconDefault": "ライトアイコン（デフォルト）",
   "appIconChristmas": "クリスマス",
   "appIconHalloween": "ハロウィン",
   "appIconBlackWhite": "白黒",
