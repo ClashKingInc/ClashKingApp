@@ -192,33 +192,12 @@
     "dynamicPrefixes": ["warInfo_", "upgradeWidget_"]
   },
   "androidPinWidgetProvider": "WarAppWidgetProvider",
-  "alternateIcons": [
-    "AppIconWhite",
-    "AppIconDarkLogo",
-    "AppIconBlackWhite",
-    "AppIconHalloween",
-    "AppIconChristmas"
-  ],
+  "alternateIcons": ["AppIconHalloween", "AppIconChristmas", "AppIconBlackWhite", "AppIconDarkLogo"],
   "alternateIconOptions": [
     {
       "labelKey": "default",
       "iconName": null,
       "previewAsset": "assets/icons/app_icon_ios_default.png"
-    },
-    {
-      "labelKey": "white_mode",
-      "iconName": "AppIconWhite",
-      "previewAsset": "assets/icons/app_icon_white.png"
-    },
-    {
-      "labelKey": "dark_mode",
-      "iconName": "AppIconDarkLogo",
-      "previewAsset": "assets/icons/app_icon_dark_logo.png"
-    },
-    {
-      "labelKey": "black_white",
-      "iconName": "AppIconBlackWhite",
-      "previewAsset": "assets/icons/app_icon_black_white.png"
     },
     {
       "labelKey": "halloween",
@@ -229,6 +208,16 @@
       "labelKey": "christmas",
       "iconName": "AppIconChristmas",
       "previewAsset": "assets/icons/app_icon_christmas.png"
+    },
+    {
+      "labelKey": "black_white",
+      "iconName": "AppIconBlackWhite",
+      "previewAsset": "assets/icons/app_icon_black_white.png"
+    },
+    {
+      "labelKey": "dark_mode",
+      "iconName": "AppIconDarkLogo",
+      "previewAsset": "assets/icons/app_icon_dark_logo.png"
     }
   ],
   "alternateIconSourceRoot": "./native/ios/alternate-icons",

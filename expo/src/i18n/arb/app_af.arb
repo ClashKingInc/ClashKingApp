@@ -3807,8 +3807,7 @@
       }
     }
   },
-  "appIconDefault": "Verstek",
-  "appIconWhiteMode": "Wit modus",
+  "appIconDefault": "Ligte ikoon (Verstek)",
   "appIconChristmas": "Kersfees",
   "appIconHalloween": "Halloween",
   "appIconBlackWhite": "Swart en wit",

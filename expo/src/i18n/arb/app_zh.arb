@@ -3902,8 +3902,7 @@
       }
     }
   },
-  "appIconDefault": "默认",
-  "appIconWhiteMode": "白色模式",
+  "appIconDefault": "浅色图标（默认）",
   "appIconChristmas": "圣诞节",
   "appIconHalloween": "万圣节",
   "appIconBlackWhite": "黑白",

@@ -3807,8 +3807,7 @@
       }
     }
   },
-  "appIconDefault": "Výchozí",
-  "appIconWhiteMode": "Bílý režim",
+  "appIconDefault": "Světlá ikona (Výchozí)",
   "appIconChristmas": "Vánoční",
   "appIconHalloween": "Halloween",
   "appIconBlackWhite": "Černobílá",

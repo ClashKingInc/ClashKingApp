@@ -3807,8 +3807,7 @@
       }
     }
   },
-  "appIconDefault": "Standard",
-  "appIconWhiteMode": "Hvid tilstand",
+  "appIconDefault": "Lyst ikon (Standard)",
   "appIconChristmas": "Jul",
   "appIconHalloween": "Halloween",
   "appIconBlackWhite": "Sort-hvid",

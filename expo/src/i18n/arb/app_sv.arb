@@ -3807,8 +3807,7 @@
       }
     }
   },
-  "appIconDefault": "Standard",
-  "appIconWhiteMode": "Vitt läge",
+  "appIconDefault": "Ljus ikon (Standard)",
   "appIconChristmas": "Jul",
   "appIconHalloween": "Halloween",
   "appIconBlackWhite": "Svartvitt",

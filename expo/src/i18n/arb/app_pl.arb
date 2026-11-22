@@ -3902,8 +3902,7 @@
       }
     }
   },
-  "appIconDefault": "Domyślna",
-  "appIconWhiteMode": "Tryb biały",
+  "appIconDefault": "Jasna ikona (Domyślna)",
   "appIconChristmas": "Świąteczna",
   "appIconHalloween": "Halloween",
   "appIconBlackWhite": "Czarno-biała",

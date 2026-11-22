@@ -3902,8 +3902,7 @@
       }
     }
   },
-  "appIconDefault": "ברירת מחדל",
-  "appIconWhiteMode": "מצב לבן",
+  "appIconDefault": "סמל בהיר (ברירת מחדל)",
   "appIconChristmas": "חג המולד",
   "appIconHalloween": "ליל כל הקדושים",
   "appIconBlackWhite": "שחור-לבן",

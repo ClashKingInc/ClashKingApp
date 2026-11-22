@@ -3902,8 +3902,7 @@
       }
     }
   },
-  "appIconDefault": "Προεπιλογή",
-  "appIconWhiteMode": "Λευκή λειτουργία",
+  "appIconDefault": "Φωτεινό εικονίδιο (Προεπιλογή)",
   "appIconChristmas": "Χριστούγεννα",
   "appIconHalloween": "Χάλοουιν",
   "appIconBlackWhite": "Ασπρόμαυρο",

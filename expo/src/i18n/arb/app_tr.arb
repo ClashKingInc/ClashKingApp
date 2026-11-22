@@ -3902,8 +3902,7 @@
       }
     }
   },
-  "appIconDefault": "Varsayılan",
-  "appIconWhiteMode": "Beyaz mod",
+  "appIconDefault": "Açık simge (Varsayılan)",
   "appIconChristmas": "Noel",
   "appIconHalloween": "Cadılar Bayramı",
   "appIconBlackWhite": "Siyah beyaz",

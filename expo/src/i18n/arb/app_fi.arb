@@ -3807,8 +3807,7 @@
       }
     }
   },
-  "appIconDefault": "Oletus",
-  "appIconWhiteMode": "Valkoinen tila",
+  "appIconDefault": "Vaalea kuvake (Oletus)",
   "appIconChristmas": "Joulu",
   "appIconHalloween": "Halloween",
   "appIconBlackWhite": "Mustavalkoinen",

@@ -4011,8 +4011,7 @@
       }
     }
   },
-  "appIconDefault": "Default",
-  "appIconWhiteMode": "White Mode",
+  "appIconDefault": "Light Icon (Default)",
   "appIconChristmas": "Christmas",
   "appIconHalloween": "Halloween",
   "appIconBlackWhite": "Black & White",

@@ -3902,8 +3902,7 @@
       }
     }
   },
-  "appIconDefault": "Podrazumevano",
-  "appIconWhiteMode": "Beli režim",
+  "appIconDefault": "Svetla ikonica (Podrazumevano)",
   "appIconChristmas": "Božić",
   "appIconHalloween": "Ноћ вештица",
   "appIconBlackWhite": "Crno-belo",

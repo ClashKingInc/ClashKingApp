@@ -3902,8 +3902,7 @@
       }
     }
   },
-  "appIconDefault": "Alapértelmezett",
-  "appIconWhiteMode": "Fehér mód",
+  "appIconDefault": "Világos ikon (Alapértelmezett)",
   "appIconChristmas": "Karácsony",
   "appIconHalloween": "Halloween",
   "appIconBlackWhite": "Fekete-fehér",

@@ -3902,8 +3902,7 @@
       }
     }
   },
-  "appIconDefault": "По умолчанию",
-  "appIconWhiteMode": "Белый режим",
+  "appIconDefault": "Светлая иконка (По умолчанию)",
   "appIconChristmas": "Рождество",
   "appIconHalloween": "Хэллоуин",
   "appIconBlackWhite": "Чёрно-белая",

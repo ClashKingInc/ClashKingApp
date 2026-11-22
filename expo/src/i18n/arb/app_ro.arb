@@ -3902,8 +3902,7 @@
       }
     }
   },
-  "appIconDefault": "Implicit",
-  "appIconWhiteMode": "Mod alb",
+  "appIconDefault": "Pictogramă luminoasă (Implicit)",
   "appIconChristmas": "Crăciun",
   "appIconHalloween": "Halloween",
   "appIconBlackWhite": "Alb-negru",
