@@ -48,7 +48,7 @@ export const GENERATED_LICENSE_INVENTORY: readonly GeneratedLicenseEntry[] = [
       "@babel/plugin-transform-class-static-block@7.29.14",
       "@babel/plugin-transform-classes@7.29.11",
       "@babel/plugin-transform-destructuring@7.29.7",
-      "@babel/plugin-transform-export-namespace-from@7.29.7",
+      "@babel/plugin-transform-export-namespace-from@7.29.15",
       "@babel/plugin-transform-flow-strip-types@7.29.7",
       "@babel/plugin-transform-for-of@7.29.7",
       "@babel/plugin-transform-logical-assignment-operators@7.29.7",
@@ -85,15 +85,15 @@ export const GENERATED_LICENSE_INVENTORY: readonly GeneratedLicenseEntry[] = [
       "@expo/modules-macros-linux-x64@0.33.0",
       "@expo/modules-macros-win32-arm64@0.33.0",
       "@expo/modules-macros-win32-x64@0.33.0",
-      "@expo/ui@58.0.28",
-      "@noxcturnal/noxcturnal-darwin-arm64@0.1.13",
-      "@noxcturnal/noxcturnal-darwin-x64@0.1.13",
-      "@noxcturnal/noxcturnal-linux-arm64-gnu@0.1.13",
-      "@noxcturnal/noxcturnal-linux-arm64-musl@0.1.13",
-      "@noxcturnal/noxcturnal-linux-x64-gnu@0.1.13",
-      "@noxcturnal/noxcturnal-linux-x64-musl@0.1.13",
-      "@noxcturnal/noxcturnal-win32-arm64-msvc@0.1.13",
-      "@noxcturnal/noxcturnal-win32-x64-msvc@0.1.13",
+      "@expo/ui@58.0.29",
+      "@noxcturnal/noxcturnal-darwin-arm64@0.1.14",
+      "@noxcturnal/noxcturnal-darwin-x64@0.1.14",
+      "@noxcturnal/noxcturnal-linux-arm64-gnu@0.1.14",
+      "@noxcturnal/noxcturnal-linux-arm64-musl@0.1.14",
+      "@noxcturnal/noxcturnal-linux-x64-gnu@0.1.14",
+      "@noxcturnal/noxcturnal-linux-x64-musl@0.1.14",
+      "@noxcturnal/noxcturnal-win32-arm64-msvc@0.1.14",
+      "@noxcturnal/noxcturnal-win32-x64-msvc@0.1.14",
       "@react-native/asset-utils@0.88.1",
       "@react-native/babel-plugin-codegen@0.88.1",
       "@react-native/babel-preset@0.88.1",
@@ -113,7 +113,7 @@ export const GENERATED_LICENSE_INVENTORY: readonly GeneratedLicenseEntry[] = [
       "badgin@1.2.3",
       "bplist-parser@0.3.1",
       "client-only@0.0.1",
-      "expo-router@58.0.31",
+      "expo-router@58.0.32",
       "expo-structured-headers@58.0.1",
       "expo-updates@58.0.22",
       "flow-estree@0.327.0",
@@ -251,7 +251,7 @@ export const GENERATED_LICENSE_INVENTORY: readonly GeneratedLicenseEntry[] = [
   },
   {
     "packages": [
-      "@expo/cli@58.1.20",
+      "@expo/cli@58.1.21",
       "@expo/config-plugins@58.0.13",
       "@expo/config@58.0.12",
       "@expo/devtools@58.0.2",
@@ -263,15 +263,15 @@ export const GENERATED_LICENSE_INVENTORY: readonly GeneratedLicenseEntry[] = [
       "@expo/local-build-cache-provider@58.0.12",
       "@expo/log-box-utils@58.0.2",
       "@expo/log-box@58.0.15",
-      "@expo/metro-config@58.0.22",
+      "@expo/metro-config@58.0.23",
       "@expo/metro-file-map@58.0.6",
       "@expo/metro-runtime@58.0.17",
       "@expo/osascript@2.8.1",
       "@expo/package-manager@1.14.2",
       "@expo/plist@0.10.2",
       "@expo/prebuild-config@58.0.20",
-      "@expo/router-server@58.0.22",
-      "babel-preset-expo@58.0.25",
+      "@expo/router-server@58.0.23",
+      "babel-preset-expo@58.0.26",
       "expo-application@58.1.2",
       "expo-asset@58.0.21",
       "expo-audio@58.0.12",
@@ -280,14 +280,14 @@ export const GENERATED_LICENSE_INVENTORY: readonly GeneratedLicenseEntry[] = [
       "expo-clipboard@58.0.4",
       "expo-constants@58.0.16",
       "expo-crypto@58.0.8",
-      "expo-dev-client@58.0.20",
-      "expo-dev-launcher@58.0.20",
+      "expo-dev-client@58.0.21",
+      "expo-dev-launcher@58.0.21",
       "expo-dev-menu-interface@58.0.2",
       "expo-dev-menu@58.0.13",
       "expo-device@58.0.5",
       "expo-document-picker@58.0.5",
       "expo-eas-client@58.0.2",
-      "expo-file-system@58.0.13",
+      "expo-file-system@58.0.14",
       "expo-font@58.0.12",
       "expo-glass-effect@58.0.5",
       "expo-hinge@58.0.2",
@@ -315,8 +315,8 @@ export const GENERATED_LICENSE_INVENTORY: readonly GeneratedLicenseEntry[] = [
       "expo-system-ui@58.0.7",
       "expo-task-manager@58.0.14",
       "expo-updates-interface@58.0.1",
-      "expo-web-browser@58.0.8",
-      "expo@58.0.25",
+      "expo-web-browser@58.1.0",
+      "expo@58.0.26",
       "unimodules-app-loader@58.0.2"
     ],
     "license": "MIT",
@@ -1657,7 +1657,7 @@ export const GENERATED_LICENSE_INVENTORY: readonly GeneratedLicenseEntry[] = [
   },
   {
     "packages": [
-      "noxcturnal@0.1.13"
+      "noxcturnal@0.1.14"
     ],
     "license": "MIT",
     "text": "The MIT License (MIT)\n\nCopyright (c) Meta Platforms, Inc. and affiliates.\nCopyright (c) 2026-present VoidZero Inc. & Contributors\nCopyright (c) 2023 Boshen\nCopyright (c) 2015-present 650 Industries, Inc. (aka Expo)\n\nPermission is hereby granted, free of charge, to any person obtaining a copy\nof this software and associated documentation files (the \"Software\"), to deal\nin the Software without restriction, including without limitation the rights\nto use, copy, modify, merge, publish, distribute, sublicense, and/or sell\ncopies of the Software, and to permit persons to whom the Software is\nfurnished to do so, subject to the following conditions:\n\nThe above copyright notice and this permission notice shall be included in all\ncopies or substantial portions of the Software.\n\nTHE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR\nIMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,\nFITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE\nAUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER\nLIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,\nOUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE\nSOFTWARE."
@@ -1751,7 +1751,7 @@ export const GENERATED_LICENSE_INVENTORY: readonly GeneratedLicenseEntry[] = [
   },
   {
     "packages": [
-      "postcss@8.5.32"
+      "postcss@8.5.33"
     ],
     "license": "MIT",
     "text": "The MIT License (MIT)\n\nCopyright 2013 Andrey Sitnik <andrey@sitnik.es>\n\nPermission is hereby granted, free of charge, to any person obtaining a copy of\nthis software and associated documentation files (the \"Software\"), to deal in\nthe Software without restriction, including without limitation the rights to\nuse, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of\nthe Software, and to permit persons to whom the Software is furnished to do so,\nsubject to the following conditions:\n\nThe above copyright notice and this permission notice shall be included in all\ncopies or substantial portions of the Software.\n\nTHE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR\nIMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS\nFOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR\nCOPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER\nIN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN\nCONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE."
@@ -2041,7 +2041,7 @@ export const GENERATED_LICENSE_INVENTORY: readonly GeneratedLicenseEntry[] = [
   },
   {
     "packages": [
-      "source-map-js@1.2.2",
+      "source-map-js@1.2.4",
       "source-map@0.5.7",
       "source-map@0.6.1"
     ],
