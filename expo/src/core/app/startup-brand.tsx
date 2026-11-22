@@ -188,14 +188,27 @@ export function StartupBrand({
           ],
         }}
       >
-        <Svg width="100%" height="100%" viewBox="58 22 163 23" fillRule="evenodd">
-          <Path d={art.word[0]} fill={artwork?.accent ?? '#D90709'} />
-          <Path d={art.word[1]} fill={foreground} />
-        </Svg>
+        <StartupWordmark foreground={foreground} accent={artwork?.accent} />
       </Animated.View>
     </View>
   );
 }
+
+export function StartupWordmark({
+  foreground,
+  accent = '#D90709',
+}: {
+  foreground: string;
+  accent?: string;
+}) {
+  return (
+    <Svg width="100%" height="100%" viewBox="58 22 163 23" fillRule="evenodd">
+      <Path d={art.word[0]} fill={accent} />
+      <Path d={art.word[1]} fill={foreground} />
+    </Svg>
+  );
+}
+
 const styles = StyleSheet.create({
   brand: { alignItems: 'center' },
   mark: { width: 112, height: 134 },
