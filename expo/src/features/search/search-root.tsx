@@ -4,6 +4,7 @@ import { useLinkParameters, linkChoice } from '../../core/deep-links/link-parame
 import { Keyboard, KeyboardAvoidingView, Platform } from 'react-native';
 
 import { useAppRuntime } from '../../core/app/runtime-context';
+import { getMaxTownHallLevel } from '../../core/game-data/game-data-service';
 import { useI18n } from '../../i18n';
 import { PageLoading, Snackbar } from '../../ui';
 import { Clan } from '../clan/models';
@@ -171,7 +172,7 @@ export function SearchRoot({
           mode === 'players'
             ? await runtime.players.searchPlayers(search.value, {
                 leagueIds: playerFilters.leagueIds,
-                townHallLevels: playerTownHallLevels(playerFilters),
+                townHallLevels: playerTownHallLevels(playerFilters, getMaxTownHallLevel()),
                 extraHeaders: trackingHeaders,
               })
             : await service.searchClans(search.value, clanFilters);

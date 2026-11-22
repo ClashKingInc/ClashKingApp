@@ -1,4 +1,3 @@
-import { getMaxTownHallLevel } from '../../core/game-data/game-data-service';
 import { ImageAssets } from '../../core/assets/image-assets';
 
 export type SearchMode = 'players' | 'clans';
@@ -58,10 +57,13 @@ export function clanSearchQuerySuffix(value: ClanSearchFilters): string {
     .join('');
 }
 
-export function playerTownHallLevels(value: PlayerSearchFilters): readonly number[] {
+export function playerTownHallLevels(
+  value: PlayerSearchFilters,
+  maxSupportedTownHall: number,
+): readonly number[] {
   if (value.minTownHallLevel === null && value.maxTownHallLevel === null) return [];
   const minimum = value.minTownHallLevel ?? 1;
-  const maximum = value.maxTownHallLevel ?? Math.max(minimum, getMaxTownHallLevel());
+  const maximum = value.maxTownHallLevel ?? Math.max(minimum, maxSupportedTownHall);
   if (minimum > maximum) return [];
   return Array.from({ length: maximum - minimum + 1 }, (_, index) => minimum + index);
 }

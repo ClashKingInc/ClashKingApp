@@ -64,15 +64,18 @@ export class SearchService {
     tag: string,
     extraHeaders?: Readonly<Record<string, string>>,
   ): Promise<JsonRecord> {
-    const decoded: unknown = await Effect.runPromise(
-      this.api.execute(
-        ProxyClanEndpoint,
-        { path: { clanTag: tag }, query: {}, body: {} },
-        { headers: extraHeaders, timeoutMs: 10_000 },
+    const result = await Effect.runPromise(
+      Effect.result(
+        this.api.execute(
+          ProxyClanEndpoint,
+          { path: { clanTag: tag }, query: {}, body: {} },
+          { headers: extraHeaders, timeoutMs: 10_000, expectedStatuses: [404] },
+        ),
       ),
     );
-    if (!isRecord(decoded)) throw new TypeError('Invalid clan response');
-    return decoded;
+    if (result._tag === 'Failure') throw result.failure;
+    if (!isRecord(result.success)) throw new TypeError('Invalid clan response');
+    return result.success;
   }
 
   async loadLocations(): Promise<readonly SearchLocation[]> {
