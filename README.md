@@ -2,6 +2,11 @@
 
 ClashKing is a Clash of Clans companion app for iOS and Android, built with Expo, React Native, and TypeScript.
 
+## Download
+
+- **iOS:** [App Store](https://apps.apple.com/us/app/clashking/id6502886269)
+- **Android:** [Google Play](https://play.google.com/store/apps/details?id=com.clashking.clashkingapp)
+
 ## Features
 
 - Player and clan profiles
