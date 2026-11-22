@@ -13,9 +13,13 @@ import { CKText, useCKAccessibility, useCKTheme } from '../../ui';
 import { isResumingStartupUpdate, registerStartupCover } from './startup-update-handoff';
 import { useStartupUpdate } from './startup-update-gate';
 import { StartupBrand } from './startup-brand';
+import { StartupChristmasBrand } from './startup-christmas-brand';
 import { StartupHalloweenBrand } from './startup-halloween-brand';
 import { useAppRuntime } from './runtime-context';
-import { HALLOWEEN_ICON_NAME } from '../../features/settings/app-icons/app-icon-service';
+import {
+  CHRISTMAS_ICON_NAME,
+  HALLOWEEN_ICON_NAME,
+} from '../../features/settings/app-icons/app-icon-service';
 
 const StartupCoveredContext = createContext(true);
 export const useStartupCovered = () => useContext(StartupCoveredContext);
@@ -100,13 +104,14 @@ export function StartupLoadingScreen({
   ] as const;
   const progress =
     update && Number.isFinite(update.progress) ? Math.max(0, Math.min(1, update.progress)) : 0;
+  const brandWidth = Math.min(width * 0.78, 330);
   return (
     <View style={[styles.screen, { backgroundColor: theme.surface }]} testID="startup-loading">
       {selectedIcon === undefined && !selectionUnavailable ? (
         <View
           style={{
-            width: Math.min(width * 0.78, 330),
-            height: 134 + 24 + (Math.min(width * 0.78, 330) * 23) / 163,
+            width: brandWidth,
+            height: 134 + 24 + (brandWidth * 23) / 163,
           }}
         />
       ) : selectedIcon === HALLOWEEN_ICON_NAME ? (
@@ -115,7 +120,15 @@ export function StartupLoadingScreen({
           foreground={theme.onSurface}
           background={theme.surface}
           label={t('appTitle')}
-          width={Math.min(width * 0.78, 330)}
+          width={brandWidth}
+        />
+      ) : selectedIcon === CHRISTMAS_ICON_NAME ? (
+        <StartupChristmasBrand
+          staticOnly={resumeUpdate}
+          foreground={theme.onSurface}
+          snowColor={theme.onSurfaceVariant}
+          label={t('appTitle')}
+          width={brandWidth}
         />
       ) : (
         <StartupBrand
@@ -123,7 +136,7 @@ export function StartupLoadingScreen({
           foreground={theme.onSurface}
           background={theme.surface}
           label={t('appTitle')}
-          width={Math.min(width * 0.78, 330)}
+          width={brandWidth}
         />
       )}
       {!update?.downloading && statusIndex >= 0 ? (
