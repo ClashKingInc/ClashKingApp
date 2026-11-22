@@ -617,9 +617,10 @@ function HomeEventBannerContent({
         }}
         onMomentumScrollBegin={() => setInteracting(true)}
         horizontal
+        // Full-width cards use native viewport paging. A separate snap interval
+        // is truncated to physical pixels on Android and can drift from the
+        // card width, causing settle() to visibly correct the position afterward.
         pagingEnabled
-        snapToInterval={availableWidth}
-        disableIntervalMomentum
         decelerationRate="fast"
         showsHorizontalScrollIndicator={false}
         scrollEventThrottle={16}
