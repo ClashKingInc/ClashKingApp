@@ -1,14 +1,19 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useContext, useEffect, useMemo, useState } from 'react';
 
 import { useAppRuntime } from '../../core/app/runtime-context';
 import { PlatformGameAssetActions, type GameAssetActions } from './actions';
-import { GameAssetsScreen } from './game-assets-screen';
+import { WikiScreen } from './wiki-screen';
+import { WikiCatalogueContext, wikiCatalogue, type WikiEntry } from './wiki-catalogue';
 import type { GameAssetManifest } from './models';
 import {
   GameAssetManifestService,
   PreferenceGameAssetManifestCache,
   type GameAssetManifestRepository,
 } from './repository';
+
+// Reuse the parsed manifest across category pushes. Re-reading and decoding the
+// full asset catalogue on every route stalls navigation before it can animate.
+const repositories = new WeakMap<object, GameAssetManifestService>();
 
 /** Live replacement for Flutter's GameAssetsPage, including its embedded category subpage. */
 export function GameAssetsRoot({
@@ -21,65 +26,93 @@ export function GameAssetsRoot({
   readonly actions?: GameAssetActions;
 }) {
   const runtime = useAppRuntime();
-  const defaultRepository = useMemo(
-    () =>
-      new GameAssetManifestService({
+  const inheritedCatalogue = useContext(WikiCatalogueContext);
+  const [refreshRevision, setRefreshRevision] = useState(0);
+  const defaultRepository = useMemo(() => {
+    let existing = repositories.get(runtime.preferences);
+    if (!existing) {
+      existing = new GameAssetManifestService({
         cache: new PreferenceGameAssetManifestCache(runtime.preferences),
-      }),
-    [runtime.preferences],
-  );
+      });
+      repositories.set(runtime.preferences, existing);
+    }
+    return existing;
+  }, [runtime.preferences]);
   const activeRepository = repository ?? defaultRepository;
   const activeActions = useMemo(() => actions ?? new PlatformGameAssetActions(), [actions]);
   const [loadState, setLoadState] = useState<{
     readonly repository: GameAssetManifestRepository;
     readonly manifest: GameAssetManifest | null;
+    readonly catalogue: readonly WikiEntry[];
     readonly loading: boolean;
     readonly error: unknown;
-  }>(() => ({ repository: activeRepository, manifest: null, loading: true, error: null }));
-  const previousRepository = useRef(activeRepository);
+  }>(() => {
+    const manifest =
+      activeRepository instanceof GameAssetManifestService ? activeRepository.peek() : null;
+    return {
+      repository: activeRepository,
+      manifest,
+      catalogue: inheritedCatalogue ?? (manifest ? wikiCatalogue(manifest) : []),
+      loading: !inheritedCatalogue && !manifest,
+      error: null,
+    };
+  });
   const currentState =
     loadState.repository === activeRepository
       ? loadState
-      : { repository: activeRepository, manifest: null, loading: true, error: null };
+      : { repository: activeRepository, manifest: null, catalogue: [], loading: true, error: null };
 
   const load = useCallback(
     async (forceRefresh = false) => {
       setLoadState((current) => ({
         repository: activeRepository,
         manifest: current.repository === activeRepository ? current.manifest : null,
+        catalogue: current.repository === activeRepository ? current.catalogue : [],
         loading: true,
         error: null,
       }));
       try {
+        // Refresh metadata and artwork together before replacing a visible grid.
+        if (forceRefresh) await runtime.gameData.refreshStaticDataIfChanged();
+        const manifest = await activeRepository.load({ forceRefresh });
         setLoadState({
           repository: activeRepository,
-          manifest: await activeRepository.load({ forceRefresh }),
+          manifest,
+          catalogue: wikiCatalogue(manifest),
           loading: false,
           error: null,
         });
+        setRefreshRevision((revision) => revision + 1);
       } catch (nextError) {
         setLoadState((current) => ({
           repository: activeRepository,
           manifest: current.repository === activeRepository ? current.manifest : null,
+          catalogue: current.repository === activeRepository ? current.catalogue : [],
           loading: false,
           error: nextError,
         }));
       }
     },
-    [activeRepository],
+    [activeRepository, runtime.gameData],
   );
 
   useEffect(() => {
     let active = true;
-    const repositoryChanged = previousRepository.current !== activeRepository;
-    previousRepository.current = activeRepository;
+    // Child routes inherit the source visit. Background manifest/data refreshes
+    // must not replace portraits, insert cards or rebuild a retained grid.
+    if (
+      inheritedCatalogue ||
+      (activeRepository instanceof GameAssetManifestService && activeRepository.peek())
+    )
+      return;
     void activeRepository
-      .load({ forceRefresh: repositoryChanged })
+      .load()
       .then((nextManifest) => {
         if (active) {
           setLoadState({
             repository: activeRepository,
             manifest: nextManifest,
+            catalogue: wikiCatalogue(nextManifest),
             loading: false,
             error: null,
           });
@@ -90,6 +123,7 @@ export function GameAssetsRoot({
           setLoadState({
             repository: activeRepository,
             manifest: null,
+            catalogue: [],
             loading: false,
             error: nextError,
           });
@@ -98,16 +132,21 @@ export function GameAssetsRoot({
     return () => {
       active = false;
     };
-  }, [activeRepository]);
+  }, [activeRepository, inheritedCatalogue]);
 
   return (
-    <GameAssetsScreen
+    <WikiScreen
       manifest={currentState.manifest}
+      catalogue={
+        refreshRevision ? currentState.catalogue : (inheritedCatalogue ?? currentState.catalogue)
+      }
       loading={currentState.loading}
       error={currentState.error}
       actions={activeActions}
       onBack={onBack}
-      onRefresh={() => void load(true)}
+      onRefresh={() => {
+        void load(true);
+      }}
     />
   );
 }

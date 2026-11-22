@@ -60,7 +60,7 @@ export const ckThemeColors = {
 } as const;
 
 export type CKThemeMode = keyof typeof ckThemeColors;
-export type CKThemeColors = (typeof ckThemeColors)[CKThemeMode];
+export type CKThemeColors = { readonly [K in keyof typeof ckThemeColors.dark]: string };
 
 export const ckRadius = {
   control: 12,

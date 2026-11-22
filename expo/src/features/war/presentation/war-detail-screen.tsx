@@ -1,6 +1,5 @@
 import { useAdaptiveLayout } from '../../../ui/adaptive-layout';
 import { WarPanelGrid } from './war-panel-grid';
-import type { ScrollViewInstance } from 'react-native';
 import { memo, useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 import { Animated, Linking, Platform, Pressable, ScrollView, StyleSheet, View } from 'react-native';
 import { ChevronDown, ChevronUp, Clock3, ListFilter } from 'lucide-react-native';
@@ -22,6 +21,7 @@ import {
 import { useCKAccessibility } from '../../../ui/accessibility';
 import { PagerView, type PagerViewHandle } from '../../../ui/pager';
 import { usePrimarySwipeGuard } from '../../../ui/primary-swipe-guard';
+import { useSectionScroll } from '../../../ui/use-section-selection';
 import { ckColors } from '../../../ui/tokens';
 import { clanGameUrl } from '../../clan/presentation/clan-root-state';
 import type { WarAttack, WarInfo, WarMember } from '../models';
@@ -95,22 +95,21 @@ function WarDetailContent({
   );
   const { reduceMotion } = useCKAccessibility();
   const pager = useRef<PagerViewHandle>(null);
-  const scroll = useRef<ScrollViewInstance>(null);
-  const scrollY = useRef(0),
-    headerHeight = useRef(0),
-    tabStart = useRef(0);
-  const [tabPosition] = useState(() => new Animated.Value(0));
+  const {
+    attachScroll,
+    onViewportLayout,
+    onHeaderLayout,
+    onTabsLayout,
+    recordScroll,
+    prepareSwitch,
+    minimumContentHeight,
+  } = useSectionScroll(mode);
   const [pageHeights, setPageHeights] = useState<Partial<Record<WarPage, number>>>({});
   const blockPrimarySwipe = usePrimarySwipeGuard();
   useEffect(() => () => blockPrimarySwipe(false), [blockPrimarySwipe]);
-  useEffect(() => {
-    const frame = requestAnimationFrame(() =>
-      scroll.current?.scrollTo({ y: tabStart.current, animated: false }),
-    );
-    return () => cancelAnimationFrame(frame);
-  }, [mode]);
   const selectPage = (page: WarPage) => {
-    tabStart.current = Math.max(0, Math.min(scrollY.current, headerHeight.current));
+    if (page === mode) return;
+    prepareSwitch();
     setMode(page);
   };
   const [side, setSide] = useState<'clan' | 'opponent'>('clan');
@@ -300,21 +299,18 @@ function WarDetailContent({
       style={{ flex: 1, backgroundColor: theme.background }}
     >
       <ScrollView
-        ref={scroll}
+        ref={attachScroll}
+        onLayout={onViewportLayout}
         onScroll={(event) => {
-          scrollY.current = event.nativeEvent.contentOffset.y;
+          recordScroll(event.nativeEvent.contentOffset.y);
         }}
-        scrollEventThrottle={100}
+        scrollEventThrottle={16}
         stickyHeaderIndices={[1]}
         contentInsetAdjustmentBehavior="never"
         automaticallyAdjustContentInsets={false}
         contentContainerStyle={{ paddingBottom: insets.bottom + 24 }}
       >
-        <View
-          onLayout={(event) => {
-            headerHeight.current = event.nativeEvent.layout.height;
-          }}
-        >
+        <View onLayout={onHeaderLayout}>
           <WarBattleHeader
             loading={loading}
             war={actualWar}
@@ -324,19 +320,16 @@ function WarDetailContent({
             onOpenCwl={onOpenCwl}
           />
         </View>
-        <View style={{ backgroundColor: theme.background }}>
+        <View onLayout={onTabsLayout} style={{ backgroundColor: theme.background }}>
           <ProfileTabs
             variant="underline"
             selectedKey={mode}
-            animatedPosition={tabPosition}
-            indicatorRtl={isRtl}
             onSelect={(value) => {
               selectPage(value as WarPage);
               const index = WAR_PAGES.indexOf(value as WarPage);
               if (reduceMotion) {
                 setSettledPage(value as WarPage);
                 pager.current?.setPageWithoutAnimation(index);
-                tabPosition.setValue(index);
               } else pager.current?.setPage(index);
             }}
             tabs={[
@@ -365,17 +358,25 @@ function WarDetailContent({
         >
           <PagerView
             ref={pager}
+            // Content gestures never change sections; the tab row owns selection.
+            scrollEnabled={false}
+            overdrag={false}
+            overScrollMode="never"
             initialPage={0}
             layoutDirection={isRtl ? 'rtl' : 'ltr'}
             testID="war-detail-pager"
-            style={{ height: Math.max(pageHeights[mode] ?? 600, pageHeights[settledPage] ?? 600) }}
-            onPageScroll={(event) =>
-              tabPosition.setValue(event.nativeEvent.position + event.nativeEvent.offset)
-            }
+            style={{
+              height: Math.max(
+                minimumContentHeight,
+                pageHeights[mode] ?? 600,
+                pageHeights[settledPage] ?? 600,
+              ),
+            }}
             onPageSelected={(event) => {
               const page = WAR_PAGES[event.nativeEvent.position]!;
-              selectPage(page);
-              setSettledPage(page);
+              // Programmatic pager callbacks can arrive after a newer tap.
+              // Only the tab control changes the selected section.
+              if (page === mode) setSettledPage(page);
             }}
           >
             {WAR_PAGES.map((page) => (

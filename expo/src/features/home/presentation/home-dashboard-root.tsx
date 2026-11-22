@@ -147,8 +147,9 @@ export function HomeDashboardRoot(props: HomeDashboardRootProps) {
   const upgradeLoading =
     upgradePlayers.length > 0 && upgradeState.signature !== upgradeLoadSignature;
   useEffect(() => {
-    if (!runtime.players.isLoading && !rankedLoading && !upgradeLoading) onReady?.();
-  }, [runtime, serviceRevision, rankedLoading, upgradeLoading, onReady]);
+    if (layout.ready && !runtime.players.isLoading && !rankedLoading && !upgradeLoading)
+      onReady?.();
+  }, [runtime, serviceRevision, rankedLoading, upgradeLoading, layout.ready, onReady]);
 
   useEffect(() => {
     let current = true;
@@ -234,6 +235,7 @@ export function HomeDashboardRoot(props: HomeDashboardRootProps) {
   const model = useMemo<HomeDashboardModel>(
     () => ({
       loading: runtime.players.isLoading,
+      layoutReady: layout.ready,
       selectedAccountTag: runtime.accounts.selectedTag,
       linkedAccountCount: runtime.accounts.verifiedAccounts.length,
       ...(runtime.accounts.lastRefresh ? { lastRefresh: runtime.accounts.lastRefresh } : {}),
@@ -277,6 +279,7 @@ export function HomeDashboardRoot(props: HomeDashboardRootProps) {
     [
       announcements,
       cardOrder,
+      layout.ready,
       homeIncludedTags,
       locale,
       rankedLoading,

@@ -5,7 +5,8 @@ import {
   UpgradesPutEndpoint,
 } from '@clashking/api-contracts/expo';
 import { ApiResponseError } from '@clashking/api-client';
-import { Effect } from 'effect';
+import { Effect, Schema } from 'effect';
+import { AccountExport } from '@clashking/clash-contract/assets';
 
 import type { ContractApiService } from '../../../core/api/contract-api';
 import { gameDataState } from '../../../core/game-data/game-data-state';
@@ -227,6 +228,11 @@ export class UpgradeTrackerRepository {
     if (!isRecord(decoded))
       throw new UpgradeTrackerFormatError('Account JSON must be one JSON object');
     const raw = unwrapSnapshot(decoded);
+    try {
+      Schema.decodeUnknownSync(AccountExport)(raw);
+    } catch (error) {
+      throw new UpgradeTrackerFormatError(`Invalid account export: ${String(error)}`);
+    }
     const tag = UpgradeTrackerRepository.normalizeTag(String(raw.tag ?? ''));
     if (!tag) throw new UpgradeTrackerFormatError('Account JSON is missing its player tag');
     const allowed = new Set(

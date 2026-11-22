@@ -190,7 +190,8 @@ export function DashboardScreen({
     </>
   );
   let emptyBody;
-  if (model.loading && model.linkedAccountCount === 0)
+  if (model.layoutReady === false) emptyBody = undefined;
+  else if (model.loading && model.linkedAccountCount === 0)
     emptyBody = (
       <>
         <HomePendingCard kind="todo" actions={actions} />

@@ -27,21 +27,28 @@ export function useDiscordServers(user: AuthUser | null | undefined) {
   useEffect(() => {
     if (!enabled) return;
     let active = true;
-    const controller=new AbortController();
+    const controller = new AbortController();
     let retry: ReturnType<typeof setTimeout> | undefined;
     const load = (attempt = 0) =>
       void Effect.runPromise(
-        Effect.result(runtime.contractApi.execute(GuildsEndpoint, { path: {}, query: {}, body: {} }, {signal:controller.signal,expectedStatuses:[401,403],retryTransientRead:false})),
+        Effect.result(
+          runtime.contractApi.execute(
+            GuildsEndpoint,
+            { path: {}, query: {}, body: {} },
+            { signal: controller.signal, expectedStatuses: [401, 403], retryTransientRead: false },
+          ),
+        ),
       )
         .then((result) => {
-          if(result._tag==='Failure')throw result.failure;
-          if (active) setResult({ userId, servers:result.success, generation, error: false });
+          if (result._tag === 'Failure') throw result.failure;
+          if (active) setResult({ userId, servers: result.success, generation, error: false });
         })
-        .catch((failure:unknown) => {
-          if(controller.signal.aborted)return;
+        .catch((failure: unknown) => {
+          if (controller.signal.aborted) return;
           // Missing guilds scope cannot be repaired by repeated GETs or token refresh.
-          if(failure instanceof ApiResponseError && [401,403].includes(failure.status)){
-            if(active)setResult({userId,servers:[],generation,error:true,reconnect:true});
+          if (failure instanceof ApiResponseError && [401, 403].includes(failure.status)) {
+            if (active)
+              setResult({ userId, servers: [], generation, error: true, reconnect: true });
             return;
           }
           // A brief tunnel/Discord outage must not strand a fresh sign-in on an
@@ -84,8 +91,17 @@ export function useDiscordServers(user: AuthUser | null | undefined) {
         loading,
         error: !loading && result.error,
       };
-  const reconnect=useCallback(async()=>{await runtime.auth.signInWithDiscord();refresh();},[runtime,refresh]);
-  return { ...current, hasDiscordIdentity, refresh, requiresReconnect:enabled && result.userId===userId && result.reconnect===true, reconnect };
+  const reconnect = useCallback(async () => {
+    await runtime.auth.signInWithDiscord();
+    refresh();
+  }, [runtime, refresh]);
+  return {
+    ...current,
+    hasDiscordIdentity,
+    refresh,
+    requiresReconnect: enabled && result.userId === userId && result.reconnect === true,
+    reconnect,
+  };
 }
 
 export type DiscordServersState = ReturnType<typeof useDiscordServers>;
