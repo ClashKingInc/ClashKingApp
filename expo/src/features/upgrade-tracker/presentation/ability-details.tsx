@@ -99,7 +99,7 @@ export function formatAbilityValue(key: string, value: unknown, number: Intl.Num
   }
   if (isRecord(value)) {
     if (value.name)
-      return `${localizedNameForItem(value) || String(value.name)}${value.level != null ? ` · Level ${number.format(Number(value.level))}` : value.level_from ? ` · ${String(value.level_from)} level` : ''}`;
+      return `${localizedNameForItem(value) || String(value.name)}${value.level != null ? ` · Level ${number.format(Number(value.level))}` : ''}`;
     return Object.entries(value)
       .filter(([field]) => field !== '_id')
       .map(
@@ -123,6 +123,9 @@ export function abilityFieldLabel(key: string): string {
     damage_loss_per_chain_percent: 'Damage lost per chain',
     spawned_unit: 'Summoned unit',
     units_spawned: 'Units summoned',
+    spawned_unit_damage_increase_percent: 'Summoned unit damage increase',
+    spawned_unit_movement_speed_increase: 'Summoned unit speed increase',
+    spawned_unit_duration: 'Summoned unit duration',
   };
   if (labels[key]) return labels[key];
   const label = key

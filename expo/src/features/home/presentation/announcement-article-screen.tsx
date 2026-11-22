@@ -1,6 +1,7 @@
 import { useAdaptiveLayout } from '../../../ui/adaptive-layout';
 import { InlineBackControl } from '../../../ui/native-back-context';
 import { ArrowLeft, ArrowRight, CalendarDays } from 'lucide-react-native';
+import { useMemo } from 'react';
 import { Pressable, StyleSheet, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
@@ -17,9 +18,13 @@ export function PostArticleScreen({ post, onBack }: { post: AppAnnouncement; onB
   const dateLabel = post.publishedAt
     ? new Intl.DateTimeFormat(toIntlLocale(locale), { dateStyle: 'full' }).format(post.publishedAt)
     : null;
-  const articleHtml = post.body?.trim()
-    ? buildPostArticleHtml(post, dateLabel, theme, isRtl, layout.isExpanded)
-    : null;
+  const articleHtml = useMemo(
+    () =>
+      post.body?.trim()
+        ? buildPostArticleHtml(post, dateLabel, theme, isRtl, layout.isExpanded)
+        : null,
+    [post, dateLabel, theme, isRtl, layout.isExpanded],
+  );
 
   return (
     <SafeAreaView
@@ -65,7 +70,7 @@ export function buildPostArticleHtml(
 ): string {
   const hero =
     post.bannerImageUrl && isHttpsUrl(post.bannerImageUrl)
-      ? `<figure class="hero"><img src="${escapeHtml(post.bannerImageUrl)}" alt=""></figure>`
+      ? `<figure class="hero"><img src="${escapeHtml(articleHeroUrl(post))}" alt=""></figure>`
       : '';
   const metadata = dateLabel ? `<time>${escapeHtml(dateLabel)}</time>` : '';
   const subtitle = post.subtitle ? `<p class="subtitle">${escapeHtml(post.subtitle)}</p>` : '';
@@ -92,6 +97,7 @@ export function buildPostArticleHtml(
     .article-content ul,.article-content ol{padding-inline-start:24px;margin:0 0 22px}.article-content li{margin:7px 0}
     .article-content img{display:block;max-width:100%;height:auto;border-radius:16px}
     .article-content figure{margin:26px 0}.article-content figcaption{font-size:13px;color:${theme.onSurfaceVariant};margin-top:8px}
+    .table-scroll{overflow-x:auto;margin:24px 0}table{border-collapse:collapse;width:100%;font-size:14px}td,th{border:1px solid ${theme.surfaceContainerHighest};padding:10px;min-width:90px;text-align:start}td p,th p{margin:0!important}th{font-weight:700}hr{border:0;border-top:1px solid ${theme.surfaceContainerHighest};margin:28px 0}
     a{color:${theme.secondary};text-decoration:underline}blockquote{margin:24px 0;padding:4px 0 4px 18px;border-inline-start:3px solid ${theme.primary};color:${theme.onSurfaceVariant}}
     code,pre{font-family:ui-monospace,SFMono-Regular,monospace;background:${theme.surfaceContainerHighest};border-radius:6px}
     code{padding:2px 5px}pre{overflow:auto;padding:16px;margin:20px 0}pre code{padding:0}
@@ -100,6 +106,16 @@ export function buildPostArticleHtml(
   return /<\/head>/i.test(content)
     ? content.replace(/<\/head>/i, `${css}</head>`)
     : content.replace(/<body[^>]*>/i, (match) => `${css}${match}`);
+}
+
+function articleHeroUrl(post: AppAnnouncement): string {
+  const url = new URL(post.bannerImageUrl!);
+  if (post.id.startsWith('supercell:') && url.hostname === 'clashofclans.inbox.supercell.com') {
+    url.searchParams.set('w', '1440');
+    url.searchParams.set('fm', 'webp');
+    url.searchParams.set('q', '85');
+  }
+  return url.href;
 }
 
 function isHttpsUrl(value: string): boolean {

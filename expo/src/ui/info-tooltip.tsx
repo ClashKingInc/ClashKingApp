@@ -1,6 +1,14 @@
-import { modalOrientations } from "./modal-orientations";
+import { modalOrientations } from './modal-orientations';
 import { useRef, useState, type ReactNode } from 'react';
-import { Modal, Pressable, View, useWindowDimensions, type ViewInstance, type StyleProp, type ViewStyle } from 'react-native';
+import {
+  Modal,
+  Pressable,
+  View,
+  useWindowDimensions,
+  type ViewInstance,
+  type StyleProp,
+  type ViewStyle,
+} from 'react-native';
 import { Info } from 'lucide-react-native';
 import { CKText } from './text';
 import { Surface } from './surfaces';
@@ -21,7 +29,10 @@ export function InfoTooltip({
 }) {
   const theme = useCKTheme();
   const trigger = useRef<ViewInstance>(null);
+  // Keep the last geometry through the native modal fade-out. Clearing it on
+  // close makes the still-visible tooltip jump to the default top coordinate.
   const [anchor, setAnchor] = useState<{ x: number; y: number; width: number; height: number }>();
+  const [visible, setVisible] = useState(false);
   const window = useWindowDimensions();
   const width = Math.min(200, window.width - 24);
   return (
@@ -30,22 +41,29 @@ export function InfoTooltip({
         ref={trigger}
         accessibilityRole="button"
         accessibilityLabel={label}
-        accessibilityState={{ expanded: !!anchor }}
+        accessibilityState={{ expanded: visible }}
         hitSlop={8}
         onPress={() =>
-          trigger.current?.measureInWindow((x, y, w, h) => setAnchor({ x, y, width: w, height: h }))
+          trigger.current?.measureInWindow((x, y, w, h) => {
+            setAnchor({ x, y, width: w, height: h });
+            setVisible(true);
+          })
         }
-        style={[{ width: 32, height: 32, alignItems: 'center', justifyContent: 'center' }, triggerStyle]}
+        style={[
+          { width: 32, height: 32, alignItems: 'center', justifyContent: 'center' },
+          triggerStyle,
+        ]}
       >
         {triggerContent ?? <Info size={17} color={theme.onSurfaceVariant} />}
       </Pressable>
-      <Modal supportedOrientations={modalOrientations}
-        visible={!!anchor}
+      <Modal
+        supportedOrientations={modalOrientations}
+        visible={visible}
         transparent
         animationType="fade"
-        onRequestClose={() => setAnchor(undefined)}
+        onRequestClose={() => setVisible(false)}
       >
-        <Pressable accessible={false} onPress={() => setAnchor(undefined)} style={{ flex: 1 }}>
+        <Pressable accessible={false} onPress={() => setVisible(false)} style={{ flex: 1 }}>
           <Surface
             accessibilityViewIsModal
             style={{

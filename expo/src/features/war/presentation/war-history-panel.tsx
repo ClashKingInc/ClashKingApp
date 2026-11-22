@@ -1,6 +1,6 @@
 import { View } from 'react-native';
 import Svg, { Line, Polyline, Text as SvgText } from 'react-native-svg';
-import { CKText, Surface, useCKTheme } from '../../../ui';
+import { CKText, Skeleton, Surface, useCKTheme, useSkeletonContent } from '../../../ui';
 import { ckColors } from '../../../ui/tokens';
 import { useI18n } from '../../../i18n';
 import type { buildWarReplay } from '../models/war-replay';
@@ -15,6 +15,7 @@ export function WarHistoryPanel({
 }) {
   const { t } = useI18n();
   const theme = useCKTheme();
+  const loading = useSkeletonContent();
   const total = history.events.length;
   const y = (stars: number) => 136 - (stars / Math.max(3, teamSize * 3)) * 120;
   const toLine = (side: 'clanStars' | 'opponentStars') =>
@@ -35,45 +36,63 @@ export function WarHistoryPanel({
             accessible
             accessibilityLabel={`${t('warReplayTitle')}: ${history.clanName} ${history.points.at(-1)?.clanStars}, ${history.opponentName} ${history.points.at(-1)?.opponentStars}`}
           >
-            <Svg width="100%" height={174} viewBox="0 0 320 174">
-              {[0, teamSize * 1.5, teamSize * 3].map((value) => (
-                <Line
-                  key={value}
-                  x1={32}
-                  x2={308}
-                  y1={y(value)}
-                  y2={y(value)}
-                  stroke={theme.outlineVariant}
-                  strokeOpacity={0.3}
+            {/* SVG text does not consume the native text skeleton context. Keep
+                the plot geometry, but never paint placeholder axis values. */}
+            {loading ? (
+              <Skeleton height={174} />
+            ) : (
+              <Svg width="100%" height={174} viewBox="0 0 320 174">
+                {[0, teamSize * 1.5, teamSize * 3].map((value) => (
+                  <Line
+                    key={value}
+                    x1={32}
+                    x2={308}
+                    y1={y(value)}
+                    y2={y(value)}
+                    stroke={theme.outlineVariant}
+                    strokeOpacity={0.3}
+                  />
+                ))}
+                <SvgText x={25} y={20} fill={theme.onSurfaceVariant} fontSize={11} textAnchor="end">
+                  {teamSize * 3}
+                </SvgText>
+                <SvgText
+                  x={25}
+                  y={140}
+                  fill={theme.onSurfaceVariant}
+                  fontSize={11}
+                  textAnchor="end"
+                >
+                  0
+                </SvgText>
+                <SvgText x={32} y={159} fill={theme.onSurfaceVariant} fontSize={11}>
+                  0
+                </SvgText>
+                <SvgText
+                  x={308}
+                  y={159}
+                  fill={theme.onSurfaceVariant}
+                  fontSize={11}
+                  textAnchor="end"
+                >
+                  {total}
+                </SvgText>
+                <Polyline
+                  points={toLine('clanStars')}
+                  fill="none"
+                  stroke={ckColors.donationGreen}
+                  strokeWidth={3}
+                  strokeLinejoin="round"
                 />
-              ))}
-              <SvgText x={25} y={20} fill={theme.onSurfaceVariant} fontSize={11} textAnchor="end">
-                {teamSize * 3}
-              </SvgText>
-              <SvgText x={25} y={140} fill={theme.onSurfaceVariant} fontSize={11} textAnchor="end">
-                0
-              </SvgText>
-              <SvgText x={32} y={159} fill={theme.onSurfaceVariant} fontSize={11}>
-                0
-              </SvgText>
-              <SvgText x={308} y={159} fill={theme.onSurfaceVariant} fontSize={11} textAnchor="end">
-                {total}
-              </SvgText>
-              <Polyline
-                points={toLine('clanStars')}
-                fill="none"
-            stroke={ckColors.donationGreen}
-                strokeWidth={3}
-                strokeLinejoin="round"
-              />
-              <Polyline
-                points={toLine('opponentStars')}
-                fill="none"
-            stroke={ckColors.primaryRed}
-                strokeWidth={3}
-                strokeLinejoin="round"
-              />
-            </Svg>
+                <Polyline
+                  points={toLine('opponentStars')}
+                  fill="none"
+                  stroke={ckColors.primaryRed}
+                  strokeWidth={3}
+                  strokeLinejoin="round"
+                />
+              </Svg>
+            )}
           </View>
           <CKText role="metadata" muted style={{ textAlign: 'center' }}>
             {t('warAttacksDetailsAttackOrder')}
@@ -81,10 +100,10 @@ export function WarHistoryPanel({
           <View
             style={{ flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'center', gap: 14 }}
           >
-          <CKText role="metadata" style={{ color: ckColors.donationGreen }}>
+            <CKText role="metadata" style={{ color: ckColors.donationGreen }}>
               {history.clanName}
             </CKText>
-          <CKText role="metadata" style={{ color: ckColors.primaryRed }}>
+            <CKText role="metadata" style={{ color: ckColors.primaryRed }}>
               {history.opponentName}
             </CKText>
           </View>

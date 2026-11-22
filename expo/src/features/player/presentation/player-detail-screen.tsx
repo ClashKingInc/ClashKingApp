@@ -1,6 +1,5 @@
 import { useAdaptiveLayout } from '../../../ui/adaptive-layout';
-import type { ScrollViewInstance } from 'react-native';
-import { useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 import { RefreshControl, ScrollView, StyleSheet, View } from 'react-native';
 import { History, Repeat2 } from 'lucide-react-native';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -8,7 +7,8 @@ import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context'
 import { useI18n } from '../../../i18n';
 import { ImageAssets } from '../../../core/assets/image-assets';
 import { MobileWebImage, ProfileTabs, SkeletonContent, useCKTheme } from '../../../ui';
-import { retainRecentSections } from '../../../ui/retained-sections';
+import { useSectionScroll, useSectionSelection } from '../../../ui/use-section-selection';
+import { RetainedSection } from '../../../ui/retained-section';
 import type {
   PlayerDetailPresentationActions,
   PlayerDetailPresentationModel,
@@ -55,61 +55,121 @@ export function PlayerDetailScreen({
   const link = useLinkParameters();
   const initialTabKey =
     PLAYER_DETAIL_TABS.find((item) => item.key === (link.tab ?? initialTab))?.key ?? 'home';
-  const [requestedTab, setTab] = useState<PlayerDetailTabKey>(initialTabKey);
+  const selection = useSectionSelection<PlayerDetailTabKey>(initialTabKey, ['home', initialTabKey]);
+  const requestedTab = selection.selectedKey;
   // Shared history links wait on availability without exposing an empty page option.
   const tab = tabs.some((item) => item.key === requestedTab) ? requestedTab : 'home';
-  const [retainedTabs, setRetainedTabs] = useState<readonly PlayerDetailTabKey[]>(() => [
-    'home',
-    initialTabKey,
-  ]);
-  const [refreshing, setRefreshing] = useState(false);
+  const contentTab = tabs.some((item) => item.key === selection.contentKey)
+    ? selection.contentKey
+    : 'home';
+  const {
+    attachScroll,
+    onViewportLayout,
+    onHeaderLayout,
+    onTabsLayout,
+    recordScroll,
+    prepareSwitch,
+    minimumContentHeight,
+  } = useSectionScroll(contentTab);
+  const [refreshing, setRefreshing] = useState<
+    Partial<
+      Record<
+        PlayerDetailTabKey,
+        {
+          playerTag: string;
+          generation: number;
+        }
+      >
+    >
+  >({});
+  const refreshGeneration = useRef(0);
+  const mounted = useRef(true);
+  useEffect(() => {
+    mounted.current = true;
+    return () => {
+      mounted.current = false;
+      refreshGeneration.current += 1;
+    };
+  }, []);
   const [visibleBattles, setVisibleBattles] = useState(20);
+  const farmingAttacks = useMemo(
+    () => (model.battlelog?.forMode('farming') ?? []).filter((entry) => entry.attack),
+    [model.battlelog],
+  );
   const [lootGridScrubbing, setLootGridScrubbing] = useState(false);
   const [battlelogShareVisible, setBattlelogShareVisible] = useState(false);
-  const scrollRef = useRef<ScrollViewInstance>(null);
-  const scrollOffsets = useRef(new Map<PlayerDetailTabKey, number>());
   const current = tabs.find((item) => item.key === tab) ?? tabs[0]!;
   const labelFor = (item: (typeof tabs)[number]) =>
     item.labelKey ? t(item.labelKey) : item.flutterLabel!;
   const loadTab = actions.loadTab;
+  const canRefresh = isPlayerDetailTabRefreshable(contentTab);
+  const refreshVisibleSection = useCallback(async () => {
+    if (!isPlayerDetailTabRefreshable(contentTab)) return;
+    const generation = ++refreshGeneration.current;
+    setRefreshing((current) => ({
+      ...current,
+      [contentTab]: { playerTag: model.player.tag, generation },
+    }));
+    try {
+      await refreshPlayerDetailTab(contentTab, actions);
+    } finally {
+      // Each section owns its refresh. A completion from the section we left
+      // must not stop another section or a newer refresh of this same section.
+      if (mounted.current)
+        setRefreshing((current) => {
+          if (current[contentTab]?.generation !== generation) return current;
+          const next = { ...current };
+          delete next[contentTab];
+          return next;
+        });
+    }
+  }, [contentTab, model.player.tag, actions]);
 
   useEffect(() => {
     void loadTab(tab);
   }, [loadTab, tab]);
 
   useEffect(() => {
-    let cancelled = false;
-    const task = requestIdleCallback(() => {
-      void (async () => {
-        for (const key of PLAYER_DETAIL_PRELOAD_TABS) {
-          if (cancelled) return;
-          try {
-            await loadTab(key);
-          } catch {
-            // The selected tab keeps its own retry/error state; background prefetch is best-effort.
-          }
-        }
-      })();
-    });
-    return () => {
-      cancelled = true;
-      cancelIdleCallback(task);
-    };
+    // This one availability request is necessary to expose a retained-history
+    // tab. Other sections load on selection, without a background response train
+    // rebuilding the detail screen while the user is changing sections.
+    void loadTab('legendHistory');
   }, [loadTab]);
 
   const selectTab = (next: PlayerDetailTabKey) => {
     const nextIndex = tabs.findIndex((item) => item.key === next);
-    if (nextIndex < 0) return;
+    if (nextIndex < 0 || next === tab) return;
+    prepareSwitch();
     setLootGridScrubbing(false);
-    setTab(next);
-    setRetainedTabs((retained) => retainRecentSections(retained, next));
+    selection.select(next);
   };
-  useEffect(() => {
-    const frame = requestAnimationFrame(() => {
-      scrollRef.current?.scrollTo({ y: scrollOffsets.current.get(tab) ?? 0, animated: false });
-    });
-    return () => cancelAnimationFrame(frame);
-  }, [tab]);
+
+  // Reuse the committed body during the urgent selection render. Rebuilding it
+  // here would put every retained card back on the critical path of a tab tap.
+  const body = useMemo(
+    () =>
+      tabs.map((item) =>
+        selection.retainedKeys.includes(item.key) ? (
+          <RetainedSection
+            key={item.key}
+            testID={`player-retained-tab-${item.key}`}
+            active={item.key === contentTab}
+            render={() => (
+              <TabState model={model} tab={item.key} actions={actions}>
+                {renderTab(
+                  item.key,
+                  playerLoadingModel(model, item.key),
+                  actions,
+                  visibleBattles,
+                  setLootGridScrubbing,
+                )}
+              </TabState>
+            )}
+          />
+        ) : null,
+      ),
+    [tabs, selection.retainedKeys, contentTab, model, actions, visibleBattles],
+  );
 
   return (
     <SafeAreaView
@@ -117,50 +177,47 @@ export function PlayerDetailScreen({
       style={[styles.safe, { backgroundColor: theme.background }]}
     >
       <ScrollView
-        ref={scrollRef}
+        ref={attachScroll}
+        onLayout={onViewportLayout}
         testID="player-detail-scroll"
-        scrollEnabled={!(tab === 'battles' && lootGridScrubbing)}
+        scrollEnabled={!(contentTab === 'battles' && lootGridScrubbing)}
         stickyHeaderIndices={[1]}
-        scrollEventThrottle={100}
+        scrollEventThrottle={16}
         onScroll={(event) => {
           const { contentOffset, contentSize, layoutMeasurement } = event.nativeEvent;
-          scrollOffsets.current.set(tab, contentOffset.y);
+          recordScroll(contentOffset.y);
           if (
-            tab === 'battles' &&
+            contentTab === 'battles' &&
             contentSize.height - layoutMeasurement.height - contentOffset.y <= 500
           ) {
-            const total =
-              model.battlelog?.forMode('farming').filter((entry) => entry.attack).length ?? 0;
-            setVisibleBattles((count) => Math.min(Math.max(count, total), count + 20));
+            if (visibleBattles < farmingAttacks.length) {
+              setVisibleBattles((count) => Math.min(farmingAttacks.length, count + 20));
+            }
           }
           if (
-            tab === 'joinLeave' &&
+            contentTab === 'joinLeave' &&
             contentSize.height - layoutMeasurement.height - contentOffset.y <= 500
           )
             void actions.loadMoreJoinLeave();
         }}
         contentContainerStyle={{ paddingBottom: insets.bottom + 20 }}
+        // Keep this element mounted on every section. React Native changes the
+        // ScrollView's native ancestry when refreshControl is added or removed,
+        // remounting retained bodies and resetting their scroll/layout state.
         refreshControl={
-          isPlayerDetailTabRefreshable(tab) ? (
-            <RefreshControl
-              refreshing={refreshing}
-              onRefresh={async () => {
-                setRefreshing(true);
-                try {
-                  await refreshPlayerDetailTab(tab, actions);
-                } finally {
-                  setRefreshing(false);
-                }
-              }}
-            />
-          ) : undefined
+          <RefreshControl
+            enabled={canRefresh}
+            tintColor={canRefresh ? theme.onSurface : 'transparent'}
+            refreshing={refreshing[contentTab]?.playerTag === model.player.tag}
+            onRefresh={refreshVisibleSection}
+          />
         }
       >
-        <View testID="player-detail-header-scroll-child">
+        <View testID="player-detail-header-scroll-child" onLayout={onHeaderLayout}>
           <PlayerDetailHeader
             model={model}
             actions={actions}
-            selectedTab={tab}
+            selectedTab={contentTab}
             onBattlelogExport={() => setBattlelogShareVisible(true)}
             safeTop={insets.top}
             loading={loading}
@@ -168,6 +225,7 @@ export function PlayerDetailScreen({
         </View>
         <View
           testID="player-detail-navigation"
+          onLayout={onTabsLayout}
           style={[styles.navigation, { backgroundColor: theme.background }]}
         >
           <View
@@ -177,8 +235,8 @@ export function PlayerDetailScreen({
             ]}
           >
             <ProfileTabs
-              variant={layout.isExpanded ? 'underline' : undefined}
-              overflow={layout.isExpanded ? 'scroll' : undefined}
+              variant="underline"
+              overflow="scroll"
               tabs={tabs.map((item) => ({
                 key: item.key,
                 label: labelFor(item),
@@ -189,53 +247,28 @@ export function PlayerDetailScreen({
             />
           </View>
         </View>
-        <SkeletonContent
-          loading={loading}
-          testID="player-detail-body"
-          style={[styles.tabBody, layout.isExpanded && { maxWidth: layout.contentMaxWidth }]}
-        >
-          {tabs.map((item) =>
-            retainedTabs.includes(item.key) ? (
-              <View
-                key={item.key}
-                testID={`player-retained-tab-${item.key}`}
-                style={item.key === tab ? undefined : styles.hiddenTab}
-              >
-                <TabState model={model} tab={item.key} actions={actions}>
-                  {renderTab(
-                    item.key,
-                    playerLoadingModel(model, item.key),
-                    actions,
-                    visibleBattles,
-                    setLootGridScrubbing,
-                  )}
-                </TabState>
-              </View>
-            ) : null,
-          )}
-        </SkeletonContent>
+        <View style={{ minHeight: minimumContentHeight }}>
+          <SkeletonContent
+            loading={loading}
+            testID="player-detail-body"
+            style={[styles.tabBody, layout.isExpanded && { maxWidth: layout.contentMaxWidth }]}
+          >
+            {body}
+          </SkeletonContent>
+        </View>
       </ScrollView>
-      <PlayerBattlelogShareModal
-        items={(model.battlelog?.forMode('farming') ?? []).filter((item) => item.attack)}
-        mode="farming"
-        onClose={() => setBattlelogShareVisible(false)}
-        playerName={model.player.name}
-        visible={battlelogShareVisible}
-      />
+      {battlelogShareVisible ? (
+        <PlayerBattlelogShareModal
+          items={farmingAttacks}
+          mode="farming"
+          onClose={() => setBattlelogShareVisible(false)}
+          playerName={model.player.name}
+          visible
+        />
+      ) : null}
     </SafeAreaView>
   );
 }
-
-const PLAYER_DETAIL_PRELOAD_TABS: readonly PlayerDetailTabKey[] = [
-  // Availability depends on retained finishes. Load them before filtering the
-  // picker, or its hidden tab can never be selected to trigger its own request.
-  'legendHistory',
-  'battles',
-  'history',
-  'war',
-  'cwl',
-  'joinLeave',
-];
 
 export function isPlayerDetailTabRefreshable(tab: PlayerDetailTabKey): boolean {
   return tab === 'battles' || tab === 'history' || tab === 'cwl' || tab === 'legendHistory';
@@ -342,5 +375,4 @@ const styles = StyleSheet.create({
   // Tablet rotation must not turn a compact phone card into a screen-wide strip.
   tabBody: { minHeight: 360, width: '100%', maxWidth: 760, alignSelf: 'center' },
   historyContent: { padding: 16, width: '100%', alignSelf: 'center' },
-  hiddenTab: { display: 'none' },
 });

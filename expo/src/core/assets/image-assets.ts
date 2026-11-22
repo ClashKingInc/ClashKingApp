@@ -10,6 +10,8 @@ export class ImageAssets {
   static readonly thinkingBuilder = `${ImageAssets.baseUrl}/stickers/thinking_bk.webp`;
   static readonly goldPass = `${ImageAssets.baseUrl}/icons/Icon_HV_Gold_Pass.png`;
   static readonly calendar = `${ImageAssets.baseUrl}/bot/icons/calendar.png`;
+  static readonly donationArrow = `${ImageAssets.baseUrl}/bot/icons/up_green_arrow.png`;
+  static readonly receivedArrow = `${ImageAssets.baseUrl}/bot/icons/down_red_arrow.png`;
   static readonly hitpoints = `${ImageAssets.baseUrl}/bot/icons/heart.png`;
 
   static readonly darkModeLogo = `${ImageAssets.baseUrl}/logos/crown-arrow-dark-bg/ClashKing-1.png`;
@@ -271,6 +273,35 @@ export class ImageAssets {
 
   static getHelperImage(name: string): string {
     return namedAsset(['helpers'], name);
+  }
+
+  static getTownHallVariantImage(level: number, selectedVariantId?: number): string {
+    // Ownership alone never chooses an appearance. Only an explicit selected
+    // variant can replace the default Town Hall image.
+    if (selectedVariantId === undefined)
+      return ImageAssets.getHomeVillageBuildingImage('Town Hall', level);
+    const buildings = gameDataState.bundleData.buildings;
+    if (!Array.isArray(buildings))
+      return ImageAssets.getHomeVillageBuildingImage('Town Hall', level);
+    for (const building of buildings) {
+      if (!isRecord(building) || building.name !== 'Town Hall' || !Array.isArray(building.levels))
+        continue;
+      const row = building.levels.find(
+        (value: unknown) => isRecord(value) && value.level === level,
+      );
+      if (!isRecord(row) || !Array.isArray(row.variants)) continue;
+      const variant = row.variants.find(
+        (value: unknown) => isRecord(value) && value._id === selectedVariantId,
+      );
+      if (!isRecord(variant) || !isRecord(variant.TID) || typeof variant.TID.name !== 'string')
+        continue;
+      const style = /_VARIANT_(BARBARIAN|ARCHER|WIZARD)_TH$/
+        .exec(variant.TID.name)?.[1]
+        ?.toLowerCase();
+      if (style)
+        return `${ImageAssets.baseUrl}/buildings/home-village/town_hall/level_${level}_${style}.webp`;
+    }
+    return ImageAssets.getHomeVillageBuildingImage('Town Hall', level);
   }
 
   static getHomeVillageBuildingImage(name: string, level: number): string {

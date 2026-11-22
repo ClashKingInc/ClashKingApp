@@ -110,7 +110,11 @@ export function parseAppLink(input: string): AppLink | null {
       return { kind: 'page', page: 'posts', params: { ...params, postId: tagPart! } };
     if (head === 'settings' && segments.length === 2 && settingsSections.has(tagPart!))
       return { kind: 'page', page: 'settings', params: { ...params, section: tagPart! } };
-    const route = appRoutes.find((route) => route.href === `/${segments.join('/')}`);
+    const pagePath = `/${segments.join('/')}`;
+    // Keep previously shared asset links working after the Wiki rename.
+    const route = appRoutes.find(
+      (route) => route.href === (pagePath === '/game-assets' ? '/wiki' : pagePath),
+    );
     return route ? { kind: 'page', page: route.id, params } : null;
   } catch {
     return null;
@@ -126,7 +130,6 @@ export function appLinkPath(link: AppLink): string {
       path += `/${encodeURIComponent(params.postId)}`;
       delete params.postId;
     }
-
 
     if (link.page === 'settings' && params.section) {
       path += `/${encodeURIComponent(params.section)}`;

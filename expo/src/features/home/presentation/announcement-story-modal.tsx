@@ -1,7 +1,13 @@
+import { Share2, Copy } from 'lucide-react-native';
+import * as Clipboard from 'expo-clipboard';
+import { useI18n } from '../../../i18n';
+import { sharePageUrl } from '../../../core/deep-links/share-page-link';
 import { useAdaptiveLayout } from '../../../ui/adaptive-layout';
 import { modalOrientations } from '../../../ui/modal-orientations';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import {
+  Alert,
+  Share,
   Animated,
   Easing,
   Modal,
@@ -13,7 +19,14 @@ import {
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-import { Skeleton, ckMotion, ckRadius, colorWithAlpha, useCKAccessibility } from '../../../ui';
+import {
+  HeaderIconButton,
+  Skeleton,
+  ckMotion,
+  ckRadius,
+  colorWithAlpha,
+  useCKAccessibility,
+} from '../../../ui';
 import type { AppAnnouncement } from '../data';
 import { AnnouncementWebView } from './announcement-webview';
 import { parseAnnouncementStoryMessage } from './announcement-webview-contract';
@@ -24,12 +37,46 @@ export function AnnouncementStoryModal({
   announcement,
   preparedUri,
   onFinish,
+  onViewed,
 }: {
   announcement: AppAnnouncement;
   preparedUri: string;
   onFinish: (result: AnnouncementStoryResult) => void;
+  onViewed?: () => void;
 }) {
+  const { t } = useI18n();
+  const sharing = useRef(false);
+  const sharedUrl = sharePageUrl({
+    kind: 'page',
+    page: 'posts',
+    params: { postId: announcement.id },
+  });
+  const copyLink = async () => {
+    try {
+      await Clipboard.setStringAsync(sharedUrl);
+      Alert.alert(t('generalCopiedToClipboard'));
+    } catch {
+      Alert.alert(t('generalError'));
+    }
+  };
+  const share = async () => {
+    if (sharing.current) return;
+    sharing.current = true;
+    try {
+      // Keep the viewer mounted: sharing must not reset the current story.
+      await Share.share(
+        Platform.OS === 'ios'
+          ? { url: sharedUrl, title: announcement.title }
+          : { message: sharedUrl, title: announcement.title },
+      );
+    } catch {
+      await copyLink();
+    } finally {
+      sharing.current = false;
+    }
+  };
   const { width, height } = useWindowDimensions();
+  const [viewport, setViewport] = useState({ width, height });
   const layout = useAdaptiveLayout();
   const insets = useSafeAreaInsets();
   const { reduceMotion } = useCKAccessibility();
@@ -62,8 +109,8 @@ export function AnnouncementStoryModal({
     0,
     Math.min(
       layout.isExpanded ? 760 : 560,
-      (layout.isExpanded ? layout.width : width) - 24,
-      (layout.isExpanded ? layout.height : height) - insets.top - insets.bottom - 24,
+      viewport.width - 24,
+      viewport.height - insets.top - insets.bottom - 84,
     ),
   );
 
@@ -90,6 +137,7 @@ export function AnnouncementStoryModal({
     if (revealTimer.current) clearTimeout(revealTimer.current);
     revealTimer.current = setTimeout(() => {
       setReady(true);
+      onViewed?.();
       Animated.timing(reveal, {
         toValue: 1,
         duration: reduceMotion ? 0 : 180,
@@ -119,7 +167,15 @@ export function AnnouncementStoryModal({
       <View
         accessibilityLabel={`Close ${announcement.title}`}
         accessibilityViewIsModal
-        style={styles.overlay}
+        onLayout={({ nativeEvent }) => {
+          const next = nativeEvent.layout;
+          setViewport((current) =>
+            current.width === next.width && current.height === next.height
+              ? current
+              : { width: next.width, height: next.height },
+          );
+        }}
+        style={[styles.overlay, { paddingTop: insets.top + 12, paddingBottom: insets.bottom + 12 }]}
       >
         <Pressable
           accessibilityLabel={`Close ${announcement.title}`}
@@ -159,12 +215,27 @@ export function AnnouncementStoryModal({
             </View>
           ) : null}
         </Animated.View>
+        <View style={styles.shareActions}>
+          <HeaderIconButton
+            label={t('gameAssetsShare')}
+            onPress={() => void share()}
+            icon={<Share2 color="#fff" size={22} />}
+            glass={false}
+          />
+          <HeaderIconButton
+            label={t('gameAssetsCopyUrl')}
+            onPress={() => void copyLink()}
+            icon={<Copy color="#fff" size={20} />}
+            glass={false}
+          />
+        </View>
       </View>
     </Modal>
   );
 }
 
 const styles = StyleSheet.create({
+  shareActions: { flexDirection: 'row', gap: 8, marginTop: 8 },
   overlay: {
     flex: 1,
     alignItems: 'center',

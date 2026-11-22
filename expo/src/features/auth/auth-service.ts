@@ -371,7 +371,11 @@ export class AuthService {
       ) {
         return;
       }
-      this.publish({ ...this.stateValue, followerCount: followerCount(response) });
+      this.publish({
+        ...this.stateValue,
+        currentUser: parseAuthUser(response),
+        followerCount: followerCount(response),
+      });
     } catch {
       // Summary refresh is deliberately best effort.
     }

@@ -1,3 +1,4 @@
+import { LocalTabSwipe } from '../../../ui/local-tab-swipe';
 import { useAdaptiveLayout } from '../../../ui/adaptive-layout';
 import { InlineReorderGrid } from '../../../ui/inline-reorder-grid';
 import { useNativePrimaryNavigation } from '../../../ui/native-primary-navigation';
@@ -226,7 +227,7 @@ export function ClansScreen({
       renderItem={(params: RenderItemParams<(typeof entries)[number]>) => (
         <ScaleDecorator activeScale={1.015}>
           <DragJiggle active={params.isActive}>
-            <View style={[styles.cardItem, params.isActive && styles.activeCard]}>
+            <View style={styles.cardItem}>
               <SkeletonContent loading={!!model.loading && !params.item.clan}>
                 <ClanRosterCard
                   item={params.item}
@@ -243,77 +244,85 @@ export function ClansScreen({
     />
   );
   return (
-    <SafeAreaView
-      edges={['left', 'right']}
-      style={[styles.safe, { backgroundColor: theme.background }]}
+    <LocalTabSwipe
+      value={mode}
+      values={['linked', 'bookmarked'] as const}
+      onChange={setMode}
+      isRtl={isRtl}
+      disabled={gridDragging}
     >
-      {desktop || layout.isDuo || layout.isTablet ? (
-        <ScrollView
-          ref={nativeScroll}
-          scrollEnabled={!gridDragging}
-          testID="clans-scroll-view"
-          onScroll={(event) => {
-            nativeScrollOffset.current = event.nativeEvent.contentOffset.y;
-            pullRefresh.onScroll(event);
-          }}
-          onScrollBeginDrag={pullRefresh.onScrollBeginDrag}
-          onScrollEndDrag={pullRefresh.onScrollEndDrag}
-          scrollEventThrottle={16}
-          contentContainerStyle={{
-            paddingHorizontal: horizontal,
-            paddingBottom: nativeTabs ? insets.bottom + 24 : 32,
-          }}
-          refreshControl={refreshControl}
-        >
-          {listHeader}
-          <View style={styles.roster}>
-            {entries.length === 0 ? (
-              emptyRoster
-            ) : layout.isDuo || layout.isTablet ? (
-              <InlineReorderGrid
-                key={mode}
-                data={entries}
-                keyExtractor={(item) => item.tag}
-                columns={layout.columns(layout.isTablet ? 420 : 280, 2)}
-                scrollRef={nativeScroll}
-                scrollOffset={nativeScrollOffset}
-                onDragStateChange={setGridDragging}
-                onReorder={(data, from, to) => reorder({ data, from, to })}
-                renderItem={(item, _index, active) => (
-                  <DragJiggle active={active}>
-                    <SkeletonContent loading={!!model.loading && !item.clan}>
-                      <ClanRosterCard
-                        item={item}
-                        notifications={model.notifications}
-                        onOpen={(origin) => void open(item, origin)}
-                        dragTestID={`clan-roster-card-${item.tag}`}
-                      />
-                    </SkeletonContent>
-                  </DragJiggle>
-                )}
-              />
-            ) : (
-              <ResponsiveGrid minItemWidth={420} maxColumns={3} gap={12}>
-                {cards}
-              </ResponsiveGrid>
-            )}
-          </View>
-        </ScrollView>
-      ) : (
-        draggableList
-      )}
-      <PullRefreshHint
-        distance={pullRefresh.distance}
-        refreshing={refreshing}
-        label={
-          model.lastRefresh
-            ? t('generalLastRefresh', {
-                time: formatClanLastRefresh(model.lastRefresh, t, locale),
-              })
-            : undefined
-        }
-      />
-    </SafeAreaView>
+      <SafeAreaView
+        edges={['left', 'right']}
+        style={[styles.safe, { backgroundColor: theme.background }]}
+      >
+        {desktop || layout.isDuo || layout.isTablet ? (
+          <ScrollView
+            ref={nativeScroll}
+            scrollEnabled={!gridDragging}
+            testID="clans-scroll-view"
+            onScroll={(event) => {
+              nativeScrollOffset.current = event.nativeEvent.contentOffset.y;
+              pullRefresh.onScroll(event);
+            }}
+            onScrollBeginDrag={pullRefresh.onScrollBeginDrag}
+            onScrollEndDrag={pullRefresh.onScrollEndDrag}
+            scrollEventThrottle={16}
+            contentContainerStyle={{
+              paddingHorizontal: horizontal,
+              paddingBottom: nativeTabs ? insets.bottom + 24 : 32,
+            }}
+            refreshControl={refreshControl}
+          >
+            {listHeader}
+            <View style={styles.roster}>
+              {entries.length === 0 ? (
+                emptyRoster
+              ) : layout.isDuo || layout.isTablet ? (
+                <InlineReorderGrid
+                  key={mode}
+                  data={entries}
+                  keyExtractor={(item) => item.tag}
+                  columns={layout.columns(layout.isTablet ? 420 : 280, 2)}
+                  scrollRef={nativeScroll}
+                  scrollOffset={nativeScrollOffset}
+                  onDragStateChange={setGridDragging}
+                  onReorder={(data, from, to) => reorder({ data, from, to })}
+                  renderItem={(item, _index, active) => (
+                    <DragJiggle active={active}>
+                      <SkeletonContent loading={!!model.loading && !item.clan}>
+                        <ClanRosterCard
+                          item={item}
+                          notifications={model.notifications}
+                          onOpen={(origin) => void open(item, origin)}
+                          dragTestID={`clan-roster-card-${item.tag}`}
+                        />
+                      </SkeletonContent>
+                    </DragJiggle>
+                  )}
+                />
+              ) : (
+                <ResponsiveGrid minItemWidth={420} maxColumns={3} gap={12}>
+                  {cards}
+                </ResponsiveGrid>
+              )}
+            </View>
+          </ScrollView>
+        ) : (
+          draggableList
+        )}
+        <PullRefreshHint
+          distance={pullRefresh.distance}
+          refreshing={refreshing}
+          label={
+            model.lastRefresh
+              ? t('generalLastRefresh', {
+                  time: formatClanLastRefresh(model.lastRefresh, t, locale),
+                })
+              : undefined
+          }
+        />
+      </SafeAreaView>
+    </LocalTabSwipe>
   );
 }
 
@@ -322,6 +331,5 @@ const styles = StyleSheet.create({
   roster: { paddingTop: 8 },
   segmentWrap: { height: 74, paddingTop: 8, paddingBottom: 14, justifyContent: 'center' },
   cardItem: { marginBottom: 10 },
-  activeCard: { opacity: 0.96 },
   empty: { padding: 0 },
 });

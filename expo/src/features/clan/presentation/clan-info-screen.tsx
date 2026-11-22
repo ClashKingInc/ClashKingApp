@@ -1,5 +1,4 @@
 import { useAdaptiveLayout } from '../../../ui/adaptive-layout';
-import type { ScrollViewInstance } from 'react-native';
 import { useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 import { ScrollView, StyleSheet, View } from 'react-native';
 import { BarChart3, List, Repeat2, Users } from 'lucide-react-native';
@@ -7,14 +6,9 @@ import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context'
 
 import { ImageAssets } from '../../../core/assets/image-assets';
 import { useI18n } from '../../../i18n';
-import {
-  DestinationPicker,
-  ProfileTabs,
-  MobileWebImage,
-  SkeletonContent,
-  useCKTheme,
-} from '../../../ui';
-import { retainRecentSections } from '../../../ui/retained-sections';
+import { ProfileTabs, MobileWebImage, SkeletonContent, useCKTheme } from '../../../ui';
+import { useSectionScroll, useSectionSelection } from '../../../ui/use-section-selection';
+import { RetainedSection } from '../../../ui/retained-section';
 import { ClanJoinLeaveTab, ClanWarLogTab } from './clan-activity-tabs';
 import {
   type ClanInfoPresentationActions,
@@ -69,20 +63,26 @@ export function ClanInfoScreen({
     0,
     Math.min(linkedIndex >= 0 ? linkedIndex : initialTab, tabs.length - 1),
   );
-  const [selectedTab, setSelectedTab] = useState<ClanInfoTabKey>(
+  const selection = useSectionSelection<ClanInfoTabKey>(
     visibleClanInfoTabs(model.featureFlags).includes(link.tab as ClanInfoTabKey)
       ? (link.tab as ClanInfoTabKey)
       : (tabs[initialIndex] ?? 'members'),
   );
-  const [retainedTabs, setRetainedTabs] = useState<readonly ClanInfoTabKey[]>(() => [
-    tabs[initialIndex] ?? 'members',
-  ]);
+  const selectedTab = selection.selectedKey;
   const [joinLeaveLoadSignal, setJoinLeaveLoadSignal] = useState(0);
   const joinLeaveEndArmed = useRef(false);
-  const scrollRef = useRef<ScrollViewInstance>(null);
-  const scrollOffsets = useRef(new Map<ClanInfoTabKey, number>());
   const activeIndex = Math.max(0, tabs.indexOf(selectedTab));
   const active = tabs[activeIndex] ?? 'members';
+  const contentActive = tabs.includes(selection.contentKey) ? selection.contentKey : 'members';
+  const {
+    attachScroll,
+    onViewportLayout,
+    onHeaderLayout,
+    onTabsLayout,
+    recordScroll,
+    prepareSwitch,
+    minimumContentHeight,
+  } = useSectionScroll(contentActive);
   const [historyCache] = useState(() => new Map<string, Promise<unknown>>());
   const historyActions = useMemo<ClanInfoPresentationActions>(() => {
     // Service updates recreate actions. Keep pending tab requests across those
@@ -133,17 +133,35 @@ export function ClanInfoScreen({
   const destinations = tabs.map((key) => tabDestination(key, t, theme.onSurfaceVariant));
   const selectTab = (nextIndex: number) => {
     const next = tabs[nextIndex];
-    if (!next) return;
-    setSelectedTab(next);
-    setRetainedTabs((retained) => retainRecentSections(retained, next));
+    if (!next || next === active) return;
+    prepareSwitch();
+    selection.select(next);
     joinLeaveEndArmed.current = false;
   };
-  useEffect(() => {
-    const frame = requestAnimationFrame(() => {
-      scrollRef.current?.scrollTo({ y: scrollOffsets.current.get(active) ?? 0, animated: false });
-    });
-    return () => cancelAnimationFrame(frame);
-  }, [active]);
+  const body = useMemo(
+    () =>
+      tabs.map((key) =>
+        key === contentActive || selection.retainedKeys.includes(key) ? (
+          <RetainedSection
+            key={key}
+            testID={`clan-retained-tab-${key}`}
+            active={key === contentActive}
+            render={() =>
+              renderTab(key, model, historyActions, joinLeaveLoadSignal, historyTypes ?? [])
+            }
+          />
+        ) : null,
+      ),
+    [
+      tabs,
+      contentActive,
+      selection.retainedKeys,
+      model,
+      historyActions,
+      joinLeaveLoadSignal,
+      historyTypes,
+    ],
+  );
   // Each retained tab fetches its own data on first use. Do not compete with
   // the visible war log by eagerly fetching every unrelated history endpoint.
   return (
@@ -152,14 +170,15 @@ export function ClanInfoScreen({
       style={[styles.safe, { backgroundColor: theme.background }]}
     >
       <ScrollView
-        ref={scrollRef}
+        ref={attachScroll}
+        onLayout={onViewportLayout}
         testID="clan-info-scroll"
         stickyHeaderIndices={[1]}
-        scrollEventThrottle={100}
+        scrollEventThrottle={16}
         onScroll={(event) => {
           const { contentOffset, contentSize, layoutMeasurement } = event.nativeEvent;
-          scrollOffsets.current.set(active, contentOffset.y);
-          if (active !== 'joinLeave') return;
+          recordScroll(contentOffset.y);
+          if (contentActive !== 'joinLeave') return;
           const nearEnd = contentSize.height - layoutMeasurement.height - contentOffset.y <= 500;
           if (nearEnd && !joinLeaveEndArmed.current) {
             joinLeaveEndArmed.current = true;
@@ -170,11 +189,12 @@ export function ClanInfoScreen({
         }}
         contentContainerStyle={{ paddingBottom: insets.bottom + 16 }}
       >
-        <View testID="clan-info-header-scroll-child">
+        <View testID="clan-info-header-scroll-child" onLayout={onHeaderLayout}>
           <ClanInfoHeader model={model} actions={actions} selectedTab={active} loading={loading} />
         </View>
         <View
           testID="clan-destination-bar"
+          onLayout={onTabsLayout}
           style={[styles.navigation, { backgroundColor: theme.background }]}
         >
           <View
@@ -183,48 +203,27 @@ export function ClanInfoScreen({
               layout.isExpanded && { maxWidth: layout.contentMaxWidth, paddingHorizontal: 24 },
             ]}
           >
-            {layout.isExpanded ? (
-              <ProfileTabs
-                variant="underline"
-                overflow="scroll"
-                tabs={destinations}
-                selectedKey={active}
-                onSelect={(key) => {
-                  const index = tabs.indexOf(key as ClanInfoTabKey);
-                  if (index >= 0) selectTab(index);
-                }}
-              />
-            ) : (
-              <DestinationPicker
-                accessibilityLabel={destinations[activeIndex]?.label}
-                onSelect={(key) => {
-                  const nextIndex = tabs.indexOf(key as ClanInfoTabKey);
-                  if (nextIndex >= 0) selectTab(nextIndex);
-                }}
-                options={destinations}
-                selectedKey={active}
-                showPositionHint
-              />
-            )}
+            <ProfileTabs
+              variant="underline"
+              overflow="scroll"
+              tabs={destinations}
+              selectedKey={active}
+              onSelect={(key) => {
+                const index = tabs.indexOf(key as ClanInfoTabKey);
+                if (index >= 0) selectTab(index);
+              }}
+            />
           </View>
         </View>
-        <SkeletonContent
-          loading={loading}
-          testID="clan-detail-body"
-          style={[styles.tabBody, layout.isExpanded && { maxWidth: layout.contentMaxWidth }]}
-        >
-          {tabs.map((key) =>
-            key === active || retainedTabs.includes(key) ? (
-              <View
-                key={key}
-                testID={`clan-retained-tab-${key}`}
-                style={key === active ? undefined : styles.hiddenTab}
-              >
-                {renderTab(key, model, historyActions, joinLeaveLoadSignal, historyTypes ?? [])}
-              </View>
-            ) : null,
-          )}
-        </SkeletonContent>
+        <View style={{ minHeight: minimumContentHeight }}>
+          <SkeletonContent
+            loading={loading}
+            testID="clan-detail-body"
+            style={[styles.tabBody, layout.isExpanded && { maxWidth: layout.contentMaxWidth }]}
+          >
+            {body}
+          </SkeletonContent>
+        </View>
       </ScrollView>
     </SafeAreaView>
   );
@@ -321,5 +320,4 @@ const styles = StyleSheet.create({
   navigationControl: { width: '100%', maxWidth: 520, alignSelf: 'center' },
   tabImage: { width: 20, height: 20, resizeMode: 'contain' },
   tabBody: { minHeight: 360 },
-  hiddenTab: { display: 'none' },
 });

@@ -137,8 +137,26 @@ jobs:
       - name: Verify TypeScript compatibility during tsrs adoption
         run: npm run typecheck:typescript
 
-      - name: Verify Expo dependencies and configuration
-        run: npx expo-doctor
+      - name: Check out the released native baseline
+        uses: actions/checkout@v4
+        with:
+          ref: c4c5fba58db2bd06bb48082cfc045ff54efe14f4
+          path: .ci-ota-native
+          persist-credentials: false
+
+      - name: Install released native baseline dependencies
+        working-directory: .ci-ota-native/expo
+        run: npm ci
+
+      - name: Compare full Expo Doctor results and native baseline
+        env:
+          CK_OTA_BASELINE_REPO: ${{ github.workspace }}/.ci-ota-native
+        run: |
+          openssl req -x509 -newkey rsa:2048 -nodes -days 1 \
+            -subj '/CN=Local OTA compatibility comparison' \
+            -keyout "$RUNNER_TEMP/ota-compare-key.pem" \
+            -out "$RUNNER_TEMP/ota-compare-cert.pem" >/dev/null 2>&1
+          node scripts/compare-ota-expo-health.mjs "$CK_OTA_BASELINE_REPO" "$RUNNER_TEMP/ota-compare-cert.pem"
 
       - name: Build native-app link landing
         env:

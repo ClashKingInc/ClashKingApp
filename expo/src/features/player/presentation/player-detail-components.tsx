@@ -1,21 +1,19 @@
-import { SafeAreaProvider, SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useAdaptiveLayout } from '../../../ui/adaptive-layout';
 import { illustratedHeaderLayout } from '../../../ui/illustrated-header-layout';
 import { HeroHeaderScrim } from '../../../ui/hero-header-scrim';
 import { HeaderArtwork } from '../../../ui/header-artwork';
-import { modalOrientations } from '../../../ui/modal-orientations';
-import type { StyleProp, ViewInstance, ViewStyle } from 'react-native';
+import type { ViewInstance } from 'react-native';
 import {
-  cloneElement,
-  isValidElement,
+  memo,
   useCallback,
   useMemo,
   useRef,
   useState,
+  useSyncExternalStore,
   type ReactNode,
 } from 'react';
 import {
-  Modal,
   PanResponder,
   Platform,
   Pressable,
@@ -44,7 +42,6 @@ import {
   Shield,
   Upload,
   UserRound,
-  X,
 } from 'lucide-react-native';
 import { SlidingSegmentControl } from '../../../ui/sliding-segment-control';
 import { ExpandableProgressCard } from '../../../ui/expandable-progress-card';
@@ -59,10 +56,11 @@ import {
 } from '../../stats/presentation/chart-interaction-boundary';
 import { ImageAssets } from '../../../core/assets/image-assets';
 import { formatUpgradeDuration } from '../../../core/utils/upgrade-duration';
+import { localizedNameForItem } from '../../../core/game-data/game-data-localization';
 import {
-  localizedInfoForItem,
-  localizedNameForItem,
-} from '../../../core/game-data/game-data-localization';
+  gameDataState,
+  subscribeToGameDataRevision,
+} from '../../../core/game-data/game-data-state';
 import { toIntlLocale, useI18n, type MessageKey } from '../../../i18n';
 import { materialBackLabel } from '../../../i18n/material-labels';
 import {
@@ -108,6 +106,7 @@ import {
   type BattlelogLootDay,
 } from './player-battlelog-share';
 
+import { UpgradeGroupTiles } from '../../upgrade-tracker/presentation/upgrade-tracker-screen';
 import { UpgradeItemDetailModal } from '../../upgrade-tracker/presentation/upgrade-tracker-breakdowns';
 import { calculateRemainingUpgradeSummary, maxLevelForItemAtTH } from '../data/player-item-utils';
 import type {
@@ -158,14 +157,14 @@ export function PlayerDetailHeader({
   const { t, locale } = useI18n();
   const theme = useCKTheme();
   const { width } = useWindowDimensions();
-  const [headerSize, setHeaderSize] = useState({ width, height: 0 });
+  const [headerWidth, setHeaderWidth] = useState(width);
   // Expanded native layouts share the desktop identity and league row while
   // compact phones retain the centered composition.
   const layout = useAdaptiveLayout();
   const headerLayout = illustratedHeaderLayout(layout);
   const insets = useSafeAreaInsets();
   const compact =
-    !layout.isExpanded && (Platform.OS !== 'web' || Math.min(width, headerSize.width) < 900);
+    !layout.isExpanded && (Platform.OS !== 'web' || Math.min(width, headerWidth) < 900);
   const clan = playerHeaderClanIdentity(player, model.cachedClanTag);
   const role = playerRoleLabel(player.role, t);
   const copyPlayerTag = () =>
@@ -217,9 +216,11 @@ export function PlayerDetailHeader({
               false,
             ],
           ]
-      ).map(([name, image, trophies, ranked], index) => (
+      ).map(([name, image, trophies, ranked]) => (
         <Pressable
-          key={`${String(name)}-${index}`}
+          // Order changes on Builder Base; identity belongs to the village,
+          // so moving the tile must not recreate its image or native control.
+          key={ranked ? 'home' : 'builder'}
           accessibilityRole={ranked ? 'button' : undefined}
           disabled={!ranked}
           onPress={() =>
@@ -306,13 +307,12 @@ export function PlayerDetailHeader({
   return (
     <View
       testID={compact ? 'player-header-mobile' : 'player-header-desktop'}
-      onLayout={({ nativeEvent: { layout } }) =>
-        setHeaderSize((current) =>
-          current.width === layout.width && current.height === layout.height
-            ? current
-            : { width: layout.width, height: layout.height },
-        )
-      }
+      onLayout={({ nativeEvent: { layout } }) => {
+        // Only width determines this header's adaptive composition. Feeding
+        // height back into state adds a render whenever its content settles.
+        if (layout.width > 0)
+          setHeaderWidth((current) => (current === layout.width ? current : layout.width));
+      }}
       style={[
         styles.header,
         { paddingTop: safeTop },
@@ -555,7 +555,7 @@ export function playerHeaderClanIdentity(
   return playerProfileClanIdentity(player, cachedClanTag);
 }
 
-export function PlayerBaseTab({
+export const PlayerBaseTab = memo(function PlayerBaseTab({
   player,
   village,
 }: {
@@ -613,6 +613,7 @@ export function PlayerBaseTab({
         />
         <PlayerItemSection
           title={t('gameEquipment')}
+          trackerLayout
           items={player.equipments}
           categoryIcon={trackerCategoryImage('equipment', UpgradeVillage.home)}
           townHallLevel={player.townHallLevel}
@@ -620,18 +621,21 @@ export function PlayerBaseTab({
         />
         <PlayerItemSection
           title={t('gameTroops')}
+          trackerLayout
           items={player.troops}
           categoryIcon={ImageAssets.upgradeCategoryIcons.troops}
           townHallLevel={player.townHallLevel}
         />
         <PlayerItemSection
           title={t('gameSpells')}
+          trackerLayout
           items={player.spells}
           categoryIcon={ImageAssets.upgradeCategoryIcons.spells}
           townHallLevel={player.townHallLevel}
         />
         <PlayerItemSection
           title={t('gameSiegeMachines')}
+          trackerLayout
           items={player.siegeMachines}
           categoryIcon={ImageAssets.upgradeCategoryIcons.siege}
           townHallLevel={player.townHallLevel}
@@ -645,7 +649,7 @@ export function PlayerBaseTab({
       </ResponsiveGrid>
     </View>
   );
-}
+});
 
 function PlayerSuperTroopSection({
   title,
@@ -680,13 +684,15 @@ function PlayerSuperTroopSection({
   );
 }
 
-export function PlayerItemSection({
+export const PlayerItemSection = memo(function PlayerItemSection({
+  trackerLayout = false,
   title,
   items,
   categoryIcon,
   townHallLevel,
   initiallyExpanded = false,
 }: {
+  trackerLayout?: boolean;
   title: string;
   items: readonly PlayerItem[];
   categoryIcon?: string;
@@ -697,47 +703,65 @@ export function PlayerItemSection({
   const [expanded, setExpanded] = useState(initiallyExpanded);
   const [selected, setSelected] = useState<PlayerItem | null>(null);
   const theme = useCKTheme();
-  const visible = useMemo(
+  const revision = useSyncExternalStore(
+    subscribeToGameDataRevision,
+    () => gameDataState.revision,
+    () => 0,
+  );
+  const [hasOpened, setHasOpened] = useState(initiallyExpanded);
+  // Each item needs one hall-limit walk, not one per total, footer and tile.
+  // Static refreshes can mutate the same metadata objects, so revision is part
+  // of this derivation's identity even when the player's item array is stable.
+  const section = useMemo(() => {
+    void revision;
+    const entries = items
+      .map((item) => ({ item, target: maxLevelForItemAtTH(item, townHallLevel) }))
+      .filter((entry) => entry.target > 0)
+      .sort((a, b) => Number(b.item.isUnlocked) - Number(a.item.isUnlocked));
+    let maximum = 0;
+    let completed = 0;
+    let remaining = 0;
+    let seconds = 0;
+    const resources = new Map<string, number>();
+    const targets = new Map<PlayerItem, number>();
+    for (const { item, target } of entries) {
+      targets.set(item, target);
+      maximum += target;
+      completed += Math.min(Math.max(0, item.level), target);
+      remaining += Math.max(0, target - Math.max(0, item.level));
+      const summary = calculateRemainingUpgradeSummary(item, target);
+      seconds += summary.seconds;
+      for (const resource of summary.resources)
+        resources.set(resource.key, (resources.get(resource.key) ?? 0) + resource.amount);
+    }
+    return {
+      visible: entries.map((entry) => entry.item),
+      targets,
+      progress: maximum ? (completed / maximum) * 100 : 0,
+      levelsRemaining: remaining,
+      summary: { seconds, resources },
+    };
+  }, [items, townHallLevel, revision]);
+  const { visible, targets, progress, levelsRemaining, summary } = section;
+  // Never-opened groups still show their cheap summary, but do not allocate
+  // every UpgradeStep and tile adapter just to hand it to a collapsed card.
+  const detailItems = useMemo(
     () =>
-      items
-        .filter((item) => maxLevelForItemAtTH(item, townHallLevel) > 0)
-        .sort((a, b) => Number(b.isUnlocked) - Number(a.isUnlocked)),
-    [items, townHallLevel],
+      hasOpened && trackerLayout
+        ? visible.map((item) => upgradeDetailsItem(item, targets.get(item)!))
+        : [],
+    [hasOpened, trackerLayout, visible, targets],
   );
-  const maxLevels = visible.reduce(
-    (sum, item) => sum + maxLevelForItemAtTH(item, townHallLevel),
-    0,
-  );
-  const progress = maxLevels
-    ? (visible.reduce(
-        (sum, item) =>
-          sum + Math.min(Math.max(0, item.level), maxLevelForItemAtTH(item, townHallLevel)),
-        0,
-      ) /
-        maxLevels) *
-      100
-    : 0;
-  const levelsRemaining = visible.reduce(
-    (sum, item) =>
-      sum + Math.max(0, maxLevelForItemAtTH(item, townHallLevel) - Math.max(0, item.level)),
-    0,
-  );
-  const summary = visible.reduce(
-    (result, item) => {
-      const remaining = calculateRemainingUpgradeSummary(
-        item,
-        maxLevelForItemAtTH(item, townHallLevel),
-      );
-      result.seconds += remaining.seconds;
-      for (const resource of remaining.resources)
-        result.resources.set(
-          resource.key,
-          (result.resources.get(resource.key) ?? 0) + resource.amount,
-        );
-      return result;
-    },
-    { seconds: 0, resources: new Map<string, number>() },
-  );
+  const tileSnapshot = useMemo(() => upgradeDetailsSnapshot(null, townHallLevel), [townHallLevel]);
+  const selectedTarget = selected ? (targets.get(selected) ?? selected.maxLevel) : 0;
+  const selectedDetail = useMemo(() => {
+    void revision;
+    return selected ? upgradeDetailsItem(selected, selectedTarget) : null;
+  }, [selected, selectedTarget, revision]);
+  const selectedSnapshot = useMemo(() => {
+    void revision;
+    return selected ? upgradeDetailsSnapshot(selected, townHallLevel) : tileSnapshot;
+  }, [selected, townHallLevel, tileSnapshot, revision]);
   if (!visible.length) return null;
   return (
     <>
@@ -746,7 +770,10 @@ export function PlayerItemSection({
         imageUrl={categoryIcon ?? items[0]!.imageUrl}
         percent={progress}
         open={expanded}
-        onToggle={() => setExpanded((value) => !value)}
+        onToggle={() => {
+          setHasOpened(true);
+          setExpanded((value) => !value);
+        }}
         footer={
           <View
             style={{
@@ -786,166 +813,90 @@ export function PlayerItemSection({
           </View>
         }
       >
-        <ResponsiveGrid
-          minItemWidth={54}
-          maxColumns={10}
-          gap={8}
-          waitForLayout
-          testID="player-item-grid"
-        >
-          {visible.map((item, index) => {
-            const thMax = maxLevelForItemAtTH(item, townHallLevel);
-            const isGlobalMax = item.maxLevel > 0 && item.level >= item.maxLevel;
-            const isTownHallMax = thMax > 0 && item.level >= thMax;
-            return (
-              <Pressable
-                key={`${item.name}-${index}`}
-                accessibilityRole="button"
-                accessibilityLabel={
-                  item instanceof PlayerSuperTroop
-                    ? item.name
-                    : `${item.name}, ${t('gameLevel', { level: item.level, maxLevel: thMax })}`
-                }
-                onPress={() => setSelected(item)}
-              >
-                <View
-                  style={[
-                    styles.itemTile,
-                    item.type === 'equipment' &&
-                      item.isUnlocked && {
-                        backgroundColor:
-                          String(item.meta?.rarity ?? item.meta?.rarity_label) === '2' ||
-                          String(item.meta?.rarity_label).toLowerCase() === 'epic'
-                            ? '#800080'
-                            : '#1565C0',
-                      },
-                    (!item.isUnlocked || item.level === 0) && styles.locked,
-                    {
-                      borderColor:
-                        !item.isUnlocked || item.level === 0
-                          ? '#808080'
-                          : isGlobalMax
-                            ? '#FFD75E'
-                            : isTownHallMax
-                              ? '#CD7F32'
-                              : theme.onSurface,
-                    },
-                  ]}
-                >
-                  <MobileWebImage
-                    imageUrl={item.imageUrl}
-                    style={styles.itemImage}
-                    contentFit="cover"
-                  />
-                  {!(item instanceof PlayerSuperTroop) && item.isUnlocked && item.level > 0 ? (
-                    <PillSurface style={styles.itemLevelPill}>
-                      <CKText role="labelSmall">{item.level}</CKText>
-                    </PillSurface>
-                  ) : null}
-                </View>
-              </Pressable>
-            );
-          })}
-        </ResponsiveGrid>
+        {hasOpened ? (
+          trackerLayout ? (
+            <UpgradeGroupTiles
+              group={visible.some((item) => item.type === 'gear') ? 'equipment' : 'laboratory'}
+              items={detailItems}
+              snapshot={tileSnapshot}
+              onSelect={(item) =>
+                setSelected(visible.find((candidate) => candidate.name === item.name) ?? null)
+              }
+            />
+          ) : (
+            <ResponsiveGrid
+              minItemWidth={54}
+              maxColumns={10}
+              gap={8}
+              waitForLayout
+              testID="player-item-grid"
+            >
+              {visible.map((item, index) => {
+                const thMax = targets.get(item)!;
+                const isGlobalMax = item.maxLevel > 0 && item.level >= item.maxLevel;
+                const isTownHallMax = thMax > 0 && item.level >= thMax;
+                return (
+                  <Pressable
+                    key={`${item.name}-${index}`}
+                    accessibilityRole="button"
+                    accessibilityLabel={
+                      item instanceof PlayerSuperTroop
+                        ? item.name
+                        : `${item.name}, ${t('gameLevel', { level: item.level, maxLevel: thMax })}`
+                    }
+                    onPress={() => setSelected(item)}
+                  >
+                    <View
+                      style={[
+                        styles.itemTile,
+                        item.type === 'equipment' &&
+                          item.isUnlocked && {
+                            backgroundColor:
+                              String(item.meta?.rarity ?? item.meta?.rarity_label) === '2' ||
+                              String(item.meta?.rarity_label).toLowerCase() === 'epic'
+                                ? '#800080'
+                                : '#1565C0',
+                          },
+                        (!item.isUnlocked || item.level === 0) && styles.locked,
+                        {
+                          borderColor:
+                            !item.isUnlocked || item.level === 0
+                              ? '#808080'
+                              : isGlobalMax
+                                ? '#FFD75E'
+                                : isTownHallMax
+                                  ? '#CD7F32'
+                                  : theme.onSurface,
+                        },
+                      ]}
+                    >
+                      <MobileWebImage
+                        imageUrl={item.imageUrl}
+                        style={styles.itemImage}
+                        contentFit="cover"
+                      />
+                      {!(item instanceof PlayerSuperTroop) && item.isUnlocked && item.level > 0 ? (
+                        <PillSurface style={styles.itemLevelPill}>
+                          <CKText role="labelSmall">{item.level}</CKText>
+                        </PillSurface>
+                      ) : null}
+                    </View>
+                  </Pressable>
+                );
+              })}
+            </ResponsiveGrid>
+          )
+        ) : null}
       </ExpandableProgressCard>
-      {selected instanceof PlayerSuperTroop ? (
-        <ItemDetailModal item={selected} onClose={() => setSelected(null)} />
-      ) : (
-        <UpgradeItemDetailModal
-          key={selected ? `${selected.name}-${selected.level}` : 'empty'}
-          item={
-            selected
-              ? upgradeDetailsItem(selected, maxLevelForItemAtTH(selected, townHallLevel))
-              : null
-          }
-          snapshot={upgradeDetailsSnapshot(selected, townHallLevel)}
-          onClose={() => setSelected(null)}
-        />
-      )}
+      <UpgradeItemDetailModal
+        key={selected ? `${selected.name}-${selected.level}` : 'empty'}
+        item={selectedDetail}
+        snapshot={selectedSnapshot}
+        onClose={() => setSelected(null)}
+      />
     </>
   );
-}
-
-function PlayerModalViewport({ children }: { children: ReactNode }) {
-  const layout = useAdaptiveLayout();
-  if (!layout.isDuo && !layout.isTablet) return <>{children}</>;
-  // Tint belongs to the full modal window; only the content respects safe areas.
-  // Moving the whole backdrop into SafeAreaView leaves untinted strips at the rail.
-  const backdrop = isValidElement<{ style?: StyleProp<ViewStyle> }>(children)
-    ? StyleSheet.flatten(children.props.style)?.backgroundColor
-    : undefined;
-  const content = isValidElement<{ style?: StyleProp<ViewStyle> }>(children)
-    ? cloneElement(children, { style: [children.props.style, { backgroundColor: 'transparent' }] })
-    : children;
-  return (
-    <SafeAreaProvider style={{ flex: 1, backgroundColor: backdrop }}>
-      <SafeAreaView style={{ flex: 1 }}>{content}</SafeAreaView>
-    </SafeAreaProvider>
-  );
-}
-
-function ItemDetailModal({ item, onClose }: { item: PlayerItem | null; onClose: () => void }) {
-  const { t } = useI18n();
-  const theme = useCKTheme();
-  const localizedName = item ? localizedNameForItem(item.meta) || item.name : '';
-  const localizedDescription = item ? localizedInfoForItem(item.meta) : '';
-  return (
-    <Modal
-      supportedOrientations={modalOrientations}
-      transparent
-      visible={item !== null}
-      animationType="fade"
-      onRequestClose={onClose}
-    >
-      <PlayerModalViewport>
-        <View style={styles.overlay}>
-          <Pressable
-            accessible={false}
-            onPress={onClose}
-            style={StyleSheet.absoluteFill}
-            testID="player-item-detail-backdrop"
-          />
-          {item ? (
-            <Surface
-              accessibilityViewIsModal
-              onAccessibilityEscape={onClose}
-              radius={ckRadius.card}
-              style={styles.dialog}
-              testID="player-item-detail-dialog"
-            >
-              <View style={styles.dialogTitle}>
-                <MobileWebImage imageUrl={item.imageUrl} style={styles.detailImage} />
-                <View style={styles.grow}>
-                  <CKText role="titleLarge">{localizedName}</CKText>
-                  <CKText muted>
-                    {item instanceof PlayerSuperTroop && item.superTroopIsActive
-                      ? t('generalActive')
-                      : t('generalInactive')}
-                  </CKText>
-                </View>
-                <Pressable
-                  accessibilityRole="button"
-                  accessibilityLabel={t('generalOk')}
-                  onPress={onClose}
-                >
-                  <X color={theme.onSurfaceVariant} />
-                </Pressable>
-              </View>
-              {localizedDescription ? (
-                <>
-                  <CKText skeleton={false} role="rowTitle">
-                    {t('gameItemOverview')}
-                  </CKText>
-                  <CKText muted>{localizedDescription}</CKText>
-                </>
-              ) : null}
-            </Surface>
-          ) : null}
-        </View>
-      </PlayerModalViewport>
-    </Modal>
-  );
-}
+});
 
 export function formatPlayerResourceAmount(value: number, locale: string) {
   const suffix = (amount: number, unit: string) =>
@@ -1490,16 +1441,41 @@ function BattleOverviewBand({
   );
 }
 
-export function PlayerActivityTab({
+type ActivityDateFormatters = {
+  date: Intl.DateTimeFormat;
+  time: Intl.DateTimeFormat;
+};
+
+export const PlayerActivityTab = memo(function PlayerActivityTab({
   data,
   actions,
 }: {
   data: PlayerActivityFeed | null | undefined;
   actions: PlayerDetailPresentationActions;
 }) {
-  const { t } = useI18n();
+  const { t, locale } = useI18n();
   const layout = useAdaptiveLayout();
   const [filter, setFilter] = useState<PlayerHistoryTypeValue>('troop_level');
+  // A history feed can contain 500 events. Share two locale formatters across
+  // its rows instead of constructing 1,000 ICU formatters on every activation.
+  const formatters = useMemo<ActivityDateFormatters>(
+    () => ({
+      date: new Intl.DateTimeFormat(toIntlLocale(locale), { dateStyle: 'medium' }),
+      time: new Intl.DateTimeFormat(toIntlLocale(locale), { timeStyle: 'short' }),
+    }),
+    [locale],
+  );
+  const rows = useMemo(
+    () =>
+      data?.items.map((item, index) => (
+        <ActivityRow
+          key={`${item.time.toISOString()}-${index}`}
+          item={item}
+          formatters={formatters}
+        />
+      )),
+    [data, formatters],
+  );
   if (!data) return <EmptyState title={t('playerActivityLoadError')} body={t('generalTryAgain')} />;
   const choices: readonly (readonly [PlayerHistoryTypeValue, string])[] = [
     ['troop_level', t('gameTroops')],
@@ -1536,9 +1512,7 @@ export function PlayerActivityTab({
       </View>
       <View testID="activity-responsive-grid">
         <ResponsiveGrid minItemWidth={430} maxColumns={2}>
-          {data.items.map((item, index) => (
-            <ActivityRow key={`${item.time.toISOString()}-${index}`} item={item} />
-          ))}
+          {rows}
         </ResponsiveGrid>
       </View>
       {!data.items.length ? (
@@ -1549,10 +1523,16 @@ export function PlayerActivityTab({
       ) : null}
     </View>
   );
-}
+});
 
-function ActivityRow({ item }: { item: PlayerActivityEvent }) {
-  const { t, locale } = useI18n();
+const ActivityRow = memo(function ActivityRow({
+  item,
+  formatters,
+}: {
+  item: PlayerActivityEvent;
+  formatters: ActivityDateFormatters;
+}) {
+  const { t } = useI18n();
   const image = activityImage(item);
   const detail = activityDetail(item, t);
   return (
@@ -1562,14 +1542,12 @@ function ActivityRow({ item }: { item: PlayerActivityEvent }) {
         <CKText role="rowTitle">{activityTitle(item, t)}</CKText>
         {detail ? <CKText style={{ color: activityAccent(item) }}>{detail}</CKText> : null}
         <CKText muted role="labelSmall">
-          {new Intl.DateTimeFormat(toIntlLocale(locale), { dateStyle: 'medium' }).format(item.time)}{' '}
-          ·{' '}
-          {new Intl.DateTimeFormat(toIntlLocale(locale), { timeStyle: 'short' }).format(item.time)}
+          {formatters.date.format(item.time)} · {formatters.time.format(item.time)}
         </CKText>
       </View>
     </Surface>
   );
-}
+});
 
 export function PlayerCwlTab({
   data,
@@ -2024,8 +2002,7 @@ export function TabState({
   children: ReactNode;
 }) {
   const { t } = useI18n();
-  if (model.loadingTabs?.has(tab) && !playerTabHasContent(model, tab))
-    return <SkeletonContent loading>{children}</SkeletonContent>;
+  const loading = model.loadingTabs?.has(tab) === true && !playerTabHasContent(model, tab);
   const error = model.errorByTab?.[tab];
   if (error && !playerTabHasContent(model, tab))
     return (
@@ -2036,7 +2013,9 @@ export function TabState({
         onAction={() => void actions.loadTab(tab, true)}
       />
     );
-  return <>{children}</>;
+  // Keep the same ancestry when a real request completes. Inserting/removing
+  // this provider remounted the entire section after its skeleton was drawn.
+  return <SkeletonContent loading={loading}>{children}</SkeletonContent>;
 }
 
 function FilterDropdown({

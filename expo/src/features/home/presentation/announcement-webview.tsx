@@ -78,9 +78,18 @@ export function AnnouncementWebView({
         allowUniversalAccessFromFileURLs={false}
         allowingReadAccessToURL={isTrustedLocalStory ? (fileUri ?? undefined) : undefined}
         scalesPageToFit={isTrustedLocalStory ? false : undefined}
+        // A story is artwork laid out on a fixed canvas, not a reflowing article.
+        // Android's system text scale must not enlarge its text independently.
+        textZoom={isTrustedLocalStory ? 100 : undefined}
         setBuiltInZoomControls={!isTrustedLocalStory}
         setDisplayZoomControls={false}
         bounces={!isTrustedLocalStory}
+        // This is WKWebView-only: iOS converts "normal" to a number, but
+        // Android forwards it unchanged to a native Double and can fail while
+        // mounting the reader. Omit the prop entirely outside iOS articles.
+        {...(Platform.OS === 'ios' && !isTrustedLocalStory
+          ? { decelerationRate: 'normal' as const }
+          : {})}
         injectedJavaScriptBeforeContentLoaded={
           isTrustedLocalStory
             ? ANNOUNCEMENT_STORY_BRIDGE_JAVASCRIPT + ANNOUNCEMENT_STORY_VIEWPORT_JAVASCRIPT
@@ -115,7 +124,7 @@ export function AnnouncementWebView({
             body={t('generalTryAgain')}
             actionLabel={t('generalRetry')}
             onAction={() => {
-                setFailedSource(null);
+              setFailedSource(null);
               setProgress(0);
               webView.current?.reload();
             }}
