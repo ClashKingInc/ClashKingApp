@@ -147,31 +147,26 @@ export class PlayerService {
   ): Promise<readonly JsonRecord[]> {
     const normalized = query.trim();
     if (!normalized) return [];
-    try {
-      const decoded = await Effect.runPromise(
-        this.api.execute(
-          PlayerSearchEndpoint,
-          {
-            path: {},
-            body: {},
-            query: {
-              query: normalized,
-              limit: options.limit ?? 20,
-              ...(options.clanTags?.length ? { clanTags: options.clanTags.join(',') } : {}),
-              ...(options.leagueIds?.length ? { leagueIds: options.leagueIds.join(',') } : {}),
-              ...(options.townHallLevels?.length
-                ? { townhallLevels: options.townHallLevels.join(',') }
-                : {}),
-            },
+    const decoded = await Effect.runPromise(
+      this.api.execute(
+        PlayerSearchEndpoint,
+        {
+          path: {},
+          body: {},
+          query: {
+            query: normalized,
+            limit: options.limit ?? 20,
+            ...(options.clanTags?.length ? { clanTags: options.clanTags.join(',') } : {}),
+            ...(options.leagueIds?.length ? { leagueIds: options.leagueIds.join(',') } : {}),
+            ...(options.townHallLevels?.length
+              ? { townhallLevels: options.townHallLevels.join(',') }
+              : {}),
           },
-          { timeoutMs: 10_000, headers: options.extraHeaders },
-        ),
-      );
-      return decoded.items;
-    } catch (error) {
-      if (error instanceof TransportError) throw error;
-      return [];
-    }
+        },
+        { timeoutMs: 10_000, headers: options.extraHeaders },
+      ),
+    );
+    return decoded.items;
   }
   loadPublicPlayerData(tags: readonly string[], notify = true) {
     return this.loadOfficialPlayerData(tags, { notify });

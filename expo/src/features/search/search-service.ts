@@ -6,7 +6,6 @@ import {
   ProxyLocationsEndpoint,
 } from '../../core/api/proxy-contracts';
 import { Effect } from 'effect';
-import { TransportError } from '@clashking/api-client';
 
 import type { ContractApiService } from '../../core/api/contract-api';
 import {
@@ -38,36 +37,30 @@ export class SearchService {
   }
 
   async searchClans(query: string, filters: ClanSearchFilters): Promise<readonly JsonRecord[]> {
-    try {
-      const decoded = await Effect.runPromise(
-        this.api.execute(
-          ProxyClanSearchEndpoint,
-          {
-            path: {},
-            body: {},
-            query: {
-              name: query,
-              limit: 20,
-              memberList: false,
-              ...(filters.warFrequency === null ? {} : { warFrequency: filters.warFrequency }),
-              ...(filters.locationId === null ? {} : { locationId: filters.locationId }),
-              ...(filters.minMembers === null ? {} : { minMembers: filters.minMembers }),
-              ...(filters.maxMembers === null ? {} : { maxMembers: filters.maxMembers }),
-              ...(filters.minClanLevel === null ? {} : { minClanLevel: filters.minClanLevel }),
-            },
+    const decoded = await Effect.runPromise(
+      this.api.execute(
+        ProxyClanSearchEndpoint,
+        {
+          path: {},
+          body: {},
+          query: {
+            name: query,
+            limit: 20,
+            memberList: false,
+            ...(filters.warFrequency === null ? {} : { warFrequency: filters.warFrequency }),
+            ...(filters.locationId === null ? {} : { locationId: filters.locationId }),
+            ...(filters.minMembers === null ? {} : { minMembers: filters.minMembers }),
+            ...(filters.maxMembers === null ? {} : { maxMembers: filters.maxMembers }),
+            ...(filters.minClanLevel === null ? {} : { minClanLevel: filters.minClanLevel }),
           },
-          { timeoutMs: 10_000 },
-        ),
-      );
-      return decoded.items;
-    } catch (error) {
-      if (error instanceof TransportError) throw error;
-      return [];
-    }
+        },
+        { timeoutMs: 10_000 },
+      ),
+    );
+    return decoded.items;
   }
 
-  /** Mirrors SearchPage's direct official-proxy fallback when clan enrichment fails. */
-  async loadClanFallback(
+  async loadClanByTag(
     tag: string,
     extraHeaders?: Readonly<Record<string, string>>,
   ): Promise<JsonRecord> {
@@ -83,26 +76,24 @@ export class SearchService {
   }
 
   async loadLocations(): Promise<readonly SearchLocation[]> {
-    try {
-      return decodeSearchLocations(
-        await Effect.runPromise(
-          this.api.execute(ProxyLocationsEndpoint, { path: {}, query: {}, body: {} }),
-        ),
-      );
-    } catch {
-      return [];
-    }
+    const decoded = await Effect.runPromise(
+      this.api.execute(
+        ProxyLocationsEndpoint,
+        { path: {}, query: {}, body: {} },
+        { timeoutMs: 10_000 },
+      ),
+    );
+    return decodeSearchLocations(decoded);
   }
 
   async loadLeagues(): Promise<readonly SearchLeague[]> {
-    try {
-      return decodeSearchLeagues(
-        await Effect.runPromise(
-          this.api.execute(ProxyLeagueTiersEndpoint, { path: {}, query: {}, body: {} }),
-        ),
-      );
-    } catch {
-      return [];
-    }
+    const decoded = await Effect.runPromise(
+      this.api.execute(
+        ProxyLeagueTiersEndpoint,
+        { path: {}, query: {}, body: {} },
+        { timeoutMs: 10_000 },
+      ),
+    );
+    return decodeSearchLeagues(decoded);
   }
 }
