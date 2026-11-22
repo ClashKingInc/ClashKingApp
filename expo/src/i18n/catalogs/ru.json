@@ -1756,7 +1756,7 @@
   "notifUpgradeReadyTitle": "{name} готово",
   "notifUpgradeCompleteBody": "Уровень {level} завершён для {player}. Улучшение завершено.",
   "clanSearchLoadFailed": "Не удалось загрузить данные клана: {error}",
-  "appIconDefault": "По умолчанию",
+  "appIconDefault": "Светлая иконка (По умолчанию)",
   "appIconChristmas": "Рождество",
   "appIconHalloween": "Хэллоуин",
   "appIconBlackWhite": "Чёрно-белая",

@@ -1756,7 +1756,7 @@
   "notifUpgradeReadyTitle": "{name} on valmis",
   "notifUpgradeCompleteBody": "Taso {level} valmistui pelaajalle {player}. Päivitys valmis.",
   "clanSearchLoadFailed": "Klaanitietojen lataus epäonnistui: {error}",
-  "appIconDefault": "Oletus",
+  "appIconDefault": "Vaalea kuvake (Oletus)",
   "appIconChristmas": "Joulu",
   "appIconHalloween": "Halloween",
   "appIconBlackWhite": "Mustavalkoinen",

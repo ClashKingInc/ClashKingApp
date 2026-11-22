@@ -1756,7 +1756,7 @@
   "notifUpgradeReadyTitle": "{name} is gereed",
   "notifUpgradeCompleteBody": "Vlak {level} is vir {player} voltooi. Opgradering voltooi.",
   "clanSearchLoadFailed": "Kon stamdata nie laai nie: {error}",
-  "appIconDefault": "Verstek",
+  "appIconDefault": "Ligte ikoon (Verstek)",
   "appIconChristmas": "Kersfees",
   "appIconHalloween": "Halloween",
   "appIconBlackWhite": "Swart en wit",

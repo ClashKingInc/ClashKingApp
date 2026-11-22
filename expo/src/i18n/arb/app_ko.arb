@@ -3902,7 +3902,7 @@
       }
     }
   },
-  "appIconDefault": "기본",
+  "appIconDefault": "라이트 아이콘 (기본)",
   "appIconChristmas": "크리스마스",
   "appIconHalloween": "할로윈",
   "appIconBlackWhite": "흑백",

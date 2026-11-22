@@ -1756,7 +1756,7 @@
   "notifUpgradeReadyTitle": "{name} is klaar",
   "notifUpgradeCompleteBody": "Niveau {level} voltooid voor {player}. Upgrade voltooid.",
   "clanSearchLoadFailed": "Kan clangegevens niet laden: {error}",
-  "appIconDefault": "Standaard",
+  "appIconDefault": "Licht icoon (Standaard)",
   "appIconChristmas": "Kerst",
   "appIconHalloween": "Halloween",
   "appIconBlackWhite": "Zwart-wit",
