@@ -40,16 +40,6 @@ export function sizedAssetUrl(
 
 export type BadgeSizeName = 'small' | 'medium' | 'large';
 
-const BADGE_SIZE_ALIASES: Readonly<Record<string, BadgeSizeName>> = {
-  small: 'small',
-  medium: 'medium',
-  large: 'large',
-  '64': 'small',
-  '128': 'medium',
-  '256': 'medium',
-  '512': 'large',
-};
-
 function badgeSizeForPixels(pixels: number): BadgeSizeName {
   if (pixels <= 70) return 'small';
   if (pixels <= 256) return 'medium';
@@ -76,8 +66,9 @@ export function originalBadgeUrl(url: string): string {
   if (!url.startsWith('https://badges.clashk.ing/')) return url;
   const value = new URL(url);
   value.pathname = value.pathname.replace(/\.(png|avif)$/i, '') + '.png';
-  const requested = value.searchParams.get('size') ?? '';
-  const size = BADGE_SIZE_ALIASES[requested] ?? 'large';
+  const requested = value.searchParams.get('size');
+  const size: BadgeSizeName =
+    requested === 'small' || requested === 'medium' || requested === 'large' ? requested : 'large';
   value.search = '';
   value.hash = '';
   value.searchParams.set('size', size);
