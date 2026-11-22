@@ -5261,7 +5261,7 @@
   "wikiStatRadius": "Radie",
   "wikiStatHits": "Träffar",
   "clanFamilyFriendly": "Familjevänlig",
-  "upgradeTrackerOwnedByTier": "Ägda per kategori",
+  "upgradeTrackerOwnedByTier": "Ägda per nivå",
   "upgradeTrackerOwnedBySize": "Ägda per storlek",
   "upgradeTrackerPercentComplete": "{percent}% klart",
   "upgradeTrackerTimeLeft": "Tid kvar",

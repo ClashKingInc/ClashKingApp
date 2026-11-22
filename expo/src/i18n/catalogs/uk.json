@@ -2506,7 +2506,7 @@
   "wikiStatRadius": "Радіус",
   "wikiStatHits": "Удари",
   "clanFamilyFriendly": "Для сімей",
-  "upgradeTrackerOwnedByTier": "Наявне за категоріями",
+  "upgradeTrackerOwnedByTier": "Наявне за рангом",
   "upgradeTrackerOwnedBySize": "Отримано за розміром",
   "upgradeTrackerPercentComplete": "Виконано на {percent}%",
   "upgradeTrackerTimeLeft": "Залишилось часу",

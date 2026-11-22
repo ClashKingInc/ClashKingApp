@@ -2506,7 +2506,7 @@
   "wikiStatRadius": "نصف القطر",
   "wikiStatHits": "الضربات",
   "clanFamilyFriendly": "مناسب للعائلات",
-  "upgradeTrackerOwnedByTier": "المملوك حسب الفئة",
+  "upgradeTrackerOwnedByTier": "المملوك حسب المستوى",
   "upgradeTrackerOwnedBySize": "المملوك حسب الحجم",
   "upgradeTrackerPercentComplete": "اكتمل {percent}%",
   "upgradeTrackerTimeLeft": "الوقت المتبقي",

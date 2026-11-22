@@ -2506,7 +2506,7 @@
   "wikiStatRadius": "Raggio",
   "wikiStatHits": "Colpi",
   "clanFamilyFriendly": "Adatto alle famiglie",
-  "upgradeTrackerOwnedByTier": "Posseduti per categoria",
+  "upgradeTrackerOwnedByTier": "Posseduti per fascia",
   "upgradeTrackerOwnedBySize": "Posseduti per dimensione",
   "upgradeTrackerPercentComplete": "{percent}% completato",
   "upgradeTrackerTimeLeft": "Tempo rimanente",

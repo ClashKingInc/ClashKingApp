@@ -2506,7 +2506,7 @@
   "wikiStatRadius": "Sugár",
   "wikiStatHits": "Találatok",
   "clanFamilyFriendly": "Családbarát",
-  "upgradeTrackerOwnedByTier": "Meglévő kategóriánként",
+  "upgradeTrackerOwnedByTier": "Meglévő szint szerint",
   "upgradeTrackerOwnedBySize": "Meglévő méret szerint",
   "upgradeTrackerPercentComplete": "{percent}% kész",
   "upgradeTrackerTimeLeft": "Hátralévő idő",

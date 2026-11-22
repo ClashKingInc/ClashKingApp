@@ -5356,7 +5356,7 @@
   "wikiStatRadius": "Полупречник",
   "wikiStatHits": "Погоци",
   "clanFamilyFriendly": "Погодно за породице",
-  "upgradeTrackerOwnedByTier": "Поседовано по категорији",
+  "upgradeTrackerOwnedByTier": "Поседовано по рангу",
   "upgradeTrackerOwnedBySize": "Поседовано по величини",
   "upgradeTrackerPercentComplete": "{percent}% завршено",
   "upgradeTrackerTimeLeft": "Преостало време",

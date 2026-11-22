@@ -2506,7 +2506,7 @@
   "wikiStatRadius": "Straal",
   "wikiStatHits": "Treffers",
   "clanFamilyFriendly": "Gezinsvriendelijk",
-  "upgradeTrackerOwnedByTier": "In bezit per categorie",
+  "upgradeTrackerOwnedByTier": "In bezit per niveau",
   "upgradeTrackerOwnedBySize": "In bezit per grootte",
   "upgradeTrackerPercentComplete": "{percent}% voltooid",
   "upgradeTrackerTimeLeft": "Resterende tijd",

@@ -2506,7 +2506,7 @@
   "wikiStatRadius": "Ακτίνα",
   "wikiStatHits": "Χτυπήματα",
   "clanFamilyFriendly": "Φιλικό προς τις οικογένειες",
-  "upgradeTrackerOwnedByTier": "Αποκτημένα ανά κατηγορία",
+  "upgradeTrackerOwnedByTier": "Αποκτημένα ανά βαθμίδα",
   "upgradeTrackerOwnedBySize": "Ιδιόκτητα ανά μέγεθος",
   "upgradeTrackerPercentComplete": "Ολοκληρώθηκε κατά {percent}%",
   "upgradeTrackerTimeLeft": "Χρόνος που απομένει",

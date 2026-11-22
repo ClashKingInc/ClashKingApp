@@ -5356,7 +5356,7 @@
   "wikiStatRadius": "Bán kính",
   "wikiStatHits": "Đòn đánh",
   "clanFamilyFriendly": "Thân thiện với gia đình",
-  "upgradeTrackerOwnedByTier": "Đã sở hữu theo loại",
+  "upgradeTrackerOwnedByTier": "Đã sở hữu theo bậc",
   "upgradeTrackerOwnedBySize": "Đã sở hữu theo kích thước",
   "upgradeTrackerPercentComplete": "Hoàn thành {percent}%",
   "upgradeTrackerTimeLeft": "Thời gian còn lại",

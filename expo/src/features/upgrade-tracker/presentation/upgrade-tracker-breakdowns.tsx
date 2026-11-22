@@ -123,10 +123,14 @@ export function UpgradeCategorySummaryModal({
   const { t, locale } = useI18n();
   const intlLocale = toIntlLocale(locale);
   if (!summary) return null;
+  const formattedPercent = new Intl.NumberFormat(intlLocale, {
+    minimumFractionDigits: 1,
+    maximumFractionDigits: 1,
+  }).format(summary.completion * 100);
   return (
     <BreakdownModal visible={visible} title={title} onClose={onClose}>
       <CKText muted role="bodySmall">
-        {t('upgradeTrackerPercentComplete', { percent: (summary.completion * 100).toFixed(1) })}
+        {t('upgradeTrackerPercentComplete', { percent: formattedPercent })}
       </CKText>
       <ResponsiveGrid minItemWidth={112} maxColumns={3}>
         <Metric label={t('upgradeTrackerHeaderLevelsLeft')} value={summary.levelsRemaining} />

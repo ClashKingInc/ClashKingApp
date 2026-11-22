@@ -2506,7 +2506,7 @@
   "wikiStatRadius": "半径",
   "wikiStatHits": "命中次数",
   "clanFamilyFriendly": "适合家庭",
-  "upgradeTrackerOwnedByTier": "按类别统计已拥有",
+  "upgradeTrackerOwnedByTier": "按等级统计已拥有",
   "upgradeTrackerOwnedBySize": "按尺寸统计已拥有",
   "upgradeTrackerPercentComplete": "已完成 {percent}%",
   "upgradeTrackerTimeLeft": "剩余时间",

@@ -2506,7 +2506,7 @@
   "wikiStatRadius": "Yarıçap",
   "wikiStatHits": "Vuruşlar",
   "clanFamilyFriendly": "Aile dostu",
-  "upgradeTrackerOwnedByTier": "Kategoriye göre sahip olunanlar",
+  "upgradeTrackerOwnedByTier": "Kademeye göre sahip olunanlar",
   "upgradeTrackerOwnedBySize": "Boyuta göre sahip olunan",
   "upgradeTrackerPercentComplete": "%{percent} tamamlandı",
   "upgradeTrackerTimeLeft": "Kalan süre",

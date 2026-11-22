@@ -5356,7 +5356,7 @@
   "wikiStatRadius": "Rază",
   "wikiStatHits": "Lovituri",
   "clanFamilyFriendly": "Prietenos cu familiile",
-  "upgradeTrackerOwnedByTier": "Deținute pe categorii",
+  "upgradeTrackerOwnedByTier": "Deținute după nivel",
   "upgradeTrackerOwnedBySize": "Deținute pe dimensiune",
   "upgradeTrackerPercentComplete": "{percent}% finalizat",
   "upgradeTrackerTimeLeft": "Timp rămas",

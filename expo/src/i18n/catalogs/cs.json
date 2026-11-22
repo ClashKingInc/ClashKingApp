@@ -2506,7 +2506,7 @@
   "wikiStatRadius": "Poloměr",
   "wikiStatHits": "Zásahy",
   "clanFamilyFriendly": "Vhodné pro rodiny",
-  "upgradeTrackerOwnedByTier": "Vlastněno podle kategorie",
+  "upgradeTrackerOwnedByTier": "Vlastněno podle úrovně",
   "upgradeTrackerOwnedBySize": "Vlastněno podle velikosti",
   "upgradeTrackerPercentComplete": "Dokončeno na {percent} %",
   "upgradeTrackerTimeLeft": "Zbývající čas",

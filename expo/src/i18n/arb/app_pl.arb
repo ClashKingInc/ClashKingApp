@@ -5356,7 +5356,7 @@
   "wikiStatRadius": "Promień",
   "wikiStatHits": "Trafienia",
   "clanFamilyFriendly": "Przyjazny rodzinom",
-  "upgradeTrackerOwnedByTier": "Posiadane według kategorii",
+  "upgradeTrackerOwnedByTier": "Posiadane według rangi",
   "upgradeTrackerOwnedBySize": "Zdobyte wg rozmiaru",
   "upgradeTrackerPercentComplete": "Ukończono w {percent}%",
   "upgradeTrackerTimeLeft": "Pozostały czas",

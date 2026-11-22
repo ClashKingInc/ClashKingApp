@@ -5356,7 +5356,7 @@
   "wikiStatRadius": "त्रिज्या",
   "wikiStatHits": "वार",
   "clanFamilyFriendly": "परिवार के अनुकूल",
-  "upgradeTrackerOwnedByTier": "श्रेणी के अनुसार स्वामित्व में",
+  "upgradeTrackerOwnedByTier": "टियर के अनुसार स्वामित्व में",
   "upgradeTrackerOwnedBySize": "आकार के अनुसार स्वामित्व में",
   "upgradeTrackerPercentComplete": "{percent}% पूरा",
   "upgradeTrackerTimeLeft": "शेष समय",

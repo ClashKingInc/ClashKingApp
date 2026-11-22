@@ -2506,7 +2506,7 @@
   "wikiStatRadius": "반경",
   "wikiStatHits": "타격 수",
   "clanFamilyFriendly": "가족 친화적",
-  "upgradeTrackerOwnedByTier": "종류별 보유",
+  "upgradeTrackerOwnedByTier": "등급별 보유",
   "upgradeTrackerOwnedBySize": "크기별 보유",
   "upgradeTrackerPercentComplete": "{percent}% 완료",
   "upgradeTrackerTimeLeft": "남은 시간",

@@ -5261,7 +5261,7 @@
   "wikiStatRadius": "Radius",
   "wikiStatHits": "Træffere",
   "clanFamilyFriendly": "Familievenlig",
-  "upgradeTrackerOwnedByTier": "Ejet efter kategori",
+  "upgradeTrackerOwnedByTier": "Ejet efter niveau",
   "upgradeTrackerOwnedBySize": "Ejet efter størrelse",
   "upgradeTrackerPercentComplete": "{percent}% gennemført",
   "upgradeTrackerTimeLeft": "Tid tilbage",

@@ -5261,7 +5261,7 @@
   "wikiStatRadius": "Radius",
   "wikiStatHits": "Treffer",
   "clanFamilyFriendly": "Familienfreundlich",
-  "upgradeTrackerOwnedByTier": "Vorhanden nach Kategorie",
+  "upgradeTrackerOwnedByTier": "Vorhanden nach Stufe",
   "upgradeTrackerOwnedBySize": "Vorhanden nach Größe",
   "upgradeTrackerPercentComplete": "{percent}% abgeschlossen",
   "upgradeTrackerTimeLeft": "Verbleibende Zeit",

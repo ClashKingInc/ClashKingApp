@@ -2506,7 +2506,7 @@
   "wikiStatRadius": "半径",
   "wikiStatHits": "命中回数",
   "clanFamilyFriendly": "ファミリー向け",
-  "upgradeTrackerOwnedByTier": "カテゴリー別の所有数",
+  "upgradeTrackerOwnedByTier": "ティア別の所有数",
   "upgradeTrackerOwnedBySize": "サイズ別の所有数",
   "upgradeTrackerPercentComplete": "{percent}% 完了",
   "upgradeTrackerTimeLeft": "残り時間",

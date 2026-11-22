@@ -5261,7 +5261,7 @@
   "wikiStatRadius": "Radius",
   "wikiStatHits": "Treff",
   "clanFamilyFriendly": "Familievennlig",
-  "upgradeTrackerOwnedByTier": "Eid etter kategori",
+  "upgradeTrackerOwnedByTier": "Eid etter nivå",
   "upgradeTrackerOwnedBySize": "Eid etter størrelse",
   "upgradeTrackerPercentComplete": "{percent}% fullført",
   "upgradeTrackerTimeLeft": "Tid igjen",

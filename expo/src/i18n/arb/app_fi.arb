@@ -5261,7 +5261,7 @@
   "wikiStatRadius": "Säde",
   "wikiStatHits": "Osumat",
   "clanFamilyFriendly": "Perheystävällinen",
-  "upgradeTrackerOwnedByTier": "Omistetut luokittain",
+  "upgradeTrackerOwnedByTier": "Omistetut tason mukaan",
   "upgradeTrackerOwnedBySize": "Omistettu koon mukaan",
   "upgradeTrackerPercentComplete": "{percent} % valmis",
   "upgradeTrackerTimeLeft": "Aikaa jäljellä",
