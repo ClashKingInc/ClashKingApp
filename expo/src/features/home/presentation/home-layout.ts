@@ -45,6 +45,7 @@ export function useHomeLayout(onError: (message: string) => void, refreshKey = 0
   const userIdentity = useRef(userId);
   const [items, setItems] = useState<readonly HomeItem[]>(initialHomeItems);
   const [resolvedUserId, setResolvedUserId] = useState<string | null>(null);
+  const [editableUserId, setEditableUserId] = useState<string | null>(null);
   const current = useRef(items),
     revision = useRef(0),
     generation = useRef(0),
@@ -59,6 +60,7 @@ export function useHomeLayout(onError: (message: string) => void, refreshKey = 0
         generation.current++;
         ready.current = false;
         setResolvedUserId(null);
+        setEditableUserId(null);
         const defaults = initialHomeItems();
         current.current = defaults;
         setItems(defaults);
@@ -70,6 +72,7 @@ export function useHomeLayout(onError: (message: string) => void, refreshKey = 0
   useEffect(() => {
     let alive = true;
     const run = ++generation.current;
+    const wasReady = ready.current;
     ready.current = false;
     revision.current = 0;
     void (async () => {
@@ -92,6 +95,13 @@ export function useHomeLayout(onError: (message: string) => void, refreshKey = 0
           /* Leave the original order intact when an old preference is malformed. */
         }
       }
+      if (!alive || run !== generation.current) return;
+      if (!wasReady) {
+        current.current = next;
+        setItems(next);
+        setResolvedUserId(userId);
+      }
+      setEditableUserId(null);
       if (userId !== 'guest') {
         try {
           const saved = await Effect.runPromise(
@@ -108,6 +118,7 @@ export function useHomeLayout(onError: (message: string) => void, refreshKey = 0
         setItems(next);
         ready.current = true;
         setResolvedUserId(userId);
+        setEditableUserId(userId);
         // Keep the last accepted cloud/legacy order for the next offline launch.
         // Cache failures are non-fatal and must not discard the resolved layout.
         void runtime.preferences.setString(storageKey, JSON.stringify(next)).catch(() => undefined);
@@ -116,6 +127,7 @@ export function useHomeLayout(onError: (message: string) => void, refreshKey = 0
       if (alive && run === generation.current) {
         ready.current = true;
         setResolvedUserId(userId);
+        setEditableUserId(userId);
         onError(t('homeWidgetsSaveError'));
       }
     });
@@ -181,6 +193,7 @@ export function useHomeLayout(onError: (message: string) => void, refreshKey = 0
     // Refresh may update the order, but never hides an already resolved layout.
     // A different account must resolve its own order before any cards appear.
     ready: resolvedUserId === userId,
+    editable: editableUserId === userId,
     change,
     move: (id: string, delta: number) => {
       const next = [...current.current],

@@ -292,6 +292,7 @@ export function createAppRuntime(): AppRuntime {
       notificationPreferences.clearClans();
       effects.clearPendingRoutes();
       accounts.clearAccountData();
+      bookmarks.setCurrentUserId(null);
       achievements.bindSession(null);
       playerCardPreferences.clear();
       players.clearRankedLeagueCache();

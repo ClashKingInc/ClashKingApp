@@ -29,11 +29,37 @@ export interface AccountBootstrapDependencies {
 interface AccountBootstrapInitializeOptions {
   readonly links?: readonly CocAccountLink[];
   readonly selectedTagLoaded?: boolean;
+  readonly onSelectedAccountReady?: () => void;
+  readonly isCurrent?: () => boolean;
 }
 
 /** Shared post-session hydration used by both cold start and completed login. */
 export class AccountBootstrapService {
+  private homeHydration?: { done: Promise<void>; isCurrent: () => boolean };
+
   constructor(private readonly dependencies: AccountBootstrapDependencies) {}
+
+  initializeHome(
+    userId: string,
+    links: readonly CocAccountLink[],
+    isCurrent: () => boolean,
+  ): Promise<void> {
+    return new Promise((resolve) => {
+      const isActive = () => isCurrent() && this.dependencies.accounts.accounts === links;
+      const done = this.initialize(userId, {
+        links,
+        selectedTagLoaded: true,
+        onSelectedAccountReady: resolve,
+        isCurrent: isActive,
+      }).catch((error) => this.report('startup.accountBootstrap', error));
+      const hydration = { done, isCurrent: isActive };
+      this.homeHydration = hydration;
+      void done.finally(() => {
+        if (this.homeHydration === hydration) this.homeHydration = undefined;
+        resolve();
+      });
+    });
+  }
 
   async initialize(
     userId: string | null,
@@ -41,8 +67,11 @@ export class AccountBootstrapService {
   ): Promise<void> {
     const { accounts, bookmarks, players, playerCardPreferences, upgrades, upgradeWidgets } =
       this.dependencies;
+    const isCurrent = options.isCurrent ?? (() => true);
+    if (!isCurrent()) return;
     accounts.setCurrentUserId(userId);
     bookmarks.setCurrentUserId(userId);
+    if (options.onSelectedAccountReady && options.links) this.configureUpgradeTracker(options.links);
 
     if (userId === null) {
       playerCardPreferences?.clear();
@@ -52,22 +81,64 @@ export class AccountBootstrapService {
       await this.dependencies.legendsWidgets?.clear();
     }
 
-    await Promise.all([
+    const preferences = Promise.all([
       ...(options.selectedTagLoaded ? [] : [accounts.loadSelectedTag()]),
-      ...(bookmarks.loaded ? [] : [bookmarks.load()]),
       ...(userId !== null && playerCardPreferences && !playerCardPreferences.loaded
         ? [playerCardPreferences.load()]
         : []),
     ]);
+    const bookmarkLoad = bookmarks.loaded ? Promise.resolve() : bookmarks.load();
+    const selectedLoad = options.onSelectedAccountReady
+      ? preferences.then(async () => {
+          if (!isCurrent()) return;
+          const links = options.links ?? [];
+          const verified = links.filter((link) => link.isVerified);
+          const selectedTag = canonicalTag(accounts.selectedTag ?? '');
+          const tag = (
+            verified.find((link) => canonicalTag(link.playerTag) === selectedTag) ?? verified[0]
+          )?.playerTag;
+          if (tag)
+            await players.loadOfficialPlayerData([tag], { throwOnError: false }).catch((error) => {
+              this.report('accountBootstrap.selectedPlayer', error);
+            });
+          if (!isCurrent()) return;
+          const remaining = links
+            .map((link) => link.playerTag)
+            .filter((other) => !tag || canonicalTag(other) !== canonicalTag(tag));
+          const profiles = remaining.length
+            ? players.loadOfficialPlayerData(remaining, { throwOnError: false }).catch((error) => {
+                this.report('accountBootstrap.players', error);
+                return {};
+              })
+            : Promise.resolve({});
+          options.onSelectedAccountReady?.();
+          return { tag, profiles };
+        })
+      : Promise.resolve(undefined);
+    const [selected] = await Promise.all([
+      selectedLoad,
+      preferences,
+      options.onSelectedAccountReady
+        ? bookmarkLoad.catch((error) => this.report('accountBootstrap.bookmarks', error))
+        : bookmarkLoad,
+    ]);
+    if (!isCurrent()) return;
 
-    const bookmarkedPlayerTags = bookmarks.players.map((player) => player.tag);
+    const bookmarkedPlayerTags = bookmarks.players
+      .map((player) => player.tag)
+      .filter((tag) => !selected?.tag || canonicalTag(tag) !== canonicalTag(selected.tag));
     const bookmarkedClanTags = bookmarks.clans.map((clan) => clan.tag);
     await Promise.all([
-      this.loadLinkedAccountData(bookmarkedClanTags, { links: options.links }),
+      this.loadLinkedAccountData(bookmarkedClanTags, {
+        links: options.links,
+        profiles: selected?.profiles,
+        isCurrent,
+      }),
       ...(bookmarkedPlayerTags.length
         ? [players.hydrateBookmarkedPlayers(bookmarkedPlayerTags)]
         : []),
     ]);
+    if (!isCurrent()) return;
 
     if (userId !== null) {
       void this.dependencies.legendsWidgets
@@ -96,6 +167,11 @@ export class AccountBootstrapService {
    * domain, and await the auxiliary Home cards before advancing lastRefresh. */
   async refresh(): Promise<void> {
     const { accounts, bookmarks } = this.dependencies;
+    const hydration = this.homeHydration;
+    if (hydration?.isCurrent()) {
+      await hydration.done;
+      if (!hydration.isCurrent()) return;
+    }
     const links = accounts.accounts;
     if (!links.length) return;
     await this.loadLinkedAccountData(
@@ -109,14 +185,15 @@ export class AccountBootstrapService {
     options: {
       links?: readonly CocAccountLink[];
       forceAuxiliaryRefresh?: boolean;
+      profiles?: Promise<Readonly<Record<string, string>>>;
+      isCurrent?: () => boolean;
     } = {},
   ): Promise<void> {
     const { accounts, players, clans, wars } = this.dependencies;
     const links = options.links ?? (await accounts.fetchAccounts());
-    this.dependencies.upgrades?.configureRemote({
-      accountId: links.length ? accounts.userId : null,
-      verifiedPlayerTags: links.filter((link) => link.isVerified).map((link) => link.playerTag),
-    });
+    const isCurrent = options.isCurrent ?? (() => true);
+    if (!isCurrent()) return;
+    if (!options.profiles) this.configureUpgradeTracker(links);
     if (!links.length) {
       await accounts.initializeSelectedTag();
       return;
@@ -129,7 +206,11 @@ export class AccountBootstrapService {
       rankedTags,
       options.forceAuxiliaryRefresh ?? false,
     );
-    const upgradeWarmup = this.warmUpgradeTracker(links, options.forceAuxiliaryRefresh ?? false);
+    const upgradeWarmup = this.warmUpgradeTracker(
+      links,
+      options.forceAuxiliaryRefresh ?? false,
+      isCurrent,
+    );
     // Flutter deliberately keeps these outside startup's awaited critical
     // path, but pull-to-refresh awaits both so its timestamp covers the cards.
     if (!options.forceAuxiliaryRefresh) {
@@ -142,6 +223,7 @@ export class AccountBootstrapService {
     }
 
     const cachedClanTagsByPlayer = await this.cachedClanTagsByPlayer(playerTags);
+    if (!isCurrent()) return;
     const optimisticClanTags = uniqueNonEmpty([
       ...cachedClanTagsByPlayer.values(),
       ...bookmarkedClanTags,
@@ -152,18 +234,24 @@ export class AccountBootstrapService {
 
     let clanTagsByPlayer: Readonly<Record<string, string>> = {};
     try {
-      clanTagsByPlayer = await players.loadOfficialPlayerData(playerTags, {
-        notify: false,
-        throwOnError: false,
-        forceRefresh: options.forceAuxiliaryRefresh ?? false,
-      });
+      clanTagsByPlayer = await (options.profiles ??
+        players.loadOfficialPlayerData(playerTags, {
+          notify: false,
+          throwOnError: false,
+          forceRefresh: options.forceAuxiliaryRefresh ?? false,
+        }));
     } catch (error) {
       this.report('accountBootstrap.players', error);
+    }
+    if (!isCurrent()) {
+      await optimisticClanLoad;
+      return;
     }
     const discoveredClanTags = uniqueNonEmpty([
       ...players.profiles.map((profile) => profile.clanTag),
       ...Object.values(clanTagsByPlayer),
     ]);
+    if (!isCurrent()) return;
     const optimisticSet = new Set(optimisticClanTags);
     const missingClanTags = discoveredClanTags.filter((tag) => !optimisticSet.has(tag));
 
@@ -185,13 +273,22 @@ export class AccountBootstrapService {
     await accounts.initializeSelectedTag();
   }
 
+  private configureUpgradeTracker(links: readonly CocAccountLink[]): void {
+    const { accounts, upgrades } = this.dependencies;
+    upgrades?.configureRemote({
+      accountId: links.length ? accounts.userId : null,
+      verifiedPlayerTags: links.filter((link) => link.isVerified).map((link) => link.playerTag),
+    });
+  }
+
   private async warmUpgradeTracker(
     links: readonly {
       playerTag: string;
       isVerified: boolean;
       raw: Readonly<Record<string, unknown>>;
     }[],
-    forceRefresh = false,
+    forceRefresh: boolean,
+    isCurrent: () => boolean,
   ): Promise<void> {
     const { upgrades, upgradeWidgets, accounts } = this.dependencies;
     if (!upgrades) return;
@@ -210,6 +307,7 @@ export class AccountBootstrapService {
         }
       })
     ).filter((snapshot) => snapshot !== null);
+    if (!isCurrent()) return;
     await upgradeWidgets?.sync(snapshots, {
       selectedTag: accounts.selectedTag,
       linkedAccounts: verified.map((link) => ({

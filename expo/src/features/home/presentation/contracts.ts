@@ -149,6 +149,7 @@ export interface HomeDashboardModel {
   readonly upgradeTrackerEnabled: boolean;
   readonly cardOrder?: readonly HomeCardId[];
   readonly layoutReady?: boolean;
+  readonly canReorderCards?: boolean;
 }
 
 export interface HomeDashboardActions {
@@ -198,7 +199,7 @@ export function normalizeHomeCardOrder(value: unknown): HomeCardId[] {
 }
 
 export function visibleHomeCards(model: HomeDashboardModel): HomeCardId[] {
-  // Never mount reorderable cards in default positions while saved order loads.
+  // Wait for the current user's local order before mounting cards.
   if (model.layoutReady === false) return [];
   const visible = new Set<HomeCardId>();
   if (model.todo && model.todo.accounts.length > 0) visible.add('todo');

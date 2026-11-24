@@ -26,6 +26,7 @@ registerHooks({
 const { initializeApplication, prepareLocalStartup } =
   await import('../src/core/app/startup-coordinator.ts');
 const { UnauthorizedException } = await import('../src/core/api/contract-api.ts');
+const { AccountBootstrapService } = await import('../src/features/auth/account-bootstrap-service.ts');
 
 function createDependencies({ authenticated = true, verified = true } = {}) {
   return {
@@ -52,6 +53,90 @@ function createDependencies({ authenticated = true, verified = true } = {}) {
     push: { supportsPushNotifications: false },
   };
 }
+
+function homeBootstrapFixture(links, loadPlayer, loadBookmarks = async () => {}) {
+  const events = [];
+  const allReady = Promise.withResolvers();
+  const profiles = [];
+  const dependencies = {
+    accounts: {
+      userId: 'user',
+      accounts: links,
+      selectedTag: '#Q2P',
+      setCurrentUserId: () => {},
+      initializeSelectedTag: async () => {},
+      updateRefreshTime: () => {
+        events.push('all ready');
+        allReady.resolve();
+      },
+    },
+    bookmarks: {
+      loaded: false,
+      load: loadBookmarks,
+      setCurrentUserId: () => {},
+      players: [],
+      clans: [],
+    },
+    players: {
+      profiles,
+      loadOfficialPlayerData: async (tags) => {
+        await Promise.all(tags.map(async (tag) => {
+          events.push(tag);
+          await loadPlayer(tag);
+        }));
+        profiles.push(...tags.map((tag) => ({ tag, clanTag: '' })));
+        return {};
+      },
+      prefetchRankedLeagueData: async () => {},
+      notifyDataChanged: () => {},
+    },
+    playerCardPreferences: { loaded: true },
+    storage: { getString: async () => null },
+    clans: { clans: new Map(), notifyDataChanged: () => {} },
+    wars: { summaries: new Map(), notifyDataChanged: () => {} },
+  };
+  return { dependencies, events, profiles, allReady: allReady.promise };
+}
+
+const homeLinks = [
+  { playerTag: '#P0Q', isVerified: true },
+  { playerTag: '#Q2P', isVerified: true },
+];
+
+test('Home can show the selected profile while other accounts and bookmarks are pending', async () => {
+  const otherAccount = Promise.withResolvers();
+  const bookmarks = Promise.withResolvers();
+  const { dependencies, events, profiles, allReady } = homeBootstrapFixture(
+    homeLinks,
+    (tag) => tag === '#Q2P' ? Promise.resolve() : otherAccount.promise,
+    () => bookmarks.promise,
+  );
+  const bootstrap = new AccountBootstrapService(dependencies);
+  try {
+    await bootstrap.initializeHome('user', homeLinks, () => true);
+    assert.deepEqual(events, ['#Q2P', '#P0Q']);
+    assert.deepEqual(profiles.map(({ tag }) => tag), ['#Q2P']);
+  } finally {
+    otherAccount.resolve();
+    bookmarks.resolve();
+  }
+  await allReady;
+  assert.deepEqual(profiles.map(({ tag }) => tag), ['#Q2P', '#P0Q']);
+}, { timeout: 1000 });
+
+test('a signed-out session cannot continue loading the remaining Home accounts', async () => {
+  const selected = Promise.withResolvers();
+  const { dependencies, events } = homeBootstrapFixture(homeLinks, () => selected.promise);
+  const bootstrap = new AccountBootstrapService(dependencies);
+  let current = true;
+  const ready = bootstrap.initializeHome('user', homeLinks, () => current);
+  await setImmediate();
+  assert.deepEqual(events, ['#Q2P']);
+  current = false;
+  selected.resolve();
+  await ready;
+  assert.deepEqual(events, ['#Q2P']);
+}, { timeout: 1000 });
 
 test('local startup preparation overlaps the update gate and is reused after release', async () => {
   const dependencies = createDependencies({ authenticated: false });

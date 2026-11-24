@@ -325,7 +325,7 @@ export function DashboardScreen({
       renderItem={({ item, getIndex, drag, isActive }: RenderItemParams<HomeCardId>) => (
         <HomeCardHold
           onHold={
-            cards.length > 1
+            cards.length > 1 && model.canReorderCards !== false
               ? (position) => {
                   holdPageY.value = position.y;
                   lastAutoScroll.value = 0;

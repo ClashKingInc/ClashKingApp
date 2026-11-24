@@ -147,9 +147,9 @@ export function HomeDashboardRoot(props: HomeDashboardRootProps) {
   const upgradeLoading =
     upgradePlayers.length > 0 && upgradeState.signature !== upgradeLoadSignature;
   useEffect(() => {
-    // Ranked and Upgrade show their own loading cards while the rest of Home is usable.
-    if (layout.ready && !runtime.players.isLoading) onReady?.();
-  }, [runtime, serviceRevision, layout.ready, onReady]);
+    // The selected account has settled before startup mounts Home.
+    if (layout.ready) onReady?.();
+  }, [layout.ready, onReady]);
 
   useEffect(() => {
     let current = true;
@@ -236,6 +236,7 @@ export function HomeDashboardRoot(props: HomeDashboardRootProps) {
     () => ({
       loading: runtime.players.isLoading,
       layoutReady: layout.ready,
+      canReorderCards: layout.editable,
       selectedAccountTag: runtime.accounts.selectedTag,
       linkedAccountCount: runtime.accounts.verifiedAccounts.length,
       ...(runtime.accounts.lastRefresh ? { lastRefresh: runtime.accounts.lastRefresh } : {}),
@@ -280,6 +281,7 @@ export function HomeDashboardRoot(props: HomeDashboardRootProps) {
       announcements,
       cardOrder,
       layout.ready,
+      layout.editable,
       homeIncludedTags,
       locale,
       rankedLoading,

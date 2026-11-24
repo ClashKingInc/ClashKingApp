@@ -158,13 +158,28 @@ function ApplicationContent() {
         },
         reportError: (operation, error) => reportException(error, operation),
       });
+      if (generation !== startupGeneration.current) return;
       if (result.authenticated) {
         const link = pendingAppLink();
+        const userId = runtime.auth.state.currentUser?.userId ?? null;
+        const sessionVersion = runtime.tokens.sessionVersion;
+        const isCurrent = () =>
+          generation === startupGeneration.current &&
+          runtime.tokens.sessionVersion === sessionVersion &&
+          runtime.auth.canUseApp &&
+          runtime.auth.state.currentUser?.userId === userId;
+        await onboarding.bind(runtime.preferences, userId);
+        if (!isCurrent()) {
+          if (generation === startupGeneration.current) setScene({ kind: 'login' });
+          return;
+        }
+        const returningUser = onboarding.getSnapshot().returningUser;
         const hydrate = () =>
           runtime.accountBootstrap
-            .initialize(runtime.auth.state.currentUser?.userId ?? null, {
+            .initialize(userId, {
               links: runtime.accounts.accounts,
               selectedTagLoaded: true,
+              isCurrent,
             })
             .catch((error) => reportException(error, 'startup.accountBootstrap'));
         if (link?.kind === 'player' && result.destination === 'home') {
@@ -173,15 +188,16 @@ function ApplicationContent() {
           await runtime.players
             .getPlayerAndClanData(link.tag)
             .catch((error) => reportException(error, 'startup.linkedPlayer'));
-          void hydrate();
+          if (isCurrent()) void hydrate();
+        } else if (userId && returningUser && result.destination === 'home') {
+          await runtime.accountBootstrap.initializeHome(userId, runtime.accounts.accounts, isCurrent);
         } else await hydrate();
-      }
-      if (generation !== startupGeneration.current) return;
-      if (result.authenticated) {
-        await onboarding.bind(runtime.preferences, runtime.auth.state.currentUser?.userId ?? null);
-        if (generation !== startupGeneration.current) return;
+        if (!isCurrent()) {
+          if (generation === startupGeneration.current) setScene({ kind: 'login' });
+          return;
+        }
         setScene(
-          onboarding.getSnapshot().returningUser
+          returningUser
             ? sceneForStartupResult(result)
             : { kind: 'introduction', stage: 'overview' },
         );
