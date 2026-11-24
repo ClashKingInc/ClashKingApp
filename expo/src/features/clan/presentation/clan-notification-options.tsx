@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Pressable, StyleSheet, View } from 'react-native';
-import { ChevronDown, ChevronUp, SlidersHorizontal } from 'lucide-react-native';
+import { ChevronDown, ChevronUp, SlidersHorizontal } from '@/ui/icons';
 import { useI18n } from '../../../i18n';
 import { CKText, MobileWebImage, useCKTheme } from '../../../ui';
 import { ImageAssets } from '../../../core/assets/image-assets';

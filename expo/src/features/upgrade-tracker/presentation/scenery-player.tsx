@@ -7,7 +7,7 @@ import {
   View,
   type KeyDownEvent,
 } from 'react-native';
-import { Pause, Play } from 'lucide-react-native';
+import { Pause, Play } from '@/ui/icons';
 import { useI18n } from '../../../i18n';
 import { CKText, PressableSurface, colorWithAlpha, useCKTheme } from '../../../ui';
 import { SceneryAudioService, type SceneryAudioState } from '../audio/scenery-audio-service';

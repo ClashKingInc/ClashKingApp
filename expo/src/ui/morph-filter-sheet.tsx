@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState, type ReactNode } from 'react';
 import { Animated, Modal, Pressable, ScrollView, StyleSheet, View } from 'react-native';
 import Reanimated, { useSharedValue, useAnimatedStyle, withSpring } from 'react-native-reanimated';
-import { ChevronLeft, Check, X } from 'lucide-react-native';
+import { ChevronLeft, Check, X } from '@/ui/icons';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { materialBackLabel, useI18n } from '../i18n';
 import { CKText } from './text';

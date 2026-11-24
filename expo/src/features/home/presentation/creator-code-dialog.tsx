@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Linking, Modal, Pressable, StyleSheet, View } from 'react-native';
-import { ExternalLink, Gamepad2, X } from 'lucide-react-native';
+import { ExternalLink, Gamepad2, X } from '@/ui/icons';
 
 import { ImageAssets } from '../../../core/assets/image-assets';
 import { supportCreatorUrl } from '../../../core/app/runtime-effects';

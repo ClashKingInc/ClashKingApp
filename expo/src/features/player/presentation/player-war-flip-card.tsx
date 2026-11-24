@@ -7,7 +7,7 @@ import Reanimated, {
   withSpring,
   withTiming,
 } from 'react-native-reanimated';
-import { BarChart3, RotateCcw } from 'lucide-react-native';
+import { BarChart3, RotateCcw } from '@/ui/icons';
 import { DashboardCardFrame } from '../../../ui/dashboard-card';
 import { useI18n } from '../../../i18n';
 import { CKText, useCKAccessibility, useCKTheme } from '../../../ui';

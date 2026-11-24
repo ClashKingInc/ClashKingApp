@@ -1,6 +1,6 @@
 import { memo, useEffect, useMemo, useRef, useState, useSyncExternalStore } from 'react';
 import { Pressable, StyleSheet, View } from 'react-native';
-import { Star } from 'lucide-react-native';
+import { Star } from '@/ui/icons';
 import Reanimated, { useAnimatedStyle, useSharedValue, withSpring } from 'react-native-reanimated';
 import { materialBackLabel, toIntlLocale, useI18n } from '../../../i18n';
 import { ImageAssets } from '../../../core/assets/image-assets';

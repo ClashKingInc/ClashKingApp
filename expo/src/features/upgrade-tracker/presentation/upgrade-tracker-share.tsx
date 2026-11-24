@@ -12,7 +12,7 @@ import {
 } from 'react-native';
 import { forwardRef, useEffect, useRef, useState } from 'react';
 import { captureRef } from 'react-native-view-shot';
-import { Check, Copy, Share2, X } from 'lucide-react-native';
+import { Check, Copy, Share2, X } from '@/ui/icons';
 import * as Clipboard from 'expo-clipboard';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 

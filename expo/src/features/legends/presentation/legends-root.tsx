@@ -25,7 +25,7 @@ import {
   Download,
   History,
   Share2,
-} from 'lucide-react-native';
+} from '@/ui/icons';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { materialBackLabel, toIntlLocale, useI18n } from '../../../i18n';
 import {

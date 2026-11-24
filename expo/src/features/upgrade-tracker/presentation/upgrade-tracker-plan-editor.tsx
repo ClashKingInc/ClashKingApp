@@ -12,7 +12,7 @@ import {
   type ScrollViewProps,
 } from 'react-native';
 import { createContext, useCallback, useContext, useMemo, useRef, useState } from 'react';
-import { GripVertical, SlidersHorizontal, X } from 'lucide-react-native';
+import { GripVertical, SlidersHorizontal, X } from '@/ui/icons';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { trackerCategoryImage, trackerCategoryImageScale } from './tracker-category-art';

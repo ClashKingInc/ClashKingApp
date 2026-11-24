@@ -11,7 +11,7 @@ import {
   View,
   useWindowDimensions,
 } from 'react-native';
-import { Check, ChevronDown, ChevronsUpDown, Search, X } from 'lucide-react-native';
+import { Check, ChevronDown, ChevronsUpDown, Search, X } from '@/ui/icons';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { tintIcon } from './icon-slot';

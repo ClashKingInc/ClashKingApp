@@ -1,5 +1,5 @@
 import { StyleSheet, View } from 'react-native';
-import { ArrowLeft } from 'lucide-react-native';
+import { ArrowLeft } from '@/ui/icons';
 import { materialBackLabel, useI18n } from '../../i18n';
 import { CKText, HeaderIconButton, useCKTheme } from '../../ui';
 import { CalculatorTitleTarget } from './calculator-fireball-playground';

@@ -1,6 +1,6 @@
 import { ProfileAvatar } from '../../features/avatars/clash-avatar';
 import { Pressable, ScrollView, StyleSheet, View } from 'react-native';
-import { Hammer, LogOut, MessageCircle, RefreshCcw, WifiOff } from 'lucide-react-native';
+import { Hammer, LogOut, MessageCircle, RefreshCcw, WifiOff } from '@/ui/icons';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { ImageAssets } from '../assets/image-assets';

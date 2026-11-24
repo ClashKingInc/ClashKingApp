@@ -18,7 +18,7 @@ import {
   UserRound,
   UsersRound,
   type LucideProps,
-} from 'lucide-react-native';
+} from '@/ui/icons';
 import type { ComponentType } from 'react';
 
 import type { AppRouteDefinition, RouteIconName } from './route-manifest';

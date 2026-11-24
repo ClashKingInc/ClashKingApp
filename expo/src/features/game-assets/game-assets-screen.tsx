@@ -19,7 +19,7 @@ import {
   PackageOpen,
   Search,
   Share2,
-} from 'lucide-react-native';
+} from '@/ui/icons';
 
 import { ImageAssets } from '../../core/assets/image-assets';
 import { gameDataState, subscribeToGameDataRevision } from '../../core/game-data/game-data-state';

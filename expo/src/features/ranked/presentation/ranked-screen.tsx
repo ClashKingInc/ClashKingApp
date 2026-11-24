@@ -41,7 +41,7 @@ import {
   LocateFixed,
   Share2,
   UsersRound,
-} from 'lucide-react-native';
+} from '@/ui/icons';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { ImageAssets } from '../../../core/assets/image-assets';

@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { ScrollView, StyleSheet, View, useWindowDimensions } from 'react-native';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
-import { ArrowLeft } from 'lucide-react-native';
+import { ArrowLeft } from '@/ui/icons';
 import { DestinationGrid, type DestinationGridGroup } from './destination-grid';
 import { HeaderIconButton } from './header';
 import { CKText } from './text';

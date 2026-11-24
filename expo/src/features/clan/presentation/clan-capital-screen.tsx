@@ -29,7 +29,7 @@ import {
   Users,
   X,
   Zap,
-} from 'lucide-react-native';
+} from '@/ui/icons';
 
 import { ImageAssets } from '../../../core/assets/image-assets';
 import { canonicalTag } from '../../../core/domain/tags';

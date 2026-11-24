@@ -12,7 +12,7 @@ import {
   Share2,
   Shield,
   Trash2,
-} from 'lucide-react-native';
+} from '@/ui/icons';
 
 import { useI18n } from '../../../i18n';
 import {

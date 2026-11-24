@@ -37,7 +37,7 @@ import {
   Shield,
   SlidersHorizontal,
   Swords,
-} from 'lucide-react-native';
+} from '@/ui/icons';
 
 import { ImageAssets } from '../../core/assets/image-assets';
 import { getMaxTownHallLevel } from '../../core/game-data/game-data-service';

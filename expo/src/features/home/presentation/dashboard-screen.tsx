@@ -19,7 +19,7 @@ import DraggableFlatList, {
   type DraggableFlatListProps,
   type RenderItemParams,
 } from 'react-native-draggable-flatlist';
-import { EyeOff, UserCircle } from 'lucide-react-native';
+import { EyeOff, UserCircle } from '@/ui/icons';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { toIntlLocale, useI18n } from '../../../i18n';
 import { InlineReorderGrid } from '../../../ui/inline-reorder-grid';

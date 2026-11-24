@@ -15,7 +15,7 @@ import { WikiSquadMembers } from '../../game-assets/wiki-squad-members';
 import { modalOrientations } from '../../../ui/modal-orientations';
 import { useEffect, useMemo, useRef, useState, type ReactNode, type ComponentRef } from 'react';
 import { Modal, Pressable, ScrollView, StyleSheet, View, useWindowDimensions } from 'react-native';
-import { ArrowLeft, Lock, Clock3, Coins, Layers3, X } from 'lucide-react-native';
+import { ArrowLeft, Lock, Clock3, Coins, Layers3, X } from '@/ui/icons';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Svg, { Defs, LinearGradient, Rect, Stop } from 'react-native-svg';
 

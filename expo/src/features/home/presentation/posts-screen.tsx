@@ -1,6 +1,6 @@
 import { useAdaptiveLayout } from '../../../ui/adaptive-layout';
 import { InlineBackControl } from '../../../ui/native-back-context';
-import { ChevronLeft, ChevronRight, Check, CloudOff, FileText, Play } from 'lucide-react-native';
+import { ChevronLeft, ChevronRight, Check, CloudOff, FileText, Play } from '@/ui/icons';
 import { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import {
   ActivityIndicator,

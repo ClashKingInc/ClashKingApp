@@ -42,7 +42,7 @@ import {
   Share2,
   ClipboardPaste,
   X,
-} from 'lucide-react-native';
+} from '@/ui/icons';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import * as Clipboard from 'expo-clipboard';
 import { HeroHeaderScrim } from '../../../ui/hero-header-scrim';

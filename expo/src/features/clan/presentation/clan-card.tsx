@@ -4,7 +4,7 @@ import { CARD_REORDER_HOLD_MS } from '../../../ui/drag-jiggle';
 import { Pressable, StyleSheet, View, Platform, useWindowDimensions } from 'react-native';
 import { useCKAccessibility } from '../../../ui/accessibility';
 import { validClanSpringOrigin, type ClanSpringOrigin } from './clan-spring-transition';
-import { Bookmark, ChevronRight, Mail, Shield, Users } from 'lucide-react-native';
+import { Bookmark, ChevronRight, Mail, Shield, Users } from '@/ui/icons';
 
 import { ImageAssets } from '../../../core/assets/image-assets';
 import { toIntlLocale, useI18n } from '../../../i18n';

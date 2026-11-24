@@ -12,7 +12,7 @@ import {
   StyleSheet,
   View,
 } from 'react-native';
-import { ArrowLeft, LockKeyhole, Mail } from 'lucide-react-native';
+import { ArrowLeft, LockKeyhole, Mail } from '@/ui/icons';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Svg, { Defs, G, LinearGradient, Mask, Path, Polygon, Rect, Stop } from 'react-native-svg';
 

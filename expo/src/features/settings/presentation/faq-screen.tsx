@@ -31,7 +31,7 @@ import {
   UserRoundCheck,
   UsersRound,
   X,
-} from 'lucide-react-native';
+} from '@/ui/icons';
 
 import { useI18n, type MessageKey } from '../../../i18n';
 import { CKText, Snackbar, Surface, ckRadius, ckSpacing, useCKTheme } from '../../../ui';

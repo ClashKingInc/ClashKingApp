@@ -13,7 +13,7 @@ import {
   Tag,
   Trophy,
   type LucideIcon,
-} from 'lucide-react-native';
+} from '@/ui/icons';
 
 import { ImageAssets } from '../../../core/assets/image-assets';
 import { HorizontalSwipeScrollView } from '../../../ui/account-bar-scroll-view';

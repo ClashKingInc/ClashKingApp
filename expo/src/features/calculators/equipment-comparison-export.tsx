@@ -2,7 +2,7 @@ import { modalOrientations } from "../../ui/modal-orientations";
 import type { ViewInstance } from 'react-native';
 import { useEffect, useRef, useState } from 'react';
 import { Modal, PixelRatio, Platform, Pressable, StyleSheet, View } from 'react-native';
-import { Check, Copy, Download } from 'lucide-react-native';
+import { Check, Copy, Download } from '@/ui/icons';
 import * as Clipboard from 'expo-clipboard';
 import { captureRef, releaseCapture } from 'react-native-view-shot';
 import { File } from 'expo-file-system';

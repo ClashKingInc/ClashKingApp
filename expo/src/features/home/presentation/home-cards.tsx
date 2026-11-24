@@ -1,6 +1,6 @@
 import { type ReactNode } from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
-import { Plus } from 'lucide-react-native';
+import { Plus } from '@/ui/icons';
 
 import { ImageAssets } from '../../../core/assets/image-assets';
 import { toIntlLocale, useI18n, type MessageKey } from '../../../i18n';

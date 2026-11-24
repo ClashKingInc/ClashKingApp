@@ -1,7 +1,7 @@
 import { useAdaptiveLayout } from '../../../ui/adaptive-layout';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { Pressable, StyleSheet, View } from 'react-native';
-import { ChevronRight, Equal, ListFilter } from 'lucide-react-native';
+import { ChevronRight, Equal, ListFilter } from '@/ui/icons';
 import { ImageAssets } from '../../../core/assets/image-assets';
 import { toIntlLocale, useI18n } from '../../../i18n';
 import {

@@ -12,7 +12,7 @@ import {
   View,
   useWindowDimensions,
 } from 'react-native';
-import { ArrowLeft, ArrowRight, Lock, X } from 'lucide-react-native';
+import { ArrowLeft, ArrowRight, Lock, X } from '@/ui/icons';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { materialBackLabel, materialCloseLabel, useI18n } from '../../../i18n';

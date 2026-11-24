@@ -1,6 +1,6 @@
 import { type ReactNode } from 'react';
 import { Pressable, StyleSheet, View, useWindowDimensions } from 'react-native';
-import { ArrowLeft } from 'lucide-react-native';
+import { ArrowLeft } from '@/ui/icons';
 import { illustratedHeaderLayout } from './illustrated-header-layout';
 import { HeroHeaderScrim } from './hero-header-scrim';
 import { useNativeRailBack } from './native-back-context';

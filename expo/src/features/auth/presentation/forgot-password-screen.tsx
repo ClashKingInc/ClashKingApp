@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { MailCheck } from 'lucide-react-native';
+import { MailCheck } from '@/ui/icons';
 
 import { useI18n } from '../../../i18n';
 import { CKText, useCKTheme } from '../../../ui';

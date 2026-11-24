@@ -10,7 +10,7 @@ import {
   type StyleProp,
   type ViewStyle,
 } from 'react-native';
-import { Filter } from 'lucide-react-native';
+import { Filter } from '@/ui/icons';
 
 import { useI18n } from '../../../i18n';
 import {

@@ -3,7 +3,7 @@ import { Pressable, StyleSheet, View } from 'react-native';
 import { materialBackLabel, useI18n } from '../../i18n';
 import { CKText, SelectionPicker, colorWithAlpha, useCKTheme } from '../../ui';
 import { HeaderIconButton } from '../../ui/header';
-import { ArrowLeft } from 'lucide-react-native';
+import { ArrowLeft } from '@/ui/icons';
 
 export function CalcHeader({ onBack }: { onBack: () => void; title?: string; image?: string }) {
   const { locale } = useI18n();

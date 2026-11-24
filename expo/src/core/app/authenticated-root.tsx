@@ -20,7 +20,7 @@ import {
   type ReactNode,
 } from 'react';
 import { Alert, Platform, StyleSheet, View, useWindowDimensions } from 'react-native';
-import { Trophy } from 'lucide-react-native';
+import { Trophy } from '@/ui/icons';
 
 import { ServersRoot, type DashboardServer } from '../../features/servers/servers-root';
 import { EsportsRoot } from '../../features/competitive/esports-root';

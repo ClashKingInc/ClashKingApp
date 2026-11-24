@@ -9,7 +9,7 @@ import {
   type ReactNode,
 } from 'react';
 import { Platform, RefreshControl, ScrollView, StyleSheet, View } from 'react-native';
-import { History, Repeat2 } from 'lucide-react-native';
+import { History, Repeat2 } from '@/ui/icons';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { useI18n } from '../../../i18n';

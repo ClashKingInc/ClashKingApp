@@ -12,7 +12,7 @@ import {
   View,
   useWindowDimensions,
 } from 'react-native';
-import { ShieldAlert } from 'lucide-react-native';
+import { ShieldAlert } from '@/ui/icons';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { toIntlLocale, useI18n } from '../../../i18n';

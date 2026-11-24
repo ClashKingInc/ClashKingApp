@@ -1,7 +1,7 @@
 import type { ViewInstance } from 'react-native';
 import { createContext, useContext, useEffect, useRef, useState, type ReactNode } from 'react';
 import { Image, Pressable, StyleSheet, View } from 'react-native';
-import { Check, Copy } from 'lucide-react-native';
+import { Check, Copy } from '@/ui/icons';
 import * as Clipboard from 'expo-clipboard';
 import { captureRef } from 'react-native-view-shot';
 import { ImageAssets } from '../../../core/assets/image-assets';

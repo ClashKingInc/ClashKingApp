@@ -2,7 +2,7 @@ import { useAdaptiveLayout } from '../../../ui/adaptive-layout';
 import { ASSET_ORIGIN } from '../../../core/assets/asset-origin';
 import { useEffect, useState } from 'react';
 import { Platform, Pressable, StyleSheet, View, useWindowDimensions } from 'react-native';
-import { ArrowDown, ArrowUp, ChevronRight, Globe2, Trophy } from 'lucide-react-native';
+import { ArrowDown, ArrowUp, ChevronRight, Globe2, Trophy } from '@/ui/icons';
 
 import { ImageAssets } from '../../../core/assets/image-assets';
 import { toIntlLocale, useI18n } from '../../../i18n';

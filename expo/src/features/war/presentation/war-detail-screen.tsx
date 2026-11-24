@@ -2,7 +2,7 @@ import { useAdaptiveLayout } from '../../../ui/adaptive-layout';
 import { WarPanelGrid } from './war-panel-grid';
 import { memo, useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 import { Animated, Linking, Platform, Pressable, ScrollView, StyleSheet, View } from 'react-native';
-import { ChevronDown, ChevronUp, Clock3, ListFilter } from 'lucide-react-native';
+import { ChevronDown, ChevronUp, Clock3, ListFilter } from '@/ui/icons';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { ImageAssets } from '../../../core/assets/image-assets';
 import { useI18n } from '../../../i18n';

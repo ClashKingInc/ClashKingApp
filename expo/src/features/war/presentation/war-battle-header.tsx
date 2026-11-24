@@ -3,7 +3,7 @@ import { illustratedHeaderLayout } from '../../../ui/illustrated-header-layout';
 import { useEffect, useState } from 'react';
 import { HeaderArtwork } from '../../../ui/header-artwork';
 import { Animated, Pressable, StyleSheet, View } from 'react-native';
-import { ArrowLeft } from 'lucide-react-native';
+import { ArrowLeft } from '@/ui/icons';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { HeroHeaderScrim } from '../../../ui/hero-header-scrim';
 import { ImageAssets } from '../../../core/assets/image-assets';

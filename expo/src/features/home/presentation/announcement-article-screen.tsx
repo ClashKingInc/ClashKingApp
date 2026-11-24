@@ -1,6 +1,6 @@
 import { useAdaptiveLayout } from '../../../ui/adaptive-layout';
 import { InlineBackControl } from '../../../ui/native-back-context';
-import { ArrowLeft, ArrowRight, CalendarDays } from 'lucide-react-native';
+import { ArrowLeft, ArrowRight, CalendarDays } from '@/ui/icons';
 import { useMemo } from 'react';
 import { Pressable, StyleSheet, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';

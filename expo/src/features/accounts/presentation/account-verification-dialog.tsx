@@ -1,7 +1,7 @@
 import { modalOrientations } from '../../../ui/modal-orientations';
 import { useState } from 'react';
 import { KeyboardAvoidingView, Platform, Modal, ScrollView, StyleSheet, View } from 'react-native';
-import { ExternalLink, Shield } from 'lucide-react-native';
+import { ExternalLink, Shield } from '@/ui/icons';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { ImageAssets } from '../../../core/assets/image-assets';

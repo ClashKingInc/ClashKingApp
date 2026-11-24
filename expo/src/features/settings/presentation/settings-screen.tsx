@@ -25,7 +25,7 @@ import {
   SunMoon,
   Shield,
   Languages as TranslateIcon,
-} from 'lucide-react-native';
+} from '@/ui/icons';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { useI18n, toIntlLocale } from '../../../i18n';

@@ -1,6 +1,5 @@
 import '../i18n/intl-polyfills';
 
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import {
   ErrorBoundary as ExpoRouterErrorBoundary,
   Stack,
@@ -36,13 +35,6 @@ void SplashScreen.preventAutoHideAsync();
 initializeObservability();
 registerPlatformPushBackgroundHandler((error) => {
   reportException(error, 'push.background_handler');
-});
-
-const queryClient = new QueryClient({
-  defaultOptions: {
-    queries: { retry: 1, staleTime: 30_000 },
-    mutations: { retry: false },
-  },
 });
 
 export default function RootLayout() {
@@ -95,27 +87,22 @@ export default function RootLayout() {
       <WebDocumentTitle />
       <SafeAreaProvider>
         <IosOrientationPolicy />
-        <QueryClientProvider client={queryClient}>
-          <AppRuntimeProvider>
-            <NavigationTheme>
-              <AppStatusBar />
-              <Stack screenOptions={{ headerShown: false, fullScreenGestureEnabled: false }}>
-                <Stack.Screen
-                  name="(main)"
-                  options={{ animation: 'none', gestureEnabled: false }}
-                />
-                <Stack.Screen
-                  name="detail"
-                  options={({ route }) =>
-                    nativeSecondaryScreenOptions(
-                      (route.params as { layer?: string } | undefined)?.layer,
-                    )
-                  }
-                />
-              </Stack>
-            </NavigationTheme>
-          </AppRuntimeProvider>
-        </QueryClientProvider>
+        <AppRuntimeProvider>
+          <NavigationTheme>
+            <AppStatusBar />
+            <Stack screenOptions={{ headerShown: false, fullScreenGestureEnabled: false }}>
+              <Stack.Screen name="(main)" options={{ animation: 'none', gestureEnabled: false }} />
+              <Stack.Screen
+                name="detail"
+                options={({ route }) =>
+                  nativeSecondaryScreenOptions(
+                    (route.params as { layer?: string } | undefined)?.layer,
+                  )
+                }
+              />
+            </Stack>
+          </NavigationTheme>
+        </AppRuntimeProvider>
       </SafeAreaProvider>
     </GestureHandlerRootView>
   );

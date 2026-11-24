@@ -9,7 +9,7 @@ import {
   type StyleProp,
   type ViewStyle,
 } from 'react-native';
-import { Info } from 'lucide-react-native';
+import { Info } from '@/ui/icons';
 import { CKText } from './text';
 import { Surface } from './surfaces';
 import { useCKTheme } from './theme';

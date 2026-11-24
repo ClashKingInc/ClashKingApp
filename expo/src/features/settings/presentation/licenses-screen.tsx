@@ -3,7 +3,7 @@ import { modalOrientations } from '../../../ui/modal-orientations';
 import { useState } from 'react';
 import { useLinkParameters } from '../../../core/deep-links/link-parameters';
 import { Image, Modal, Pressable, ScrollView, StyleSheet, View } from 'react-native';
-import { ChevronRight, X } from 'lucide-react-native';
+import { ChevronRight, X } from '@/ui/icons';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { useI18n } from '../../../i18n';

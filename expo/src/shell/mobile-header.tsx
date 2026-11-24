@@ -1,7 +1,7 @@
 import { useRef, type ReactNode, type ComponentRef } from 'react';
 import { setSearchFieldOrigin } from '../ui/search-transition';
 import { Pressable, StyleSheet, View } from 'react-native';
-import { Menu, Search } from 'lucide-react-native';
+import { Menu, Search } from '@/ui/icons';
 import { GlobalSearchHeaderFrame, globalSearchHeaderLayout } from '../ui/header';
 import { useTabletTypography } from '../ui/typography-context';
 

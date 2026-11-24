@@ -21,7 +21,7 @@ import {
   ThumbsDown,
   Trash2,
   X,
-} from 'lucide-react-native';
+} from '@/ui/icons';
 import {
   Animated,
   Linking,

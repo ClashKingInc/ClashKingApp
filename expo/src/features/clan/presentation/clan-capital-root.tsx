@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { View } from 'react-native';
-import { Building2 } from 'lucide-react-native';
+import { Building2 } from '@/ui/icons';
 
 import { useAppRuntime } from '../../../core/app/runtime-context';
 import { useI18n } from '../../../i18n';

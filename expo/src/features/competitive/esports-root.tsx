@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useId, useRef, useState } from 'react';
 import { Platform, Pressable, StyleSheet, View, type ViewInstance } from 'react-native';
-import { ArrowLeft } from 'lucide-react-native';
+import { ArrowLeft } from '@/ui/icons';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { InlineBackControl } from '../../ui/native-back-context';
 import { DestinationStack, useCKTheme } from '../../ui';

@@ -10,7 +10,7 @@ import {
 } from 'react-native';
 import { Drawer } from 'react-native-drawer-layout';
 import type { LegacyPanGesture as PanGesture } from 'react-native-gesture-handler';
-import { ChevronLeft, ChevronRight } from 'lucide-react-native';
+import { ChevronLeft, ChevronRight } from '@/ui/icons';
 
 import { STORAGE_KEYS, type StringStorage } from '../core/storage/storage';
 import type { MessageKey } from '../i18n';

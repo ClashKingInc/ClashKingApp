@@ -8,7 +8,7 @@ import {
   SlidersHorizontal,
   Star,
   Users,
-} from 'lucide-react-native';
+} from '@/ui/icons';
 
 import { ImageAssets } from '../../../core/assets/image-assets';
 import { toIntlLocale, useI18n } from '../../../i18n';
