@@ -1,3 +1,4 @@
+import { ArtworkViewportGroup } from '../../../ui/artwork-viewport';
 import { useAdaptiveLayout } from '../../../ui/adaptive-layout';
 import { sectionScrollOffset, useSectionSelection } from '../../../ui/use-section-selection';
 import { RetainedSection } from '../../../ui/retained-section';
@@ -1705,11 +1706,13 @@ export function UpgradeGroupTiles({
   items,
   snapshot,
   onSelect,
+  deferEquipmentArtwork = false,
 }: {
   group: UpgradeGroup;
   items: readonly UpgradeTrackerItem[];
   snapshot: UpgradeTrackerSnapshot;
   onSelect: (item: UpgradeTrackerItem) => void;
+  deferEquipmentArtwork?: boolean;
 }) {
   const { t } = useI18n();
   const { width } = useWindowDimensions();
@@ -1745,35 +1748,48 @@ export function UpgradeGroupTiles({
     <View style={styles.groupedTileSections}>
       {sections.map(([label, values]) =>
         values.length ? (
-          <View key={label || group} style={styles.groupedTileSection}>
-            {label ? (
-              <View style={styles.groupedTileHeading}>
-                {group === 'equipment' && label !== t('generalOthers') ? (
-                  <MobileWebImage
-                    imageUrl={ImageAssets.getHeroImage(label)}
-                    style={styles.groupedTileHeadingImage}
-                  />
+          <ArtworkViewportGroup
+            key={label || group}
+            style={styles.groupedTileSection}
+            enabled={deferEquipmentArtwork && group === 'equipment'}
+          >
+            {(showArtwork) => (
+              <>
+                {label ? (
+                  <View style={styles.groupedTileHeading}>
+                    {group === 'equipment' && label !== t('generalOthers') ? (
+                      showArtwork ? (
+                        <MobileWebImage
+                          imageUrl={ImageAssets.getHeroImage(label)}
+                          style={styles.groupedTileHeadingImage}
+                        />
+                      ) : (
+                        <View style={styles.groupedTileHeadingImage} />
+                      )
+                    ) : null}
+                    <CKText role="labelLarge">{label}</CKText>
+                  </View>
                 ) : null}
-                <CKText role="labelLarge">{label}</CKText>
-              </View>
-            ) : null}
-            <ResponsiveGrid
-              minItemWidth={60}
-              maxColumns={8}
-              gap={8}
-              waitForLayout
-              initialWidth={Math.max(0, Math.min(width, 1180) - 56)}
-            >
-              {values.map((item) => (
-                <UpgradeTile
-                  key={`${item.planKey}-${item.id}`}
-                  item={item}
-                  active={snapshot.remainingActiveSeconds(item) > 0}
-                  onPress={() => onSelect(item)}
-                />
-              ))}
-            </ResponsiveGrid>
-          </View>
+                <ResponsiveGrid
+                  minItemWidth={60}
+                  maxColumns={8}
+                  gap={8}
+                  waitForLayout
+                  initialWidth={Math.max(0, Math.min(width, 1180) - 56)}
+                >
+                  {values.map((item) => (
+                    <UpgradeTile
+                      key={`${item.planKey}-${item.id}`}
+                      item={item}
+                      showArtwork={showArtwork}
+                      active={snapshot.remainingActiveSeconds(item) > 0}
+                      onPress={() => onSelect(item)}
+                    />
+                  ))}
+                </ResponsiveGrid>
+              </>
+            )}
+          </ArtworkViewportGroup>
         ) : null,
       )}
     </View>
@@ -2228,10 +2244,12 @@ function UpgradeTile({
   item,
   active,
   onPress,
+  showArtwork = true,
 }: {
   item: UpgradeTrackerItem;
   active: boolean;
   onPress: () => void;
+  showArtwork?: boolean;
 }) {
   const { t } = useI18n();
   const theme = useCKTheme();
@@ -2279,18 +2297,20 @@ function UpgradeTile({
         ]}
       >
         <View style={[styles.upgradeTileArt, containedArt && styles.upgradeTileContainedArt]}>
-          <MobileWebImage
-            imageUrl={item.imageUrl}
-            fallbackImageUrls={
-              item.name === 'Blacksmith'
-                ? [ImageAssets.getHomeVillageBuildingImage('Blacksmith', 1)]
-                : undefined
-            }
-            displaySize={{ width: 64, height: 64 }}
-            transition={0}
-            contentFit={containedArt ? 'contain' : 'cover'}
-            style={[styles.upgradeTileImage, lockedEquipment && { opacity: 0.35 }]}
-          />
+          {showArtwork ? (
+            <MobileWebImage
+              imageUrl={item.imageUrl}
+              fallbackImageUrls={
+                item.name === 'Blacksmith'
+                  ? [ImageAssets.getHomeVillageBuildingImage('Blacksmith', 1)]
+                  : undefined
+              }
+              displaySize={{ width: 64, height: 64 }}
+              transition={0}
+              contentFit={containedArt ? 'contain' : 'cover'}
+              style={[styles.upgradeTileImage, lockedEquipment && { opacity: 0.35 }]}
+            />
+          ) : null}
         </View>
         <View style={[styles.levelBadge, item.isComplete && styles.levelBadgeComplete]}>
           {lockedEquipment ? (

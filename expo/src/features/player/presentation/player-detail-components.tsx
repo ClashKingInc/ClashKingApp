@@ -816,6 +816,7 @@ export const PlayerItemSection = memo(function PlayerItemSection({
         {hasOpened ? (
           trackerLayout ? (
             <UpgradeGroupTiles
+              deferEquipmentArtwork
               group={visible.some((item) => item.type === 'gear') ? 'equipment' : 'laboratory'}
               items={detailItems}
               snapshot={tileSnapshot}

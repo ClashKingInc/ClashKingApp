@@ -1,10 +1,12 @@
 import { badgeRequestHeaders } from './badge-token-hints';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { Directory, File, Paths } from 'expo-file-system';
+import { Directory, File, FileMode, Paths } from 'expo-file-system';
+import { Image } from 'expo-image';
 import { fetch } from 'expo/fetch';
 import { randomUUID } from 'expo-crypto';
 import { FileUpdateIndex } from './file-update-index';
 import { ManagedImageCache } from './managed-image-cache';
+import { avifPixelBound } from './avif-dimensions';
 
 export const localFileIndex = new FileUpdateIndex({
   getKeys: () => AsyncStorage.getAllKeys(),
@@ -25,6 +27,7 @@ function ownedFile(uri: string): File {
   return new File(uri);
 }
 const MAX_IMAGE_BYTES = 16 * 1024 * 1024;
+const AVIF_HEADER_BYTES = 16 * 1024;
 export const localImageCache = new ManagedImageCache(localFileIndex, {
   // Absolute cache URLs can outlive an iOS app-container replacement. Treat
   // those stale records as cache misses, and never try to delete outside the
@@ -39,7 +42,7 @@ export const localImageCache = new ManagedImageCache(localFileIndex, {
     const directory = cacheDirectory();
     if (directory.exists) directory.delete();
   },
-  download: async (url, expectedSha, signal) => {
+  download: async ({ url, sha, size: variantSize }, signal, validateReplacement) => {
     const controller = new AbortController();
     const cancel = () => controller.abort();
     signal?.addEventListener('abort', cancel, { once: true });
@@ -56,42 +59,73 @@ export const localImageCache = new ManagedImageCache(localFileIndex, {
       });
       if (!response.ok || !response.headers.get('content-type')?.startsWith('image/'))
         throw new Error('Image download failed');
-      if (Number(response.headers.get('content-length')) > MAX_IMAGE_BYTES)
-        throw new Error('Image exceeds cache limit');
+      const declaredBytes = Number(response.headers.get('content-length'));
+      if (declaredBytes > MAX_IMAGE_BYTES) throw new Error('Image exceeds cache limit');
       const reader = response.body?.getReader();
       if (!reader) throw new Error('Missing image body');
-      const parts: Uint8Array[] = [];
-      let length = 0;
-      for (;;) {
-        const next = await reader.read();
-        if (next.done) break;
-        length += next.value.length;
-        if (length > MAX_IMAGE_BYTES) {
-          await reader.cancel();
-          throw new Error('Image exceeds cache limit');
-        }
-        parts.push(next.value);
-      }
-      if (!length) throw new Error('Empty image');
-      const bytes = new Uint8Array(length);
-      let offset = 0;
-      for (const part of parts) {
-        bytes.set(part, offset);
-        offset += part.length;
-      }
-      // The manifest identifies the source version. Converted bytes deliberately
-      // differ from that source; the Worker does not expose a source-SHA header.
       const directory = cacheDirectory();
-      directory.create({ intermediates: true, idempotent: true });
-      const extension = new URL(url).pathname.split('.').pop()!;
+      const source = new URL(url);
+      const extension = source.pathname.split('.').pop()!;
+      const header =
+        !validateReplacement && variantSize !== undefined && extension === 'avif'
+          ? new Uint8Array(
+              Math.min(declaredBytes > 0 ? declaredBytes : AVIF_HEADER_BYTES, AVIF_HEADER_BYTES),
+            )
+          : undefined;
       const file = new File(directory, randomUUID() + '.' + extension);
       try {
-        file.write(bytes);
+        directory.create({ intermediates: true, idempotent: true });
+        file.create();
+        const handle = file.open(FileMode.WriteOnly);
+        let length = 0;
+        try {
+          for (;;) {
+            const next = await reader.read();
+            if (next.done) break;
+            if (header && length < header.length)
+              header.set(next.value.subarray(0, header.length - length), length);
+            length += next.value.length;
+            if (length > MAX_IMAGE_BYTES) throw new Error('Image exceeds cache limit');
+            await handle.writeBytes(next.value);
+          }
+        } finally {
+          handle.close();
+        }
+        if (!length) throw new Error('Empty image');
+        let pixels = header ? avifPixelBound(header.subarray(0, length)) : undefined;
+
+        // First installs are decoded by the image view. Only a replacement can
+        // displace a good file, so only it needs an eager native decode.
+        if (validateReplacement) {
+          const limit = variantSize ?? 1024;
+          const image = await Image.loadAsync(
+            { uri: file.uri },
+            { maxWidth: limit, maxHeight: limit },
+          );
+          try {
+            pixels = Math.round(Math.max(image.width, image.height) * image.scale);
+            if (!Number.isFinite(pixels) || pixels < 1) throw new Error('Invalid image');
+          } finally {
+            image.release();
+          }
+        }
+        if (controller.signal.aborted) throw new Error('Image download was cancelled');
+
+        // The converted bytes differ from the manifest source. The Worker does
+        // not expose a source-SHA header, so this is the requested source version.
+        // If the header is unknown, reuse only at or below the requested bucket.
+        if (variantSize !== undefined && pixels !== undefined && pixels > variantSize)
+          pixels = undefined;
+        const fullSize =
+          variantSize === undefined || (pixels !== undefined && pixels < variantSize);
+        return { file: file.uri, sha, bytes: length, pixels, fullSize };
       } catch (error) {
+        await reader.cancel().catch(() => undefined);
         if (file.exists) file.delete();
         throw error;
+      } finally {
+        reader.releaseLock();
       }
-      return { file: file.uri, sha: expectedSha, bytes: length };
     } finally {
       clearTimeout(timeout);
       signal?.removeEventListener('abort', cancel);

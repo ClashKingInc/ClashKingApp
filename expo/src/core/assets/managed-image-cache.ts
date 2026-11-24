@@ -1,20 +1,43 @@
 import { FileUpdateIndex } from './file-update-index';
 
+export interface ImageRequest {
+  url: string;
+  path: string;
+  sha: string;
+  size?: number;
+}
+
+type SavedImage = ReturnType<FileUpdateIndex['imagesForPath']>[number];
+type Download = { request: ImageRequest; promise: Promise<string> };
+
+function capacity(record: SavedImage): number {
+  if (record.fullSize) return Infinity;
+  // Older installs have the requested size in the URL but no decoded metadata.
+  return (
+    record.pixels ??
+    (Number(new URL(record.key.slice('image:'.length)).searchParams.get('size')) || 0)
+  );
+}
+
+function covers(request: ImageRequest, record: SavedImage): boolean {
+  return record.key === 'image:' + request.url || capacity(record) >= (request.size ?? Infinity);
+}
+
 export interface ImageFiles {
   exists(file: string): Promise<boolean>;
   download(
-    url: string,
-    expectedSha: string,
+    request: ImageRequest,
     signal?: AbortSignal,
-  ): Promise<{ file: string; sha: string; bytes: number }>;
+    validateReplacement?: boolean,
+  ): Promise<{ file: string; sha: string; bytes: number; pixels?: number; fullSize?: boolean }>;
   remove(file: string): Promise<void>;
   clearAll?(): Promise<void>;
 }
 
-/** Owns originals and each requested size independently; never downloads from notice(). */
+/** Shares suitable variants of the same source without changing the on-disk URL keys. */
 export class ManagedImageCache {
   private static readonly UNUSED_EXPIRY_MS = 30 * 24 * 60 * 60 * 1_000;
-  private readonly downloads = new Map<string, Promise<string>>();
+  private readonly downloads = new Map<string, Set<Download>>();
   private readonly resolutions = new Set<Promise<string>>();
   private clearing?: Promise<void>;
   private generation = 0;
@@ -26,6 +49,9 @@ export class ManagedImageCache {
     private readonly now: () => number = Date.now,
   ) {}
   subscribe = (listener: () => void) => this.index.subscribe(listener);
+  subscribeImage(path: string, listener: () => void) {
+    return this.index.subscribeImage(path, listener);
+  }
   getRevision = () => this.index.getRevision();
   getSize = () => this.index.imageBytes();
   hydrate = () => {
@@ -44,17 +70,22 @@ export class ManagedImageCache {
       await this.index.remove(key);
     }
   }
-  peek(url: string) {
-    return this.index.peek('image:' + url)?.file ?? undefined;
+  private candidates(request: ImageRequest): SavedImage[] {
+    return this.index
+      .imagesForPath(request.path)
+      .filter((record) => covers(request, record))
+      .sort(
+        (a, b) =>
+          Number(b.installedSha === request.sha) - Number(a.installedSha === request.sha) ||
+          a.bytes - b.bytes,
+      );
   }
-  async resolve(
-    url: string,
-    path: string,
-    expectedSha: string,
-    showSaved: (file: string) => void,
-  ): Promise<string> {
+  peek(request: ImageRequest) {
+    return this.candidates(request)[0]?.file;
+  }
+  async resolve(request: ImageRequest, showSaved: (file: string) => void): Promise<string> {
     if (this.clearing) await this.clearing;
-    const operation = this.resolveActive(url, path, expectedSha, showSaved, this.generation);
+    const operation = this.resolveActive(request, showSaved, this.generation);
     this.resolutions.add(operation);
     try {
       return await operation;
@@ -63,52 +94,91 @@ export class ManagedImageCache {
     }
   }
   private async resolveActive(
-    url: string,
-    path: string,
-    expectedSha: string,
+    request: ImageRequest,
     showSaved: (file: string) => void,
     generation: number,
   ): Promise<string> {
     const ensureActive = () => {
       if (generation !== this.generation) throw new Error('Image cache was cleared');
     };
-    const key = 'image:' + url;
     await this.hydrate();
     ensureActive();
-    const record = await this.index.prepare(key, path, expectedSha);
+    let saved: SavedImage | undefined;
+    for (const record of this.candidates(request)) {
+      const exists = await this.files.exists(record.file);
+      ensureActive();
+      if (exists) {
+        saved = record;
+        break;
+      }
+      await this.index.removeImageFile(record.key, record.file);
+      ensureActive();
+    }
+    if (saved) {
+      showSaved(saved.file);
+      await this.index.prepare(saved.key, request.path, request.sha);
+      ensureActive();
+      if (saved.installedSha === request.sha) return saved.file;
+    }
+
+    const key = 'image:' + request.url;
+    // A sibling may have finished while this request was checking files.
+    const current = this.candidates(request).find((item) => item.installedSha === request.sha);
+    if (current && (await this.files.exists(current.file))) {
+      ensureActive();
+      return current.file;
+    }
     ensureActive();
-    const saved = record.file && (await this.files.exists(record.file)) ? record.file : null;
-    ensureActive();
-    if (saved) showSaved(saved);
-    if (saved && record.installedSha === expectedSha && !record.pendingSha) return saved;
-    const target = record.pendingSha ?? expectedSha;
-    const downloadKey = key + ':' + target;
-    let download = this.downloads.get(downloadKey);
+    const group = request.path + ':' + request.sha;
+    const running = this.downloads.get(group) ?? new Set<Download>();
+    let download = [...running].find(
+      ({ request: other }) =>
+        other.url === request.url || (other.size ?? Infinity) >= (request.size ?? Infinity),
+    );
     if (!download) {
-      download = this.replace(key, url, target, saved, generation);
-      this.downloads.set(downloadKey, download);
-      void download.finally(() => this.downloads.delete(downloadKey)).catch(() => undefined);
+      const previous = this.index.peek(key)?.file ?? null;
+      const validateReplacement = Boolean(previous || saved);
+      const promise = this.replace(key, request, previous, generation, validateReplacement);
+      download = { request, promise };
+      const entry = download;
+      running.add(entry);
+      this.downloads.set(group, running);
+      void promise
+        .finally(() => {
+          running.delete(entry);
+          if (!running.size) this.downloads.delete(group);
+        })
+        .catch(() => undefined);
     }
     try {
-      return await download;
+      return await download.promise;
     } catch (error) {
       ensureActive();
-      if (saved) return saved;
+      if (saved) return saved.file;
+      // A larger request can fail independently of the requested variant.
+      if (download.request.url !== request.url)
+        return this.resolveActive(request, showSaved, generation);
       throw error;
     }
   }
+  async invalidate(path: string, file: string): Promise<void> {
+    const saved = this.index.imagesForPath(path).find((item) => item.file === file);
+    if (!saved) return;
+    await this.index.removeImageFile(saved.key, file);
+    await this.files.remove(file);
+  }
   private async replace(
     key: string,
-    url: string,
-    target: string,
+    request: ImageRequest,
     previous: string | null,
     generation: number,
+    validateReplacement: boolean,
   ): Promise<string> {
     const controller = new AbortController();
     this.controllers.add(controller);
     let result;
     try {
-      result = await this.files.download(url, target, controller.signal);
+      result = await this.files.download(request, controller.signal, validateReplacement);
     } finally {
       this.controllers.delete(controller);
     }
@@ -116,12 +186,12 @@ export class ManagedImageCache {
       await this.files.remove(result.file);
       throw new Error('Image cache was cleared');
     }
-    if (result.sha !== target) {
+    if (result.sha !== request.sha) {
       await this.files.remove(result.file);
       throw new Error('Image source does not match the requested SHA');
     }
     try {
-      await this.index.commit(key, result.file, result.sha, result.bytes);
+      await this.index.commitImage(key, request.path, result);
     } catch (error) {
       await this.files.remove(result.file);
       throw error;

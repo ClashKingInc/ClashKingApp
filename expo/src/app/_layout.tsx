@@ -31,8 +31,6 @@ import { ExpoDeepLinkRuntime } from '../core/deep-links/expo-deep-link-runtime';
 import { queueAppLink } from '../core/deep-links/link-inbox';
 import { nativeSecondaryScreenOptions } from '../core/app/native-secondary-navigation';
 import { WebDocumentTitle } from '../core/app/web-document-title';
-import { warmRankedCheckerBackgrounds } from '../ui/ranked-checker-background';
-import { warmHeaderArtwork } from '../core/assets/header-artwork-cache';
 
 void SplashScreen.preventAutoHideAsync();
 initializeObservability();
@@ -69,12 +67,6 @@ export default function RootLayout() {
     };
   }, []);
   const [fontReady, setFontReady] = useState(false);
-  useEffect(() => {
-    if (fontReady) {
-      void warmHeaderArtwork();
-      void warmRankedCheckerBackgrounds();
-    }
-  }, [fontReady]);
   const launchHidden = useRef(false);
   const navigationContainerRef = useNavigationContainerRef();
   useEffect(() => {

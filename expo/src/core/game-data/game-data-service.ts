@@ -75,6 +75,9 @@ const MANIFEST_CACHE: CachedJsonAsset = {
   cachedAtKey: 'asset_manifest.cachedAt',
 };
 
+const LEGACY_WIKI_MANIFEST = 'game_asset_manifest_v1';
+const LEGACY_WIKI_FETCHED_AT = 'game_asset_manifest_v1_fetched_at';
+
 function dataCache(fileName: string, sha?: string): CachedJsonAsset {
   return {
     label: fileName,
@@ -93,6 +96,9 @@ export class GameDataService {
   private readonly platform: GameDataPlatform;
   private readonly now: () => Date;
   private readonly systemLocales: () => readonly AppLocale[];
+  private manifest?: JsonRecord;
+  private manifestLoad?: Promise<JsonRecord>;
+  private manifestRefresh?: Promise<JsonRecord>;
   private bundleLoad: Promise<void> | null = null;
   private appliedSections: string | null = null;
   private readonly refreshes = new Map<string, Promise<JsonRecord>>();
@@ -149,11 +155,46 @@ export class GameDataService {
     }
   }
 
-  async refreshStaticDataIfChanged(): Promise<JsonRecord | undefined> {
+  loadAssetManifest(mode: 'cached' | 'refresh' | 'force' = 'cached'): Promise<JsonRecord> {
+    if (mode !== 'cached') {
+      const pending = this.manifestLoad;
+      this.manifestRefresh ??= (async () => {
+        await pending?.catch(() => undefined);
+        const manifest = await this.refreshAsset(
+          MANIFEST_CACHE,
+          ASSET_MANIFEST_URL,
+          mode === 'force',
+        ).catch((error) => {
+          if (this.manifest) return this.manifest;
+          throw error;
+        });
+        return this.installManifest(manifest);
+      })().finally(() => {
+        this.manifestRefresh = undefined;
+      });
+      return this.manifestRefresh;
+    }
+    if (this.manifest) return Promise.resolve(this.manifest);
+    if (this.manifestRefresh) return this.manifestRefresh;
+    this.manifestLoad ??= this.loadCachedJsonAsset(MANIFEST_CACHE, ASSET_MANIFEST_URL)
+      .then((manifest) => this.installManifest(manifest))
+      .finally(() => {
+        this.manifestLoad = undefined;
+      });
+    return this.manifestLoad;
+  }
+
+  private async installManifest(manifest: JsonRecord): Promise<JsonRecord> {
+    if (manifest === this.manifest) return manifest;
+    await this.noticeManifest(manifest);
+    applyAssetManifest(manifest);
+    this.manifest = manifest;
+    return manifest;
+  }
+
+  async refreshStaticDataIfChanged(force = false): Promise<JsonRecord | undefined> {
     try {
-      const manifest = await this.refreshAsset(MANIFEST_CACHE, ASSET_MANIFEST_URL);
-      await this.noticeManifest(manifest);
-      applyAssetManifest(manifest);
+      const manifest = await this.loadAssetManifest(force ? 'force' : 'refresh');
       await this.loadSections(manifest, true).catch(() => undefined);
       return manifest;
     } catch {
@@ -215,9 +256,7 @@ export class GameDataService {
 
   private async loadBundleOnce(): Promise<void> {
     try {
-      const manifest = await this.loadCachedJsonAsset(MANIFEST_CACHE, ASSET_MANIFEST_URL);
-      await this.noticeManifest(manifest);
-      applyAssetManifest(manifest);
+      const manifest = await this.loadAssetManifest();
       await this.loadSections(manifest, false);
     } catch {
       // Flutter deliberately retains the last valid in-memory static bundle.
@@ -308,7 +347,7 @@ export class GameDataService {
       }
     }
     const body = await this.files.read(asset.fileName);
-    if (body === null) return null;
+    if (body === null) return asset === MANIFEST_CACHE ? this.migrateWikiManifest() : null;
     try {
       this.validateAssetBody(asset, body);
       return {
@@ -322,6 +361,19 @@ export class GameDataService {
     }
   }
 
+  private async migrateWikiManifest(): Promise<JsonCache | null> {
+    const body = await this.preferences.getString(LEGACY_WIKI_MANIFEST);
+    if (!body) return null;
+    try {
+      this.validateAssetBody(MANIFEST_CACHE, body);
+    } catch {
+      return null;
+    }
+    const record = { body, etag: null, lastModified: null, checkedAt: '' };
+    await this.saveCache(MANIFEST_CACHE, record).catch(() => undefined);
+    return record;
+  }
+
   private async saveCache(asset: CachedJsonAsset, record: JsonCache): Promise<void> {
     // Each persisted body + SHA is our local inventory of installed JSON, separate
     // from the downloaded manifest of available versions. Failed downloads never
@@ -332,6 +384,11 @@ export class GameDataService {
     const slot = previous === 'a' ? 'b' : 'a';
     await this.files.write(asset.fileName + '.' + slot, JSON.stringify(record));
     await this.preferences.setString(asset.fileName + '.slot', slot);
+    if (asset === MANIFEST_CACHE)
+      await Promise.allSettled([
+        this.preferences.removeString(LEGACY_WIKI_MANIFEST),
+        this.preferences.removeString(LEGACY_WIKI_FETCHED_AT),
+      ]);
   }
 
   private async reconcileSavedFile(
@@ -374,11 +431,11 @@ export class GameDataService {
     return !Number.isFinite(age) || age < 0 || age >= GAME_DATA_CACHE_FRESHNESS_MS;
   }
 
-  private refreshAsset(asset: CachedJsonAsset, url: string): Promise<JsonRecord> {
+  private refreshAsset(asset: CachedJsonAsset, url: string, force = false): Promise<JsonRecord> {
     const refreshKey = url + (asset.sha ?? '');
     const existing = this.refreshes.get(refreshKey);
     if (existing) return existing;
-    const refresh = this.refreshAssetOnce(asset, url);
+    const refresh = this.refreshAssetOnce(asset, url, force);
     this.refreshes.set(refreshKey, refresh);
     void refresh
       .finally(() => {
@@ -388,7 +445,11 @@ export class GameDataService {
     return refresh;
   }
 
-  private async refreshAssetOnce(asset: CachedJsonAsset, url: string): Promise<JsonRecord> {
+  private async refreshAssetOnce(
+    asset: CachedJsonAsset,
+    url: string,
+    force: boolean,
+  ): Promise<JsonRecord> {
     const cache = await this.readCache(asset).catch(() => null);
     const local =
       asset === MANIFEST_CACHE
@@ -399,14 +460,15 @@ export class GameDataService {
     const now = this.now().getTime();
     const attemptKey = url + (expectedSha ?? '');
     const lastAttempt = this.attempts.get(attemptKey);
-    if (
-      (cache &&
-        (!expectedSha || cache.sha === expectedSha) &&
-        !this.cacheNeedsRefresh(cache.checkedAt)) ||
-      (lastAttempt !== undefined &&
-        now >= lastAttempt &&
-        now - lastAttempt < GAME_DATA_CACHE_FRESHNESS_MS)
-    ) {
+    const hasFreshCache =
+      cache &&
+      (!expectedSha || cache.sha === expectedSha) &&
+      !this.cacheNeedsRefresh(cache.checkedAt);
+    const attemptedRecently =
+      lastAttempt !== undefined &&
+      now >= lastAttempt &&
+      now - lastAttempt < GAME_DATA_CACHE_FRESHNESS_MS;
+    if (!force && (hasFreshCache || attemptedRecently)) {
       if (cache) return parseJsonObject(cache.body, asset.label);
       throw new Error('Metadata retry is waiting for the next refresh interval');
     }
@@ -450,7 +512,6 @@ export class GameDataService {
         };
       } else throw new Error(`HTTP ${response.status} for ${asset.label}`);
       const decoded = parseJsonObject(record.body, asset.label);
-      if (asset === MANIFEST_CACHE) await this.noticeManifest(decoded);
       // A valid downloaded body is usable even if persistence is unavailable.
       await this.saveCache(asset, record)
         .then(async () => {

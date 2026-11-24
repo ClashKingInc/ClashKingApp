@@ -5,6 +5,8 @@ export interface LocalFileRecord {
   pendingSha: string | null;
   bytes: number;
   lastViewed: number;
+  pixels?: number;
+  fullSize?: boolean;
 }
 export interface FileIndexStorage {
   getString(key: string): Promise<string | null>;
@@ -21,8 +23,10 @@ const LAST_VIEWED_WRITE_INTERVAL_MS = 24 * 60 * 60 * 1_000;
 /** One persistent record per file, hydrated once; only writes to the same file serialize. */
 export class FileUpdateIndex {
   private readonly records = new Map<string, LocalFileRecord>();
+  private readonly imageKeysByPath = new Map<string, Set<string>>();
   private readonly tails = new Map<string, Promise<unknown>>();
   private readonly listeners = new Set<() => void>();
+  private readonly imageListeners = new Map<string, Set<() => void>>();
   private available: ReadonlyMap<string, string> = new Map();
   private hydration?: Promise<void>;
   private revision = 0;
@@ -37,9 +41,20 @@ export class FileUpdateIndex {
     };
   };
   getRevision = () => this.revision;
-  private changed() {
+  subscribeImage(path: string, listener: () => void) {
+    const listeners = this.imageListeners.get(path) ?? new Set<() => void>();
+    listeners.add(listener);
+    this.imageListeners.set(path, listeners);
+    return () => {
+      listeners.delete(listener);
+      if (!listeners.size) this.imageListeners.delete(path);
+    };
+  }
+  private changed(imagePaths: Iterable<string> = this.imageListeners.keys()) {
     this.revision++;
     for (const listener of this.listeners) listener();
+    for (const path of imagePaths)
+      for (const listener of this.imageListeners.get(path) ?? []) listener();
   }
   hydrate(): Promise<void> {
     if (!this.hydration)
@@ -73,7 +88,7 @@ export class FileUpdateIndex {
       // Delete only after all records have been durably migrated.
       await this.storage.removeString(LEGACY_KEY);
     }
-    for (const [key, record] of loaded) this.records.set(key, record);
+    for (const [key, record] of loaded) this.setRecord(key, record);
     this.changed();
   }
   private decode(raw: string): LocalFileRecord {
@@ -94,7 +109,35 @@ export class FileUpdateIndex {
       lastViewed < 0
     )
       throw new Error('Invalid local file record');
-    return { path, file, installedSha, pendingSha, bytes, lastViewed };
+    const pixels =
+      typeof parsed.pixels === 'number' && parsed.pixels > 0 && Number.isFinite(parsed.pixels)
+        ? parsed.pixels
+        : undefined;
+    const fullSize = parsed.fullSize === true ? true : undefined;
+    return { path, file, installedSha, pendingSha, bytes, lastViewed, pixels, fullSize };
+  }
+  private setRecord(key: string, next?: LocalFileRecord) {
+    const previous = this.records.get(key);
+    if (key.startsWith('image:') && previous?.path !== next?.path) {
+      if (previous) {
+        const keys = this.imageKeysByPath.get(previous.path);
+        keys?.delete(key);
+        if (!keys?.size) this.imageKeysByPath.delete(previous.path);
+      }
+      if (next) {
+        const keys = this.imageKeysByPath.get(next.path) ?? new Set<string>();
+        keys.add(key);
+        this.imageKeysByPath.set(next.path, keys);
+      }
+    }
+    if (next) this.records.set(key, next);
+    else this.records.delete(key);
+  }
+  imagesForPath(path: string) {
+    return [...(this.imageKeysByPath.get(path) ?? [])].flatMap((key) => {
+      const record = this.records.get(key);
+      return record?.file ? [{ key, ...record, file: record.file }] : [];
+    });
   }
   peek(key: string) {
     const record = this.records.get(key);
@@ -131,9 +174,9 @@ export class FileUpdateIndex {
         if (next)
           await this.storage.setString(PREFIX + encodeURIComponent(key), JSON.stringify(next));
         else await this.storage.removeString(PREFIX + encodeURIComponent(key));
-        if (next) this.records.set(key, next);
-        else this.records.delete(key);
-        this.changed();
+        this.setRecord(key, next);
+        const path = next?.path ?? before?.path;
+        this.changed(key.startsWith('image:') && path !== undefined ? [path] : []);
       }
       return next ? { ...next } : undefined;
     });
@@ -189,6 +232,26 @@ export class FileUpdateIndex {
       };
     });
   }
+  async commitImage(
+    key: string,
+    path: string,
+    image: { file: string; sha: string; bytes: number; pixels?: number; fullSize?: boolean },
+  ) {
+    await this.update(key, (record) => {
+      const target = this.available.get(path) ?? record?.pendingSha;
+      if (target && target !== image.sha) throw new Error('Image version was superseded');
+      return {
+        path,
+        file: image.file,
+        installedSha: image.sha,
+        pendingSha: null,
+        bytes: image.bytes,
+        lastViewed: this.now(),
+        pixels: image.pixels,
+        fullSize: image.fullSize || undefined,
+      };
+    });
+  }
   /** Batch cache resets and notify mounted images once, not once per file. */
   async removeMany(keys: readonly string[]) {
     await this.hydrate();
@@ -196,10 +259,19 @@ export class FileUpdateIndex {
     const storageKeys = keys.map((key) => PREFIX + encodeURIComponent(key));
     if (this.storage.removeStrings) await this.storage.removeStrings(storageKeys);
     else await Promise.all(storageKeys.map((key) => this.storage.removeString(key)));
-    for (const key of keys) this.records.delete(key);
-    if (keys.length) this.changed();
+    const imagePaths = new Set<string>();
+    for (const key of keys) {
+      const record = this.records.get(key);
+      if (key.startsWith('image:') && record) imagePaths.add(record.path);
+      this.setRecord(key);
+    }
+    if (keys.length) this.changed(imagePaths);
   }
   async remove(key: string) {
     await this.update(key, () => undefined);
+  }
+
+  async removeImageFile(key: string, file: string) {
+    await this.update(key, (record) => (record?.file === file ? undefined : record));
   }
 }
