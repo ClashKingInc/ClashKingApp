@@ -23,7 +23,8 @@ registerHooks({
   },
 });
 
-const { initializeApplication } = await import('../src/core/app/startup-coordinator.ts');
+const { initializeApplication, prepareLocalStartup } =
+  await import('../src/core/app/startup-coordinator.ts');
 const { UnauthorizedException } = await import('../src/core/api/contract-api.ts');
 
 function createDependencies({ authenticated = true, verified = true } = {}) {
@@ -51,6 +52,39 @@ function createDependencies({ authenticated = true, verified = true } = {}) {
     push: { supportsPushNotifications: false },
   };
 }
+
+test('local startup preparation overlaps the update gate and is reused after release', async () => {
+  const dependencies = createDependencies({ authenticated: false });
+  const migration = Promise.withResolvers();
+  const events = [];
+  dependencies.preferenceMigration.run = () => {
+    events.push('migration');
+    return migration.promise;
+  };
+  const appState = dependencies.appState.getState();
+  dependencies.appState.getState = () => appState;
+  const preferences = Promise.withResolvers();
+  appState.initializePreferences = () => {
+    events.push('preferences');
+    return preferences.promise;
+  };
+  appState.initialize = async () => { events.push('remote configuration'); };
+  dependencies.gameData.loadGameData = async () => { events.push('game data'); };
+  dependencies.auth.initializeAuth = async () => { events.push('auth'); };
+
+  const preparedMigration = prepareLocalStartup(dependencies);
+  assert.deepEqual(events, ['migration']);
+  migration.resolve();
+  await setImmediate();
+  assert.deepEqual(events, ['migration', 'preferences']);
+
+  const startup = initializeApplication({ ...dependencies, preparedMigration });
+  await setImmediate();
+  assert.ok(events.includes('auth'));
+  assert.equal(events.filter((event) => event === 'migration').length, 1);
+  preferences.resolve();
+  assert.equal((await startup).destination, 'login');
+});
 
 test('login is usable with a game data request still pending', async () => {
   const dependencies = createDependencies({ authenticated: false });

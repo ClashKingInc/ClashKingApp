@@ -34,6 +34,7 @@ import {
   defaultIsNetworkError,
   initializeApplication,
   initializeAuthenticatedPush,
+  prepareLocalStartup,
 } from './startup-coordinator';
 import { StartupErrorScreen, MaintenanceScreen } from './startup-feedback';
 import { StartupHandoff } from './startup-loading';
@@ -65,6 +66,16 @@ function ApplicationContent() {
   }, []);
   const sceneRef = useRef(scene);
   const startupGeneration = useRef(0);
+  const localStartup = useRef<Promise<void> | undefined>(undefined);
+  const prepareStartup = useCallback(
+    () =>
+      prepareLocalStartup({
+        preferenceMigration: runtime.preferenceMigration,
+        appState: runtime.appState,
+        reportError: (operation, error) => reportException(error, operation),
+      }),
+    [runtime],
+  );
 
   useEffect(() => {
     sceneRef.current = scene;
@@ -123,8 +134,11 @@ function ApplicationContent() {
     setScene({ kind: 'startup' });
     setHomeReady(false);
     try {
+      const preparedMigration = localStartup.current;
+      localStartup.current = undefined;
       const result = await initializeApplication({
         preferenceMigration: runtime.preferenceMigration,
+        preparedMigration,
         appState: runtime.appState,
         auth: runtime.auth,
         accounts: runtime.accounts,
@@ -183,14 +197,17 @@ function ApplicationContent() {
   }, [runtime]);
 
   useEffect(() => {
-    if (!updateReady) return;
-    // Bootstrap begins only after the update decision; the shared cover stays mounted.
+    if (!updateReady) {
+      localStartup.current ??= prepareStartup();
+      return;
+    }
+    // Network-backed bootstrap begins only after the update decision.
     // eslint-disable-next-line react-hooks/set-state-in-effect
     void runStartup();
     return () => {
       startupGeneration.current += 1;
     };
-  }, [runStartup, updateReady]);
+  }, [prepareStartup, runStartup, updateReady]);
 
   useEffect(
     () =>
