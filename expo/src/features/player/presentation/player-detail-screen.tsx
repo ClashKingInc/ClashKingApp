@@ -72,7 +72,7 @@ export function PlayerDetailScreen({
     ? selection.contentKey
     : 'home';
   const [artworkViewport] = useState(() =>
-    Platform.OS === 'android' ? createArtworkViewport() : null,
+    Platform.OS === 'android' || Platform.OS === 'ios' ? createArtworkViewport() : null,
   );
   useLayoutEffect(() => {
     artworkViewport?.setActive(contentTab === 'home');
