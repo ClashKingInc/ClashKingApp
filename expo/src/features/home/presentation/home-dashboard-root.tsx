@@ -147,9 +147,9 @@ export function HomeDashboardRoot(props: HomeDashboardRootProps) {
   const upgradeLoading =
     upgradePlayers.length > 0 && upgradeState.signature !== upgradeLoadSignature;
   useEffect(() => {
-    if (layout.ready && !runtime.players.isLoading && !rankedLoading && !upgradeLoading)
-      onReady?.();
-  }, [runtime, serviceRevision, rankedLoading, upgradeLoading, layout.ready, onReady]);
+    // Ranked and Upgrade show their own loading cards while the rest of Home is usable.
+    if (layout.ready && !runtime.players.isLoading) onReady?.();
+  }, [runtime, serviceRevision, layout.ready, onReady]);
 
   useEffect(() => {
     let current = true;

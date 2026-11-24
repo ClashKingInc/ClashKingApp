@@ -52,37 +52,30 @@ export async function initializeApplication(
     // storage bridge problem cannot prevent login or an existing session.
     dependencies.reportError?.('startup.preferenceMigration', error);
   }
-  try {
-    await Promise.all([
-      dependencies.auth.initializeAuth(),
-      dependencies.gameData.loadGameData(),
-      dependencies.appState.getState().initialize(),
-    ]);
-  } catch (error) {
-    const isNetworkError = dependencies.isNetworkError ?? defaultIsNetworkError;
-    const isMaintenanceError = dependencies.isMaintenanceError ?? defaultIsMaintenanceError;
-    const rejectedSession =
-      error instanceof UnauthorizedException ||
-      (error instanceof ApiResponseError && error.status === 401);
-    if (!rejectedSession) {
-      dependencies.reportError?.('startup.bootstrap', error);
-      return failureResult(error, dependencies.auth.canUseApp, {
-        network: isNetworkError(error),
-        maintenance: isMaintenanceError(error),
-      });
-    }
-    // Only a definitive rejected session may continue to Login. A profile
-    // decode error, forbidden request, or unavailable service needs retry;
-    // none proves that the browser's refresh cookie is invalid.
-  }
-
   let accountResult: StartupResult;
   try {
-    accountResult = await initializeAccountsForCurrentAuth(
-      dependencies.auth,
-      dependencies.accounts,
-    );
+    const gameData = dependencies.gameData.loadGameData().catch((error) => {
+      dependencies.reportError?.('startup.gameData', error);
+    });
+    const accounts = dependencies.auth
+      .initializeAuth()
+      .catch((error: unknown) => {
+        // A failed profile request only permits Login after a definitive rejection.
+        if (
+          !(error instanceof UnauthorizedException) &&
+          !(error instanceof ApiResponseError && error.status === 401)
+        ) {
+          throw error;
+        }
+      })
+      .then(() => initializeAccountsForCurrentAuth(dependencies.auth, dependencies.accounts));
+    const appState = dependencies.appState.getState();
+    const appStateReady = appState.initialize();
+    void appStateReady.catch((error) => dependencies.reportError?.('startup.appState', error));
+    [accountResult] = await Promise.all([accounts, appState.initializePreferences()]);
     if (accountResult.authenticated) {
+      // Home uses remote flags and static game data. Sign-in only needs local preferences.
+      await Promise.all([gameData, appStateReady]);
       void dependencies
         .initializeAuthenticatedData?.()
         .catch((error) => dependencies.reportError?.('startup.authenticatedData', error));

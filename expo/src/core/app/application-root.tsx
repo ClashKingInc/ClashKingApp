@@ -73,7 +73,11 @@ function ApplicationContent() {
   const loadAccounts = useCallback(async () => {
     setHomeReady(false);
     void runtime.gameData.refreshGameDataIfChanged().catch(() => undefined);
-    const result = await initializeAccountsForCurrentAuth(runtime.auth, runtime.accounts);
+    const appState = runtime.appState.getState();
+    const [result] = await Promise.all([
+      initializeAccountsForCurrentAuth(runtime.auth, runtime.accounts),
+      appState.initialized ? undefined : appState.initialize(),
+    ]);
     if (!result.authenticated) throw new Error('Authentication expired.');
     await runtime.accountBootstrap
       .initialize(runtime.auth.state.currentUser?.userId ?? null, {
