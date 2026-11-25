@@ -3,7 +3,6 @@ import { Directory, File, Paths } from 'expo-file-system';
 import { getLocales } from 'expo-localization';
 import { Platform } from 'react-native';
 import { webGameDataFileStore } from './web-game-data-file-store';
-import { localFileIndex } from '../assets/local-asset-cache';
 
 import {
   GameDataService,
@@ -33,8 +32,6 @@ export class ExpoGameDataFileStore implements GameDataFileStore {
 }
 
 export class AsyncStorageGameDataPreferences implements GameDataPreferences {
-  getKeys = () => AsyncStorage.getAllKeys();
-  getMany = (keys: readonly string[]) => AsyncStorage.multiGet([...keys]);
   removeString = (key: string) => AsyncStorage.removeItem(key);
   getString(key: string): Promise<string | null> {
     return AsyncStorage.getItem(key);
@@ -52,7 +49,6 @@ export function createExpoGameDataService(
     platform,
     files: platform === 'web' ? webGameDataFileStore : new ExpoGameDataFileStore(),
     preferences: new AsyncStorageGameDataPreferences(),
-    fileIndex: localFileIndex,
     systemLocales: () =>
       getLocales().map((locale) => ({
         languageCode: locale.languageCode ?? 'en',

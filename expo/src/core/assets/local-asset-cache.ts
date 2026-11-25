@@ -7,15 +7,20 @@ import { randomUUID } from 'expo-crypto';
 import { FileUpdateIndex } from './file-update-index';
 import { ManagedImageCache } from './managed-image-cache';
 import { avifPixelBound } from './avif-dimensions';
+import { manifestImageVersion } from './asset-manifest';
 
-export const localFileIndex = new FileUpdateIndex({
-  getKeys: () => AsyncStorage.getAllKeys(),
-  getMany: (keys) => AsyncStorage.multiGet([...keys]),
-  removeString: (key) => AsyncStorage.removeItem(key),
-  removeStrings: (keys) => AsyncStorage.multiRemove([...keys]),
-  getString: (key) => AsyncStorage.getItem(key),
-  setString: (key, value) => AsyncStorage.setItem(key, value),
-});
+const localFileIndex = new FileUpdateIndex(
+  {
+    getKeys: () => AsyncStorage.getAllKeys(),
+    getMany: (keys) => AsyncStorage.multiGet([...keys]),
+    removeString: (key) => AsyncStorage.removeItem(key),
+    removeStrings: (keys) => AsyncStorage.multiRemove([...keys]),
+    getString: (key) => AsyncStorage.getItem(key),
+    setString: (key, value) => AsyncStorage.setItem(key, value),
+  },
+  Date.now,
+  manifestImageVersion,
+);
 function cacheDirectory() {
   return new Directory(Paths.cache, 'clashking-images-v2');
 }

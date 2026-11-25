@@ -18,21 +18,22 @@ export interface FileIndexStorage {
 }
 const LEGACY_KEY = 'asset-local-files-v2';
 const PREFIX = 'asset-local-file-v3:';
+const IMAGE_PREFIX = PREFIX + encodeURIComponent('image:');
 const LAST_VIEWED_WRITE_INTERVAL_MS = 24 * 60 * 60 * 1_000;
 
-/** One persistent record per file, hydrated once; only writes to the same file serialize. */
+/** Installed image files, hydrated on first use. Writes to the same file serialize. */
 export class FileUpdateIndex {
   private readonly records = new Map<string, LocalFileRecord>();
   private readonly imageKeysByPath = new Map<string, Set<string>>();
   private readonly tails = new Map<string, Promise<unknown>>();
   private readonly listeners = new Set<() => void>();
   private readonly imageListeners = new Map<string, Set<() => void>>();
-  private available: ReadonlyMap<string, string> = new Map();
   private hydration?: Promise<void>;
   private revision = 0;
   constructor(
     private readonly storage: FileIndexStorage,
     private readonly now: () => number = Date.now,
+    private readonly availableVersion: (path: string) => string | undefined = () => undefined,
   ) {}
   subscribe = (listener: () => void) => {
     this.listeners.add(listener);
@@ -65,7 +66,7 @@ export class FileUpdateIndex {
     return this.hydration;
   }
   private async load() {
-    const keys = (await this.storage.getKeys()).filter((key) => key.startsWith(PREFIX));
+    const keys = (await this.storage.getKeys()).filter((key) => key.startsWith(IMAGE_PREFIX));
     const loaded = new Map<string, LocalFileRecord>();
     for (let offset = 0; offset < keys.length; offset += 128) {
       for (const [key, raw] of await this.storage.getMany(keys.slice(offset, offset + 128))) {
@@ -80,7 +81,7 @@ export class FileUpdateIndex {
     const legacy = await this.storage.getString(LEGACY_KEY);
     if (legacy) {
       for (const [key, value] of Object.entries(JSON.parse(legacy))) {
-        if (loaded.has(key)) continue;
+        if (!key.startsWith('image:') || loaded.has(key)) continue;
         const record = this.decode(JSON.stringify(value));
         await this.storage.setString(PREFIX + encodeURIComponent(key), JSON.stringify(record));
         loaded.set(key, record);
@@ -158,10 +159,6 @@ export class FileUpdateIndex {
     await this.hydrate();
     return Object.fromEntries([...this.records].map(([key, record]) => [key, { ...record }]));
   }
-  async get(key: string) {
-    await this.hydrate();
-    return this.peek(key);
-  }
   private async update(
     key: string,
     transform: (record?: LocalFileRecord) => LocalFileRecord | undefined,
@@ -187,20 +184,6 @@ export class FileUpdateIndex {
       if (this.tails.get(key) === operation) this.tails.delete(key);
     }
   }
-  async notice(available: ReadonlyMap<string, string>): Promise<void> {
-    await this.hydrate();
-    this.available = available;
-    await Promise.all(
-      [...this.records.keys()].map((key) =>
-        this.update(key, (record) => {
-          if (!record) return;
-          const target = this.available.get(record.path);
-          if (target) record.pendingSha = record.installedSha === target ? null : target;
-          return record;
-        }),
-      ),
-    );
-  }
   async prepare(key: string, path: string, expected?: string): Promise<LocalFileRecord> {
     return (await this.update(key, (saved) => {
       const viewedAt = this.now();
@@ -212,25 +195,12 @@ export class FileUpdateIndex {
         bytes: 0,
         lastViewed: viewedAt,
       };
-      const target = this.available.get(path) ?? record.pendingSha ?? expected;
+      const target = this.availableVersion(path) ?? record.pendingSha ?? expected;
       if (target) record.pendingSha = record.installedSha === target ? null : target;
       if (viewedAt - record.lastViewed >= LAST_VIEWED_WRITE_INTERVAL_MS)
         record.lastViewed = viewedAt;
       return record;
     }))!;
-  }
-  async commit(key: string, file: string, sha: string, bytes = 0) {
-    await this.update(key, (record) => {
-      if (!record) throw new Error('Missing local asset record');
-      const target = this.available.get(record.path) ?? record.pendingSha ?? record.installedSha;
-      return {
-        ...record,
-        file,
-        installedSha: sha,
-        bytes,
-        pendingSha: !target || target === sha ? null : target,
-      };
-    });
   }
   async commitImage(
     key: string,
@@ -238,7 +208,7 @@ export class FileUpdateIndex {
     image: { file: string; sha: string; bytes: number; pixels?: number; fullSize?: boolean },
   ) {
     await this.update(key, (record) => {
-      const target = this.available.get(path) ?? record?.pendingSha;
+      const target = this.availableVersion(path) ?? record?.pendingSha;
       if (target && target !== image.sha) throw new Error('Image version was superseded');
       return {
         path,

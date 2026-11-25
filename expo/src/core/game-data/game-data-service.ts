@@ -14,7 +14,6 @@ import {
   validateAssetManifest,
   manifestData,
 } from '../assets/asset-manifest';
-import { FileUpdateIndex, type FileIndexStorage } from '../assets/file-update-index';
 import { CryptoDigestAlgorithm, digestStringAsync } from 'expo-crypto';
 
 export const STATIC_DATA_URL = `${ASSET_ORIGIN}/static_data`;
@@ -39,10 +38,13 @@ export interface GameDataFileStore {
   write(fileName: string, contents: string): Promise<void>;
 }
 
-export type GameDataPreferences = FileIndexStorage;
+export interface GameDataPreferences {
+  getString(key: string): Promise<string | null>;
+  setString(key: string, value: string): Promise<void>;
+  removeString(key: string): Promise<void>;
+}
 
 export interface GameDataServiceOptions {
-  readonly fileIndex?: FileUpdateIndex;
   readonly platform: GameDataPlatform;
   readonly files: GameDataFileStore;
   readonly preferences: GameDataPreferences;
@@ -88,8 +90,14 @@ function dataCache(fileName: string, sha?: string): CachedJsonAsset {
   };
 }
 
+function translationCache(locale: string, manifest?: JsonRecord): CachedJsonAsset {
+  const entry = manifest && manifestData(manifest).translations.find(
+    (item) => item.path === `translations/${locale}.json`,
+  );
+  return dataCache(`translations_${locale}.json`, entry?.sha);
+}
+
 export class GameDataService {
-  private readonly fileIndex: FileUpdateIndex;
   private readonly files: GameDataFileStore;
   private readonly preferences: GameDataPreferences;
   private readonly fetchImplementation: typeof fetch;
@@ -107,7 +115,6 @@ export class GameDataService {
   private desiredLocale = 'EN';
 
   constructor(options: GameDataServiceOptions) {
-    this.fileIndex = options.fileIndex ?? new FileUpdateIndex(options.preferences);
     this.files = options.files;
     this.preferences = options.preferences;
     // A raw Window.fetch stored on this service is invoked with the service
@@ -120,7 +127,6 @@ export class GameDataService {
   }
 
   async loadGameData(locale?: AppLocale): Promise<void> {
-    await this.fileIndex.hydrate();
     const preferredLocale = locale ?? (await this.resolvePreferredLocale());
     await Promise.all([this.loadBundle(), this.loadTranslationsForLocale(preferredLocale)]);
     void this.refreshGameDataIfChanged(preferredLocale);
@@ -134,17 +140,9 @@ export class GameDataService {
   async refreshGameDataIfChanged(locale?: AppLocale): Promise<void> {
     const preferred = clashyLocaleCodeForAppLocale(locale ?? (await this.resolvePreferredLocale()));
     const manifest = await this.refreshStaticDataIfChanged();
-    const entry = manifest
-      ? manifestData(manifest).translations.find(
-          (item) => item.path === `translations/${preferred}.json`,
-        )
-      : undefined;
     if (preferred !== 'EN') {
       await this.refreshAsset(
-        dataCache(
-          `translations_${preferred}.json`,
-          isRecord(entry) && typeof entry.sha === 'string' ? entry.sha : undefined,
-        ),
+        translationCache(preferred, manifest ?? this.manifest),
         `${TRANSLATIONS_URL}/${preferred}.json`,
       )
         .then((data) => {
@@ -184,9 +182,8 @@ export class GameDataService {
     return this.manifestLoad;
   }
 
-  private async installManifest(manifest: JsonRecord): Promise<JsonRecord> {
+  private installManifest(manifest: JsonRecord): JsonRecord {
     if (manifest === this.manifest) return manifest;
-    await this.noticeManifest(manifest);
     applyAssetManifest(manifest);
     this.manifest = manifest;
     return manifest;
@@ -266,22 +263,13 @@ export class GameDataService {
   private async loadTranslationsOnce(clashyLocale: string): Promise<void> {
     try {
       const data = await this.loadCachedJsonAsset(
-        dataCache(`translations_${clashyLocale}.json`),
+        translationCache(clashyLocale, this.manifest),
         `${TRANSLATIONS_URL}/${clashyLocale}.json`,
       );
       if (this.desiredLocale === clashyLocale) applyGameTranslations(data, clashyLocale);
     } catch {
       if (this.desiredLocale === clashyLocale) clearGameTranslations(clashyLocale);
     }
-  }
-
-  private async noticeManifest(manifest: JsonRecord): Promise<void> {
-    const available = new Map(
-      [...validateAssetManifest(manifest)].map(([path, image]) => [path, image.sha]),
-    );
-    const data = manifestData(manifest);
-    for (const item of [...data.stats, ...data.translations]) available.set(item.path, item.sha);
-    await this.fileIndex.notice(available);
   }
 
   private async loadSections(manifest: JsonRecord, refresh: boolean): Promise<void> {
@@ -301,7 +289,6 @@ export class GameDataService {
           const asset = dataCache(`static_data_${name}.json`, entry.sha);
           const url = `${ASSET_ORIGIN}/${path}`;
           const cached = await this.readCache(asset).catch(() => null);
-          if (cached?.sha === entry.sha) await this.reconcileSavedFile(asset, url, cached);
           const data =
             cached?.sha === entry.sha
               ? parseJsonObject(cached.body, asset.label)
@@ -391,19 +378,6 @@ export class GameDataService {
       ]);
   }
 
-  private async reconcileSavedFile(
-    asset: CachedJsonAsset,
-    url: string,
-    cache: JsonCache,
-  ): Promise<void> {
-    if (!cache.sha || asset === MANIFEST_CACHE) return;
-    const local = await this.fileIndex.get(url);
-    if (local?.installedSha === cache.sha && local.pendingSha !== cache.sha) return;
-    await this.fileIndex.prepare(url, new URL(url).pathname.slice(1));
-    const slot = await this.preferences.getString(asset.fileName + '.slot');
-    if (slot) await this.fileIndex.commit(url, asset.fileName + '.' + slot, cache.sha);
-  }
-
   private validateAssetBody(asset: CachedJsonAsset, body: string): void {
     const data = parseJsonObject(body, asset.label);
     if (asset === MANIFEST_CACHE) validateAssetManifest(data);
@@ -418,9 +392,7 @@ export class GameDataService {
 
   private async loadCachedJsonAsset(asset: CachedJsonAsset, url: string): Promise<JsonRecord> {
     const cache = await this.readCache(asset).catch(() => null);
-    const pending =
-      asset === MANIFEST_CACHE ? undefined : (await this.fileIndex.get(url))?.pendingSha;
-    if (cache !== null && !pending && (!asset.sha || cache.sha === asset.sha)) {
+    if (cache !== null && (!asset.sha || cache.sha === asset.sha)) {
       return parseJsonObject(cache.body, asset.label);
     }
     return this.refreshAsset(asset, url);
@@ -451,12 +423,7 @@ export class GameDataService {
     force: boolean,
   ): Promise<JsonRecord> {
     const cache = await this.readCache(asset).catch(() => null);
-    const local =
-      asset === MANIFEST_CACHE
-        ? undefined
-        : await this.fileIndex.prepare(url, new URL(url).pathname.slice(1), asset.sha);
-    const expectedSha = local?.pendingSha ?? asset.sha;
-    if (cache?.sha && cache.sha === expectedSha) await this.reconcileSavedFile(asset, url, cache);
+    const expectedSha = asset.sha;
     const now = this.now().getTime();
     const attemptKey = url + (expectedSha ?? '');
     const lastAttempt = this.attempts.get(attemptKey);
@@ -513,14 +480,7 @@ export class GameDataService {
       } else throw new Error(`HTTP ${response.status} for ${asset.label}`);
       const decoded = parseJsonObject(record.body, asset.label);
       // A valid downloaded body is usable even if persistence is unavailable.
-      await this.saveCache(asset, record)
-        .then(async () => {
-          if (asset !== MANIFEST_CACHE && record.sha) {
-            const slot = await this.preferences.getString(asset.fileName + '.slot');
-            await this.fileIndex.commit(url, asset.fileName + '.' + slot, record.sha);
-          }
-        })
-        .catch(() => undefined);
+      await this.saveCache(asset, record).catch(() => undefined);
       return decoded;
     } catch (error) {
       if (cache) return parseJsonObject(cache.body, asset.label);

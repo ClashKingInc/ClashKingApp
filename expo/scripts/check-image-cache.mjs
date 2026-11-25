@@ -40,6 +40,7 @@ const { ManagedImageCache } = await import('../src/core/assets/managed-image-cac
 const { avifPixelBound } = await import('../src/core/assets/avif-dimensions.ts');
 const { applyAssetManifest } = await import('../src/core/assets/asset-manifest.ts');
 const { GameDataService } = await import('../src/core/game-data/game-data-service.ts');
+const { gameDataState } = await import('../src/core/game-data/game-data-state.ts');
 const { GameAssetManifestService } = await import('../src/features/game-assets/repository.ts');
 const { managedAssetRequest, sizedAssetUrl, sizedBadgeUrl, originalBadgeUrl } =
   await import('../src/ui/image-delivery.ts');
@@ -78,6 +79,7 @@ function imageFixture() {
   const storage = memoryStore();
   const files = new Set();
   const transfers = [];
+  const versions = new Map();
   let handle = async () => {};
   const implementation = {
     exists: async (file) => files.has(file),
@@ -96,7 +98,7 @@ function imageFixture() {
     },
   };
   const create = () => {
-    const index = new FileUpdateIndex(storage, now);
+    const index = new FileUpdateIndex(storage, now, (path) => versions.get(path));
     return { index, cache: new ManagedImageCache(index, implementation, now) };
   };
   return {
@@ -105,6 +107,7 @@ function imageFixture() {
     transfers,
     files,
     storage,
+    versions,
     onDownload: (callback) => {
       handle = callback;
     },
@@ -135,7 +138,7 @@ test('reads AVIF dimensions from complete metadata without scanning pixel data',
 });
 
 test('writes a first install once and notifies only subscribers for its path', async () => {
-  const { cache, index, storage, onDownload } = imageFixture();
+  const { cache, storage, versions, onDownload } = imageFixture();
   await cache.hydrate();
   let matching = 0;
   let unrelated = 0;
@@ -150,7 +153,8 @@ test('writes a first install once and notifies only subscribers for its path', a
   assert.equal(unrelated, 0);
   assert.deepEqual(validations, [false]);
 
-  await index.notice(new Map([[assetPath, nextSha]]));
+  versions.set(assetPath, nextSha);
+  assert.equal(storage.writes.length, 1);
   await cache.resolve(request(256, nextSha), () => {});
   assert.deepEqual(validations, [false, true]);
   stopMatching();
@@ -219,9 +223,9 @@ test('joins an in-flight larger download and retries independently if it fails',
 });
 
 test('shows the previous file when a replacement fails and recovers on retry', async () => {
-  const { cache, index, files, onDownload } = imageFixture();
+  const { cache, versions, files, onDownload } = imageFixture();
   const old = await cache.resolve(request(512), () => {});
-  await index.notice(new Map([[assetPath, nextSha]]));
+  versions.set(assetPath, nextSha);
   onDownload(async () => {
     throw new Error('Broken response');
   });
@@ -236,7 +240,7 @@ test('shows the previous file when a replacement fails and recovers on retry', a
 });
 
 test('rejects a download superseded while the previous version is in flight', async () => {
-  const { cache, index, files, onDownload } = imageFixture();
+  const { cache, versions, files, onDownload } = imageFixture();
   const started = deferred();
   const finish = deferred();
   onDownload(async () => {
@@ -246,7 +250,7 @@ test('rejects a download superseded while the previous version is in flight', as
   const old = cache.resolve(request(512), () => {});
   const rejection = assert.rejects(old, /superseded/);
   await started.promise;
-  await index.notice(new Map([[assetPath, nextSha]]));
+  versions.set(assetPath, nextSha);
   finish.resolve();
   await rejection;
   assert.equal(files.size, 0);
@@ -255,12 +259,19 @@ test('rejects a download superseded while the previous version is in flight', as
 });
 
 test('removes failed files, reuses pre-upgrade records and clears during a download', async () => {
-  const { cache, index, files, onDownload, transfers } = imageFixture();
+  const { cache, storage, files, onDownload, transfers } = imageFixture();
   const legacy = request(512);
-  await index.prepare('image:' + legacy.url, legacy.path, sha);
-  await index.commit('image:' + legacy.url, 'file://legacy', sha, 12000);
+  const metadataKey = 'https://assets.clashk.ing/static_data/buildings.json';
+  await storage.setString('asset-local-files-v2', JSON.stringify({
+    ['image:' + legacy.url]: {
+      path: legacy.path, file: 'file://legacy', sha, pendingSha: null, bytes: 12000,
+    },
+    [metadataKey]: { unused: true },
+  }));
+  await storage.setString('asset-local-file-v3:' + encodeURIComponent(metadataKey), 'not JSON');
   files.add('file://legacy');
   assert.equal(await cache.resolve(request(128), () => {}), 'file://legacy');
+  assert.equal(await storage.getString('asset-local-files-v2'), null);
   assert.equal(transfers.length, 0);
   await cache.invalidate(assetPath, 'file://legacy');
   assert.equal(cache.peek(request(128)), undefined);
@@ -406,6 +417,71 @@ test('Wiki and game data share one download and one conditional refresh', async 
   const restarted = create();
   await restarted.loadAssetManifest('refresh');
   assert.equal((await restarted.loadAssetManifest()).version, 2);
+});
+
+test('cold and warm startup load metadata without reading the image inventory', async () => {
+  const preferences = memoryStore();
+  const files = memoryStore();
+  const sectionPath = 'static_data/troops.json';
+  const translationPath = 'translations/FR.json';
+  const section = JSON.stringify({ items: [{ name: 'Barbarian' }] });
+  const translation = JSON.stringify({ TID_BARBARIAN: 'Barbare' });
+  const version = (body) => createHash('sha256').update(body).digest('hex');
+  const manifest = JSON.parse(manifestFixture().body);
+  manifest.data.stats = [{ path: sectionPath, sha: version(section) }];
+  manifest.data.translations = [{ path: translationPath, sha: version(translation) }];
+  const payloads = new Map([
+    ['/manifest.json', JSON.stringify(manifest)],
+    ['/' + sectionPath, section],
+    ['/' + translationPath, translation],
+  ]);
+  const requests = [];
+  const inventoryReads = [];
+  const start = () => new GameDataService({
+    platform: 'native',
+    preferences: {
+      ...preferences,
+      getKeys: async () => {
+        inventoryReads.push('getKeys');
+        return preferences.getKeys();
+      },
+      getMany: async (keys) => {
+        inventoryReads.push(...keys);
+        return preferences.getMany(keys);
+      },
+    },
+    files: { read: files.getString, write: files.setString },
+    now: () => new Date(now()),
+    fetchImplementation: async (url) => {
+      const path = new URL(url).pathname;
+      requests.push(path);
+      const payload = payloads.get(path);
+      return new Response(payload, { status: payload ? 200 : 404 });
+    },
+  });
+
+  const cold = start();
+  const locale = { languageCode: 'fr' };
+  await cold.loadFreshGameData(locale);
+  assert.ok(gameDataState.troopsData.troops.Barbarian);
+  assert.equal(gameDataState.translationsData.TID_BARBARIAN, 'Barbare');
+  assert.equal(requests.length, 3);
+  assert.deepEqual(inventoryReads, []);
+
+  for (let i = 0; i < 1024; i++) {
+    const key = 'image:https://assets.clashk.ing/' + i + '.webp';
+    await preferences.setString('asset-local-file-v3:' + encodeURIComponent(key), JSON.stringify({
+      path: i + '.webp', file: 'file://' + i, installedSha: sha, pendingSha: null,
+      bytes: 256, lastViewed: now(),
+    }));
+  }
+  await cold.loadTranslationsForLocale({ languageCode: 'en' });
+  assert.equal(gameDataState.translationsData.TID_BARBARIAN, undefined);
+  await start().loadFreshGameData(locale);
+  assert.ok(gameDataState.troopsData.troops.Barbarian);
+  assert.equal(gameDataState.translationsData.TID_BARBARIAN, 'Barbare');
+  assert.equal(requests.length, 3);
+  assert.deepEqual(inventoryReads, []);
 });
 
 test('migrates a valid Wiki-only manifest and can open it offline', async () => {

@@ -76,6 +76,10 @@ export function SettingsRoot({
     localImageCache.getSize,
   );
   useEffect(() => {
+    if (Platform.OS !== 'web' && scene === 'main')
+      void localImageCache.hydrate().catch(() => undefined);
+  }, [scene]);
+  useEffect(() => {
     if (Platform.OS !== 'android' || scene === 'main') return;
     // Consume nested settings Back before the outer Home utility handler.
     const back = BackHandler.addEventListener('hardwareBackPress', () => {

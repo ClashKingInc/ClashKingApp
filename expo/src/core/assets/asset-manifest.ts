@@ -60,6 +60,10 @@ export function manifestImage(url: string): ManifestImage | undefined {
   catch { return undefined; }
 }
 
+export function manifestImageVersion(path: string): string | undefined {
+  return images.get(path)?.sha;
+}
+
 export function changedImagePaths(previous: Record<string, unknown>, next: Record<string, unknown>): string[] {
   const before = validateAssetManifest(previous);
   const after = validateAssetManifest(next);
