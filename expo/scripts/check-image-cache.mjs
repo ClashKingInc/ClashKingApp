@@ -437,6 +437,10 @@ test('cold and warm startup load metadata without reading the image inventory', 
   ]);
   const requests = [];
   const inventoryReads = [];
+  let stamp = now();
+  const indexStarted = deferred();
+  const indexResponse = deferred();
+  let delayIndex = false;
   const start = () => new GameDataService({
     platform: 'native',
     preferences: {
@@ -451,10 +455,14 @@ test('cold and warm startup load metadata without reading the image inventory', 
       },
     },
     files: { read: files.getString, write: files.setString },
-    now: () => new Date(now()),
+    now: () => new Date(stamp),
     fetchImplementation: async (url) => {
       const path = new URL(url).pathname;
       requests.push(path);
+      if (delayIndex && path === '/app_metadata/v1/index.json') {
+        indexStarted.resolve();
+        await indexResponse.promise;
+      }
       const payload = payloads.get(path);
       return new Response(payload, { status: payload ? 200 : 404 });
     },
@@ -482,6 +490,23 @@ test('cold and warm startup load metadata without reading the image inventory', 
   assert.equal(gameDataState.translationsData.TID_BARBARIAN, 'Barbare');
   assert.equal(requests.length, 4);
   assert.deepEqual(inventoryReads, []);
+
+  stamp += 60_001;
+  delayIndex = true;
+  const upgrading = start();
+  let timer;
+  try {
+    await Promise.race([
+      upgrading.loadGameData(locale).then(() => indexStarted.promise),
+      new Promise((_, reject) => { timer = setTimeout(() => reject(new Error('Legacy startup waited for the index')), 1000); }),
+    ]);
+    assert.ok(gameDataState.troopsData.troops.Barbarian);
+    assert.deepEqual(inventoryReads, []);
+  } finally {
+    clearTimeout(timer);
+    indexResponse.resolve();
+  }
+  await upgrading.refreshGameDataIfChanged(locale);
 });
 
 function splitStartupFixture() {

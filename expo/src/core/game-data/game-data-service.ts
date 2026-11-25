@@ -277,13 +277,19 @@ export class GameDataService {
 
   private async loadStartupDataOnce(mode: MetadataLoadMode): Promise<readonly ManifestDataEntry[] | undefined> {
     try {
+      const savedIndex = mode === 'cached' ? await this.readCache(STARTUP_INDEX_CACHE).catch(() => null) : null;
+      if (mode === 'cached' && !savedIndex) {
+        const legacy = await this.loadCompleteLegacyCache();
+        if (legacy) return manifestData(legacy).translations;
+      }
       const missingAt = this.startupIndex ? null : await this.preferences
         .getString(STARTUP_INDEX_MISSING_AT).catch(() => null);
-      if (missingAt && !this.cacheNeedsRefresh(missingAt)) throw new Error('Startup metadata unavailable');
+      if (!savedIndex && missingAt && !this.cacheNeedsRefresh(missingAt))
+        throw new Error('Startup metadata unavailable');
       const url = `${STARTUP_METADATA_URL}/index.json`;
-      const index = readStartupIndex(await (mode === 'cached'
-        ? this.loadCachedJsonAsset(STARTUP_INDEX_CACHE, url)
-        : this.refreshAsset(STARTUP_INDEX_CACHE, url, mode === 'force')));
+      const index = readStartupIndex(savedIndex
+        ? parseJsonObject(savedIndex.body, STARTUP_INDEX_CACHE.label)
+        : await this.refreshAsset(STARTUP_INDEX_CACHE, url, mode === 'force'));
       const [stats, images] = await Promise.all([
         this.appliedSections === index.staticSha ? undefined : this.loadStartupPart('static', index.staticSha),
         this.appliedImageCatalog === index.imagesSha ? undefined : this.loadStartupPart('images', index.imagesSha),
@@ -307,11 +313,24 @@ export class GameDataService {
           this.appliedImageCatalog = undefined;
         }
         this.startupIndex = undefined;
-        await this.loadSections(manifest, mode !== 'cached').catch(() => undefined);
+        await this.loadSections(manifest, mode).catch(() => undefined);
         return manifestData(manifest).translations;
       } catch {
         // Keep the last valid in-memory data on network or storage failure.
       }
+    }
+  }
+
+  private async loadCompleteLegacyCache(): Promise<JsonRecord | undefined> {
+    try {
+      const saved = await this.readCache(MANIFEST_CACHE);
+      if (!saved) return undefined;
+      const manifest = parseJsonObject(saved.body, MANIFEST_CACHE.label);
+      await this.loadSections(manifest, 'cache-only');
+      return this.installManifest(manifest);
+    } catch {
+      // A partial legacy cache must not start individual downloads before probing the new index.
+      return undefined;
     }
   }
 
@@ -345,7 +364,7 @@ export class GameDataService {
     }
   }
 
-  private async loadSections(manifest: JsonRecord, refresh: boolean): Promise<void> {
+  private async loadSections(manifest: JsonRecord, mode: MetadataLoadMode | 'cache-only'): Promise<void> {
     const entries = manifestData(manifest).stats;
     if (!entries.length) throw new Error('Empty static data index');
     const signature = JSON.stringify(entries.map((entry) => [entry.path, entry.sha]));
@@ -362,12 +381,14 @@ export class GameDataService {
           const asset = dataCache(`static_data_${name}.json`, entry.sha);
           const url = `${ASSET_ORIGIN}/${path}`;
           const cached = await this.readCache(asset).catch(() => null);
+          if (mode === 'cache-only' && cached?.sha !== entry.sha)
+            throw new Error('Incomplete cached static data');
           const data =
             cached?.sha === entry.sha
               ? parseJsonObject(cached.body, asset.label)
-              : await (refresh
-                  ? this.refreshAsset(asset, url)
-                  : this.loadCachedJsonAsset(asset, url));
+              : await (mode === 'cached'
+                  ? this.loadCachedJsonAsset(asset, url)
+                  : this.refreshAsset(asset, url));
           if (!Array.isArray(data.items)) throw new Error('Invalid static data section');
           bundle[name] = data.items;
         }),
