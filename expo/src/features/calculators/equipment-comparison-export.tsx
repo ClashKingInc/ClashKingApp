@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from 'react';
 import { Modal, PixelRatio, Platform, Pressable, StyleSheet, View } from 'react-native';
 import { Check, Copy, Download } from '@/ui/icons';
 import * as Clipboard from 'expo-clipboard';
-import { captureRef, releaseCapture } from 'react-native-view-shot';
+import { captureRef, releaseCapture } from '../../core/graphics/view-shot';
 import { File } from 'expo-file-system';
 import { ImageAssets } from '../../core/assets/image-assets';
 import { useI18n } from '../../i18n';

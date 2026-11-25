@@ -3,7 +3,7 @@ import { createContext, useContext, useEffect, useRef, useState, type ReactNode 
 import { Image, Pressable, StyleSheet, View } from 'react-native';
 import { Check, Copy } from '@/ui/icons';
 import * as Clipboard from 'expo-clipboard';
-import { captureRef } from 'react-native-view-shot';
+import { captureRef } from '../../../core/graphics/view-shot';
 import { ImageAssets } from '../../../core/assets/image-assets';
 import { useI18n } from '../../../i18n';
 import { CKText, MobileWebImage, useCKTheme } from '../../../ui';

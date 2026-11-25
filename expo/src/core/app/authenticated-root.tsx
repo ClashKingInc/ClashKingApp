@@ -22,17 +22,16 @@ import {
 import { Alert, Platform, StyleSheet, View, useWindowDimensions } from 'react-native';
 import { Trophy } from '@/ui/icons';
 
-import { ServersRoot, type DashboardServer } from '../../features/servers/servers-root';
+import { ServersRoot } from '../../features/servers/servers-root';
 import { EsportsRoot } from '../../features/competitive/esports-root';
 import { ServerDashboardScreen } from '../../features/servers/server-dashboard-screen';
 import {
   managesDiscordServer,
   useDiscordServers,
+  type DashboardServer,
 } from '../../features/servers/use-discord-servers';
-import {
-  accountPresentationItem,
-  ManageLinkedAccountsScreen,
-} from '../../features/accounts/presentation';
+import { accountPresentationItem } from '../../features/accounts/presentation/contracts';
+import { ManageLinkedAccountsScreen } from '../../features/accounts/presentation/manage-linked-accounts-screen';
 import { materialContinueLabel, useI18n } from '../../i18n';
 import {
   appRoutes,
@@ -41,33 +40,28 @@ import {
   type FeatureState,
 } from '../../navigation';
 import { NavigationShell, resolveShellLayout, type PrimaryRouteId } from '../../shell';
-import { SettingsRoot } from '../../features/settings/presentation';
+import { SettingsRoot } from '../../features/settings/presentation/settings-root';
 import {
   AnnouncementOpeningController,
   sharedAnnouncementStoryCache,
 } from '../../features/home/data';
-import {
-  HomeDashboardRoot,
-  PostsRoot,
-  useAnnouncementPresentation,
-} from '../../features/home/presentation';
-import { AchievementsRoot } from '../../features/achievements/presentation';
-import {
-  PlayersRoot,
-  PlayerDetailRoot,
-  type PlayerCurrentCwl,
-} from '../../features/player/presentation';
+import { useAnnouncementPresentation } from '../../features/home/presentation/announcement-presenter';
+import { HomeDashboardRoot } from '../../features/home/presentation/home-dashboard-root';
+import { PostsRoot } from '../../features/home/presentation/posts-root';
+import { AchievementsRoot } from '../../features/achievements/presentation/achievements-root';
+import type { PlayerCurrentCwl } from '../../features/player/presentation/player-detail-contracts';
+import { PlayerDetailRoot } from '../../features/player/presentation/player-detail-root';
+import { PlayersRoot } from '../../features/player/presentation/players-root';
 import { Player, currentLegendDay } from '../../features/player/models';
+import { ClanCapitalRoot } from '../../features/clan/presentation/clan-capital-root';
 import {
-  ClanCapitalRoot,
   ClanInfoRoot,
   ClanRoot,
   type ClanNavigationActions,
-} from '../../features/clan/presentation';
+} from '../../features/clan/presentation/clan-root';
 import { Clan } from '../../features/clan/models';
 import { ClanCapitalScreen } from '../../features/clan/presentation/clan-capital-screen';
 import { RankedScreen } from '../../features/ranked/presentation/ranked-screen';
-import { LegendsScreen } from '../../features/legends/presentation/legends-root';
 import { loadingCwl, loadingWar } from '../../features/war/presentation/war-loading-model';
 import { DeferredDestination } from './deferred-destination';
 import {
@@ -75,17 +69,17 @@ import {
   HistoricalCwlRoot,
   WarCwlRoot,
   WarInfoRoot,
-} from '../../features/war/presentation';
+} from '../../features/war/presentation/war-cwl-root';
 import type { WarCwl, WarInfo } from '../../features/war/models';
-import { SearchRoot } from '../../features/search';
-import { RankedRoot } from '../../features/ranked';
-import { LegendsRoot } from '../../features/legends';
-import { RankingsRoot } from '../../features/rankings';
-import { BasesArmiesRoot } from '../../features/bases-armies';
-import { TodoRoot } from '../../features/todo';
-import { GameAssetsRoot } from '../../features/game-assets';
-import { CalculatorsRoot } from '../../features/calculators';
-import { UpgradeTrackerRoot } from '../../features/upgrade-tracker';
+import { SearchRoot } from '../../features/search/search-root';
+import { RankedRoot } from '../../features/ranked/presentation/ranked-root';
+import { LegendsRoot, LegendsScreen } from '../../features/legends/presentation/legends-root';
+import { RankingsRoot } from '../../features/rankings/presentation/rankings-root';
+import { BasesArmiesRoot } from '../../features/bases-armies/bases-armies-root';
+import { TodoRoot } from '../../features/todo/presentation/todo-root';
+import { GameAssetsRoot } from '../../features/game-assets/game-assets-root';
+import { CalculatorsRoot } from '../../features/calculators/calculators-root';
+import { UpgradeTrackerRoot } from '../../features/upgrade-tracker/presentation/upgrade-tracker-root';
 import { APP_FEATURE_FLAGS } from '../feature-flags/feature-flags';
 import { canonicalTag } from '../domain/tags';
 import { reportException } from '../observability/observability';
@@ -202,7 +196,21 @@ export function AuthenticatedRoot({
   );
   const getAuthSnapshot = useCallback(() => runtime.auth.state, [runtime.auth]);
   const authState = useSyncExternalStore(subscribeAuth, getAuthSnapshot, getAuthSnapshot);
-  const [primary, setPrimary] = useState<PrimaryRouteId>('home');
+  const [{ primary, visitedPrimary }, setPrimaryNavigation] = useState<{
+    primary: PrimaryRouteId;
+    visitedPrimary: ReadonlySet<PrimaryRouteId>;
+  }>(() => ({ primary: 'home', visitedPrimary: new Set(['home']) }));
+  const setPrimary = useCallback((route: PrimaryRouteId) => {
+    setPrimaryNavigation((current) => {
+      if (current.primary === route) return current;
+      return {
+        primary: route,
+        visitedPrimary: current.visitedPrimary.has(route)
+          ? current.visitedPrimary
+          : new Set([...current.visitedPrimary, route]),
+      };
+    });
+  }, []);
   const [utility, setUtility] = useState<AppRouteId>();
   const [utilityPlayerTag, setUtilityPlayerTag] = useState<string>();
   const [utilityPostId, setUtilityPostId] = useState<string>();
@@ -586,7 +594,9 @@ export function AuthenticatedRoot({
         }
       />
     ),
-    players: (
+    // The pager keeps a slot for each tab. Create its screen on first visit,
+    // then keep it mounted so returning to the tab restores its local state.
+    players: visitedPrimary.has('players') ? (
       <PlayersRoot
         openManageAccounts={() => openUtility(routeById('accounts'))}
         openPlayer={pushPlayer}
@@ -595,9 +605,11 @@ export function AuthenticatedRoot({
           void openExternal('https://link.clashofclans.com/?action=OpenMoreSettings')
         }
       />
-    ),
-    clans: <ClanRoot navigation={clanNavigation} onOpenClan={pushClan} />,
-    war: (
+    ) : null,
+    clans: visitedPrimary.has('clans') ? (
+      <ClanRoot navigation={clanNavigation} onOpenClan={pushClan} />
+    ) : null,
+    war: visitedPrimary.has('war') ? (
       <WarCwlRoot
         openClan={loadClan}
         openPlayer={loadPlayer}
@@ -610,7 +622,7 @@ export function AuthenticatedRoot({
           })
         }
       />
-    ),
+    ) : null,
   } as const;
 
   const isHomeRouteCurrent = primary === 'home' && utility === undefined && !pushedScenes.length;
@@ -817,7 +829,7 @@ export function AuthenticatedRoot({
       active = false;
       unsubscribe?.();
     };
-  }, [locale, onHomeReady, runtime, t]);
+  }, [locale, onHomeReady, runtime, setPrimary, t]);
 
   const renderUtilityContent = (
     route: AppRouteId,

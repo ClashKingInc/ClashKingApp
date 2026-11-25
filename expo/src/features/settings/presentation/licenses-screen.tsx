@@ -10,28 +10,26 @@ import { useI18n } from '../../../i18n';
 import { CKText, Surface, ckSpacing, useCKTheme } from '../../../ui';
 import { SettingsPage } from './settings-components';
 
-export interface LicensePackageSummary {
-  readonly packages: readonly string[];
-  readonly license: string;
-  readonly text: string;
-}
+import {
+  GENERATED_LICENSE_INVENTORY,
+  type GeneratedLicenseEntry,
+} from './generated-license-inventory';
 
 export function LicensesScreen({
   applicationName,
   applicationVersion,
-  packages,
   onBack,
 }: {
   applicationName: string;
   applicationVersion: string;
-  packages: readonly LicensePackageSummary[];
   onBack: () => void;
 }) {
   const { t } = useI18n();
   const layout = useAdaptiveLayout();
   const theme = useCKTheme();
   const link = useLinkParameters();
-  const [selected, setSelected] = useState<LicensePackageSummary | undefined>(() =>
+  const packages = GENERATED_LICENSE_INVENTORY;
+  const [selected, setSelected] = useState<GeneratedLicenseEntry | undefined>(() =>
     packages.find((entry) =>
       entry.packages.some(
         (name) =>

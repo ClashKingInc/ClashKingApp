@@ -24,7 +24,6 @@ import type {
   SettingsPresentationActions,
 } from './contracts';
 import { FaqScreen } from './faq-screen';
-import { GENERATED_LICENSE_INVENTORY } from './generated-license-inventory';
 import { LicensesScreen } from './licenses-screen';
 import { NotificationSettingsScreen } from './notification-settings-screen';
 import { EntityNotificationSettings } from './entity-notification-settings';
@@ -248,7 +247,6 @@ export function SettingsRoot({
           applicationName={t('appTitle')}
           applicationVersion={versionLabel.split('\n', 1)[0] ?? versionLabel}
           onBack={() => setScene('main')}
-          packages={GENERATED_LICENSE_INVENTORY}
         />
       );
     }
