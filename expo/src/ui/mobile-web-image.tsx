@@ -9,6 +9,7 @@ import {
   useCallback,
   useEffect,
   useMemo,
+  useRef,
   useState,
   useSyncExternalStore,
   type ReactNode,
@@ -376,21 +377,28 @@ function CandidateImage({
     useCallback(() => (request ? localImageCache.peek(request) : undefined), [request]),
     () => undefined,
   );
+  const hasLocalFile = localUri !== undefined;
+  const previousRequest = useRef<typeof request>(undefined);
   useEffect(() => {
+    const sameRequest = previousRequest.current === request;
+    previousRequest.current = request;
     if (!request || !candidate) return;
+    // Resolve again when a sibling invalidates our shared file. A successful
+    // download changes the subscription too, but needs no second lookup.
+    if (sameRequest && hasLocalFile) return;
     let active = true;
     void localImageCache
       .resolve(request, () => {})
       .catch(() => {
         if (active) {
           rememberFailure(resolutionKey, candidate);
-          setIndex((current) => current + 1);
+          setIndex((current) => (current === index ? current + 1 : current));
         }
       });
     return () => {
       active = false;
     };
-  }, [candidate, request, resolutionKey]);
+  }, [candidate, hasLocalFile, index, request, resolutionKey]);
   if (candidate === undefined) {
     if (offlineSource === undefined && errorFallback !== undefined) return errorFallback;
     return (
@@ -438,7 +446,7 @@ function CandidateImage({
         if (request && localUri)
           void localImageCache.invalidate(request.path, localUri).catch(() => undefined);
         rememberFailure(resolutionKey, candidate);
-        setIndex((current) => current + 1);
+        setIndex((current) => (current === index ? current + 1 : current));
       }}
     />
   );

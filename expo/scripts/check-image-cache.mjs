@@ -281,6 +281,31 @@ test('removes failed files, reuses pre-upgrade records and clears during a downl
   assert.equal(files.size, 0);
 });
 
+test('consumers of a shared image can replace it after one invalidates it', async () => {
+  const { cache, transfers } = imageFixture();
+  const large = request(512);
+  const small = request(128);
+  const shared = await cache.resolve(large, () => {});
+  assert.equal(cache.peek(small), shared);
+
+  const recover = (consumer) => new Promise((resolve, reject) => {
+    const unsubscribe = cache.subscribeImage(consumer.path, () => {
+      if (cache.peek(consumer) !== undefined) return;
+      unsubscribe();
+      cache.resolve(consumer, () => {}).then(resolve, reject);
+    });
+  });
+  const recovering = [recover(large), recover(small)];
+  await cache.invalidate(assetPath, shared);
+
+  const replacement = await Promise.all(recovering);
+  assert.notEqual(replacement[0], shared);
+  assert.equal(replacement[1], replacement[0]);
+  assert.equal(cache.peek(large), replacement[0]);
+  assert.equal(cache.peek(small), replacement[1]);
+  assert.equal(transfers.length, 2);
+});
+
 function manifestFixture({ legacy = false } = {}) {
   const preferences = memoryStore();
   const files = memoryStore();
