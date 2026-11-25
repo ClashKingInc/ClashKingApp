@@ -169,14 +169,6 @@ export default ({ config }: ConfigContext): ExpoConfig => {
       ['expo-screen-orientation', { initialOrientation: 'PORTRAIT_UP' }],
       'expo-localization',
       'expo-image',
-      [
-        'expo-image-picker',
-        {
-          photosPermission: 'Choose a profile photo or banner for ClashKing.',
-          cameraPermission: false,
-          microphonePermission: false,
-        },
-      ],
       '@react-native-firebase/app',
       '@react-native-firebase/messaging',
       [
