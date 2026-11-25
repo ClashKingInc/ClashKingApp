@@ -59,6 +59,8 @@ export default function RootLayout() {
     };
   }, []);
   const [fontReady, setFontReady] = useState(false);
+  const [updateHandoffReady, setUpdateHandoffReady] = useState(false);
+  const [rootLaidOut, setRootLaidOut] = useState(false);
   const launchHidden = useRef(false);
   const navigationContainerRef = useNavigationContainerRef();
   useEffect(() => {
@@ -66,22 +68,27 @@ export default function RootLayout() {
   }, [navigationContainerRef]);
   useEffect(() => {
     let mounted = true;
-    void Promise.all([loadClashKingFont(), prepareStartupUpdateHandoff()]).finally(() => {
-      if (!mounted) return;
-      setFontReady(true);
+    void loadClashKingFont().finally(() => {
+      if (mounted) setFontReady(true);
+    });
+    void prepareStartupUpdateHandoff().finally(() => {
+      if (mounted) setUpdateHandoffReady(true);
     });
     return () => {
       mounted = false;
     };
   }, []);
-  const handleRootLayout = useCallback(() => {
-    if (!fontReady || launchHidden.current) return;
+  const handleRootLayout = useCallback(() => setRootLaidOut(true), []);
+  useEffect(() => {
+    if (!fontReady || !rootLaidOut || launchHidden.current) return;
     launchHidden.current = true;
     hideWebLaunchScreen();
     void SplashScreen.hideAsync();
-  }, [fontReady]);
+  }, [fontReady, rootLaidOut]);
 
-  if (!fontReady) return null;
+  // Resolve the OTA handoff before mounting its gate. The launch screen stays
+  // visible while the app starts and the fonts finish loading in parallel.
+  if (!updateHandoffReady) return null;
   return (
     <GestureHandlerRootView style={{ flex: 1 }} onLayout={handleRootLayout}>
       <WebDocumentTitle />
