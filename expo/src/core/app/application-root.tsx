@@ -190,7 +190,13 @@ function ApplicationContent() {
             .catch((error) => reportException(error, 'startup.linkedPlayer'));
           if (isCurrent()) void hydrate();
         } else if (userId && returningUser && result.destination === 'home') {
-          await runtime.accountBootstrap.initializeHome(userId, runtime.accounts.accounts, isCurrent);
+          const preview = await runtime.accountBootstrap.initializeHome(
+            userId, runtime.accounts.accounts, isCurrent,
+          );
+          if (preview && isCurrent()) {
+            setScene({ kind: 'home', preview });
+            return;
+          }
         } else await hydrate();
         if (!isCurrent()) {
           if (generation === startupGeneration.current) setScene({ kind: 'login' });
@@ -391,7 +397,7 @@ function ApplicationContent() {
         ) : null;
       break;
     case 'home':
-      content = <AuthenticatedRoot onHomeReady={onHomeReady} />;
+      content = <AuthenticatedRoot onHomeReady={onHomeReady} homeStartupPreview={scene.preview} />;
       break;
     case 'maintenance':
       content = <MaintenanceScreen onRetry={() => void runStartup()} />;

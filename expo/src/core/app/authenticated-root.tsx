@@ -123,6 +123,7 @@ import { selectLegendsPlayer } from './legends-player-selection';
 import { UserProfileScreen } from '../../features/accounts/presentation/user-profile-screen';
 import { onboarding } from '../../features/onboarding/onboarding-service';
 import { useStartupCovered } from './startup-loading';
+import type { HomeStartupPreview } from '../../features/home/data/home-startup-snapshot';
 
 type ResolvedScene = {
   readonly nativeKey?: string;
@@ -177,7 +178,12 @@ type PushedScene =
 export function AuthenticatedRoot({
   onHomeReady,
   suppressAnnouncements = false,
-}: { onHomeReady?: () => void; suppressAnnouncements?: boolean } = {}) {
+  homeStartupPreview,
+}: {
+  onHomeReady?: () => void;
+  suppressAnnouncements?: boolean;
+  homeStartupPreview?: HomeStartupPreview;
+} = {}) {
   const [startupPlayerLink, setStartupPlayerLink] = useState(
     () => pendingAppLink()?.kind === 'player',
   );
@@ -559,6 +565,7 @@ export function AuthenticatedRoot({
   const screens = {
     home: (
       <HomeDashboardRoot
+        startupPreview={homeStartupPreview}
         active={
           primary === 'home' && !utility && pushedScenes.length === 0 && !announcementPresentation
         }

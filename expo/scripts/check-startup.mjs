@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import { existsSync, readFileSync } from 'node:fs';
 import { registerHooks } from 'node:module';
 import { test } from 'node:test';
-import { setImmediate } from 'node:timers/promises';
+import { setImmediate, setTimeout as wait } from 'node:timers/promises';
 import ts from 'typescript';
 
 // Exercise the real startup coordinator in Node with deterministic service responses.
@@ -27,6 +27,8 @@ const { initializeApplication, prepareLocalStartup } =
   await import('../src/core/app/startup-coordinator.ts');
 const { UnauthorizedException } = await import('../src/core/api/contract-api.ts');
 const { AccountBootstrapService } = await import('../src/features/auth/account-bootstrap-service.ts');
+const { readHomeStartupSnapshot, saveHomeStartupSnapshot } =
+  await import('../src/features/home/data/home-startup-snapshot.ts');
 
 function createDependencies({ authenticated = true, verified = true } = {}) {
   return {
@@ -90,7 +92,11 @@ function homeBootstrapFixture(links, loadPlayer, loadBookmarks = async () => {})
       prefetchRankedLeagueData: async () => {},
       notifyDataChanged: () => {},
     },
-    playerCardPreferences: { loaded: true },
+    playerCardPreferences: {
+      loaded: true,
+      isShownInTodoPage: () => true,
+      homeIncludedTags: (tags) => tags,
+    },
     storage: { getString: async () => null },
     clans: { clans: new Map(), notifyDataChanged: () => {} },
     wars: { summaries: new Map(), notifyDataChanged: () => {} },
@@ -102,6 +108,55 @@ const homeLinks = [
   { playerTag: '#P0Q', isVerified: true },
   { playerTag: '#Q2P', isVerified: true },
 ];
+
+test('a saved Home identity is scoped to the user and matching selected tag', async () => {
+  const values = new Map();
+  const storage = {
+    getString: async (key) => values.get(key) ?? null,
+    setString: async (key, value) => values.set(key, value),
+  };
+  const snapshot = { userId: 'user', tag: '#Q2P', name: 'Cached player', townHallLevel: 16 };
+  await saveHomeStartupSnapshot(storage, snapshot);
+  assert.deepEqual(await readHomeStartupSnapshot(storage, 'user', 'q2p'), snapshot);
+  assert.equal(await readHomeStartupSnapshot(storage, 'other user', '#Q2P'), null);
+  assert.equal(await readHomeStartupSnapshot(storage, 'user', '#P0Q'), null);
+});
+
+test('Home returns a matching snapshot before the selected account refresh finishes', async () => {
+  const selected = Promise.withResolvers();
+  const { dependencies, profiles, allReady } = homeBootstrapFixture(
+    homeLinks,
+    (tag) => tag === '#Q2P' ? selected.promise : Promise.resolve(),
+  );
+  dependencies.storage.getString = async (key) => key === 'home_startup_snapshot_v1:user'
+    ? JSON.stringify({ tag: '#Q2P', name: 'Cached player', townHallLevel: 16 })
+    : null;
+  const bootstrap = new AccountBootstrapService(dependencies);
+  try {
+    const preview = await bootstrap.initializeHome('user', homeLinks, () => true);
+    assert.equal(preview?.snapshot.name, 'Cached player');
+    assert.equal(profiles.length, 0);
+    selected.resolve();
+    await preview.selectedReady;
+    assert.ok(profiles.some(({ tag }) => tag === '#Q2P'));
+  } finally {
+    selected.resolve();
+  }
+  await allReady;
+}, { timeout: 1000 });
+
+test('Home uses the live selected profile when it finishes while a snapshot is available', async () => {
+  const { dependencies, profiles, allReady } = homeBootstrapFixture(
+    homeLinks, () => wait(20),
+  );
+  dependencies.storage.getString = async (key) => key === 'home_startup_snapshot_v1:user'
+    ? JSON.stringify({ tag: '#Q2P', name: 'Cached player', townHallLevel: 16 })
+    : null;
+  const bootstrap = new AccountBootstrapService(dependencies);
+  assert.equal(await bootstrap.initializeHome('user', homeLinks, () => true), null);
+  assert.ok(profiles.some(({ tag }) => tag === '#Q2P'));
+  await allReady;
+});
 
 test('Home can show the selected profile while other accounts and bookmarks are pending', async () => {
   const otherAccount = Promise.withResolvers();

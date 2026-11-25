@@ -8,8 +8,16 @@ import type { UpgradeTrackerRepository, UpgradeWidgetSyncService } from '../upgr
 import type { WarCwlService } from '../war/data';
 import type { WarWidgetService } from '../widgets';
 import type { LegendsWidgetService } from '../widgets/legends-widget-service';
+import {
+  readHomeStartupSnapshot,
+  type HomeStartupPreview,
+  type HomeStartupSnapshot,
+} from '../home/data/home-startup-snapshot';
 import type { CocAccountService } from './account-service';
 import type { CocAccountLink } from './models';
+
+// Give a fast profile response time to win before mounting the temporary card.
+const HOME_PREVIEW_GRACE_MS = 250;
 
 export interface AccountBootstrapDependencies {
   readonly accounts: CocAccountService;
@@ -30,6 +38,7 @@ interface AccountBootstrapInitializeOptions {
   readonly links?: readonly CocAccountLink[];
   readonly selectedTagLoaded?: boolean;
   readonly onSelectedAccountReady?: () => void;
+  readonly onHomeSnapshot?: (snapshot: HomeStartupSnapshot) => void;
   readonly isCurrent?: () => boolean;
 }
 
@@ -43,20 +52,29 @@ export class AccountBootstrapService {
     userId: string,
     links: readonly CocAccountLink[],
     isCurrent: () => boolean,
-  ): Promise<void> {
+  ): Promise<HomeStartupPreview | null> {
+    let finishSelected!: () => void;
+    const selectedReady = new Promise<void>((resolve) => {
+      finishSelected = resolve;
+    });
     return new Promise((resolve) => {
+      const finish = () => {
+        finishSelected();
+        resolve(null);
+      };
       const isActive = () => isCurrent() && this.dependencies.accounts.accounts === links;
       const done = this.initialize(userId, {
         links,
         selectedTagLoaded: true,
-        onSelectedAccountReady: resolve,
+        onSelectedAccountReady: finish,
+        onHomeSnapshot: (snapshot) => resolve({ snapshot, selectedReady }),
         isCurrent: isActive,
       }).catch((error) => this.report('startup.accountBootstrap', error));
       const hydration = { done, isCurrent: isActive };
       this.homeHydration = hydration;
       void done.finally(() => {
         if (this.homeHydration === hydration) this.homeHydration = undefined;
-        resolve();
+        finish();
       });
     });
   }
@@ -97,10 +115,30 @@ export class AccountBootstrapService {
           const tag = (
             verified.find((link) => canonicalTag(link.playerTag) === selectedTag) ?? verified[0]
           )?.playerTag;
-          if (tag)
-            await players.loadOfficialPlayerData([tag], { throwOnError: false }).catch((error) => {
-              this.report('accountBootstrap.selectedPlayer', error);
+          const selectedProfile = tag
+            ? players.loadOfficialPlayerData([tag], { throwOnError: false }).catch((error) => {
+                this.report('accountBootstrap.selectedPlayer', error);
+              })
+            : Promise.resolve();
+          let previewTimer: ReturnType<typeof setTimeout> | undefined;
+          let selectedSettled = false;
+          if (userId && tag && canonicalTag(tag) === selectedTag && options.onHomeSnapshot) {
+            void readHomeStartupSnapshot(this.dependencies.storage, userId, tag).then((snapshot) => {
+              if (!snapshot || selectedSettled || !isCurrent()) return;
+              previewTimer = setTimeout(() => {
+                if (!isCurrent() || canonicalTag(accounts.selectedTag ?? '') !== selectedTag) return;
+                const visible =
+                  !playerCardPreferences ||
+                  (playerCardPreferences.isShownInTodoPage(tag) &&
+                    playerCardPreferences.homeIncludedTags(verified.map((link) => link.playerTag), tag)
+                      .some((included) => canonicalTag(included) === selectedTag));
+                if (visible) options.onHomeSnapshot?.(snapshot);
+              }, HOME_PREVIEW_GRACE_MS);
             });
+          }
+          await selectedProfile;
+          selectedSettled = true;
+          clearTimeout(previewTimer);
           if (!isCurrent()) return;
           const remaining = links
             .map((link) => link.playerTag)

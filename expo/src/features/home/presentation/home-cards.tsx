@@ -77,6 +77,38 @@ function TodoBody({ summary, chevron = true }: { summary: HomeTodoSummary; chevr
   );
 }
 
+function pendingTodoSummary(account: HomeAccountIdentity, status: string): HomeTodoSummary {
+  return {
+    account,
+    status,
+    done: 0,
+    total: 2,
+    metrics: [
+      { id: 'games', kind: 'clanGames', done: 0, total: 4000 },
+      { id: 'pass', kind: 'seasonPass', done: 0, total: 2000 },
+    ],
+  };
+}
+
+export function HomeStartupTodoCard({ account }: { account: HomeAccountIdentity }) {
+  const { t } = useI18n();
+  return (
+    <HomeCardFrame
+      header={
+        <HomeWidgetHeader
+          imageUrl={ImageAssets.todoTarget}
+          title={t('todoTitle')}
+          account={account}
+        />
+      }
+    >
+      <SkeletonContent>
+        <TodoBody summary={pendingTodoSummary(account, t('generalLoading'))} />
+      </SkeletonContent>
+    </HomeCardFrame>
+  );
+}
+
 function HomeWidgetHeader({
   imageUrl,
   title,
@@ -636,16 +668,7 @@ export function HomePendingCard({
         desktop={false}
         actions={actions}
         model={{
-          accounts: entries.map((account) => ({
-            account,
-            status: t('generalLoading'),
-            done: 0,
-            total: 2,
-            metrics: [
-              { id: 'games', kind: 'clanGames', done: 0, total: 4000 },
-              { id: 'pass', kind: 'seasonPass', done: 0, total: 2000 },
-            ],
-          })),
+          accounts: entries.map((account) => pendingTodoSummary(account, t('generalLoading'))),
         }}
       />
     );

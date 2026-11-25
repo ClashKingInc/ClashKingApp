@@ -38,7 +38,9 @@ import {
 } from './contracts';
 import { HomeEventBanner } from './event-banner';
 import { HomeDragContext } from './home-components';
-import { HomePendingCard, HomeRankedCard, HomeTodoCard, HomeUpgradeCard } from './home-cards';
+import {
+  HomePendingCard, HomeRankedCard, HomeStartupTodoCard, HomeTodoCard, HomeUpgradeCard,
+} from './home-cards';
 import { HomeActivityCard } from './home-activity-card';
 
 export const MOBILE_HOME_OVERLAY_CLEARANCE = 96;
@@ -242,6 +244,8 @@ export function DashboardScreen({
                   compact={wideNative}
                   refreshKey={model.lastRefresh?.toISOString()}
                 />
+              ) : card === 'todo' && model.startupAccount ? (
+                <HomeStartupTodoCard account={model.startupAccount} />
               ) : card === 'todo' && model.todo ? (
                 <HomeTodoCard
                   model={model.todo}
