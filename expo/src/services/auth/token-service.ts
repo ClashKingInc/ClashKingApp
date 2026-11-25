@@ -1,6 +1,6 @@
 import { ApiResponseError, TransportError } from '@clashking/api-client';
 
-import type { StoredAuthSession } from '../../core/dto/auth-session';
+import { jwtDeviceId, type StoredAuthSession } from '../../core/dto/auth-session';
 import type { AuthSessionRepository, RuntimePlatform } from '../storage/auth-storage';
 import { withWebAuthRefreshLock, type AuthRefreshLock } from './refresh-lock';
 
@@ -109,7 +109,8 @@ export class TokenService {
       await this.saveWebAccessToken(accessToken);
       return;
     }
-    const deviceId = this.options.platform === 'ios' ? await this.getDeviceId() : null;
+    const deviceId =
+      jwtDeviceId(refreshToken) ?? jwtDeviceId(accessToken) ?? (await this.getDeviceId());
     const saved = await this.options.refreshLock.run(async () => {
       this.sessionGeneration += 1;
       await this.saveSession({ accessToken, refreshToken, deviceId });
@@ -129,6 +130,15 @@ export class TokenService {
     if (cleared !== true) {
       throw new Error('Could not acquire the shared authentication lock.');
     }
+  }
+
+  async clearTokensIfVersion(expectedVersion: number): Promise<boolean> {
+    const cleared = await this.options.refreshLock.run(async () => {
+      if (this.sessionGeneration !== expectedVersion) return false;
+      await this.clearSessionUnlocked();
+      return true;
+    });
+    return cleared === true;
   }
 
   isTokenExpired(token: string, skewSeconds = 30): boolean {
@@ -179,7 +189,7 @@ export class TokenService {
       // Re-reading while holding the cross-process lock prevents an old token
       // from resurrecting a session cleared by logout or rotated by WidgetKit.
       if (latest.refreshToken === null) return null;
-      const currentDeviceId = latest.deviceId ?? deviceId;
+      const currentDeviceId = latest.deviceId ?? jwtDeviceId(latest.refreshToken) ?? deviceId;
       const response = await this.fetchWithTimeout(
         `${withoutTrailingSlash(this.options.apiV2Url)}/auth/refresh`,
         {
