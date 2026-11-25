@@ -1,5 +1,6 @@
 import {
   EMPTY_AUTH_SESSION,
+  jwtDeviceId,
   serializeStoredAuthSession,
   tryParseStoredAuthSession,
   type StoredAuthSession,
@@ -58,8 +59,16 @@ export class AuthSessionRepository {
     const encoded = await this.secureStore.getItem(SECURE_STORAGE_KEYS.sharedAuthSession);
     let session = tryParseStoredAuthSession(encoded);
     if (session.accessToken !== null && session.refreshToken !== null) {
-      if (this.platform === 'ios' && session.deviceId === null) {
-        session = { ...session, deviceId: await this.getDeviceId() };
+      // Persist the session's bound device ID on both iOS and Android so
+      // Android OS updates (which change Build.ID) do not drift device_id away
+      // from the stored Discord OAuth row. Prefer the JWT's signed device claim
+      // when backfilling an existing session that predates Android persistence.
+      if (session.deviceId === null) {
+        const deviceId =
+          jwtDeviceId(session.refreshToken) ??
+          jwtDeviceId(session.accessToken) ??
+          (await this.getDeviceId());
+        session = { ...session, deviceId };
         await this.write(session);
       }
       return session;
@@ -170,7 +179,7 @@ export class AuthSessionRepository {
     await this.write({
       accessToken,
       refreshToken,
-      deviceId: this.platform === 'ios' ? await this.getDeviceId() : null,
+      deviceId: jwtDeviceId(refreshToken) ?? jwtDeviceId(accessToken) ?? (await this.getDeviceId()),
     });
     return {
       migrated: true,

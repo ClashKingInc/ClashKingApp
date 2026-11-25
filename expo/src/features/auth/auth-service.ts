@@ -139,20 +139,17 @@ export class AuthService {
         error instanceof UnauthorizedException ||
         (error instanceof ApiResponseError && error.status === 401)
       ) {
-        // The shared client already refreshed/replayed this access rejection.
-        // Only TokenService may discard a definitively rejected refresh token;
-        // a late profile 401 must not erase a newer sign-in or rotation.
+        // The shared client already refreshed and replayed this 401. If the
+        // same session version is still rejected by /v2/auth/me (for example
+        // after a revoked or orphaned Discord OAuth grant), clear it only when
+        // sessionVersion is unchanged so a newer sign-in is never erased.
         if (version !== this.options.tokens.sessionVersion) return;
-        if ((await this.options.tokens.getAccessToken()) === null) {
+        const token = await this.options.tokens.getAccessToken();
+        if (version !== this.options.tokens.sessionVersion) return;
+        if (token === null || (await this.options.tokens.clearTokensIfVersion(version))) {
           await this.handleSessionRejected();
-          // A rejected restored session goes to sign-in rather than startup's
-          // outage UI, preserving the existing upgraded-session recovery path.
-          return;
         }
-        throw new TransportError({
-          cause: error,
-          message: 'Account session validation failed. Retry startup.',
-        });
+        return;
       }
       throw error;
     }

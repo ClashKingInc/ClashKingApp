@@ -34,6 +34,23 @@ export function serializeStoredAuthSession(session: StoredAuthSession): string {
   });
 }
 
+/** Read the device claim signed into an existing ClashKing JWT without verifying it. */
+export function jwtDeviceId(token: string | null): string | null {
+  if (token === null || token.length === 0) return null;
+  try {
+    const parts = token.split('.');
+    if (parts.length !== 3) return null;
+    const normalized = parts[1]!.replaceAll('-', '+').replaceAll('_', '/');
+    const padded = normalized.padEnd(normalized.length + ((4 - (normalized.length % 4)) % 4), '=');
+    const binary = globalThis.atob(padded);
+    const bytes = Uint8Array.from(binary, (character) => character.charCodeAt(0));
+    const decoded: unknown = JSON.parse(new TextDecoder().decode(bytes));
+    return isRecord(decoded) ? nonEmptyStringOrNull(decoded.device) : null;
+  } catch {
+    return null;
+  }
+}
+
 function nonEmptyStringOrNull(value: unknown): string | null {
   return typeof value === 'string' && value.length > 0 ? value : null;
 }
