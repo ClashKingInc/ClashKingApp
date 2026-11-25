@@ -1,7 +1,7 @@
 import { ProfileAvatar } from '../../avatars/clash-avatar';
 import { useEffect, useState, useCallback } from 'react';
 import { RefreshControl, ScrollView, StyleSheet, View, useWindowDimensions } from 'react-native';
-import { ArrowLeft, ChevronRight, Settings2 } from 'lucide-react-native';
+import { ArrowLeft, ChevronRight, Settings2 } from '@/ui/icons';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useAdaptiveLayout } from '../../../ui/adaptive-layout';
 import { illustratedHeaderLayout } from '../../../ui/illustrated-header-layout';

@@ -1,6 +1,6 @@
 import { useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { PanResponder, Platform, Pressable, View, type KeyDownEvent } from 'react-native';
-import { ChevronDown, ChevronUp, Minus, Plus } from 'lucide-react-native';
+import { ChevronDown, ChevronUp, Minus, Plus } from '@/ui/icons';
 import { useI18n } from '../i18n';
 import { CKText } from './text';
 import { useCKTheme } from './theme';

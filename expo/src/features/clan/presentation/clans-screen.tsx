@@ -14,7 +14,7 @@ import {
   View,
   useWindowDimensions,
 } from 'react-native';
-import { Users } from 'lucide-react-native';
+import { Users } from '@/ui/icons';
 import DraggableFlatList, {
   ScaleDecorator,
   type RenderItemParams,

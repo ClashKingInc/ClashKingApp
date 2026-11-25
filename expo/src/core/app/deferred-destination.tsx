@@ -1,7 +1,7 @@
 import { useEffect, useState, type ReactNode } from 'react';
 import { View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { ArrowLeft } from 'lucide-react-native';
+import { ArrowLeft } from '@/ui/icons';
 import { materialBackLabel, useI18n } from '../../i18n';
 import { ErrorState, ProfileHeaderAction, useCKTheme } from '../../ui';
 

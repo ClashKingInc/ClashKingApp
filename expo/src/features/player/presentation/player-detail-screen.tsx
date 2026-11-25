@@ -1,7 +1,15 @@
 import { useAdaptiveLayout } from '../../../ui/adaptive-layout';
-import { useCallback, useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
-import { RefreshControl, ScrollView, StyleSheet, View } from 'react-native';
-import { History, Repeat2 } from 'lucide-react-native';
+import {
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useMemo,
+  useRef,
+  useState,
+  type ReactNode,
+} from 'react';
+import { Platform, RefreshControl, ScrollView, StyleSheet, View } from 'react-native';
+import { History, Repeat2 } from '@/ui/icons';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { useI18n } from '../../../i18n';
@@ -9,6 +17,7 @@ import { ImageAssets } from '../../../core/assets/image-assets';
 import { MobileWebImage, ProfileTabs, SkeletonContent, useCKTheme } from '../../../ui';
 import { useSectionScroll, useSectionSelection } from '../../../ui/use-section-selection';
 import { RetainedSection } from '../../../ui/retained-section';
+import { ArtworkViewportContext, createArtworkViewport } from '../../../ui/artwork-viewport';
 import type {
   PlayerDetailPresentationActions,
   PlayerDetailPresentationModel,
@@ -62,6 +71,12 @@ export function PlayerDetailScreen({
   const contentTab = tabs.some((item) => item.key === selection.contentKey)
     ? selection.contentKey
     : 'home';
+  const [artworkViewport] = useState(() =>
+    Platform.OS === 'android' || Platform.OS === 'ios' ? createArtworkViewport() : null,
+  );
+  useLayoutEffect(() => {
+    artworkViewport?.setActive(contentTab === 'home');
+  }, [artworkViewport, contentTab]);
   const {
     attachScroll,
     onViewportLayout,
@@ -178,7 +193,10 @@ export function PlayerDetailScreen({
     >
       <ScrollView
         ref={attachScroll}
-        onLayout={onViewportLayout}
+        onLayout={(event) => {
+          onViewportLayout(event);
+          artworkViewport?.setHeight(event.nativeEvent.layout.height);
+        }}
         testID="player-detail-scroll"
         scrollEnabled={!(contentTab === 'battles' && lootGridScrubbing)}
         stickyHeaderIndices={[1]}
@@ -186,6 +204,7 @@ export function PlayerDetailScreen({
         onScroll={(event) => {
           const { contentOffset, contentSize, layoutMeasurement } = event.nativeEvent;
           recordScroll(contentOffset.y);
+          artworkViewport?.setScroll(contentOffset.y);
           if (
             contentTab === 'battles' &&
             contentSize.height - layoutMeasurement.height - contentOffset.y <= 500
@@ -247,13 +266,24 @@ export function PlayerDetailScreen({
             />
           </View>
         </View>
-        <View style={{ minHeight: minimumContentHeight }}>
+        <View
+          ref={artworkViewport?.contentRef}
+          collapsable={artworkViewport ? false : undefined}
+          onLayout={
+            artworkViewport
+              ? (event) => artworkViewport.onContentLayout(event.nativeEvent.layout.y)
+              : undefined
+          }
+          style={{ minHeight: minimumContentHeight }}
+        >
           <SkeletonContent
             loading={loading}
             testID="player-detail-body"
             style={[styles.tabBody, layout.isExpanded && { maxWidth: layout.contentMaxWidth }]}
           >
-            {body}
+            <ArtworkViewportContext.Provider value={artworkViewport}>
+              {body}
+            </ArtworkViewportContext.Provider>
           </SkeletonContent>
         </View>
       </ScrollView>

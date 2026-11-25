@@ -1,7 +1,7 @@
 import { modalOrientations } from "../../../ui/modal-orientations";
 import { createContext, useContext, useState, type ReactNode } from 'react';
 import { Modal, Pressable, View } from 'react-native';
-import { SlidersHorizontal, X } from 'lucide-react-native';
+import { SlidersHorizontal, X } from '@/ui/icons';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { CKText, ProfileTabs, colorWithAlpha, useCKTheme } from '../../../ui';
 import { HeaderIconButton } from '../../../ui/header';

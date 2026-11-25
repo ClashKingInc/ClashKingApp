@@ -16,7 +16,7 @@ import {
   SafeAreaView,
   initialWindowMetrics,
 } from 'react-native-safe-area-context';
-import { ChevronLeft } from 'lucide-react-native';
+import { ChevronLeft } from '@/ui/icons';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { materialBackLabel, materialContinueLabel, useI18n } from '../../i18n';
 import type { MessageKey } from '../../i18n/catalogs.generated';

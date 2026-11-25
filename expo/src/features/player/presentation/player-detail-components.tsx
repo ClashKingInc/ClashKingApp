@@ -42,7 +42,7 @@ import {
   Shield,
   Upload,
   UserRound,
-} from 'lucide-react-native';
+} from '@/ui/icons';
 import { SlidingSegmentControl } from '../../../ui/sliding-segment-control';
 import { ExpandableProgressCard } from '../../../ui/expandable-progress-card';
 import { trackerCategoryImage } from '../../upgrade-tracker/presentation/tracker-category-art';
@@ -816,6 +816,7 @@ export const PlayerItemSection = memo(function PlayerItemSection({
         {hasOpened ? (
           trackerLayout ? (
             <UpgradeGroupTiles
+              deferEquipmentArtwork
               group={visible.some((item) => item.type === 'gear') ? 'equipment' : 'laboratory'}
               items={detailItems}
               snapshot={tileSnapshot}

@@ -1,4 +1,4 @@
-import { Share2, Copy } from 'lucide-react-native';
+import { Share2, Copy } from '@/ui/icons';
 import * as Clipboard from 'expo-clipboard';
 import { useI18n } from '../../../i18n';
 import { sharePageUrl } from '../../../core/deep-links/share-page-link';

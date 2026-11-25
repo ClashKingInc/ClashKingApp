@@ -1,5 +1,6 @@
 import type { PostAuthDestination } from '../../features/auth/presentation';
 import type { AppStartupResult } from './startup-coordinator';
+import type { HomeStartupPreview } from '../../features/home/data/home-startup-snapshot';
 
 export type ApplicationScene =
   | { readonly kind: 'startup' }
@@ -10,7 +11,7 @@ export type ApplicationScene =
   | { readonly kind: 'reset-password'; readonly email: string }
   | { readonly kind: 'account-setup' }
   | { readonly kind: 'introduction'; readonly stage: 'overview' | 'notifications' }
-  | { readonly kind: 'home' }
+  | { readonly kind: 'home'; readonly preview?: HomeStartupPreview }
   | { readonly kind: 'maintenance' }
   | { readonly kind: 'error'; readonly networkError: boolean };
 

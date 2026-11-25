@@ -6,7 +6,7 @@ import {
   type LayoutChangeEvent,
   type StyleProp,
 } from 'react-native';
-import { ImageOff } from 'lucide-react-native';
+import { ImageOff } from '@/ui/icons';
 
 import { MobileWebImage, Skeleton, useCKTheme, useSkeletonContent } from '../../ui';
 import type { GameAsset } from './models';

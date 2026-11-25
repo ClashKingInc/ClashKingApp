@@ -5,7 +5,7 @@ import { useState, type ReactNode } from 'react';
 import { Pressable, ScrollView, StyleSheet, View } from 'react-native';
 import * as Linking from 'expo-linking';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { ChevronLeft, ChevronRight, Plus, UserPlus } from 'lucide-react-native';
+import { ChevronLeft, ChevronRight, Plus, UserPlus } from '@/ui/icons';
 import {
   discordServerInstallUrl,
   DISCORD_PERSONAL_INSTALL_URL,

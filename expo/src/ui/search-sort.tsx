@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react';
-import { ChevronDown } from 'lucide-react-native';
+import { ChevronDown } from '@/ui/icons';
 import {
   Pressable,
   StyleSheet,

@@ -28,6 +28,7 @@ export type AppStartupResult =
 
 export interface StartupCoordinatorDependencies {
   readonly preferenceMigration: Pick<FlutterPreferenceMigration, 'run'>;
+  readonly preparedMigration?: Promise<void>;
   readonly appState: StoreApi<AppStateSnapshot>;
   readonly auth: AuthService;
   readonly accounts: CocAccountService;
@@ -42,47 +43,54 @@ export interface StartupCoordinatorDependencies {
   readonly isMaintenanceError?: (error: unknown) => boolean;
 }
 
+type LocalStartupDependencies = Pick<
+  StartupCoordinatorDependencies,
+  'preferenceMigration' | 'appState' | 'reportError'
+>;
+
+export function prepareLocalStartup(dependencies: LocalStartupDependencies): Promise<void> {
+  const migration = dependencies.preferenceMigration
+    .run()
+    .then(() => undefined)
+    .catch((error) => {
+      // A storage bridge problem cannot prevent login or an existing session.
+      dependencies.reportError?.('startup.preferenceMigration', error);
+    });
+  // The store shares a pending read with bootstrap and retries if this early read fails.
+  void migration
+    .then(() => dependencies.appState.getState().initializePreferences())
+    .catch(() => undefined);
+  return migration;
+}
+
 export async function initializeApplication(
   dependencies: StartupCoordinatorDependencies,
 ): Promise<AppStartupResult> {
-  try {
-    await dependencies.preferenceMigration.run();
-  } catch (error) {
-    // Flutter's AppPreferences reports and suppresses migration failures so a
-    // storage bridge problem cannot prevent login or an existing session.
-    dependencies.reportError?.('startup.preferenceMigration', error);
-  }
-  try {
-    await Promise.all([
-      dependencies.auth.initializeAuth(),
-      dependencies.gameData.loadGameData(),
-      dependencies.appState.getState().initialize(),
-    ]);
-  } catch (error) {
-    const isNetworkError = dependencies.isNetworkError ?? defaultIsNetworkError;
-    const isMaintenanceError = dependencies.isMaintenanceError ?? defaultIsMaintenanceError;
-    const rejectedSession =
-      error instanceof UnauthorizedException ||
-      (error instanceof ApiResponseError && error.status === 401);
-    if (!rejectedSession) {
-      dependencies.reportError?.('startup.bootstrap', error);
-      return failureResult(error, dependencies.auth.canUseApp, {
-        network: isNetworkError(error),
-        maintenance: isMaintenanceError(error),
-      });
-    }
-    // Only a definitive rejected session may continue to Login. A profile
-    // decode error, forbidden request, or unavailable service needs retry;
-    // none proves that the browser's refresh cookie is invalid.
-  }
-
   let accountResult: StartupResult;
   try {
-    accountResult = await initializeAccountsForCurrentAuth(
-      dependencies.auth,
-      dependencies.accounts,
-    );
+    await (dependencies.preparedMigration ?? prepareLocalStartup(dependencies));
+    const gameData = dependencies.gameData.loadGameData().catch((error) => {
+      dependencies.reportError?.('startup.gameData', error);
+    });
+    const accounts = dependencies.auth
+      .initializeAuth()
+      .catch((error: unknown) => {
+        // A failed profile request only permits Login after a definitive rejection.
+        if (
+          !(error instanceof UnauthorizedException) &&
+          !(error instanceof ApiResponseError && error.status === 401)
+        ) {
+          throw error;
+        }
+      })
+      .then(() => initializeAccountsForCurrentAuth(dependencies.auth, dependencies.accounts));
+    const appState = dependencies.appState.getState();
+    const appStateReady = appState.initialize();
+    void appStateReady.catch((error) => dependencies.reportError?.('startup.appState', error));
+    [accountResult] = await Promise.all([accounts, appState.initializePreferences()]);
     if (accountResult.authenticated) {
+      // Home uses remote flags and static game data. Sign-in only needs local preferences.
+      await Promise.all([gameData, appStateReady]);
       void dependencies
         .initializeAuthenticatedData?.()
         .catch((error) => dependencies.reportError?.('startup.authenticatedData', error));

@@ -2,7 +2,7 @@ import type { ViewInstance } from 'react-native';
 import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState, type PropsWithChildren } from 'react';
 import { Animated, AppState, Easing, Platform, Pressable, StyleSheet, View } from 'react-native';
 import { Image } from 'expo-image';
-import { captureRef, releaseCapture } from 'react-native-view-shot';
+import { captureRef, releaseCapture } from '../../core/graphics/view-shot';
 import { useCKAccessibility } from '../../ui';
 
 // The bundled build cycle is 750ms. Keep the builder on the repair pose for

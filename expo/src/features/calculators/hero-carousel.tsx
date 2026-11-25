@@ -1,6 +1,6 @@
 import { useCallback, useMemo, type ReactNode } from 'react';
 import { PanResponder, Pressable, StyleSheet, View } from 'react-native';
-import { ChevronLeft, ChevronRight } from 'lucide-react-native';
+import { ChevronLeft, ChevronRight } from '@/ui/icons';
 import { CKText, colorWithAlpha, useCKTheme } from '../../ui';
 import { useCKAccessibility } from '../../ui/accessibility';
 import { BundledHeroScene } from '../../ui/bundled-hero-scene';

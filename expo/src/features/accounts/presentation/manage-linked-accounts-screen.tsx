@@ -10,7 +10,7 @@ import {
   View,
   useWindowDimensions,
 } from 'react-native';
-import { ChevronLeft, LogOut, Search, ArrowRight, Shield, Trash2 } from 'lucide-react-native';
+import { ChevronLeft, LogOut, Search, ArrowRight, Shield, Trash2 } from '@/ui/icons';
 import DraggableFlatList, {
   ScaleDecorator,
   type DragEndParams,

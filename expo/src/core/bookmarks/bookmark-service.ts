@@ -136,6 +136,9 @@ export class BookmarkService {
     this.currentUserId = nextUserId;
     this.loadGeneration += 1;
     this.hasLoaded = false;
+    this.playerBookmarks = [];
+    this.clanBookmarks = [];
+    this.notify();
   }
 
   async load(): Promise<void> {

@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { Percent } from 'lucide-react-native';
+import { Percent } from '@/ui/icons';
 import { ScrollView, StyleSheet, View } from 'react-native';
 import { ImageAssets } from '../../../core/assets/image-assets';
 import { toIntlLocale, useI18n } from '../../../i18n';

@@ -2,7 +2,7 @@ import { useAdaptiveLayout } from '../../ui/adaptive-layout';
 import { modalOrientations } from '../../ui/modal-orientations';
 import { useState, type ReactNode } from 'react';
 import { Modal, Pressable, ScrollView, StyleSheet, View, useWindowDimensions } from 'react-native';
-import { Check, X } from 'lucide-react-native';
+import { Check, X } from '@/ui/icons';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { materialCloseLabel, useI18n } from '../../i18n';
 import { CKText, MobileWebImage, Surface, colorWithAlpha, useCKTheme } from '../../ui';

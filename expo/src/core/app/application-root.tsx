@@ -34,6 +34,7 @@ import {
   defaultIsNetworkError,
   initializeApplication,
   initializeAuthenticatedPush,
+  prepareLocalStartup,
 } from './startup-coordinator';
 import { StartupErrorScreen, MaintenanceScreen } from './startup-feedback';
 import { StartupHandoff } from './startup-loading';
@@ -65,6 +66,16 @@ function ApplicationContent() {
   }, []);
   const sceneRef = useRef(scene);
   const startupGeneration = useRef(0);
+  const localStartup = useRef<Promise<void> | undefined>(undefined);
+  const prepareStartup = useCallback(
+    () =>
+      prepareLocalStartup({
+        preferenceMigration: runtime.preferenceMigration,
+        appState: runtime.appState,
+        reportError: (operation, error) => reportException(error, operation),
+      }),
+    [runtime],
+  );
 
   useEffect(() => {
     sceneRef.current = scene;
@@ -73,7 +84,11 @@ function ApplicationContent() {
   const loadAccounts = useCallback(async () => {
     setHomeReady(false);
     void runtime.gameData.refreshGameDataIfChanged().catch(() => undefined);
-    const result = await initializeAccountsForCurrentAuth(runtime.auth, runtime.accounts);
+    const appState = runtime.appState.getState();
+    const [result] = await Promise.all([
+      initializeAccountsForCurrentAuth(runtime.auth, runtime.accounts),
+      appState.initialized ? undefined : appState.initialize(),
+    ]);
     if (!result.authenticated) throw new Error('Authentication expired.');
     await runtime.accountBootstrap
       .initialize(runtime.auth.state.currentUser?.userId ?? null, {
@@ -119,8 +134,11 @@ function ApplicationContent() {
     setScene({ kind: 'startup' });
     setHomeReady(false);
     try {
+      const preparedMigration = localStartup.current;
+      localStartup.current = undefined;
       const result = await initializeApplication({
         preferenceMigration: runtime.preferenceMigration,
+        preparedMigration,
         appState: runtime.appState,
         auth: runtime.auth,
         accounts: runtime.accounts,
@@ -140,13 +158,28 @@ function ApplicationContent() {
         },
         reportError: (operation, error) => reportException(error, operation),
       });
+      if (generation !== startupGeneration.current) return;
       if (result.authenticated) {
         const link = pendingAppLink();
+        const userId = runtime.auth.state.currentUser?.userId ?? null;
+        const sessionVersion = runtime.tokens.sessionVersion;
+        const isCurrent = () =>
+          generation === startupGeneration.current &&
+          runtime.tokens.sessionVersion === sessionVersion &&
+          runtime.auth.canUseApp &&
+          runtime.auth.state.currentUser?.userId === userId;
+        await onboarding.bind(runtime.preferences, userId);
+        if (!isCurrent()) {
+          if (generation === startupGeneration.current) setScene({ kind: 'login' });
+          return;
+        }
+        const returningUser = onboarding.getSnapshot().returningUser;
         const hydrate = () =>
           runtime.accountBootstrap
-            .initialize(runtime.auth.state.currentUser?.userId ?? null, {
+            .initialize(userId, {
               links: runtime.accounts.accounts,
               selectedTagLoaded: true,
+              isCurrent,
             })
             .catch((error) => reportException(error, 'startup.accountBootstrap'));
         if (link?.kind === 'player' && result.destination === 'home') {
@@ -155,15 +188,22 @@ function ApplicationContent() {
           await runtime.players
             .getPlayerAndClanData(link.tag)
             .catch((error) => reportException(error, 'startup.linkedPlayer'));
-          void hydrate();
+          if (isCurrent()) void hydrate();
+        } else if (userId && returningUser && result.destination === 'home') {
+          const preview = await runtime.accountBootstrap.initializeHome(
+            userId, runtime.accounts.accounts, isCurrent,
+          );
+          if (preview && isCurrent()) {
+            setScene({ kind: 'home', preview });
+            return;
+          }
         } else await hydrate();
-      }
-      if (generation !== startupGeneration.current) return;
-      if (result.authenticated) {
-        await onboarding.bind(runtime.preferences, runtime.auth.state.currentUser?.userId ?? null);
-        if (generation !== startupGeneration.current) return;
+        if (!isCurrent()) {
+          if (generation === startupGeneration.current) setScene({ kind: 'login' });
+          return;
+        }
         setScene(
-          onboarding.getSnapshot().returningUser
+          returningUser
             ? sceneForStartupResult(result)
             : { kind: 'introduction', stage: 'overview' },
         );
@@ -179,14 +219,17 @@ function ApplicationContent() {
   }, [runtime]);
 
   useEffect(() => {
-    if (!updateReady) return;
-    // Bootstrap begins only after the update decision; the shared cover stays mounted.
+    if (!updateReady) {
+      localStartup.current ??= prepareStartup();
+      return;
+    }
+    // Network-backed bootstrap begins only after the update decision.
     // eslint-disable-next-line react-hooks/set-state-in-effect
     void runStartup();
     return () => {
       startupGeneration.current += 1;
     };
-  }, [runStartup, updateReady]);
+  }, [prepareStartup, runStartup, updateReady]);
 
   useEffect(
     () =>
@@ -354,7 +397,7 @@ function ApplicationContent() {
         ) : null;
       break;
     case 'home':
-      content = <AuthenticatedRoot onHomeReady={onHomeReady} />;
+      content = <AuthenticatedRoot onHomeReady={onHomeReady} homeStartupPreview={scene.preview} />;
       break;
     case 'maintenance':
       content = <MaintenanceScreen onRetry={() => void runStartup()} />;

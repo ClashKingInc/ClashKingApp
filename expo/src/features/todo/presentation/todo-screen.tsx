@@ -14,7 +14,7 @@ import {
   useWindowDimensions,
   type ViewInstance,
 } from 'react-native';
-import { ArrowLeft, Check, CheckCircle2, ChevronDown, Info, Search, X } from 'lucide-react-native';
+import { ArrowLeft, Check, CheckCircle2, ChevronDown, Info, Search, X } from '@/ui/icons';
 import Svg, { Circle } from 'react-native-svg';
 import { HeroHeaderScrim } from '../../../ui/hero-header-scrim';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';

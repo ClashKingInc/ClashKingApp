@@ -26,7 +26,7 @@ import {
   Shield,
   Users,
   X,
-} from 'lucide-react-native';
+} from '@/ui/icons';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { HeroHeaderScrim } from '../../../ui/hero-header-scrim';
 

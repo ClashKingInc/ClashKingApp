@@ -19,7 +19,7 @@ import DraggableFlatList, {
   type DraggableFlatListProps,
   type RenderItemParams,
 } from 'react-native-draggable-flatlist';
-import { EyeOff, UserCircle } from 'lucide-react-native';
+import { EyeOff, UserCircle } from '@/ui/icons';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { toIntlLocale, useI18n } from '../../../i18n';
 import { InlineReorderGrid } from '../../../ui/inline-reorder-grid';
@@ -38,7 +38,9 @@ import {
 } from './contracts';
 import { HomeEventBanner } from './event-banner';
 import { HomeDragContext } from './home-components';
-import { HomePendingCard, HomeRankedCard, HomeTodoCard, HomeUpgradeCard } from './home-cards';
+import {
+  HomePendingCard, HomeRankedCard, HomeStartupTodoCard, HomeTodoCard, HomeUpgradeCard,
+} from './home-cards';
 import { HomeActivityCard } from './home-activity-card';
 
 export const MOBILE_HOME_OVERLAY_CLEARANCE = 96;
@@ -242,6 +244,8 @@ export function DashboardScreen({
                   compact={wideNative}
                   refreshKey={model.lastRefresh?.toISOString()}
                 />
+              ) : card === 'todo' && model.startupAccount ? (
+                <HomeStartupTodoCard account={model.startupAccount} />
               ) : card === 'todo' && model.todo ? (
                 <HomeTodoCard
                   model={model.todo}
@@ -325,7 +329,7 @@ export function DashboardScreen({
       renderItem={({ item, getIndex, drag, isActive }: RenderItemParams<HomeCardId>) => (
         <HomeCardHold
           onHold={
-            cards.length > 1
+            cards.length > 1 && model.canReorderCards !== false
               ? (position) => {
                   holdPageY.value = position.y;
                   lastAutoScroll.value = 0;

@@ -9,7 +9,7 @@ import {
   View,
   type TextInputProps,
 } from 'react-native';
-import { CheckCircle2, Circle, Eye, EyeOff, Shield } from 'lucide-react-native';
+import { CheckCircle2, Circle, Eye, EyeOff, Shield } from '@/ui/icons';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { ImageAssets } from '../../../core/assets/image-assets';

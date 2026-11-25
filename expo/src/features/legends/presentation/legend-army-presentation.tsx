@@ -1,13 +1,9 @@
-import { ASSET_ORIGIN } from '../../../core/assets/asset-origin';
 import { type ReactNode } from 'react';
-import { Image } from 'expo-image';
-import { PixelRatio, Platform, StyleSheet, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 
 import { CKText, MobileWebImage, ckRadius, colorWithAlpha, useCKTheme } from '../../../ui';
-import { manifestImage } from '../../../core/assets/asset-manifest';
-import { localImageCache } from '../../../core/assets/local-asset-cache';
-import { sizedAssetUrl } from '../../../ui/image-delivery';
 import { useI18n } from '../../../i18n';
+import { prefetchMobileImage } from '../../../ui/mobile-web-image';
 import { PlayerBattlelogArmyCatalog } from '../../player/models/player-battlelog';
 import { legendArmyGroups, legendHeroLoadouts, type LegendArmyItem } from './legend-army';
 
@@ -82,23 +78,10 @@ export async function prefetchLegendArmyArtwork(shareCodes: readonly string[]): 
   for (let offset = 0; offset < pending.length; offset += 4) {
     const batch = pending.slice(offset, offset + 4);
     const results = await Promise.allSettled(
-      batch.map(async ({ url, size }) => {
-        const candidate = sizedAssetUrl(url, size, size, PixelRatio.get());
-        const metadata = manifestImage(url);
-        if (Platform.OS !== 'web' && metadata && url.startsWith(`${ASSET_ORIGIN}/`)) {
-          await localImageCache.resolve(
-            candidate,
-            decodeURIComponent(new URL(url).pathname.slice(1)),
-            metadata.sha,
-            () => {},
-          );
-        } else {
-          await Image.prefetch(candidate);
-        }
-      }),
+      batch.map(({ url, size }) => prefetchMobileImage(url, size, size)),
     );
     results.forEach((result, index) => {
-      if (result.status === 'rejected') {
+      if (result.status === 'rejected' || !result.value) {
         const item = batch[index];
         if (item) warmedArtwork.delete(`${item.url}:${item.size}`);
       }

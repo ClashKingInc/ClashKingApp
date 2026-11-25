@@ -3,7 +3,7 @@ import { useEffect, useId, useMemo, useState, type ReactNode } from 'react';
 import { Alert, Pressable, StyleSheet, View, type StyleProp, type ViewStyle } from 'react-native';
 import * as Font from 'expo-font';
 import Svg, { Defs, LinearGradient, RadialGradient, Rect, Stop } from 'react-native-svg';
-import { ArrowLeft, ArrowRight, Share2 } from 'lucide-react-native';
+import { ArrowLeft, ArrowRight, Share2 } from '@/ui/icons';
 import {
   CKText,
   HeaderIconButton,

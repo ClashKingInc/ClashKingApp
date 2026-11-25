@@ -1,7 +1,7 @@
 import { AdaptiveStatsPanels } from './adaptive-stats-panels';
 import { useState, useSyncExternalStore } from 'react';
 import { Pressable, StyleSheet, View } from 'react-native';
-import { ChevronDown, ChevronUp } from 'lucide-react-native';
+import { ChevronDown, ChevronUp } from '@/ui/icons';
 
 import { ImageAssets } from '../../../core/assets/image-assets';
 import { localizedNameForItemOrFallback } from '../../../core/game-data/game-data-localization';

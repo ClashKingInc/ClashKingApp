@@ -2,7 +2,7 @@ import type { ScrollViewInstance } from 'react-native';
 import { ASSET_ORIGIN } from '../../../core/assets/asset-origin';
 import { createContext, useContext, useRef, useState, type ReactNode } from 'react';
 import { Pressable, StyleSheet, View } from 'react-native';
-import { Check, ChevronLeft, ChevronRight, Group, ImageOff } from 'lucide-react-native';
+import { Check, ChevronLeft, ChevronRight, Group, ImageOff } from '@/ui/icons';
 import Svg, { Circle as SvgCircle } from 'react-native-svg';
 
 import { ImageAssets } from '../../../core/assets/image-assets';

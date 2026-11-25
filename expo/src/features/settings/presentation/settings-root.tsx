@@ -24,7 +24,6 @@ import type {
   SettingsPresentationActions,
 } from './contracts';
 import { FaqScreen } from './faq-screen';
-import { GENERATED_LICENSE_INVENTORY } from './generated-license-inventory';
 import { LicensesScreen } from './licenses-screen';
 import { NotificationSettingsScreen } from './notification-settings-screen';
 import { EntityNotificationSettings } from './entity-notification-settings';
@@ -75,6 +74,10 @@ export function SettingsRoot({
     localImageCache.getSize,
     localImageCache.getSize,
   );
+  useEffect(() => {
+    if (Platform.OS !== 'web' && scene === 'main')
+      void localImageCache.hydrate().catch(() => undefined);
+  }, [scene]);
   useEffect(() => {
     if (Platform.OS !== 'android' || scene === 'main') return;
     // Consume nested settings Back before the outer Home utility handler.
@@ -244,7 +247,6 @@ export function SettingsRoot({
           applicationName={t('appTitle')}
           applicationVersion={versionLabel.split('\n', 1)[0] ?? versionLabel}
           onBack={() => setScene('main')}
-          packages={GENERATED_LICENSE_INVENTORY}
         />
       );
     }

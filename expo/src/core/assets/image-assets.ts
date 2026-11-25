@@ -143,7 +143,7 @@ export class ImageAssets {
   }
 
   static clanBadge(badgeUrl: string): string {
-    return badgeUrl || `${ImageAssets.baseUrl}/icons/default_clan_badge.png`;
+    return badgeUrl || ImageAssets.shield;
   }
 
   static clanBadgeUrls(

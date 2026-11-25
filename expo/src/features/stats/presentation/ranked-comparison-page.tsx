@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState, useRef, useId, type ReactNode } from 'react';
 import { ActivityIndicator, Animated, Easing, Pressable, StyleSheet, View } from 'react-native';
 import { Image as ExpoImage } from 'expo-image';
-import { RotateCw } from 'lucide-react-native';
+import { RotateCw } from '@/ui/icons';
 import Svg, { Defs, LinearGradient, Rect, Stop } from 'react-native-svg';
 import type { ContractApiService } from '../../../core/api/contract-api';
 import { ImageAssets } from '../../../core/assets/image-assets';

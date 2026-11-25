@@ -35,7 +35,12 @@ export async function initializeAccountsForCurrentAuth(
   }
   const userId = auth.state.currentUser?.userId ?? null;
   accounts.setCurrentUserId(userId);
-  await Promise.all([accounts.loadSelectedTag(), accounts.fetchAccounts()]);
+  // The link response reconciles the selected tag, so restore it first.
+  await accounts.loadSelectedTag();
+  if (!auth.canUseApp || auth.state.currentUser?.userId !== userId) {
+    return startupDecision(false, false);
+  }
+  await accounts.fetchAccounts();
   const sameSession =
     auth.canUseApp && auth.state.currentUser?.userId === userId;
   return startupDecision(sameSession, sameSession && accounts.hasVerifiedAccounts);

@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Modal, Pressable, StyleSheet, View, useWindowDimensions } from 'react-native';
 import { Gesture, GestureDetector, GestureHandlerRootView } from 'react-native-gesture-handler';
 import Reanimated, { useSharedValue, useAnimatedStyle, withSpring } from 'react-native-reanimated';
-import { X, ZoomIn, ZoomOut } from 'lucide-react-native';
+import { X, ZoomIn, ZoomOut } from '@/ui/icons';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { CKText, MobileWebImage, HeaderIconButton, useCKTheme } from '../../ui';
 import { useI18n } from '../../i18n';

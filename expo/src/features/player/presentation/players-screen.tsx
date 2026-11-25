@@ -16,7 +16,7 @@ import {
   View,
   useWindowDimensions,
 } from 'react-native';
-import { Bookmark, UserCircle } from 'lucide-react-native';
+import { Bookmark, UserCircle } from '@/ui/icons';
 import DraggableFlatList, {
   ScaleDecorator,
   type RenderItemParams,

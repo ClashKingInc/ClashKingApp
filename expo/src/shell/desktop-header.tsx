@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react';
 import { Pressable, StyleSheet, View } from 'react-native';
-import { Goal, Search, UserCog } from 'lucide-react-native';
+import { Goal, Search, UserCog } from '@/ui/icons';
 
 import { CKText, ckColors, colorWithAlpha, useCKTheme } from '../ui';
 

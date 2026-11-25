@@ -57,14 +57,6 @@ const byUrl = new Map(
       .map((uri) => [uri, source] as const);
   }),
 );
-// Decode the common first destinations; fetch the remaining bundled files
-// without pinning every possible page's bitmap in memory at launch.
-const firstDestinations = new Set([
-  ...headers.slice(2, 9),
-  landscapes['home-landscape.png'],
-  landscapes['clan-capital-landscape.png'],
-  require('../../../assets/generated/clashking/headers/profile/profile-selected-banner.png'),
-]);
 for (const [name, source] of Object.entries(landscapes)) {
   byUrl.set(`${ASSET_ORIGIN}/landscape/${name}`, source);
   byUrl.set(`https://assets.clashk.ing/landscape/${name}`, source);
@@ -80,7 +72,6 @@ const pending = new Map<number, Promise<void>>();
 const listeners = new Set<() => void>();
 let bytes = 0;
 let generation = 0;
-let warmup: Promise<void> | undefined;
 export const subscribeHeaderArtwork = (listener: () => void) => {
   listeners.add(listener);
   return () => {
@@ -132,30 +123,10 @@ export function prepareHeaderArtwork(source: number): Promise<void> {
   return load;
 }
 
-/** Starts during startup; never await this from navigation or the splash gate. */
-export function warmHeaderArtwork(): Promise<void> {
-  warmup ??= (async () => {
-    let index = 0;
-    const worker = async () => {
-      while (index < headers.length) {
-        const source = headers[index++]!;
-        if (firstDestinations.has(source)) await prepareHeaderArtwork(source);
-        else
-          await Image.prefetch(Asset.fromModule(source).uri, { cachePolicy: 'disk' }).catch(
-            () => false,
-          );
-      }
-    };
-    await Promise.all([worker(), worker()]);
-  })();
-  return warmup;
-}
-
 export function clearHeaderArtworkCache(): void {
   generation++;
   decoded.clear();
   pending.clear();
-  warmup = undefined;
   bytes = 0;
   for (const listener of listeners) listener();
 }

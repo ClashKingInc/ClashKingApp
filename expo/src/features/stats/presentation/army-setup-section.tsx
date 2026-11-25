@@ -1,7 +1,7 @@
 import { AdaptiveStatsPanels } from './adaptive-stats-panels';
 import { useEffect, useRef, useState } from 'react';
 import { Pressable, StyleSheet, View } from 'react-native';
-import { ChevronDown, ChevronRight } from 'lucide-react-native';
+import { ChevronDown, ChevronRight } from '@/ui/icons';
 import { AnalyticsLineChart } from './analytics-chart';
 import { LeagueStatsPicker } from './league-stats-picker';
 

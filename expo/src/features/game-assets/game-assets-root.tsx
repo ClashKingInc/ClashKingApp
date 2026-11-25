@@ -5,11 +5,7 @@ import { PlatformGameAssetActions, type GameAssetActions } from './actions';
 import { WikiScreen } from './wiki-screen';
 import { WikiCatalogueContext, wikiCatalogue, type WikiEntry } from './wiki-catalogue';
 import type { GameAssetManifest } from './models';
-import {
-  GameAssetManifestService,
-  PreferenceGameAssetManifestCache,
-  type GameAssetManifestRepository,
-} from './repository';
+import { GameAssetManifestService, type GameAssetManifestRepository } from './repository';
 
 // Reuse the parsed manifest across category pushes. Re-reading and decoding the
 // full asset catalogue on every route stalls navigation before it can animate.
@@ -29,15 +25,15 @@ export function GameAssetsRoot({
   const inheritedCatalogue = useContext(WikiCatalogueContext);
   const [refreshRevision, setRefreshRevision] = useState(0);
   const defaultRepository = useMemo(() => {
-    let existing = repositories.get(runtime.preferences);
+    let existing = repositories.get(runtime.gameData);
     if (!existing) {
-      existing = new GameAssetManifestService({
-        cache: new PreferenceGameAssetManifestCache(runtime.preferences),
-      });
-      repositories.set(runtime.preferences, existing);
+      existing = new GameAssetManifestService((refresh) =>
+        runtime.gameData.loadAssetManifest(refresh ? 'force' : 'cached'),
+      );
+      repositories.set(runtime.gameData, existing);
     }
     return existing;
-  }, [runtime.preferences]);
+  }, [runtime.gameData]);
   const activeRepository = repository ?? defaultRepository;
   const activeActions = useMemo(() => actions ?? new PlatformGameAssetActions(), [actions]);
   const [loadState, setLoadState] = useState<{
@@ -47,8 +43,7 @@ export function GameAssetsRoot({
     readonly loading: boolean;
     readonly error: unknown;
   }>(() => {
-    const manifest =
-      activeRepository instanceof GameAssetManifestService ? activeRepository.peek() : null;
+    const manifest = activeRepository.peek?.() ?? null;
     return {
       repository: activeRepository,
       manifest,
@@ -73,8 +68,10 @@ export function GameAssetsRoot({
       }));
       try {
         // Refresh metadata and artwork together before replacing a visible grid.
-        if (forceRefresh) await runtime.gameData.refreshStaticDataIfChanged();
-        const manifest = await activeRepository.load({ forceRefresh });
+        if (forceRefresh) await runtime.gameData.refreshStaticDataIfChanged(true);
+        const manifest = await activeRepository.load({
+          forceRefresh: forceRefresh && repository !== undefined,
+        });
         setLoadState({
           repository: activeRepository,
           manifest,
@@ -93,18 +90,14 @@ export function GameAssetsRoot({
         }));
       }
     },
-    [activeRepository, runtime.gameData],
+    [activeRepository, repository, runtime.gameData],
   );
 
   useEffect(() => {
     let active = true;
     // Child routes inherit the source visit. Background manifest/data refreshes
     // must not replace portraits, insert cards or rebuild a retained grid.
-    if (
-      inheritedCatalogue ||
-      (activeRepository instanceof GameAssetManifestService && activeRepository.peek())
-    )
-      return;
+    if (inheritedCatalogue || activeRepository.peek?.()) return;
     void activeRepository
       .load()
       .then((nextManifest) => {

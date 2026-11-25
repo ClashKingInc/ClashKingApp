@@ -23,7 +23,7 @@ import {
   Upload,
   UsersRound,
   X,
-} from 'lucide-react-native';
+} from '@/ui/icons';
 
 import { ImageAssets } from '../../core/assets/image-assets';
 import { translationForTid } from '../../core/game-data/game-data-localization';

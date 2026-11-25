@@ -1,6 +1,5 @@
 import '../i18n/intl-polyfills';
 
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import {
   ErrorBoundary as ExpoRouterErrorBoundary,
   Stack,
@@ -31,20 +30,11 @@ import { ExpoDeepLinkRuntime } from '../core/deep-links/expo-deep-link-runtime';
 import { queueAppLink } from '../core/deep-links/link-inbox';
 import { nativeSecondaryScreenOptions } from '../core/app/native-secondary-navigation';
 import { WebDocumentTitle } from '../core/app/web-document-title';
-import { warmRankedCheckerBackgrounds } from '../ui/ranked-checker-background';
-import { warmHeaderArtwork } from '../core/assets/header-artwork-cache';
 
 void SplashScreen.preventAutoHideAsync();
 initializeObservability();
 registerPlatformPushBackgroundHandler((error) => {
   reportException(error, 'push.background_handler');
-});
-
-const queryClient = new QueryClient({
-  defaultOptions: {
-    queries: { retry: 1, staleTime: 30_000 },
-    mutations: { retry: false },
-  },
 });
 
 export default function RootLayout() {
@@ -69,12 +59,8 @@ export default function RootLayout() {
     };
   }, []);
   const [fontReady, setFontReady] = useState(false);
-  useEffect(() => {
-    if (fontReady) {
-      void warmHeaderArtwork();
-      void warmRankedCheckerBackgrounds();
-    }
-  }, [fontReady]);
+  const [updateHandoffReady, setUpdateHandoffReady] = useState(false);
+  const [rootLaidOut, setRootLaidOut] = useState(false);
   const launchHidden = useRef(false);
   const navigationContainerRef = useNavigationContainerRef();
   useEffect(() => {
@@ -82,48 +68,48 @@ export default function RootLayout() {
   }, [navigationContainerRef]);
   useEffect(() => {
     let mounted = true;
-    void Promise.all([loadClashKingFont(), prepareStartupUpdateHandoff()]).finally(() => {
-      if (!mounted) return;
-      setFontReady(true);
+    void loadClashKingFont().finally(() => {
+      if (mounted) setFontReady(true);
+    });
+    void prepareStartupUpdateHandoff().finally(() => {
+      if (mounted) setUpdateHandoffReady(true);
     });
     return () => {
       mounted = false;
     };
   }, []);
-  const handleRootLayout = useCallback(() => {
-    if (!fontReady || launchHidden.current) return;
+  const handleRootLayout = useCallback(() => setRootLaidOut(true), []);
+  useEffect(() => {
+    if (!fontReady || !rootLaidOut || launchHidden.current) return;
     launchHidden.current = true;
     hideWebLaunchScreen();
     void SplashScreen.hideAsync();
-  }, [fontReady]);
+  }, [fontReady, rootLaidOut]);
 
-  if (!fontReady) return null;
+  // Resolve the OTA handoff before mounting its gate. The launch screen stays
+  // visible while the app starts and the fonts finish loading in parallel.
+  if (!updateHandoffReady) return null;
   return (
     <GestureHandlerRootView style={{ flex: 1 }} onLayout={handleRootLayout}>
       <WebDocumentTitle />
       <SafeAreaProvider>
         <IosOrientationPolicy />
-        <QueryClientProvider client={queryClient}>
-          <AppRuntimeProvider>
-            <NavigationTheme>
-              <AppStatusBar />
-              <Stack screenOptions={{ headerShown: false, fullScreenGestureEnabled: false }}>
-                <Stack.Screen
-                  name="(main)"
-                  options={{ animation: 'none', gestureEnabled: false }}
-                />
-                <Stack.Screen
-                  name="detail"
-                  options={({ route }) =>
-                    nativeSecondaryScreenOptions(
-                      (route.params as { layer?: string } | undefined)?.layer,
-                    )
-                  }
-                />
-              </Stack>
-            </NavigationTheme>
-          </AppRuntimeProvider>
-        </QueryClientProvider>
+        <AppRuntimeProvider>
+          <NavigationTheme>
+            <AppStatusBar />
+            <Stack screenOptions={{ headerShown: false, fullScreenGestureEnabled: false }}>
+              <Stack.Screen name="(main)" options={{ animation: 'none', gestureEnabled: false }} />
+              <Stack.Screen
+                name="detail"
+                options={({ route }) =>
+                  nativeSecondaryScreenOptions(
+                    (route.params as { layer?: string } | undefined)?.layer,
+                  )
+                }
+              />
+            </Stack>
+          </NavigationTheme>
+        </AppRuntimeProvider>
       </SafeAreaProvider>
     </GestureHandlerRootView>
   );

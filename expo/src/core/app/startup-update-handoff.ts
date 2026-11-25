@@ -2,7 +2,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as Updates from 'expo-updates';
 import type { ElementRef } from 'react';
 import type { View } from 'react-native';
-import { captureRef } from 'react-native-view-shot';
+import { captureRef } from '../graphics/view-shot';
 
 const KEY = 'startup_update_handoff';
 let resuming = false;

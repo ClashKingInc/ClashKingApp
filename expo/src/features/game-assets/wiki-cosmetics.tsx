@@ -3,7 +3,7 @@ import { useMemo, useState } from 'react';
 import { FlatList, Pressable, View } from 'react-native';
 import { useAdaptiveLayout } from '../../ui/adaptive-layout';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { ChevronRight, SlidersHorizontal, Search } from 'lucide-react-native';
+import { ChevronRight, SlidersHorizontal, Search } from '@/ui/icons';
 import { CKText, MobileWebImage, SearchField, HeaderIconButton, useCKTheme } from '../../ui';
 import { MorphFilterSheet } from '../../ui/morph-filter-sheet';
 import { useI18n } from '../../i18n';

@@ -2,7 +2,7 @@ import { useAdaptiveLayout } from '../../ui/adaptive-layout';
 import { useNativeRailBack } from '../../ui/native-back-context';
 import { useCallback, useEffect, useState, useRef } from 'react';
 import { BackHandler, Pressable, View, useWindowDimensions } from 'react-native';
-import { ChevronLeft } from 'lucide-react-native';
+import { ChevronLeft } from '@/ui/icons';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Effect, Schedule } from 'effect';
 import * as Crypto from 'expo-crypto';

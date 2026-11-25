@@ -3,7 +3,7 @@ import { CalculatorWorkspaceColumns } from './calculator-workspace-columns';
 import { useMemo, useState, useSyncExternalStore, type ReactNode } from 'react';
 import { Pressable, ScrollView, StyleSheet, View } from 'react-native';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
-import { Copy, SlidersHorizontal, Trash2, X } from 'lucide-react-native';
+import { Copy, SlidersHorizontal, Trash2, X } from '@/ui/icons';
 import { gameDataState, subscribeToGameDataRevision } from '../../core/game-data/game-data-state';
 import { ImageAssets } from '../../core/assets/image-assets';
 import { localizedNameForItem } from '../../core/game-data/game-data-localization';

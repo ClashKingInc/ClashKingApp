@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react';
 import { Pressable, StyleSheet, View } from 'react-native';
-import { ChevronLeft, ChevronRight } from 'lucide-react-native';
+import { ChevronLeft, ChevronRight } from '@/ui/icons';
 
 import { materialNextPageTooltip, materialPreviousPageTooltip, useI18n } from '../i18n';
 import { CKText } from './text';

@@ -1,7 +1,7 @@
 import { useAdaptiveLayout } from '../../../ui/adaptive-layout';
 import { useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 import { ScrollView, StyleSheet, View } from 'react-native';
-import { BarChart3, List, Repeat2, Users } from 'lucide-react-native';
+import { BarChart3, List, Repeat2, Users } from '@/ui/icons';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { ImageAssets } from '../../../core/assets/image-assets';

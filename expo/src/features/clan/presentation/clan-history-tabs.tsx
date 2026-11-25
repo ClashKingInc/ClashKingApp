@@ -2,7 +2,7 @@ import { ClanAdaptiveCards , ClanTabEmpty, FilterPill } from './clan-tab-compone
 import { useAdaptiveLayout } from '../../../ui/adaptive-layout';
 import { useEffect, useRef, useState, type ReactNode } from 'react';
 import { StyleSheet, View } from 'react-native';
-import { ArrowRight, Calendar, History } from 'lucide-react-native';
+import { ArrowRight, Calendar, History } from '@/ui/icons';
 import { AnalyticsLineChart } from '../../stats/presentation/analytics-chart';
 import { ChartInteractionBoundary } from '../../stats/presentation/chart-interaction-boundary';
 

@@ -2,6 +2,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Linking, View } from 'react-native';
 
 import { canonicalTag } from '../../../core/domain/tags';
+import { ImageAssets } from '../../../core/assets/image-assets';
 import { mapWithConcurrencyLimit } from '../../../core/utils/bounded-concurrency';
 import { APP_FEATURE_FLAGS } from '../../../core/feature-flags/feature-flags';
 import { useAppRuntime, useAppState } from '../../../core/app/runtime-context';
@@ -18,6 +19,7 @@ import {
 } from '../data';
 import { loadHomeUpgradeSnapshots } from '../data/home-upgrade-loader';
 import { homeAccountIdentity } from '../data/home-dashboard-model';
+import { saveHomeStartupSnapshot, type HomeStartupPreview } from '../data/home-startup-snapshot';
 import {
   type HomeAnnouncement,
   type HomeCardId,
@@ -31,6 +33,7 @@ import { UpgradeImportModal } from '../../upgrade-tracker/presentation/upgrade-t
 export interface HomeDashboardRootProps {
   readonly active?: boolean;
   readonly onReady?: () => void;
+  readonly startupPreview?: HomeStartupPreview;
   readonly openManageAccounts: () => void;
   readonly openAnnouncement: (announcement: AppAnnouncement) => void;
   readonly openTodo: () => void;
@@ -40,11 +43,12 @@ export interface HomeDashboardRootProps {
 }
 
 export function HomeDashboardRoot(props: HomeDashboardRootProps) {
-  const { onReady } = props;
+  const { onReady, startupPreview } = props;
   const runtime = useAppRuntime();
   const appState = useAppState();
   const { t, locale } = useI18n();
   const [serviceRevision, setServiceRevision] = useState(0);
+  const [settledPreview, setSettledPreview] = useState<HomeStartupPreview>();
   const [refreshGeneration, setRefreshGeneration] = useState(0);
   const [rankedState, setRankedState] = useState<{
     readonly signature: string;
@@ -109,6 +113,43 @@ export function HomeDashboardRoot(props: HomeDashboardRootProps) {
     // Service revision intentionally invalidates stable service-owned arrays.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [runtime, serviceRevision]);
+  const userId = runtime.auth.state.currentUser?.userId;
+  const selectedTag = canonicalTag(runtime.accounts.selectedTag ?? '');
+  const selectedPlayer = linkedPlayers.find((player) => canonicalTag(player.tag) === selectedTag);
+  const selectedName = selectedPlayer?.name;
+  const selectedTownHall = selectedPlayer?.townHallLevel;
+  useEffect(() => {
+    if (userId && selectedName && selectedTownHall)
+      void saveHomeStartupSnapshot(runtime.preferences, {
+        userId, tag: selectedTag, name: selectedName, townHallLevel: selectedTownHall,
+      });
+  }, [runtime.preferences, userId, selectedTag, selectedName, selectedTownHall]);
+
+  useEffect(() => {
+    if (!startupPreview) return;
+    let active = true;
+    void startupPreview.selectedReady.then(() => {
+      if (active) setSettledPreview(startupPreview);
+    });
+    return () => { active = false; };
+  }, [startupPreview]);
+  const previewSnapshot = startupPreview !== settledPreview ? startupPreview?.snapshot : undefined;
+  const pendingAccount = useMemo(() => {
+    if (
+      !previewSnapshot ||
+      selectedPlayer ||
+      previewSnapshot.userId !== userId ||
+      previewSnapshot.tag !== selectedTag ||
+      !homeIncludedTags.some((tag) => canonicalTag(tag) === selectedTag) ||
+      !runtime.playerCardPreferences.isShownInTodoPage(selectedTag)
+    ) return undefined;
+    return {
+      tag: selectedTag,
+      name: previewSnapshot.name,
+      subtitle: selectedTag,
+      imageUrl: ImageAssets.townHall(previewSnapshot.townHallLevel),
+    };
+  }, [homeIncludedTags, previewSnapshot, runtime.playerCardPreferences, selectedPlayer, selectedTag, userId]);
   const todoPlayers = useMemo(
     () =>
       linkedPlayers.filter(
@@ -147,9 +188,9 @@ export function HomeDashboardRoot(props: HomeDashboardRootProps) {
   const upgradeLoading =
     upgradePlayers.length > 0 && upgradeState.signature !== upgradeLoadSignature;
   useEffect(() => {
-    if (layout.ready && !runtime.players.isLoading && !rankedLoading && !upgradeLoading)
-      onReady?.();
-  }, [runtime, serviceRevision, rankedLoading, upgradeLoading, layout.ready, onReady]);
+    // Startup has either a verified preview or a settled selected account.
+    if (layout.ready) onReady?.();
+  }, [layout.ready, onReady]);
 
   useEffect(() => {
     let current = true;
@@ -236,10 +277,12 @@ export function HomeDashboardRoot(props: HomeDashboardRootProps) {
     () => ({
       loading: runtime.players.isLoading,
       layoutReady: layout.ready,
+      canReorderCards: layout.editable,
       selectedAccountTag: runtime.accounts.selectedTag,
       linkedAccountCount: runtime.accounts.verifiedAccounts.length,
       ...(runtime.accounts.lastRefresh ? { lastRefresh: runtime.accounts.lastRefresh } : {}),
       announcements: announcements.map(homeAnnouncement),
+      startupAccount: pendingAccount,
       ...(todoPlayers.length
         ? { todo: buildHomeTodoModel(todoPlayers, runtime.wars, t, locale) }
         : {}),
@@ -280,7 +323,9 @@ export function HomeDashboardRoot(props: HomeDashboardRootProps) {
       announcements,
       cardOrder,
       layout.ready,
+      layout.editable,
       homeIncludedTags,
+      pendingAccount,
       locale,
       rankedLoading,
       rankedPlayers,

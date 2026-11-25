@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react';
 import { Pressable, StyleSheet, View } from 'react-native';
-import { ChevronLeft, ChevronRight } from 'lucide-react-native';
+import { ChevronLeft, ChevronRight } from '@/ui/icons';
 
 import { toIntlLocale, useI18n } from '../i18n';
 import { materialNextMonthTooltip, materialPreviousMonthTooltip } from '../i18n/material-labels';

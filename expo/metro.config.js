@@ -13,6 +13,25 @@ const fs = require('node:fs');
 const path = require('node:path');
 
 const config = getDefaultConfig(__dirname);
+const nativePlatforms = new Set(['android', 'ios']);
+const getTransformOptions = config.transformer.getTransformOptions;
+config.transformer.getTransformOptions = async (entryPoints, context, getDependencies) => {
+  const options = await getTransformOptions(entryPoints, context, getDependencies);
+  if (!nativePlatforms.has(context.platform)) return options;
+  return { ...options, transform: { ...options.transform, inlineRequires: true } };
+};
+
+config.resolver.resolveRequest = (context, moduleName, platform) => {
+  // Inlined imports can reach resolution as requires. This package only
+  // exposes its JavaScript entry points under the import condition.
+  if (nativePlatforms.has(platform) && (
+    moduleName === '@clashking/clash-contract' || moduleName.startsWith('@clashking/clash-contract/')
+  )) {
+    return context.resolveRequest({ ...context, isESMImport: true }, moduleName, platform);
+  }
+  return context.resolveRequest(context, moduleName, platform);
+};
+
 // SDK 58's Rust worker preserves Babel fallback for transforms it cannot run
 // (including worklets). Keep this at the actual Metro transformer boundary.
 config.transformer.unstable_noxcturnalTransformWorker = true;

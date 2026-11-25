@@ -1,6 +1,6 @@
 import { useState, type ReactNode } from 'react';
 import { Pressable, StyleSheet, View } from 'react-native';
-import { ChevronRight } from 'lucide-react-native';
+import { ChevronRight } from '@/ui/icons';
 import { ImageAssets } from '../core/assets/image-assets';
 import { toIntlLocale, useI18n } from '../i18n';
 import { CKText } from './text';

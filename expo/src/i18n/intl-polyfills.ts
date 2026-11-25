@@ -1,31 +1,44 @@
-import '@formatjs/intl-getcanonicallocales/polyfill.js';
-import '@formatjs/intl-locale/polyfill.js';
-import '@formatjs/intl-pluralrules/polyfill.js';
-import '@formatjs/intl-pluralrules/locale-data/af.js';
-import '@formatjs/intl-pluralrules/locale-data/ar.js';
-import '@formatjs/intl-pluralrules/locale-data/ca.js';
-import '@formatjs/intl-pluralrules/locale-data/cs.js';
-import '@formatjs/intl-pluralrules/locale-data/da.js';
-import '@formatjs/intl-pluralrules/locale-data/de.js';
-import '@formatjs/intl-pluralrules/locale-data/el.js';
-import '@formatjs/intl-pluralrules/locale-data/en.js';
-import '@formatjs/intl-pluralrules/locale-data/es.js';
-import '@formatjs/intl-pluralrules/locale-data/fi.js';
-import '@formatjs/intl-pluralrules/locale-data/fr.js';
-import '@formatjs/intl-pluralrules/locale-data/he.js';
-import '@formatjs/intl-pluralrules/locale-data/hu.js';
-import '@formatjs/intl-pluralrules/locale-data/it.js';
-import '@formatjs/intl-pluralrules/locale-data/ja.js';
-import '@formatjs/intl-pluralrules/locale-data/ko.js';
-import '@formatjs/intl-pluralrules/locale-data/nl.js';
-import '@formatjs/intl-pluralrules/locale-data/no.js';
-import '@formatjs/intl-pluralrules/locale-data/pl.js';
-import '@formatjs/intl-pluralrules/locale-data/pt.js';
-import '@formatjs/intl-pluralrules/locale-data/ro.js';
-import '@formatjs/intl-pluralrules/locale-data/ru.js';
-import '@formatjs/intl-pluralrules/locale-data/sr.js';
-import '@formatjs/intl-pluralrules/locale-data/sv.js';
-import '@formatjs/intl-pluralrules/locale-data/tr.js';
-import '@formatjs/intl-pluralrules/locale-data/uk.js';
-import '@formatjs/intl-pluralrules/locale-data/vi.js';
-import '@formatjs/intl-pluralrules/locale-data/zh.js';
+/* eslint-disable @typescript-eslint/no-require-imports -- Load Intl fallbacks synchronously only when needed. */
+import { shouldPolyfill as needsCanonicalLocales } from '@formatjs/intl-getcanonicallocales/should-polyfill.js';
+import { loadPluralRulesLocaleData, type SupportedLocale } from './catalogs.generated';
+
+const preparedLocales = new Set<SupportedLocale>();
+let pluralRulesPolyfilled = false;
+
+if (needsCanonicalLocales()) require('@formatjs/intl-getcanonicallocales/polyfill-force.js');
+if (!hasUsableLocale()) require('@formatjs/intl-locale/polyfill-force.js');
+
+function hasUsableLocale(): boolean {
+  try {
+    // MessageFormat uses maximization for ICU skeletons and locale matching.
+    return typeof Intl.Locale === 'function' &&
+      new Intl.Locale('und-x-private').toString() === 'und-x-private' &&
+      typeof new Intl.Locale('en').maximize().region === 'string';
+  } catch {
+    return false;
+  }
+}
+
+export function ensureIntl(locale: SupportedLocale): void {
+  if (preparedLocales.has(locale)) return;
+
+  // Match FormatJS's native checks, including runtimes that mishandle fractions.
+  const tag = locale.replaceAll('_', '-');
+  if (!pluralRulesPolyfilled && (
+    typeof Intl.PluralRules !== 'function' ||
+    Intl.PluralRules.supportedLocalesOf(tag).length === 0 ||
+    new Intl.PluralRules('en', { minimumFractionDigits: 2 }).select(1) === 'one'
+  )) {
+    require('@formatjs/intl-pluralrules/polyfill-force.js');
+    pluralRulesPolyfilled = true;
+    // Revisit locales that previously used the native implementation.
+    preparedLocales.clear();
+    loadPluralRulesLocaleData('en');
+  }
+
+  if (pluralRulesPolyfilled && Intl.PluralRules.supportedLocalesOf(tag).length === 0)
+    loadPluralRulesLocaleData(locale);
+  preparedLocales.add(locale);
+}
+
+ensureIntl('en');

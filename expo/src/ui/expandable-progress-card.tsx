@@ -6,7 +6,7 @@ import Reanimated, {
   useSharedValue,
   withTiming,
 } from 'react-native-reanimated';
-import { ChevronRight } from 'lucide-react-native';
+import { ChevronRight } from '@/ui/icons';
 import { CKText, MobileWebImage, Surface, colorWithAlpha, statColors, useCKTheme } from './index';
 import { useCKAccessibility } from './accessibility';
 

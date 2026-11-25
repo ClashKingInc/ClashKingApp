@@ -22,7 +22,7 @@ import Animated, {
 } from 'react-native-reanimated';
 import Svg, { Defs, LinearGradient, RadialGradient, Rect, Stop } from 'react-native-svg';
 import { useCKThemeMode } from '../../ui/theme';
-import { ChevronLeft, Pencil } from 'lucide-react-native';
+import { ChevronLeft, Pencil } from '@/ui/icons';
 import {
   SafeAreaProvider,
   SafeAreaView,

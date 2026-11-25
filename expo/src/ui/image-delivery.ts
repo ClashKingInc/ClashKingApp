@@ -1,9 +1,10 @@
-import { ASSET_ORIGIN, resolveAssetUrl } from '../core/assets/asset-origin';
+import { ASSET_ORIGIN, assetPath, resolveAssetUrl } from '../core/assets/asset-origin';
 import { manifestImage } from '../core/assets/asset-manifest';
+import type { ImageRequest } from '../core/assets/managed-image-cache';
 
 export const ASSET_IMAGE_SIZES = [64, 128, 256, 512, 1024] as const;
 
-function requiredPixels(width: number, height: number, scale: number): number | undefined {
+export function requiredPixels(width: number, height: number, scale: number): number | undefined {
   if (![width, height, scale].every((value) => Number.isFinite(value) && value > 0))
     return undefined;
   return Math.ceil(Math.max(width, height) * scale);
@@ -36,6 +37,33 @@ export function sizedAssetUrl(
   // Unknown dimensions and displays larger than our biggest variant retain full resolution.
   if (size !== undefined) value.searchParams.set('size', String(size));
   return value.toString();
+}
+
+/** Use the original manifest identity for CDN variants, and a fallback's own identity otherwise. */
+export function managedAssetRequest(
+  original: string,
+  candidate: string,
+  preserveAnimation = false,
+): ImageRequest | undefined {
+  if (
+    preserveAnimation ||
+    !candidate.startsWith(ASSET_ORIGIN + '/') ||
+    (__DEV__ && process.env.EXPO_PUBLIC_CK_ASSET_ORIGIN)
+  )
+    return undefined;
+  const url = new URL(candidate);
+  if (!/\.(png|webp|jpe?g|avif)$/i.test(url.pathname)) return undefined;
+  const origin = resolveAssetUrl(original);
+  const transformed =
+    origin.startsWith(ASSET_ORIGIN + '/') &&
+    url.pathname === new URL(origin).pathname.replace(/\.(png|webp|jpe?g|avif)$/i, '.avif');
+  const source = transformed ? origin : candidate;
+  const metadata = manifestImage(source);
+  if (!metadata || metadata.animated) return undefined;
+  const size = transformed
+    ? ASSET_IMAGE_SIZES.find((bucket) => String(bucket) === url.searchParams.get('size'))
+    : undefined;
+  return { url: candidate, path: assetPath(source), sha: metadata.sha, size };
 }
 
 export type BadgeSizeName = 'small' | 'medium' | 'large';

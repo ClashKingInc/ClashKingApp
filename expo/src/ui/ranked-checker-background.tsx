@@ -1,7 +1,6 @@
 import { memo } from 'react';
 import { StyleSheet, View, useWindowDimensions } from 'react-native';
 import { HeaderArtwork } from './header-artwork';
-import { prepareHeaderArtwork } from '../core/assets/header-artwork-cache';
 import { useCKTheme } from './theme';
 import { HeroHeaderScrim } from './hero-header-scrim';
 import { useAdaptiveLayout } from './adaptive-layout';
@@ -14,16 +13,6 @@ const artwork = {
   red: require('../../assets/generated/clashking/headers/red.webp'),
 };
 const fallback = { blue: '#302A68', purple: '#4A203D', green: '#174A20', red: '#652626' };
-let warmup: Promise<unknown> | undefined;
-
-/** Opportunistic warmup only: routing and the launch screen never await artwork. */
-export function warmRankedCheckerBackgrounds() {
-  warmup ??= Promise.allSettled(
-    Object.values(artwork).map((source) => prepareHeaderArtwork(source)),
-  );
-  return warmup;
-}
-
 /** Cache the checker artwork, then share the same measured scrim as other headers. */
 export const RankedCheckerBackground = memo(function RankedCheckerBackground({
   color,

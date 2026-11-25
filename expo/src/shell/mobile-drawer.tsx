@@ -2,7 +2,7 @@ import { useEffect, useRef, useState, type ReactNode } from 'react';
 import * as Linking from 'expo-linking';
 import { Platform, Pressable, ScrollView, StyleSheet, View } from 'react-native';
 import { SafeAreaView, type Edge } from 'react-native-safe-area-context';
-import { Bot, CircleHelp, Goal, MessageCircle, UserPlus } from 'lucide-react-native';
+import { Bot, CircleHelp, Goal, MessageCircle, UserPlus } from '@/ui/icons';
 
 import { DISCORD_BOT_INVITE_URL, DISCORD_URL } from '../core/config/api-config';
 import type { MessageKey } from '../i18n';

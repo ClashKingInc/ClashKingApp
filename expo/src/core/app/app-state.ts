@@ -20,6 +20,7 @@ export interface AppStateSnapshot {
   readonly themePreference: AppThemePreference;
   readonly features: AppFeatureState;
   readonly initialized: boolean;
+  readonly initializePreferences: () => Promise<void>;
   readonly initialize: () => Promise<void>;
   readonly changeLanguage: (locale: SupportedLocale | 'system') => Promise<void>;
   readonly refreshSystemLocale: () => Promise<void>;
@@ -38,6 +39,7 @@ export interface AppStateDependencies {
 export function createAppStateStore(
   dependencies: AppStateDependencies,
 ): StoreApi<AppStateSnapshot> {
+  let preferencesLoad: Promise<void> | null = null;
   let initializeInFlight: Promise<void> | null = null;
   let featureFlagsLoaded = false;
   const refreshFeatureFlags = async () => {
@@ -56,15 +58,8 @@ export function createAppStateStore(
     features: defaultFeatureState(),
     initialized: false,
 
-    initialize: async () => {
-      if (get().initialized && featureFlagsLoaded) return;
-      if (initializeInFlight !== null) return initializeInFlight;
-      const initialize = (async () => {
-        if (get().initialized) {
-          await refreshFeatureFlags();
-          set({ features: currentFeatureState(dependencies.featureFlags) });
-          return;
-        }
+    initializePreferences: () => {
+      preferencesLoad ??= (async () => {
         const [storedLocale, storedTheme] = await Promise.all([
           dependencies.preferences.getItem('languageCode'),
           dependencies.preferences.getItem('themeMode'),
@@ -75,16 +70,27 @@ export function createAppStateStore(
             : resolveLocale(storedLocale);
         const locale =
           languagePreference === 'system' ? dependencies.systemLocale() : languagePreference;
-        const themePreference = parseThemePreference(storedTheme);
+        set({ locale, languagePreference, themePreference: parseThemePreference(storedTheme) });
+      })().catch((error) => {
+        preferencesLoad = null;
+        throw error;
+      });
+      return preferencesLoad;
+    },
 
-        await Promise.all([
-          dependencies.gameData.loadTranslationsForLocale(appLocale(locale)),
-          refreshFeatureFlags(),
-        ]);
+    initialize: async () => {
+      if (get().initialized && featureFlagsLoaded) return;
+      if (initializeInFlight !== null) return initializeInFlight;
+      const initialize = (async () => {
+        await get().initializePreferences();
+        if (get().initialized) await refreshFeatureFlags();
+        else {
+          await Promise.all([
+            dependencies.gameData.loadTranslationsForLocale(appLocale(get().locale)),
+            refreshFeatureFlags(),
+          ]);
+        }
         set({
-          locale,
-          languagePreference,
-          themePreference,
           features: currentFeatureState(dependencies.featureFlags),
           initialized: true,
         });

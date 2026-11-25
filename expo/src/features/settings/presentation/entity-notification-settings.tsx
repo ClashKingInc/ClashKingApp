@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Pressable, View } from 'react-native';
-import { ChevronDown, ChevronUp, Bell } from 'lucide-react-native';
+import { ChevronDown, ChevronUp, Bell } from '@/ui/icons';
 import { useAppRuntime } from '../../../core/app/runtime-context';
 import type { NotificationPreferences } from '../../../core/dto/notification-preferences';
 import { ImageAssets } from '../../../core/assets/image-assets';

@@ -1,4 +1,4 @@
-import { ASSET_ORIGIN, resolveAssetUrl, assetPath } from '../core/assets/asset-origin';
+import { ASSET_ORIGIN, resolveAssetUrl } from '../core/assets/asset-origin';
 import {
   badgeImageSource,
   badgeTokenForUrl,
@@ -9,17 +9,33 @@ import {
   useCallback,
   useEffect,
   useMemo,
+  useRef,
   useState,
   useSyncExternalStore,
   type ReactNode,
 } from 'react';
 import { bundledImageSource } from '../core/assets/bundled-image-source';
 import { localImageCache } from '../core/assets/local-asset-cache';
+import {
+  defaultClanBadgeSource,
+  offlineGameImage,
+  unknownTroopSource,
+} from '../core/assets/offline-game-images';
 import { Animated, Platform, StyleSheet, PixelRatio, View, type ViewStyle } from 'react-native';
-import { sizedAssetUrl, sizedBadgeUrl, originalBadgeUrl } from './image-delivery';
+import {
+  managedAssetRequest,
+  requiredPixels,
+  sizedAssetUrl,
+  sizedBadgeUrl,
+  originalBadgeUrl,
+} from './image-delivery';
 
 import { ImageAssets } from '../core/assets/image-assets';
-import { clearHeaderArtworkCache, headerArtworkForUrl } from '../core/assets/header-artwork-cache';
+import {
+  clearHeaderArtworkCache,
+  headerArtworkForUrl,
+  prepareHeaderArtwork,
+} from '../core/assets/header-artwork-cache';
 import { HeaderArtwork } from './header-artwork';
 import { useCKTheme, useCKThemeMode } from './theme';
 import { useSkeletonAppearance } from './skeleton-content';
@@ -37,43 +53,69 @@ const FAILURE_TTL_MS = 20_000;
 const EMPTY_FALLBACKS: readonly string[] = [];
 
 const resolvedImages = new Map<string, string>();
-const prefetchingImages = new Map<string, Promise<void>>();
+const prefetchingImages = new Map<string, Promise<boolean>>();
 
-/** Warm the same variant/file cache used by rendering, rather than a separate URL cache. */
+function currentOfflineSource(url: string, pixels: number | undefined, preserveAnimation = false) {
+  const bundle = offlineGameImage(url);
+  const metadata = manifestImage(url);
+  if (!bundle || preserveAnimation || metadata?.animated) return undefined;
+  if (
+    !metadata ||
+    (metadata.sha === bundle.sha && (bundle.fullSize || (pixels ?? Infinity) <= bundle.pixels))
+  )
+    return bundle.source;
+  return undefined;
+}
+
+/** Warm the same source and file cache used to render the image. */
 export function prefetchMobileImage(
   imageUrl: string,
   width: number,
   height: number,
-): Promise<void> {
+): Promise<boolean> {
+  const header = headerArtworkForUrl(imageUrl);
+  if (header !== undefined) return prepareHeaderArtwork(header).then(() => true);
+  const scale = PixelRatio.get();
+  if (
+    bundledImageSource(imageUrl) !== undefined ||
+    currentOfflineSource(imageUrl, requiredPixels(width, height, scale)) !== undefined
+  )
+    return Promise.resolve(true);
   const requested = sizedAssetUrl(
-    sizedBadgeUrl(imageUrl, width, height, PixelRatio.get()),
+    sizedBadgeUrl(imageUrl, width, height, scale),
     width,
     height,
-    PixelRatio.get(),
+    scale,
   );
-  const existing = prefetchingImages.get(requested);
+  const token = badgeTokenForUrl(requested);
+  const prefetchKey = JSON.stringify([requested, manifestImage(imageUrl)?.sha, token]);
+  const existing = prefetchingImages.get(prefetchKey);
   if (existing) return existing;
   const pending = (async () => {
-    const metadata = manifestImage(imageUrl);
-    for (const candidate of mobileWebImageCandidates(requested, [imageUrl])) {
+    for (const candidate of mobileWebImageCandidates(requested, [
+      originalBadgeUrl(requested),
+      imageUrl,
+    ])) {
       try {
-        const uri =
-          Platform.OS !== 'web' &&
-          metadata &&
-          candidate !== imageUrl &&
-          candidate.startsWith(`${ASSET_ORIGIN}/`)
-            ? await localImageCache.resolve(candidate, assetPath(imageUrl), metadata.sha, () => {})
-            : candidate;
-        if (await Image.prefetch(uri, { cachePolicy: 'memory-disk' })) {
+        const request =
+          Platform.OS !== 'web' ? managedAssetRequest(imageUrl, candidate) : undefined;
+        const loaded = request
+          ? Boolean(await localImageCache.resolve(request, () => {}))
+          : token
+            ? // Prefetch cannot use the token-specific cache key from badgeImageSource.
+              false
+            : await Image.prefetch(candidate, { cachePolicy: 'memory-disk' });
+        if (loaded) {
           rememberResolved(requested, candidate);
-          return;
+          return true;
         }
       } catch {
         /* Optional warmup must never prevent navigation. */
       }
     }
-  })().finally(() => prefetchingImages.delete(requested));
-  prefetchingImages.set(requested, pending);
+    return false;
+  })().finally(() => prefetchingImages.delete(prefetchKey));
+  prefetchingImages.set(prefetchKey, pending);
   return pending;
 }
 
@@ -250,6 +292,21 @@ function LoadedMobileWebImage({
       (layout?.position === 'absolute' && layout.left === 0 && layout.right === 0));
   if (layoutPending)
     return <View testID={imageProps.testID} style={imageProps.style} onLayout={onLayout} />;
+  const offlineSource = currentOfflineSource(
+    imageUrl,
+    requiredPixels(renderedWidth, renderedHeight, PixelRatio.get()),
+    preserveAnimation,
+  );
+  if (offlineSource !== undefined)
+    return (
+      <Image
+        {...imageProps}
+        source={offlineSource}
+        contentFit={contentFit}
+        onLoad={onLoad}
+        onLayout={onLayout}
+      />
+    );
   return (
     <CandidateImage
       key={identity}
@@ -273,6 +330,8 @@ function LoadedMobileWebImage({
       onLoad={onLoad}
       resolutionKey={requestedUrl}
       originalUrl={imageUrl}
+      preserveAnimation={preserveAnimation}
+      offlineSource={preserveAnimation ? undefined : offlineGameImage(imageUrl)?.source}
       onExhausted={onExhausted}
     />
   );
@@ -285,66 +344,73 @@ function CandidateImage({
   resolutionKey,
   errorFallback,
   onLoad,
+  preserveAnimation,
+  offlineSource,
   ...imageProps
 }: Omit<ImageProps, 'source' | 'onError'> & {
   readonly candidates: readonly string[];
   readonly onExhausted: () => void;
   readonly resolutionKey: string;
+  readonly preserveAnimation: boolean;
+  readonly offlineSource?: number;
   readonly originalUrl: string;
   readonly errorFallback?: ReactNode;
 }) {
   const [index, setIndex] = useState(0);
   const candidate = candidates[index];
-  const [downloaded, setDownloaded] = useState<{ candidate: string; file: string }>();
   useEffect(() => {
     if (candidate === undefined) onExhausted();
   }, [candidate, onExhausted]);
-  const metadata = manifestImage(originalUrl);
-  const managed =
-    Platform.OS !== 'web' &&
-    metadata &&
-    candidate !== originalUrl &&
-    candidate?.startsWith(`${ASSET_ORIGIN}/`);
-  const cachedFile = useSyncExternalStore(
-    localImageCache.subscribe,
+  const request = useMemo(
+    () =>
+      candidate && Platform.OS !== 'web'
+        ? managedAssetRequest(originalUrl, candidate, preserveAnimation)
+        : undefined,
+    [candidate, originalUrl, preserveAnimation],
+  );
+  const path = request?.path;
+  const localUri = useSyncExternalStore(
     useCallback(
-      () => (managed && candidate ? localImageCache.peek(candidate) : undefined),
-      [managed, candidate],
+      (listener) => (path ? localImageCache.subscribeImage(path, listener) : () => {}),
+      [path],
     ),
+    useCallback(() => (request ? localImageCache.peek(request) : undefined), [request]),
     () => undefined,
   );
-  const localUri =
-    managed && candidate
-      ? downloaded?.candidate === candidate
-        ? downloaded.file
-        : cachedFile
-      : undefined;
+  const hasLocalFile = localUri !== undefined;
+  const previousRequest = useRef<typeof request>(undefined);
   useEffect(() => {
-    if (!managed || !candidate || !metadata) return;
+    const sameRequest = previousRequest.current === request;
+    previousRequest.current = request;
+    if (!request || !candidate) return;
+    // Resolve again when a sibling invalidates our shared file. A successful
+    // download changes the subscription too, but needs no second lookup.
+    if (sameRequest && hasLocalFile) return;
     let active = true;
-    const display = (file: string) => {
-      if (active) setDownloaded({ candidate, file });
-    };
     void localImageCache
-      .resolve(candidate, assetPath(originalUrl), metadata.sha, display)
-      .then(display)
+      .resolve(request, () => {})
       .catch(() => {
         if (active) {
           rememberFailure(resolutionKey, candidate);
-          setIndex((current) => current + 1);
+          setIndex((current) => (current === index ? current + 1 : current));
         }
       });
     return () => {
       active = false;
     };
-  }, [candidate, managed, metadata, originalUrl, resolutionKey]);
+  }, [candidate, hasLocalFile, index, request, resolutionKey]);
   if (candidate === undefined) {
-    if (errorFallback !== undefined) return errorFallback;
+    if (offlineSource === undefined && errorFallback !== undefined) return errorFallback;
     return (
       <Image
         {...imageProps}
         recyclingKey={imageProps.recyclingKey ?? ImageAssets.defaultImage}
-        source={{ uri: ImageAssets.defaultImage }}
+        source={
+          offlineSource ??
+          (originalUrl.startsWith(ImageAssets.clanBadgeBaseUrl + '/')
+            ? defaultClanBadgeSource
+            : unknownTroopSource)
+        }
         onLoad={onLoad}
       />
     );
@@ -353,11 +419,18 @@ function CandidateImage({
     <Image
       {...imageProps}
       recyclingKey={imageProps.recyclingKey ?? candidate}
+      cachePolicy={
+        request
+          ? imageProps.cachePolicy?.includes('memory')
+            ? 'memory'
+            : 'none'
+          : imageProps.cachePolicy
+      }
       source={
-        managed
+        request
           ? localUri
             ? { uri: localUri }
-            : null
+            : (offlineSource ?? null)
           : {
               ...badgeImageSource(candidate, Platform.OS),
               ...(Platform.OS !== 'web' && candidate.startsWith(`${ASSET_ORIGIN}/`)
@@ -366,12 +439,14 @@ function CandidateImage({
             }
       }
       onLoad={(event: ImageLoadEventData) => {
-        rememberResolved(resolutionKey, candidate);
+        if (!request || localUri) rememberResolved(resolutionKey, candidate);
         onLoad?.(event);
       }}
       onError={() => {
+        if (request && localUri)
+          void localImageCache.invalidate(request.path, localUri).catch(() => undefined);
         rememberFailure(resolutionKey, candidate);
-        setIndex((current) => current + 1);
+        setIndex((current) => (current === index ? current + 1 : current));
       }}
     />
   );

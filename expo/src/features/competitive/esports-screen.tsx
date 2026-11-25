@@ -21,7 +21,7 @@ import {
   type NativeSyntheticEvent,
   type NativeScrollEvent,
 } from 'react-native';
-import { ArrowDown, ArrowUp, ChevronRight, ExternalLink, Trophy } from 'lucide-react-native';
+import { ArrowDown, ArrowUp, ChevronRight, ExternalLink, Trophy } from '@/ui/icons';
 import Svg, { Defs, LinearGradient, Rect, Stop } from 'react-native-svg';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useAppRuntime } from '../../core/app/runtime-context';

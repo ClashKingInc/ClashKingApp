@@ -18,7 +18,7 @@ import {
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useAdaptiveLayout } from '../../ui/adaptive-layout';
-import { BookOpen, ChevronRight, Search } from 'lucide-react-native';
+import { BookOpen, ChevronRight, Search } from '@/ui/icons';
 import {
   CKText,
   EmptyState,

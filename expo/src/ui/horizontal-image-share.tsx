@@ -11,8 +11,8 @@ import {
   type LayoutChangeEvent,
   type ViewInstance as ViewType,
 } from 'react-native';
-import { Share2, X } from 'lucide-react-native';
-import { captureRef } from 'react-native-view-shot';
+import { Share2, X } from '@/ui/icons';
+import { captureRef } from '../core/graphics/view-shot';
 
 import { materialCloseLabel, useI18n } from '../i18n';
 import { CKText } from './text';

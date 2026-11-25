@@ -14,7 +14,7 @@ import {
   type StyleProp,
   type ViewStyle,
 } from 'react-native';
-import { ArrowLeft, ChevronRight, Eye, Shield, Sword, X } from 'lucide-react-native';
+import { ArrowLeft, ChevronRight, Eye, Shield, Sword, X } from '@/ui/icons';
 
 import { ImageAssets } from '../../../core/assets/image-assets';
 import { materialBackLabel, useI18n } from '../../../i18n';

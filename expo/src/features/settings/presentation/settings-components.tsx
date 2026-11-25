@@ -10,7 +10,7 @@ import {
   View,
   type RefreshControlProps,
 } from 'react-native';
-import { ArrowLeft, Check, ChevronRight } from 'lucide-react-native';
+import { ArrowLeft, Check, ChevronRight } from '@/ui/icons';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { materialBackLabel, useI18n } from '../../../i18n';

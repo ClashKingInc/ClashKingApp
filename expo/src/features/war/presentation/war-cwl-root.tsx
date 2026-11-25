@@ -4,7 +4,7 @@ import * as Linking from 'expo-linking';
 import * as Sharing from 'expo-sharing';
 import { useMemo, useState, useEffect } from 'react';
 import { Platform, View } from 'react-native';
-import { ArrowLeft } from 'lucide-react-native';
+import { ArrowLeft } from '@/ui/icons';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { useAppRuntime } from '../../../core/app/runtime-context';

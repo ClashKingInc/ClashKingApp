@@ -1,5 +1,5 @@
 import { Pressable, StyleSheet, View, useWindowDimensions } from 'react-native';
-import { ChevronRight, Languages, MessageCircle } from 'lucide-react-native';
+import { ChevronRight, Languages, MessageCircle } from '@/ui/icons';
 
 import { useI18n } from '../../../i18n';
 import { CKText, MobileWebImage, PillSurface, useCKTheme } from '../../../ui';
