@@ -11,8 +11,13 @@ import { gameDataState, isRecord, type JsonRecord } from './game-data-state';
 import {
   applyAssetManifest,
   ASSET_MANIFEST_URL,
+  installImageManifest,
+  isManifestSha,
   validateAssetManifest,
   manifestData,
+  manifestTranslations,
+  readImageCatalog,
+  type ManifestDataEntry,
 } from '../assets/asset-manifest';
 import { CryptoDigestAlgorithm, digestStringAsync } from 'expo-crypto';
 
@@ -20,6 +25,7 @@ export const STATIC_DATA_URL = `${ASSET_ORIGIN}/static_data`;
 export const TRANSLATIONS_URL = `${ASSET_ORIGIN}/translations`;
 export const GAME_DATA_USER_AGENT = 'ClashKing-App/1.0';
 export const GAME_DATA_CACHE_FRESHNESS_MS = 60 * 1_000;
+const STARTUP_METADATA_URL = `${ASSET_ORIGIN}/app_metadata/v1`;
 
 export const GAME_DATA_PREFERENCE_KEYS = {
   languageCode: 'languageCode',
@@ -64,6 +70,7 @@ interface JsonCache {
 
 interface CachedJsonAsset {
   readonly sha?: string;
+  readonly immutable?: boolean;
   readonly label: string;
   readonly fileName: string;
   readonly lastModifiedKey: string;
@@ -80,6 +87,13 @@ const MANIFEST_CACHE: CachedJsonAsset = {
 const LEGACY_WIKI_MANIFEST = 'game_asset_manifest_v1';
 const LEGACY_WIKI_FETCHED_AT = 'game_asset_manifest_v1_fetched_at';
 
+interface StartupMetadataIndex {
+  readonly staticSha: string;
+  readonly imagesSha: string;
+  readonly translations: readonly ManifestDataEntry[];
+}
+type MetadataLoadMode = 'cached' | 'refresh' | 'force';
+
 function dataCache(fileName: string, sha?: string): CachedJsonAsset {
   return {
     label: fileName,
@@ -90,8 +104,21 @@ function dataCache(fileName: string, sha?: string): CachedJsonAsset {
   };
 }
 
-function translationCache(locale: string, manifest?: JsonRecord): CachedJsonAsset {
-  const entry = manifest && manifestData(manifest).translations.find(
+const STARTUP_INDEX_CACHE = dataCache('app_startup_index.json');
+const STARTUP_INDEX_MISSING_AT = 'app_startup_index.missingAt';
+
+function readStartupIndex(value: JsonRecord): StartupMetadataIndex {
+  if (value.version !== 1 || !isManifestSha(value.staticSha) || !isManifestSha(value.imagesSha))
+    throw new Error('Invalid startup metadata index');
+  return {
+    staticSha: value.staticSha,
+    imagesSha: value.imagesSha,
+    translations: manifestTranslations(value.translations),
+  };
+}
+
+function translationCache(locale: string, entries?: readonly ManifestDataEntry[]): CachedJsonAsset {
+  const entry = entries?.find(
     (item) => item.path === `translations/${locale}.json`,
   );
   return dataCache(`translations_${locale}.json`, entry?.sha);
@@ -107,7 +134,9 @@ export class GameDataService {
   private manifest?: JsonRecord;
   private manifestLoad?: Promise<JsonRecord>;
   private manifestRefresh?: Promise<JsonRecord>;
-  private bundleLoad: Promise<void> | null = null;
+  private startupLoad?: Promise<readonly ManifestDataEntry[] | undefined>;
+  private startupIndex?: StartupMetadataIndex;
+  private appliedImageCatalog?: string;
   private appliedSections: string | null = null;
   private readonly refreshes = new Map<string, Promise<JsonRecord>>();
   private readonly attempts = new Map<string, number>();
@@ -128,7 +157,7 @@ export class GameDataService {
 
   async loadGameData(locale?: AppLocale): Promise<void> {
     const preferredLocale = locale ?? (await this.resolvePreferredLocale());
-    await Promise.all([this.loadBundle(), this.loadTranslationsForLocale(preferredLocale)]);
+    await Promise.all([this.loadStartupData('cached'), this.loadTranslationsForLocale(preferredLocale)]);
     void this.refreshGameDataIfChanged(preferredLocale);
   }
 
@@ -139,10 +168,10 @@ export class GameDataService {
 
   async refreshGameDataIfChanged(locale?: AppLocale): Promise<void> {
     const preferred = clashyLocaleCodeForAppLocale(locale ?? (await this.resolvePreferredLocale()));
-    const manifest = await this.refreshStaticDataIfChanged();
+    const translations = await this.loadStartupData('refresh');
     if (preferred !== 'EN') {
       await this.refreshAsset(
-        translationCache(preferred, manifest ?? this.manifest),
+        translationCache(preferred, translations ?? this.translationEntries()),
         `${TRANSLATIONS_URL}/${preferred}.json`,
       )
         .then((data) => {
@@ -153,7 +182,7 @@ export class GameDataService {
     }
   }
 
-  loadAssetManifest(mode: 'cached' | 'refresh' | 'force' = 'cached'): Promise<JsonRecord> {
+  loadAssetManifest(mode: MetadataLoadMode = 'cached'): Promise<JsonRecord> {
     if (mode !== 'cached') {
       const pending = this.manifestLoad;
       this.manifestRefresh ??= (async () => {
@@ -184,19 +213,18 @@ export class GameDataService {
 
   private installManifest(manifest: JsonRecord): JsonRecord {
     if (manifest === this.manifest) return manifest;
-    applyAssetManifest(manifest);
+    if (!this.appliedImageCatalog) applyAssetManifest(manifest);
     this.manifest = manifest;
     return manifest;
   }
 
   async refreshStaticDataIfChanged(force = false): Promise<JsonRecord | undefined> {
-    try {
-      const manifest = await this.loadAssetManifest(force ? 'force' : 'refresh');
-      await this.loadSections(manifest, true).catch(() => undefined);
-      return manifest;
-    } catch {
-      // Keep the last good body on network, decode, or storage failure.
-    }
+    if (force) await this.startupLoad;
+    await this.loadStartupData(force ? 'force' : 'refresh');
+    // A manual Wiki refresh also revalidates the detailed catalogue it displays.
+    if (force && this.startupIndex)
+      return this.loadAssetManifest('force').catch(() => this.manifest);
+    return this.manifest;
   }
 
   async loadTranslationsForLocale(locale: AppLocale): Promise<void> {
@@ -240,30 +268,75 @@ export class GameDataService {
     return this.systemLocales()[0] ?? { languageCode: 'en' };
   }
 
-  private async loadBundle(): Promise<void> {
-    if (this.bundleLoad !== null) return this.bundleLoad;
-    const load = this.loadBundleOnce();
-    this.bundleLoad = load;
+  private loadStartupData(mode: MetadataLoadMode): Promise<readonly ManifestDataEntry[] | undefined> {
+    this.startupLoad ??= this.loadStartupDataOnce(mode).finally(() => {
+      this.startupLoad = undefined;
+    });
+    return this.startupLoad;
+  }
+
+  private async loadStartupDataOnce(mode: MetadataLoadMode): Promise<readonly ManifestDataEntry[] | undefined> {
     try {
-      await load;
-    } finally {
-      if (this.bundleLoad === load) this.bundleLoad = null;
+      const missingAt = this.startupIndex ? null : await this.preferences
+        .getString(STARTUP_INDEX_MISSING_AT).catch(() => null);
+      if (missingAt && !this.cacheNeedsRefresh(missingAt)) throw new Error('Startup metadata unavailable');
+      const url = `${STARTUP_METADATA_URL}/index.json`;
+      const index = readStartupIndex(await (mode === 'cached'
+        ? this.loadCachedJsonAsset(STARTUP_INDEX_CACHE, url)
+        : this.refreshAsset(STARTUP_INDEX_CACHE, url, mode === 'force')));
+      const [stats, images] = await Promise.all([
+        this.appliedSections === index.staticSha ? undefined : this.loadStartupPart('static', index.staticSha),
+        this.appliedImageCatalog === index.imagesSha ? undefined : this.loadStartupPart('images', index.imagesSha),
+      ]);
+      if (images && this.appliedImageCatalog !== images.sha) {
+        installImageManifest(readImageCatalog(images.body));
+        this.appliedImageCatalog = images.sha;
+      }
+      if (stats && this.appliedSections !== stats.sha) {
+        applyGameDataBundle(await applyLocalGameAssets(stats.body, this.fetchImplementation));
+        this.appliedSections = stats.sha;
+      }
+      this.startupIndex = index;
+      return index.translations;
+    } catch {
+      // Older CDN releases still serve the full Wiki manifest and individual sections.
+      try {
+        const manifest = await this.loadAssetManifest(mode);
+        if (this.appliedImageCatalog) {
+          applyAssetManifest(manifest);
+          this.appliedImageCatalog = undefined;
+        }
+        this.startupIndex = undefined;
+        await this.loadSections(manifest, mode !== 'cached').catch(() => undefined);
+        return manifestData(manifest).translations;
+      } catch {
+        // Keep the last valid in-memory data on network or storage failure.
+      }
     }
   }
 
-  private async loadBundleOnce(): Promise<void> {
+  private async loadStartupPart(kind: 'static' | 'images', sha: string) {
+    const asset = { ...dataCache(`app_startup_${kind}.json`, sha), immutable: true };
+    const cache = await this.readCache(asset).catch(() => null);
+    if (cache?.sha === sha) return { sha, body: parseJsonObject(cache.body, asset.label) };
     try {
-      const manifest = await this.loadAssetManifest();
-      await this.loadSections(manifest, false);
-    } catch {
-      // Flutter deliberately retains the last valid in-memory static bundle.
+      const body = await this.refreshAsset(asset, `${STARTUP_METADATA_URL}/${kind}-${sha}.json`);
+      return { sha, body };
+    } catch (error) {
+      // Each payload retains its last good version if a new object is temporarily unavailable.
+      if (!cache || !isManifestSha(cache.sha)) throw error;
+      return { sha: cache.sha, body: parseJsonObject(cache.body, asset.label) };
     }
+  }
+
+  private translationEntries(): readonly ManifestDataEntry[] | undefined {
+    return this.startupIndex?.translations ?? (this.manifest && manifestData(this.manifest).translations);
   }
 
   private async loadTranslationsOnce(clashyLocale: string): Promise<void> {
     try {
       const data = await this.loadCachedJsonAsset(
-        translationCache(clashyLocale, this.manifest),
+        translationCache(clashyLocale, this.translationEntries()),
         `${TRANSLATIONS_URL}/${clashyLocale}.json`,
       );
       if (this.desiredLocale === clashyLocale) applyGameTranslations(data, clashyLocale);
@@ -381,7 +454,13 @@ export class GameDataService {
   private validateAssetBody(asset: CachedJsonAsset, body: string): void {
     const data = parseJsonObject(body, asset.label);
     if (asset === MANIFEST_CACHE) validateAssetManifest(data);
-    else if (asset.fileName.startsWith('static_data_') && !Array.isArray(data.items))
+    else if (asset === STARTUP_INDEX_CACHE) readStartupIndex(data);
+    else if (asset.fileName === 'app_startup_images.json') readImageCatalog(data);
+    else if (asset.fileName === 'app_startup_static.json') {
+      const sections = Object.entries(data);
+      if (!sections.length || sections.some(([name, items]) => !/^[a-z_]+$/.test(name) || !Array.isArray(items)))
+        throw new Error('Invalid startup static data');
+    } else if (asset.fileName.startsWith('static_data_') && !Array.isArray(data.items))
       throw new Error('Invalid static data section');
     else if (
       asset.fileName.startsWith('translations_') &&
@@ -422,8 +501,9 @@ export class GameDataService {
     url: string,
     force: boolean,
   ): Promise<JsonRecord> {
-    const cache = await this.readCache(asset).catch(() => null);
     const expectedSha = asset.sha;
+    const saved = await this.readCache(asset).catch(() => null);
+    const cache = asset.immutable && saved?.sha !== expectedSha ? null : saved;
     const now = this.now().getTime();
     const attemptKey = url + (expectedSha ?? '');
     const lastAttempt = this.attempts.get(attemptKey);
@@ -477,7 +557,13 @@ export class GameDataService {
           lastModified: response.headers.get('last-modified'),
           checkedAt: this.now().toISOString(),
         };
-      } else throw new Error(`HTTP ${response.status} for ${asset.label}`);
+      } else {
+        if (response.status === 404 && asset === STARTUP_INDEX_CACHE && !cache) {
+          await this.preferences.setString(STARTUP_INDEX_MISSING_AT, this.now().toISOString())
+            .catch(() => undefined);
+        }
+        throw new Error(`HTTP ${response.status} for ${asset.label}`);
+      }
       const decoded = parseJsonObject(record.body, asset.label);
       // A valid downloaded body is usable even if persistence is unavailable.
       await this.saveCache(asset, record).catch(() => undefined);

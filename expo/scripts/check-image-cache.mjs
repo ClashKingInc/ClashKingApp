@@ -38,7 +38,7 @@ registerHooks({
 const { FileUpdateIndex } = await import('../src/core/assets/file-update-index.ts');
 const { ManagedImageCache } = await import('../src/core/assets/managed-image-cache.ts');
 const { avifPixelBound } = await import('../src/core/assets/avif-dimensions.ts');
-const { applyAssetManifest } = await import('../src/core/assets/asset-manifest.ts');
+const { applyAssetManifest, manifestImage } = await import('../src/core/assets/asset-manifest.ts');
 const { GameDataService } = await import('../src/core/game-data/game-data-service.ts');
 const { gameDataState } = await import('../src/core/game-data/game-data-state.ts');
 const { GameAssetManifestService } = await import('../src/features/game-assets/repository.ts');
@@ -465,7 +465,7 @@ test('cold and warm startup load metadata without reading the image inventory', 
   await cold.loadFreshGameData(locale);
   assert.ok(gameDataState.troopsData.troops.Barbarian);
   assert.equal(gameDataState.translationsData.TID_BARBARIAN, 'Barbare');
-  assert.equal(requests.length, 3);
+  assert.equal(requests.length, 4);
   assert.deepEqual(inventoryReads, []);
 
   for (let i = 0; i < 1024; i++) {
@@ -480,8 +480,100 @@ test('cold and warm startup load metadata without reading the image inventory', 
   await start().loadFreshGameData(locale);
   assert.ok(gameDataState.troopsData.troops.Barbarian);
   assert.equal(gameDataState.translationsData.TID_BARBARIAN, 'Barbare');
-  assert.equal(requests.length, 3);
+  assert.equal(requests.length, 4);
   assert.deepEqual(inventoryReads, []);
+});
+
+function splitStartupFixture() {
+  const preferences = memoryStore();
+  const files = memoryStore();
+  const calls = [];
+  const prefix = '/app_metadata/v1';
+  const indexPath = `${prefix}/index.json`;
+  const payloads = new Map([['/manifest.json', manifestFixture().body]]);
+  let stamp = now();
+  const publish = (name, imageSha = nextSha) => {
+    const put = (kind, data) => {
+      const body = JSON.stringify(data);
+      const hash = createHash('sha256').update(body).digest('hex');
+      const path = `${prefix}/${kind}-${hash}.json`;
+      payloads.set(path, body);
+      return { hash, path };
+    };
+    const stats = put('static', { troops: [{ name }], abilities: [{ name: 'Recall' }] });
+    const images = put('images', { images: [[assetPath, imageSha, 1]] });
+    payloads.set(indexPath, JSON.stringify({
+      version: 1, staticSha: stats.hash, imagesSha: images.hash, translations: [],
+    }));
+    return [stats.path, images.path];
+  };
+  const create = () => new GameDataService({
+    platform: 'native',
+    preferences,
+    files: { read: files.getString, write: files.setString },
+    now: () => new Date(stamp),
+    fetchImplementation: async (url, init) => {
+      const path = new URL(url).pathname;
+      calls.push(path);
+      const body = payloads.get(path);
+      if (body === undefined) return new Response(null, { status: 404 });
+      const etag = '"' + createHash('sha256').update(body).digest('hex') + '"';
+      return init.headers['If-None-Match'] === etag
+        ? new Response(null, { status: 304 })
+        : new Response(body, { headers: { ETag: etag } });
+    },
+  });
+  return { create, publish, calls, payloads, indexPath, advance: () => { stamp += 60_001; } };
+}
+
+test('startup fetches the index and two payloads, leaving the full manifest for Wiki', async () => {
+  const { create, publish, calls, indexPath, advance } = splitStartupFixture();
+  const paths = publish('Barbarian');
+  const service = create();
+  await service.loadFreshGameData();
+  assert.deepEqual([...calls].sort(), [indexPath, ...paths].sort());
+  assert.ok(gameDataState.troopsData.troops.Barbarian);
+  assert.deepEqual(gameDataState.bundleData.abilities, [{ name: 'Recall' }]);
+  const imageUrl = `https://assets.clashk.ing/${assetPath}`;
+  assert.deepEqual(manifestImage(imageUrl), { sha: nextSha, animated: true });
+
+  await create().loadFreshGameData();
+  assert.equal(calls.length, 3);
+  const wiki = new GameAssetManifestService(() => service.loadAssetManifest());
+  assert.equal((await wiki.load()).assets[0].path, assetPath);
+  assert.equal(calls.at(-1), '/manifest.json');
+  assert.deepEqual(manifestImage(imageUrl), { sha: nextSha, animated: true });
+
+  calls.length = 0;
+  advance();
+  await service.refreshGameDataIfChanged();
+  assert.deepEqual(calls, [indexPath]);
+  calls.length = 0;
+  await service.refreshStaticDataIfChanged(true);
+  assert.deepEqual(calls, [indexPath, '/manifest.json']);
+});
+
+test('an interrupted indexed update keeps the last good bundle across restart and retries', async () => {
+  const { create, publish, calls, payloads, advance } = splitStartupFixture();
+  publish('Barbarian');
+  const initial = create();
+  await initial.loadFreshGameData();
+  advance();
+  const [path] = publish('Archer');
+  const body = payloads.get(path);
+  payloads.set(path, JSON.stringify({ troops: [{ name: 'Wrong body' }] }));
+  await initial.refreshGameDataIfChanged();
+  assert.ok(gameDataState.troopsData.troops.Barbarian);
+  const restarted = create();
+  await restarted.loadFreshGameData();
+  assert.ok(gameDataState.troopsData.troops.Barbarian);
+  assert.equal(gameDataState.troopsData.troops.Archer, undefined);
+
+  payloads.set(path, body);
+  advance();
+  await restarted.refreshGameDataIfChanged();
+  assert.ok(gameDataState.troopsData.troops.Archer);
+  assert.equal(calls.includes('/manifest.json'), false);
 });
 
 test('migrates a valid Wiki-only manifest and can open it offline', async () => {
