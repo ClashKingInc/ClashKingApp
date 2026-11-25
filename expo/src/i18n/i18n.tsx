@@ -3,6 +3,7 @@ import { IntlMessageFormat } from 'intl-messageformat';
 import React, { createContext, useContext, useMemo, type ReactNode } from 'react';
 
 import { catalogs, type MessageKey, type SupportedLocale } from './catalogs.generated';
+import { ensureIntl } from './intl-polyfills';
 
 type MessageValues = Record<string, string | number | Date | boolean | null | undefined>;
 
@@ -91,8 +92,10 @@ export function formatCompactNumber(value: number, locale: string): string {
 }
 
 export function createTranslator(locale: SupportedLocale): I18nValue['t'] {
+  const catalog = catalogs[locale];
   return (key, values = {}) => {
-    const message = catalogs[locale][key] ?? catalogs.en[key];
+    ensureIntl(locale);
+    const message = catalog[key] ?? catalogs.en[key];
     if (message === undefined) {
       throw new Error(`Missing localization message: ${locale}.${key}`);
     }
