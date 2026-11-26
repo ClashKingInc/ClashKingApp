@@ -139,34 +139,41 @@ export class PlayerService {
     query: string,
     options: {
       limit?: number;
+      cursor?: string | null;
       clanTags?: readonly string[];
       leagueIds?: readonly number[];
       townHallLevels?: readonly number[];
       extraHeaders?: Readonly<Record<string, string>>;
     } = {},
-  ): Promise<readonly JsonRecord[]> {
+  ): Promise<typeof PlayerSearchEndpoint.response.Type> {
     const normalized = query.trim();
-    if (!normalized) return [];
-    const decoded = await Effect.runPromise(
-      this.api.execute(
-        PlayerSearchEndpoint,
-        {
-          path: {},
-          body: {},
-          query: {
-            query: normalized,
-            limit: options.limit ?? 20,
-            ...(options.clanTags?.length ? { clanTags: options.clanTags.join(',') } : {}),
-            ...(options.leagueIds?.length ? { leagueIds: options.leagueIds.join(',') } : {}),
-            ...(options.townHallLevels?.length
-              ? { townhallLevels: options.townHallLevels.join(',') }
-              : {}),
-          },
+    const limit = options.limit ?? 20;
+    if (!normalized) return { items: [], pagination: { limit, hasMore: false, nextCursor: null } };
+    const request = this.api.execute(
+      PlayerSearchEndpoint,
+      {
+        path: {},
+        body: {},
+        query: {
+          query: normalized,
+          limit,
+          ...(options.cursor ? { cursor: options.cursor } : {}),
+          ...(options.clanTags?.length ? { clanTags: options.clanTags.join(',') } : {}),
+          ...(options.leagueIds?.length ? { leagueIds: options.leagueIds.join(',') } : {}),
+          ...(options.townHallLevels?.length
+            ? { townhallLevels: options.townHallLevels.join(',') }
+            : {}),
         },
-        { timeoutMs: 10_000, headers: options.extraHeaders },
-      ),
+      },
+      {
+        timeoutMs: 10_000,
+        headers: options.extraHeaders,
+        expectedStatuses: options.cursor ? [400] : undefined,
+      },
     );
-    return decoded.items;
+    const result = await Effect.runPromise(Effect.result(request));
+    if (result._tag === 'Failure') throw result.failure;
+    return result.success;
   }
   loadPublicPlayerData(tags: readonly string[], notify = true) {
     return this.loadOfficialPlayerData(tags, { notify });

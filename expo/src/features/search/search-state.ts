@@ -1,6 +1,7 @@
 import type { JsonRecord } from './models';
 
 export const SEARCH_DEBOUNCE_MS = 450;
+export const SEARCH_PAGE_SIZE = 20;
 const minimumQueryLength = 3;
 
 export type SearchQuery =
@@ -22,16 +23,23 @@ export function classifySearchQuery(value: string): SearchQuery {
     : { kind: 'text', value: query };
 }
 
-export interface SearchRequestState {
+export interface SearchPage {
+  readonly results: readonly JsonRecord[];
+  readonly nextCursor: string | null;
+}
+
+export interface SearchRequestState extends SearchPage {
   readonly version: number;
   readonly status: 'idle' | 'loading' | 'success' | 'error';
-  readonly results: readonly JsonRecord[];
+  readonly paginationStatus: 'idle' | 'loading' | 'error' | 'expired';
 }
 
 export const initialSearchRequestState: SearchRequestState = Object.freeze({
   version: 0,
   status: 'idle',
   results: [],
+  nextCursor: null,
+  paginationStatus: 'idle',
 });
 
 export function invalidateSearch(state: SearchRequestState): SearchRequestState {

@@ -26,9 +26,11 @@ import { SearchScreen } from './search-screen';
 import { SearchService } from './search-service';
 import {
   SEARCH_DEBOUNCE_MS,
+  SEARCH_PAGE_SIZE,
   classifySearchQuery,
   initialSearchRequestState,
   invalidateSearch,
+  type SearchPage,
   type SearchRequestState,
 } from './search-state';
 
@@ -136,52 +138,108 @@ export function SearchRoot({
 
   const searchText = query.trim();
   const runSearch = useCallback(
-    async (retry = false) => {
+    async (action: 'search' | 'retry' | 'more' = 'search') => {
       const request = requestRef.current;
-      if (request.status !== 'idle' && !(retry && request.status === 'error')) return;
+      const loadMore = action === 'more';
+      if (loadMore) {
+        if (
+          request.status !== 'success' ||
+          request.paginationStatus === 'loading' ||
+          (request.nextCursor === null && request.paginationStatus !== 'expired')
+        ) {
+          return;
+        }
+      } else if (request.status !== 'idle' && !(action === 'retry' && request.status === 'error')) {
+        return;
+      }
       const search = classifySearchQuery(searchText);
       if (search.kind !== 'tag' && search.kind !== 'text') return;
+      if (loadMore && search.kind !== 'text') return;
 
       const version = request.version + 1;
-      publishRequest({ version, status: 'loading', results: [] });
-      const finish = (status: 'success' | 'error', results: readonly JsonRecord[] = []) => {
+      const cursor = loadMore ? request.nextCursor : null;
+      publishRequest(
+        loadMore
+          ? { ...request, version, paginationStatus: 'loading' }
+          : { ...initialSearchRequestState, version, status: 'loading' },
+      );
+      const finish = (next: Omit<SearchRequestState, 'version'>) => {
         if (mounted.current && requestRef.current.version === version) {
-          publishRequest({ version, status, results });
+          publishRequest({ ...next, version });
         }
+      };
+      const finishPage = ({ results, nextCursor }: SearchPage) => {
+        // Clan results can shift between requests. Keep the first row for each tag.
+        const seen = new Set(cursor === null ? [] : request.results.map((item) => item.tag));
+        const newResults = results.filter((item) => {
+          if (seen.has(item.tag)) return false;
+          seen.add(item.tag);
+          return true;
+        });
+        finish({
+          status: 'success',
+          results: cursor === null ? newResults : [...request.results, ...newResults],
+          nextCursor: nextCursor === cursor || results.length === 0 ? null : nextCursor,
+          paginationStatus: 'idle',
+        });
       };
       try {
         const trackingHeaders =
           userId && Platform.OS !== 'web' ? { 'x-ck-user-id': userId } : undefined;
         if (search.kind === 'tag') {
           if (mode === 'clans') {
-            finish('success', [await service.loadClanByTag(search.value, trackingHeaders)]);
+            finishPage({
+              results: [await service.loadClanByTag(search.value, trackingHeaders)],
+              nextCursor: null,
+            });
           } else {
             const player = await runtime.players.getPlayerAndClanData(search.value, trackingHeaders);
-            finish('success', [
-              {
-                tag: player.tag,
-                name: player.name,
-                townHallLevel: player.townHallLevel,
-                trophies: player.trophies,
-              },
-            ]);
+            finishPage({
+              results: [
+                {
+                  tag: player.tag,
+                  name: player.name,
+                  townHallLevel: player.townHallLevel,
+                  trophies: player.trophies,
+                },
+              ],
+              nextCursor: null,
+            });
           }
           return;
         }
-        const results =
-          mode === 'players'
-            ? await runtime.players.searchPlayers(search.value, {
-                leagueIds: playerFilters.leagueIds,
-                townHallLevels: playerTownHallLevels(playerFilters, getMaxTownHallLevel()),
-                extraHeaders: trackingHeaders,
-              })
-            : await service.searchClans(search.value, clanFilters);
-        finish('success', results);
-      } catch (error) {
-        if (search.kind === 'tag' && error instanceof ApiResponseError && error.status === 404) {
-          finish('success');
+        if (mode === 'clans') {
+          finishPage(await service.searchClans(search.value, clanFilters, cursor));
         } else {
-          finish('error');
+          const { items, pagination } = await runtime.players.searchPlayers(search.value, {
+            limit: SEARCH_PAGE_SIZE,
+            cursor,
+            leagueIds: playerFilters.leagueIds,
+            townHallLevels: playerTownHallLevels(playerFilters, getMaxTownHallLevel()),
+            extraHeaders: trackingHeaders,
+          });
+          finishPage({
+            results: items,
+            nextCursor: pagination.hasMore ? pagination.nextCursor : null,
+          });
+        }
+      } catch (error) {
+        if (loadMore) {
+          const expired =
+            cursor === null || (error instanceof ApiResponseError && error.status === 400);
+          finish({
+            ...request,
+            nextCursor: expired ? null : cursor,
+            paginationStatus: expired ? 'expired' : 'error',
+          });
+        } else if (
+          search.kind === 'tag' &&
+          error instanceof ApiResponseError &&
+          error.status === 404
+        ) {
+          finishPage({ results: [], nextCursor: null });
+        } else {
+          finish({ ...initialSearchRequestState, status: 'error' });
         }
       }
     },
@@ -292,13 +350,16 @@ export function SearchRoot({
         locations={locations}
         leagues={leagues}
         searchStatus={requestState.status}
+        hasMoreResults={requestState.nextCursor !== null}
+        paginationStatus={requestState.paginationStatus}
         filterOptionsStatus={filterOptionsStatus}
         onRetryFilterOptions={() => {
           setFilterOptionsStatus('loading');
           setFilterOptionsAttempt((attempt) => attempt + 1);
         }}
         onQueryChange={changeQuery}
-        onSubmit={() => void runSearch(true)}
+        onSubmit={() => void runSearch('retry')}
+        onLoadMore={() => void runSearch('more')}
         onModeChange={changeMode}
         onFiltersExpandedChange={(expanded) => {
           if (expanded) setFilterOptionsStatus('loading');

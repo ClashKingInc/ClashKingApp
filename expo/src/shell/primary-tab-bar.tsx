@@ -4,6 +4,13 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { primaryTabRoutes } from '../navigation';
 import { RouteIcon } from '../navigation/route-icons';
 import { CKText, GlassSurface, colorWithAlpha, useCKTheme, useCKThemeMode } from '../ui';
+import {
+  fallbackTabBarBottomPadding,
+  IOS_PRIMARY_TAB_BAR_MIN_HEIGHT,
+  PRIMARY_TAB_BAR_HEIGHT,
+  PRIMARY_TAB_BAR_TOP_PADDING,
+  WEB_PRIMARY_TAB_BAR_HEIGHT,
+} from './contracts';
 import type { PrimaryRouteId } from './retained-pager';
 
 type Translate = (key: (typeof primaryTabRoutes)[number]['labelKey']) => string;
@@ -122,13 +129,9 @@ export function PrimaryTabBar({
   );
 }
 
-export function fallbackTabBarBottomPadding(bottomInset: number): number {
-  return bottomInset > 0 ? bottomInset : 10;
-}
-
 const styles = StyleSheet.create({
   webOuter: { borderTopWidth: StyleSheet.hairlineWidth },
-  webBar: { height: 64, paddingHorizontal: 8 },
+  webBar: { height: WEB_PRIMARY_TAB_BAR_HEIGHT, paddingHorizontal: 8 },
   webItem: { borderRadius: 14, marginVertical: 6, gap: 2 },
   items: { flex: 1, flexDirection: 'row' },
   itemsRtl: { flexDirection: 'row-reverse' },
@@ -136,11 +139,16 @@ const styles = StyleSheet.create({
   iosItem: { margin: 6, borderRadius: 25 },
   fallbackItem: { marginHorizontal: 4, marginVertical: 5, borderRadius: 29, gap: 4 },
   pressed: { opacity: 0.72 },
-  iosOuter: { minHeight: 78, paddingHorizontal: 8, paddingTop: 4, justifyContent: 'flex-start' },
-  iosGlass: { height: 62 },
-  fallbackOuter: { paddingHorizontal: 8, paddingTop: 4 },
+  iosOuter: {
+    minHeight: IOS_PRIMARY_TAB_BAR_MIN_HEIGHT,
+    paddingHorizontal: 8,
+    paddingTop: PRIMARY_TAB_BAR_TOP_PADDING,
+    justifyContent: 'flex-start',
+  },
+  iosGlass: { height: PRIMARY_TAB_BAR_HEIGHT },
+  fallbackOuter: { paddingHorizontal: 8, paddingTop: PRIMARY_TAB_BAR_TOP_PADDING },
   fallbackBar: {
-    height: 62,
+    height: PRIMARY_TAB_BAR_HEIGHT,
     borderRadius: 31,
     shadowColor: '#000000',
     shadowOffset: { width: 0, height: 8 },

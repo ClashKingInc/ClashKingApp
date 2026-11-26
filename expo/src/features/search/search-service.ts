@@ -5,7 +5,7 @@ import {
   ProxyLeagueTiersEndpoint,
   ProxyLocationsEndpoint,
 } from '../../core/api/proxy-contracts';
-import { Effect } from 'effect';
+import { Effect, Schema } from 'effect';
 
 import type { ContractApiService } from '../../core/api/contract-api';
 import {
@@ -19,6 +19,17 @@ import {
   type SearchLeague,
   type SearchLocation,
 } from './models';
+import { SEARCH_PAGE_SIZE, type SearchPage } from './search-state';
+
+// The released endpoint already decodes paging.cursors. Extend its query to
+// accept the forward cursor from the Clash clan search contract.
+const paginatedClanSearchEndpoint = {
+  ...ProxyClanSearchEndpoint,
+  query: Schema.Struct({
+    ...ProxyClanSearchEndpoint.query.fields,
+    after: Schema.optionalKey(Schema.String),
+  }),
+};
 
 export class SearchService {
   constructor(private readonly api: ContractApiService) {}
@@ -36,28 +47,36 @@ export class SearchService {
     }
   }
 
-  async searchClans(query: string, filters: ClanSearchFilters): Promise<readonly JsonRecord[]> {
-    const decoded = await Effect.runPromise(
-      this.api.execute(
-        ProxyClanSearchEndpoint,
-        {
-          path: {},
-          body: {},
-          query: {
-            name: query,
-            limit: 20,
-            memberList: false,
-            ...(filters.warFrequency === null ? {} : { warFrequency: filters.warFrequency }),
-            ...(filters.locationId === null ? {} : { locationId: filters.locationId }),
-            ...(filters.minMembers === null ? {} : { minMembers: filters.minMembers }),
-            ...(filters.maxMembers === null ? {} : { maxMembers: filters.maxMembers }),
-            ...(filters.minClanLevel === null ? {} : { minClanLevel: filters.minClanLevel }),
-          },
+  async searchClans(
+    query: string,
+    filters: ClanSearchFilters,
+    after: string | null,
+  ): Promise<SearchPage> {
+    const request = this.api.execute(
+      paginatedClanSearchEndpoint,
+      {
+        path: {},
+        body: {},
+        query: {
+          name: query,
+          limit: SEARCH_PAGE_SIZE,
+          memberList: false,
+          ...(after === null ? {} : { after }),
+          ...(filters.warFrequency === null ? {} : { warFrequency: filters.warFrequency }),
+          ...(filters.locationId === null ? {} : { locationId: filters.locationId }),
+          ...(filters.minMembers === null ? {} : { minMembers: filters.minMembers }),
+          ...(filters.maxMembers === null ? {} : { maxMembers: filters.maxMembers }),
+          ...(filters.minClanLevel === null ? {} : { minClanLevel: filters.minClanLevel }),
         },
-        { timeoutMs: 10_000 },
-      ),
+      },
+      { timeoutMs: 10_000, expectedStatuses: after === null ? undefined : [400] },
     );
-    return decoded.items;
+    const result = await Effect.runPromise(Effect.result(request));
+    if (result._tag === 'Failure') throw result.failure;
+    return {
+      results: result.success.items,
+      nextCursor: result.success.paging?.cursors?.after || null,
+    };
   }
 
   async loadClanByTag(

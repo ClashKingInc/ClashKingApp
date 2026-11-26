@@ -26,7 +26,16 @@ import {
   type ComponentRef,
 } from 'react';
 import { SlidingSegmentControl } from '../../ui/sliding-segment-control';
-import { Keyboard, Pressable, ScrollView, StyleSheet, TextInput, View } from 'react-native';
+import {
+  Keyboard,
+  Platform,
+  Pressable,
+  ScrollView,
+  StyleSheet,
+  TextInput,
+  View,
+  useWindowDimensions,
+} from 'react-native';
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 import {
   ChevronLeft,
@@ -44,8 +53,10 @@ import { getMaxTownHallLevel } from '../../core/game-data/game-data-service';
 import { gameDataState, subscribeToGameDataRevision } from '../../core/game-data/game-data-state';
 import { GlobalSearchHeaderFrame, globalSearchHeaderLayout } from '../../ui/header';
 import { materialBackLabel, useI18n } from '../../i18n';
+import { primaryTabBarClearance } from '../../shell/contracts';
 import {
   CKText,
+  ckSpacing,
   GlassControlSurface,
   LoadingIndicator,
   SkeletonContent,
@@ -90,8 +101,11 @@ export interface SearchScreenProps extends FilterOptionsFeedbackProps {
   readonly locations: readonly SearchLocation[];
   readonly leagues: readonly SearchLeague[];
   readonly searchStatus: SearchRequestState['status'];
+  readonly hasMoreResults: boolean;
+  readonly paginationStatus: SearchRequestState['paginationStatus'];
   readonly onQueryChange: (value: string) => void;
   readonly onSubmit: () => void;
+  readonly onLoadMore: () => void;
   readonly onModeChange: (mode: SearchMode) => void;
   readonly onFiltersExpandedChange: (expanded: boolean) => void;
   readonly onPlayerFiltersChange: (filters: PlayerSearchFilters) => void;
@@ -106,6 +120,8 @@ export function SearchScreen(props: SearchScreenProps) {
   const theme = useCKTheme();
   const layout = useAdaptiveLayout();
   const insets = useSafeAreaInsets();
+  const { width } = useWindowDimensions();
+  const bottomPadding = primaryTabBarClearance(Platform.OS, width, insets.bottom) + ckSpacing.lg;
   const controlBounds = (layout.isExpanded || layout.isDuo) && {
     width: '100%' as const,
     maxWidth: layout.readableMaxWidth,
@@ -250,6 +266,8 @@ export function SearchScreen(props: SearchScreenProps) {
       ? !isClanSearchFiltersEmpty(props.clanFilters)
       : !isPlayerSearchFiltersEmpty(props.playerFilters));
   const isSearching = props.searchStatus === 'loading';
+  const paginationFailed =
+    props.paginationStatus === 'error' || props.paginationStatus === 'expired';
   const visibleRecents = props.recents.filter((item) =>
     props.mode === 'players' ? item.type === 'player' : item.type === 'clan',
   );
@@ -407,6 +425,23 @@ export function SearchScreen(props: SearchScreenProps) {
           ))}
         </SearchResultCollection>
       ) : null}
+      {props.hasMoreResults || props.paginationStatus !== 'idle' ? (
+        <View style={styles.pagination}>
+          {paginationFailed ? (
+            <CKText muted accessibilityLiveRegion="polite" style={styles.noResults}>
+              {t('apiErrorOperationFailed')}
+            </CKText>
+          ) : null}
+          {props.paginationStatus === 'loading' ? (
+            <LoadingIndicator />
+          ) : (
+            <SearchTextAction
+              label={t(paginationFailed ? 'generalRetry' : 'postsLoadMore')}
+              onPress={props.onLoadMore}
+            />
+          )}
+        </View>
+      ) : null}
     </>
   );
 
@@ -505,6 +540,7 @@ export function SearchScreen(props: SearchScreenProps) {
             contentContainerStyle={[
               styles.overlayResults,
               resultBounds,
+              { paddingBottom: bottomPadding },
               props.query.trim().length !== 0 || visibleRecents.length === 0
                 ? styles.overlayResultSpacer
                 : undefined,
@@ -524,7 +560,7 @@ export function SearchScreen(props: SearchScreenProps) {
       <ScrollView
         keyboardDismissMode="on-drag"
         keyboardShouldPersistTaps="handled"
-        contentContainerStyle={[styles.page, resultBounds]}
+        contentContainerStyle={[styles.page, resultBounds, { paddingBottom: bottomPadding }]}
       >
         {controlBounds ? (
           <View style={controlBounds}>
@@ -1453,7 +1489,7 @@ const styles = StyleSheet.create({
   filterSelectedValue: { textAlign: 'right', flexShrink: 1 },
   pickerValue: { flexGrow: 1, flexBasis: 145, minWidth: 130, maxWidth: '100%' },
   grow: { flex: 1 },
-  page: { padding: 16, paddingBottom: 96 },
+  page: { padding: 16 },
   pageSearch: { marginTop: 12 },
   pageFilters: { marginTop: 10 },
   overlayHeader: {
@@ -1490,7 +1526,13 @@ const styles = StyleSheet.create({
   },
   fieldAction: { width: 38, height: 44, alignItems: 'center', justifyContent: 'center' },
   pageResultSpacer: { paddingTop: 14 },
-  overlayResults: { paddingHorizontal: 16, paddingTop: 16, paddingBottom: 20 },
+  overlayResults: { paddingHorizontal: 16, paddingTop: 16 },
+  pagination: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    minHeight: 44,
+    marginTop: ckSpacing.sm,
+  },
   overlayResultSpacer: { paddingTop: 12 },
   recentTitle: { marginBottom: 12, fontWeight: '700' },
   searchFeedback: { paddingVertical: 16, alignItems: 'center' },
