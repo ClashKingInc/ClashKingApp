@@ -7,7 +7,7 @@ import Reanimated, {
   withTiming,
   Easing,
 } from 'react-native-reanimated';
-import { SEARCH_MIN_QUERY_LENGTH } from './search-state';
+import { classifySearchQuery, type SearchRequestState } from './search-state';
 import type { TextInputInstance } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useAdaptiveLayout } from '../../ui/adaptive-layout';
@@ -26,7 +26,16 @@ import {
   type ComponentRef,
 } from 'react';
 import { SlidingSegmentControl } from '../../ui/sliding-segment-control';
-import { Keyboard, Pressable, ScrollView, StyleSheet, TextInput, View } from 'react-native';
+import {
+  Keyboard,
+  Platform,
+  Pressable,
+  ScrollView,
+  StyleSheet,
+  TextInput,
+  View,
+  useWindowDimensions,
+} from 'react-native';
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 import {
   ChevronLeft,
@@ -44,8 +53,10 @@ import { getMaxTownHallLevel } from '../../core/game-data/game-data-service';
 import { gameDataState, subscribeToGameDataRevision } from '../../core/game-data/game-data-state';
 import { GlobalSearchHeaderFrame, globalSearchHeaderLayout } from '../../ui/header';
 import { materialBackLabel, useI18n } from '../../i18n';
+import { primaryTabBarClearance } from '../../shell/contracts';
 import {
   CKText,
+  ckSpacing,
   GlassControlSurface,
   LoadingIndicator,
   SkeletonContent,
@@ -72,7 +83,12 @@ import {
   type SearchMode,
 } from './models';
 
-export interface SearchScreenProps {
+interface FilterOptionsFeedbackProps {
+  readonly filterOptionsStatus: 'loading' | 'ready' | 'error';
+  readonly onRetryFilterOptions: () => void;
+}
+
+export interface SearchScreenProps extends FilterOptionsFeedbackProps {
   readonly overlay?: boolean;
   readonly autofocus?: boolean;
   readonly query: string;
@@ -84,10 +100,12 @@ export interface SearchScreenProps {
   readonly recents: readonly RecentSearchItem[];
   readonly locations: readonly SearchLocation[];
   readonly leagues: readonly SearchLeague[];
-  readonly isSearching: boolean;
-  readonly hasSearched: boolean;
+  readonly searchStatus: SearchRequestState['status'];
+  readonly hasMoreResults: boolean;
+  readonly paginationStatus: SearchRequestState['paginationStatus'];
   readonly onQueryChange: (value: string) => void;
   readonly onSubmit: () => void;
+  readonly onLoadMore: () => void;
   readonly onModeChange: (mode: SearchMode) => void;
   readonly onFiltersExpandedChange: (expanded: boolean) => void;
   readonly onPlayerFiltersChange: (filters: PlayerSearchFilters) => void;
@@ -102,6 +120,8 @@ export function SearchScreen(props: SearchScreenProps) {
   const theme = useCKTheme();
   const layout = useAdaptiveLayout();
   const insets = useSafeAreaInsets();
+  const { width } = useWindowDimensions();
+  const bottomPadding = primaryTabBarClearance(Platform.OS, width, insets.bottom) + ckSpacing.lg;
   const controlBounds = (layout.isExpanded || layout.isDuo) && {
     width: '100%' as const,
     maxWidth: layout.readableMaxWidth,
@@ -239,10 +259,15 @@ export function SearchScreen(props: SearchScreenProps) {
     props.onFiltersExpandedChange(true);
   };
   const [headerLaidOut, setHeaderLaidOut] = useState(!props.overlay);
+  const searchQuery = classifySearchQuery(props.query);
   const activeFilters =
-    props.mode === 'clans'
+    !props.query.trimStart().startsWith('#') &&
+    (props.mode === 'clans'
       ? !isClanSearchFiltersEmpty(props.clanFilters)
-      : !isPlayerSearchFiltersEmpty(props.playerFilters);
+      : !isPlayerSearchFiltersEmpty(props.playerFilters));
+  const isSearching = props.searchStatus === 'loading';
+  const paginationFailed =
+    props.paginationStatus === 'error' || props.paginationStatus === 'expired';
   const visibleRecents = props.recents.filter((item) =>
     props.mode === 'players' ? item.type === 'player' : item.type === 'clan',
   );
@@ -302,7 +327,7 @@ export function SearchScreen(props: SearchScreenProps) {
           />
         </Pressable>
       ) : null}
-      {props.isSearching ? <LoadingIndicator /> : null}
+      {isSearching ? <LoadingIndicator /> : null}
     </>
   );
   const searchField = (
@@ -311,9 +336,31 @@ export function SearchScreen(props: SearchScreenProps) {
     </GlassControlSurface>
   );
 
+  let searchFeedback: string | undefined;
+  if (searchQuery.kind === 'tooShort' || (searchQuery.kind === 'empty' && activeFilters)) {
+    searchFeedback = t('searchMinimumCharacters');
+  } else if (searchQuery.kind === 'invalidTag') {
+    searchFeedback = t('apiErrorBadRequest');
+  } else if (props.searchStatus === 'error') {
+    searchFeedback = t('apiErrorOperationFailed');
+  } else if (props.searchStatus === 'success' && props.results.length === 0) {
+    searchFeedback = t(activeFilters ? 'generalNoFilteredResults' : 'searchNoResult');
+  }
+
   const resultContent = (
     <>
-      {props.query.trim().length === 0 && visibleRecents.length ? (
+      {activeFilters ? <ActiveSearchFilters {...props} /> : null}
+      {searchFeedback ? (
+        <View style={styles.searchFeedback}>
+          <CKText role="bodyLarge" muted accessibilityLiveRegion="polite" style={styles.noResults}>
+            {searchFeedback}
+          </CKText>
+          {props.searchStatus === 'error' ? (
+            <SearchTextAction label={t('generalRetry')} onPress={props.onSubmit} />
+          ) : null}
+        </View>
+      ) : null}
+      {searchQuery.kind === 'empty' && visibleRecents.length ? (
         <>
           <CKText
             skeleton={false}
@@ -343,13 +390,7 @@ export function SearchScreen(props: SearchScreenProps) {
           </SearchResultCollection>
         </>
       ) : null}
-      {props.query.trim().length > 0 &&
-      (props.query.trim().length < SEARCH_MIN_QUERY_LENGTH ||
-        (props.hasSearched && !props.isSearching && props.results.length === 0)) ? (
-        <CKText role="bodyLarge" muted style={styles.noResults}>
-          {t('searchNoResult')}
-        </CKText>
-      ) : props.isSearching && props.results.length === 0 ? (
+      {isSearching ? (
         <SkeletonContent loading>
           <SearchResultCollection>
             {[0, 1, 2, 3, 4].map((index) => (
@@ -368,14 +409,14 @@ export function SearchScreen(props: SearchScreenProps) {
             ))}
           </SearchResultCollection>
         </SkeletonContent>
-      ) : (
+      ) : props.results.length > 0 ? (
         <SearchResultCollection>
           {props.results.map((result, index) => (
             <EntityTile
               key={`${stringValue(result.tag)}:${index}`}
               name={stringValue(result.name)}
               tag={stringValue(result.tag)}
-              subtitle={resultSubtitle(result, props.mode)}
+              subtitle={resultSubtitle(result, props.mode, t)}
               imageUrl={resultImage(result, props.mode)}
               type={props.mode === 'players' ? 'player' : 'clan'}
               overlay={props.overlay ?? false}
@@ -383,7 +424,24 @@ export function SearchScreen(props: SearchScreenProps) {
             />
           ))}
         </SearchResultCollection>
-      )}
+      ) : null}
+      {props.hasMoreResults || props.paginationStatus !== 'idle' ? (
+        <View style={styles.pagination}>
+          {paginationFailed ? (
+            <CKText muted accessibilityLiveRegion="polite" style={styles.noResults}>
+              {t('apiErrorOperationFailed')}
+            </CKText>
+          ) : null}
+          {props.paginationStatus === 'loading' ? (
+            <LoadingIndicator />
+          ) : (
+            <SearchTextAction
+              label={t(paginationFailed ? 'generalRetry' : 'postsLoadMore')}
+              onPress={props.onLoadMore}
+            />
+          )}
+        </View>
+      ) : null}
     </>
   );
 
@@ -476,13 +534,13 @@ export function SearchScreen(props: SearchScreenProps) {
             <ModeSelector mode={props.mode} compact isRtl={isRtl} onChange={props.onModeChange} />
           </View>
           <ScrollView
-            automaticallyAdjustKeyboardInsets
             keyboardDismissMode="on-drag"
             keyboardShouldPersistTaps="handled"
             style={styles.grow}
             contentContainerStyle={[
               styles.overlayResults,
               resultBounds,
+              { paddingBottom: bottomPadding },
               props.query.trim().length !== 0 || visibleRecents.length === 0
                 ? styles.overlayResultSpacer
                 : undefined,
@@ -502,7 +560,7 @@ export function SearchScreen(props: SearchScreenProps) {
       <ScrollView
         keyboardDismissMode="on-drag"
         keyboardShouldPersistTaps="handled"
-        contentContainerStyle={[styles.page, resultBounds]}
+        contentContainerStyle={[styles.page, resultBounds, { paddingBottom: bottomPadding }]}
       >
         {controlBounds ? (
           <View style={controlBounds}>
@@ -539,6 +597,99 @@ function SearchResultCollection({ children }: { children: ReactNode }) {
 }
 
 const FilterNavigationContext = createContext<((page: FilterChoicePage) => void) | null>(null);
+
+function ActiveSearchFilters({
+  mode,
+  playerFilters,
+  clanFilters,
+  leagues,
+  locations,
+  onPlayerFiltersChange,
+  onClanFiltersChange,
+}: SearchScreenProps) {
+  const { t, isRtl } = useI18n();
+  const labels: string[] = [];
+  const clear =
+    mode === 'players'
+      ? () => onPlayerFiltersChange(emptyPlayerSearchFilters)
+      : () => onClanFiltersChange(emptyClanSearchFilters);
+
+  if (mode === 'players') {
+    const { minTownHallLevel, maxTownHallLevel, leagueIds } = playerFilters;
+    if (minTownHallLevel !== null && minTownHallLevel === maxTownHallLevel) {
+      labels.push(t('gameTownHallLevelNumber', { level: minTownHallLevel }));
+    } else if (minTownHallLevel !== null || maxTownHallLevel !== null) {
+      const range =
+        minTownHallLevel === null
+          ? `≤${maxTownHallLevel}`
+          : maxTownHallLevel === null
+            ? `≥${minTownHallLevel}`
+            : `${minTownHallLevel}–${maxTownHallLevel}`;
+      labels.push(`${t('filtersTownHall')} ${range}`);
+    }
+    for (const id of leagueIds) {
+      labels.push(leagues.find((league) => league.id === id)?.name ?? t('gameLeague'));
+    }
+  } else {
+    const { warFrequency, locationId, minMembers, maxMembers, minClanLevel } = clanFilters;
+    if (warFrequency) {
+      labels.push(
+        warFrequencyOptions(t).find((option) => option.value === warFrequency)?.label ??
+          t('warFrequency'),
+      );
+    }
+    if (locationId !== null) {
+      labels.push(locations.find((location) => location.id === locationId)?.name ?? t('clanLocation'));
+    }
+    if (minMembers !== null || maxMembers !== null) {
+      labels.push(`${t('clanMembers')} ${minMembers ?? 0}–${maxMembers ?? 50}`);
+    }
+    if (minClanLevel !== null) labels.push(`${t('clanMinimumLevel')} ${minClanLevel}`);
+  }
+
+  return (
+    <View style={[styles.appliedFilters, isRtl && styles.rowRtl]} testID="search-active-filters">
+      <CKText
+        role="bodySmall"
+        muted
+        accessibilityLiveRegion="polite"
+        style={styles.appliedFilterValues}
+      >
+        {labels.join(' · ')}
+      </CKText>
+      <SearchTextAction label={t('generalClearFilters')} onPress={clear} />
+    </View>
+  );
+}
+
+function SearchTextAction({ label, onPress }: { label: string; onPress: () => void }) {
+  const theme = useCKTheme();
+  return (
+    <Pressable accessibilityRole="button" onPress={onPress} style={styles.searchTextAction}>
+      <CKText role="bodySmall" style={{ color: theme.primary }}>
+        {label}
+      </CKText>
+    </Pressable>
+  );
+}
+
+function FilterOptionsFeedback({
+  filterOptionsStatus,
+  onRetryFilterOptions,
+}: FilterOptionsFeedbackProps) {
+  const { t, isRtl } = useI18n();
+  return (
+    <View style={[styles.filterOptionsFeedback, isRtl && styles.rowRtl]}>
+      <CKText muted role="bodySmall" accessibilityLiveRegion="polite">
+        {t(filterOptionsStatus === 'error' ? 'generalError' : 'generalLoading')}
+      </CKText>
+      {filterOptionsStatus === 'error' ? (
+        <SearchTextAction label={t('generalRetry')} onPress={onRetryFilterOptions} />
+      ) : null}
+    </View>
+  );
+}
+
 function SearchFiltersSheet(props: SearchScreenProps) {
   const { t } = useI18n();
   const [players, setPlayers] = useState(props.playerFilters);
@@ -546,7 +697,7 @@ function SearchFiltersSheet(props: SearchScreenProps) {
   return (
     <MorphFilterSheet
       title={t('searchFilters')}
-      applyLabel={t('calcSearch')}
+      applyLabel={t('generalApply')}
       onClose={() => props.onFiltersExpandedChange(false)}
       onReset={() =>
         props.mode === 'players'
@@ -561,9 +712,21 @@ function SearchFiltersSheet(props: SearchScreenProps) {
       {(open) => (
         <FilterNavigationContext.Provider value={open}>
           {props.mode === 'players' ? (
-            <PlayerFiltersPanel value={players} leagues={props.leagues} onChange={setPlayers} />
+            <PlayerFiltersPanel
+              value={players}
+              leagues={props.leagues}
+              onChange={setPlayers}
+              filterOptionsStatus={props.filterOptionsStatus}
+              onRetryFilterOptions={props.onRetryFilterOptions}
+            />
           ) : (
-            <ClanFiltersPanel value={clans} locations={props.locations} onChange={setClans} />
+            <ClanFiltersPanel
+              value={clans}
+              locations={props.locations}
+              onChange={setClans}
+              filterOptionsStatus={props.filterOptionsStatus}
+              onRetryFilterOptions={props.onRetryFilterOptions}
+            />
           )}
         </FilterNavigationContext.Provider>
       )}
@@ -698,18 +861,8 @@ function EntityTile({
   );
 }
 
-function ClanFiltersPanel({
-  value,
-  locations,
-  onChange,
-}: {
-  value: ClanSearchFilters;
-  locations: readonly SearchLocation[];
-  onChange: (value: ClanSearchFilters) => void;
-}) {
-  const { t } = useI18n();
-  const theme = useCKTheme();
-  const warOptions = [
+function warFrequencyOptions(t: ReturnType<typeof useI18n>['t']) {
+  return [
     { value: '', label: t('generalNotSet') },
     { value: 'always', label: t('clanWarFrequencyAlways') },
     { value: 'never', label: t('clanWarFrequencyNever') },
@@ -717,6 +870,21 @@ function ClanFiltersPanel({
     { value: 'moreThanOncePerWeek', label: t('clanWarFrequencyMoreThanOncePerWeek') },
     { value: 'lessThanOncePerWeek', label: t('clanWarFrequencyRarely') },
   ];
+}
+
+function ClanFiltersPanel({
+  value,
+  locations,
+  onChange,
+  ...optionsFeedback
+}: FilterOptionsFeedbackProps & {
+  value: ClanSearchFilters;
+  locations: readonly SearchLocation[];
+  onChange: (value: ClanSearchFilters) => void;
+}) {
+  const { t } = useI18n();
+  const theme = useCKTheme();
+  const warOptions = warFrequencyOptions(t);
   const locationOptions = [
     { value: '', label: t('generalNotSet') },
     ...locations.map((location) => ({
@@ -753,13 +921,17 @@ function ClanFiltersPanel({
           icon={<Globe2 size={18} color={theme.onSurfaceVariant} />}
           label={t('clanLocation')}
         />
-        <OptionPicker
-          accessibilityLabel={`${t('clanLocation')}: ${selectedLocation}`}
-          title={t('clanLocation')}
-          value={value.locationId === null ? '' : String(value.locationId)}
-          options={locationOptions}
-          onChange={(next) => onChange({ ...value, locationId: next ? Number(next) : null })}
-        />
+        {optionsFeedback.filterOptionsStatus === 'ready' || locations.length > 0 ? (
+          <OptionPicker
+            accessibilityLabel={`${t('clanLocation')}: ${selectedLocation}`}
+            title={t('clanLocation')}
+            value={value.locationId === null ? '' : String(value.locationId)}
+            options={locationOptions}
+            onChange={(next) => onChange({ ...value, locationId: next ? Number(next) : null })}
+          />
+        ) : (
+          <FilterOptionsFeedback {...optionsFeedback} />
+        )}
       </View>
       <RangeFilter
         label={`${t('clanMinimumMembers')} – ${t('clanMaximumMembers')}`}
@@ -793,7 +965,8 @@ function PlayerFiltersPanel({
   value,
   leagues,
   onChange,
-}: {
+  ...optionsFeedback
+}: FilterOptionsFeedbackProps & {
   value: PlayerSearchFilters;
   leagues: readonly SearchLeague[];
   onChange: (value: PlayerSearchFilters) => void;
@@ -845,16 +1018,20 @@ function PlayerFiltersPanel({
           }
           label={t('gameLeague')}
         />
-        <OptionPicker
-          accessibilityLabel={`${t('gameLeague')}: ${
-            options.find((option) => option.value === String(value.leagueIds[0]))?.label ??
-            t('generalNotSet')
-          }`}
-          title={t('gameLeague')}
-          value={value.leagueIds.length ? String(value.leagueIds[0]) : ''}
-          options={options}
-          onChange={(next) => onChange({ ...value, leagueIds: next ? [Number(next)] : [] })}
-        />
+        {optionsFeedback.filterOptionsStatus === 'ready' || leagues.length > 0 ? (
+          <OptionPicker
+            accessibilityLabel={`${t('gameLeague')}: ${
+              options.find((option) => option.value === String(value.leagueIds[0]))?.label ??
+              t('generalNotSet')
+            }`}
+            title={t('gameLeague')}
+            value={value.leagueIds.length ? String(value.leagueIds[0]) : ''}
+            options={options}
+            onChange={(next) => onChange({ ...value, leagueIds: next ? [Number(next)] : [] })}
+          />
+        ) : (
+          <FilterOptionsFeedback {...optionsFeedback} />
+        )}
       </View>
       <View style={styles.filterPickerRow}>
         <FilterLabel
@@ -1233,8 +1410,12 @@ function recentSubtitle(item: RecentSearchItem, t: ReturnType<typeof useI18n>['t
     : [item.clanName, item.leagueName].filter(Boolean).join(' • ');
 }
 
-function resultSubtitle(result: JsonRecord, mode: SearchMode): string {
-  if (mode === 'clans') return `${numberValue(result.members)} members`;
+function resultSubtitle(
+  result: JsonRecord,
+  mode: SearchMode,
+  t: ReturnType<typeof useI18n>['t'],
+): string {
+  if (mode === 'clans') return t('generalMembersCount', { count: numberValue(result.members) });
   const clan = recordValue(result.clan);
   const league = recordValue(result.league);
   return [
@@ -1308,7 +1489,7 @@ const styles = StyleSheet.create({
   filterSelectedValue: { textAlign: 'right', flexShrink: 1 },
   pickerValue: { flexGrow: 1, flexBasis: 145, minWidth: 130, maxWidth: '100%' },
   grow: { flex: 1 },
-  page: { padding: 16, paddingBottom: 96 },
+  page: { padding: 16 },
   pageSearch: { marginTop: 12 },
   pageFilters: { marginTop: 10 },
   overlayHeader: {
@@ -1345,10 +1526,27 @@ const styles = StyleSheet.create({
   },
   fieldAction: { width: 38, height: 44, alignItems: 'center', justifyContent: 'center' },
   pageResultSpacer: { paddingTop: 14 },
-  overlayResults: { paddingHorizontal: 16, paddingTop: 16, paddingBottom: 20 },
+  overlayResults: { paddingHorizontal: 16, paddingTop: 16 },
+  pagination: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    minHeight: 44,
+    marginTop: ckSpacing.sm,
+  },
   overlayResultSpacer: { paddingTop: 12 },
   recentTitle: { marginBottom: 12, fontWeight: '700' },
-  noResults: { paddingTop: 24, textAlign: 'center' },
+  searchFeedback: { paddingVertical: 16, alignItems: 'center' },
+  noResults: { textAlign: 'center' },
+  appliedFilters: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    alignItems: 'center',
+    columnGap: 12,
+    marginBottom: 8,
+  },
+  appliedFilterValues: { flexGrow: 1, flexShrink: 1 },
+  searchTextAction: { minHeight: 44, justifyContent: 'center' },
+  filterOptionsFeedback: { flexDirection: 'row', alignItems: 'center', gap: 8 },
   entityCard: { marginBottom: 10, padding: 12 },
   overlayTile: { paddingVertical: 11, borderRadius: 14 },
   entityRow: { flexDirection: 'row', alignItems: 'center', gap: 12 },

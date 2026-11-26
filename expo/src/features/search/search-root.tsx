@@ -1,9 +1,10 @@
 import { ApiResponseError } from '@clashking/api-client';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useLinkParameters, linkChoice } from '../../core/deep-links/link-parameters';
-import { Keyboard, Platform, View } from 'react-native';
+import { Keyboard, KeyboardAvoidingView, Platform } from 'react-native';
 
 import { useAppRuntime } from '../../core/app/runtime-context';
+import { getMaxTownHallLevel } from '../../core/game-data/game-data-service';
 import { useI18n } from '../../i18n';
 import { PageLoading, Snackbar } from '../../ui';
 import { Clan } from '../clan/models';
@@ -25,12 +26,11 @@ import { SearchScreen } from './search-screen';
 import { SearchService } from './search-service';
 import {
   SEARCH_DEBOUNCE_MS,
-  beginSearch,
-  changeSearchMode,
-  completeSearch,
-  failSearch,
+  SEARCH_PAGE_SIZE,
+  classifySearchQuery,
   initialSearchRequestState,
   invalidateSearch,
+  type SearchPage,
   type SearchRequestState,
 } from './search-state';
 
@@ -75,9 +75,14 @@ export function SearchRoot({
   const [clanFilters, setClanFiltersState] = useState(emptyClanSearchFilters);
   const [requestState, setRequestState] = useState(initialSearchRequestState);
   const requestRef = useRef<SearchRequestState>(initialSearchRequestState);
+  const searchTimer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
   const [recents, setRecents] = useState<readonly RecentSearchItem[]>([]);
   const [locations, setLocations] = useState<readonly SearchLocation[]>([]);
   const [leagues, setLeagues] = useState<readonly SearchLeague[]>([]);
+  const [filterOptionsStatus, setFilterOptionsStatus] = useState<'loading' | 'ready' | 'error'>(
+    'loading',
+  );
+  const [filterOptionsAttempt, setFilterOptionsAttempt] = useState(0);
   const [opening, setOpening] = useState(false);
   const mounted = useRef(true);
   useEffect(() => {
@@ -111,97 +116,166 @@ export function SearchRoot({
   useEffect(() => {
     if (!filtersExpanded) return undefined;
     let active = true;
-    const loadFilters =
-      mode === 'clans'
-        ? service.loadLocations().then((nextLocations) => {
-            if (active) setLocations(nextLocations);
-          })
-        : service.loadLeagues().then((nextLeagues) => {
-            if (active) setLeagues(nextLeagues);
-          });
-    void loadFilters.catch(() => {
-      if (!active) return;
-      if (mode === 'clans') setLocations([]);
-      else setLeagues([]);
-    });
+    const loadFilters = async () => {
+      try {
+        if (mode === 'clans') {
+          const options = await service.loadLocations();
+          if (active) setLocations(options);
+        } else {
+          const options = await service.loadLeagues();
+          if (active) setLeagues(options);
+        }
+        if (active) setFilterOptionsStatus('ready');
+      } catch {
+        if (active) setFilterOptionsStatus('error');
+      }
+    };
+    void loadFilters();
     return () => {
       active = false;
     };
-  }, [filtersExpanded, mode, service]);
+  }, [filterOptionsAttempt, filtersExpanded, mode, service]);
 
-  const runSearch = useCallback(async () => {
-    const started = beginSearch(requestRef.current, query);
-    publishRequest(started.state);
-    if (!started.shouldSearch) return;
-    const version = started.state.version;
-    try {
-      // Browsers must not send the legacy native tracking header: it is not
-      // CORS-allowed. The authenticated API already knows the caller's identity.
-      const trackingHeaders =
-        userId && Platform.OS !== 'web' ? { 'x-ck-user-id': userId } : undefined;
-      const directTag = query.trim().toUpperCase().replace(/O/g, '0');
-      if (mode === 'players' && /^#?[0289PYLQGRJCUV]{3,}$/.test(directTag)) {
-        const player = await runtime.players.getPlayerAndClanData(directTag, trackingHeaders);
-        publishRequest(
-          completeSearch(requestRef.current, version, [
-            {
-              tag: player.tag,
-              name: player.name,
-              townHallLevel: player.townHallLevel,
-              trophies: player.trophies,
-            },
-          ]),
-        );
+  const searchText = query.trim();
+  const runSearch = useCallback(
+    async (action: 'search' | 'retry' | 'more' = 'search') => {
+      const request = requestRef.current;
+      const loadMore = action === 'more';
+      if (loadMore) {
+        if (
+          request.status !== 'success' ||
+          request.paginationStatus === 'loading' ||
+          (request.nextCursor === null && request.paginationStatus !== 'expired')
+        ) {
+          return;
+        }
+      } else if (request.status !== 'idle' && !(action === 'retry' && request.status === 'error')) {
         return;
       }
-      const results =
-        mode === 'players'
-          ? await runtime.players.searchPlayers(query.trim(), {
-              leagueIds: playerFilters.leagueIds,
-              townHallLevels: playerTownHallLevels(playerFilters),
-              extraHeaders: trackingHeaders,
-            })
-          : await service.searchClans(query.trim(), normalizeClanSearchFilters(clanFilters));
-      publishRequest(completeSearch(requestRef.current, version, results));
-    } catch (error) {
-      // A validly formed tag can still identify no player; present an empty
-      // result instead of an infrastructure failure and allow another search.
-      publishRequest(error instanceof ApiResponseError && error.status===404
-        ? completeSearch(requestRef.current,version,[]) : failSearch(requestRef.current, version));
-    }
-  }, [clanFilters, mode, playerFilters, publishRequest, query, runtime.players, service, userId]);
+      const search = classifySearchQuery(searchText);
+      if (search.kind !== 'tag' && search.kind !== 'text') return;
+      if (loadMore && search.kind !== 'text') return;
+
+      const version = request.version + 1;
+      const cursor = loadMore ? request.nextCursor : null;
+      publishRequest(
+        loadMore
+          ? { ...request, version, paginationStatus: 'loading' }
+          : { ...initialSearchRequestState, version, status: 'loading' },
+      );
+      const finish = (next: Omit<SearchRequestState, 'version'>) => {
+        if (mounted.current && requestRef.current.version === version) {
+          publishRequest({ ...next, version });
+        }
+      };
+      const finishPage = ({ results, nextCursor }: SearchPage) => {
+        // Clan results can shift between requests. Keep the first row for each tag.
+        const seen = new Set(cursor === null ? [] : request.results.map((item) => item.tag));
+        const newResults = results.filter((item) => {
+          if (seen.has(item.tag)) return false;
+          seen.add(item.tag);
+          return true;
+        });
+        finish({
+          status: 'success',
+          results: cursor === null ? newResults : [...request.results, ...newResults],
+          nextCursor: nextCursor === cursor || results.length === 0 ? null : nextCursor,
+          paginationStatus: 'idle',
+        });
+      };
+      try {
+        const trackingHeaders =
+          userId && Platform.OS !== 'web' ? { 'x-ck-user-id': userId } : undefined;
+        if (search.kind === 'tag') {
+          if (mode === 'clans') {
+            finishPage({
+              results: [await service.loadClanByTag(search.value, trackingHeaders)],
+              nextCursor: null,
+            });
+          } else {
+            const player = await runtime.players.getPlayerAndClanData(search.value, trackingHeaders);
+            finishPage({
+              results: [
+                {
+                  tag: player.tag,
+                  name: player.name,
+                  townHallLevel: player.townHallLevel,
+                  trophies: player.trophies,
+                },
+              ],
+              nextCursor: null,
+            });
+          }
+          return;
+        }
+        if (mode === 'clans') {
+          finishPage(await service.searchClans(search.value, clanFilters, cursor));
+        } else {
+          const { items, pagination } = await runtime.players.searchPlayers(search.value, {
+            limit: SEARCH_PAGE_SIZE,
+            cursor,
+            leagueIds: playerFilters.leagueIds,
+            townHallLevels: playerTownHallLevels(playerFilters, getMaxTownHallLevel()),
+            extraHeaders: trackingHeaders,
+          });
+          finishPage({
+            results: items,
+            nextCursor: pagination.hasMore ? pagination.nextCursor : null,
+          });
+        }
+      } catch (error) {
+        if (loadMore) {
+          const expired =
+            cursor === null || (error instanceof ApiResponseError && error.status === 400);
+          finish({
+            ...request,
+            nextCursor: expired ? null : cursor,
+            paginationStatus: expired ? 'expired' : 'error',
+          });
+        } else if (
+          search.kind === 'tag' &&
+          error instanceof ApiResponseError &&
+          error.status === 404
+        ) {
+          finishPage({ results: [], nextCursor: null });
+        } else {
+          finish({ ...initialSearchRequestState, status: 'error' });
+        }
+      }
+    },
+    [clanFilters, mode, playerFilters, publishRequest, runtime.players, searchText, service, userId],
+  );
 
   useEffect(() => {
+    if (requestState.status !== 'idle') return;
     const timer = setTimeout(() => void runSearch(), SEARCH_DEBOUNCE_MS);
+    searchTimer.current = timer;
     return () => clearTimeout(timer);
-  }, [runSearch]);
+  }, [requestState.status, requestState.version, runSearch]);
 
+  const resetSearch = () => {
+    clearTimeout(searchTimer.current);
+    publishRequest(invalidateSearch(requestRef.current));
+  };
   const changeMode = (next: SearchMode) => {
     if (next === mode) return;
     setMode(next);
     setFiltersExpanded(false);
-    publishRequest(changeSearchMode(requestRef.current, next));
+    resetSearch();
   };
   const changePlayerFilters = (next: PlayerSearchFilters) => {
+    if (next === playerFilters) return;
     setPlayerFiltersState(next);
-    publishRequest(invalidateSearch(requestRef.current));
+    if (!searchText.startsWith('#')) resetSearch();
   };
   const changeClanFilters = (next: ClanSearchFilters) => {
+    if (next === clanFilters) return;
     setClanFiltersState(normalizeClanSearchFilters(next));
-    publishRequest(invalidateSearch(requestRef.current));
+    if (!searchText.startsWith('#')) resetSearch();
   };
   const changeQuery = (next: string) => {
+    if (next.trim() !== searchText) resetSearch();
     setQuery(next);
-    if (!next.length) {
-      publishRequest({
-        ...requestRef.current,
-        version: requestRef.current.version + 1,
-        results: [],
-        isSearching: false,
-        hasSearched: false,
-        lastQuery: '',
-      });
-    }
   };
 
   const openResult = async (result: JsonRecord, type: SearchMode) => {
@@ -221,7 +295,7 @@ export function SearchRoot({
           clan = await runtime.clans.getClanAndWarData(tag, { extraHeaders: trackingHeaders });
         } catch {
           try {
-            clan = Clan.fromJson(await service.loadClanFallback(tag, trackingHeaders));
+            clan = Clan.fromJson(await service.loadClanByTag(tag, trackingHeaders));
           } catch {
             // Search already returned enough identity data to open a useful clan detail shell.
             // This keeps web navigation responsive when the follow-up proxy request is blocked.
@@ -257,8 +331,12 @@ export function SearchRoot({
   const openRecent = (item: RecentSearchItem) =>
     openResult({ tag: item.tag, name: item.name }, item.type === 'player' ? 'players' : 'clans');
 
+  // On iOS, padding the overlay avoids the ScrollView resetting its offset when the keyboard hides.
   return (
-    <View style={{ flex: 1 }}>
+    <KeyboardAvoidingView
+      behavior={overlay && Platform.OS === 'ios' ? 'padding' : undefined}
+      style={{ flex: 1 }}
+    >
       <SearchScreen
         overlay={overlay}
         autofocus={autofocus}
@@ -271,12 +349,22 @@ export function SearchRoot({
         recents={recents}
         locations={locations}
         leagues={leagues}
-        isSearching={requestState.isSearching}
-        hasSearched={requestState.hasSearched}
+        searchStatus={requestState.status}
+        hasMoreResults={requestState.nextCursor !== null}
+        paginationStatus={requestState.paginationStatus}
+        filterOptionsStatus={filterOptionsStatus}
+        onRetryFilterOptions={() => {
+          setFilterOptionsStatus('loading');
+          setFilterOptionsAttempt((attempt) => attempt + 1);
+        }}
         onQueryChange={changeQuery}
-        onSubmit={() => void runSearch()}
+        onSubmit={() => void runSearch('retry')}
+        onLoadMore={() => void runSearch('more')}
         onModeChange={changeMode}
-        onFiltersExpandedChange={setFiltersExpanded}
+        onFiltersExpandedChange={(expanded) => {
+          if (expanded) setFilterOptionsStatus('loading');
+          setFiltersExpanded(expanded);
+        }}
         onPlayerFiltersChange={changePlayerFilters}
         onClanFiltersChange={changeClanFilters}
         onOpenResult={openResult}
@@ -285,6 +373,6 @@ export function SearchRoot({
       />
       <PageLoading visible={opening} />
       <Snackbar message={snackbar} onDismiss={() => setSnackbar(undefined)} />
-    </View>
+    </KeyboardAvoidingView>
   );
 }

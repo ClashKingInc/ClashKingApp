@@ -1,4 +1,4 @@
-// Actual App WarCwlService -> installed client -> local API Worker -> HTTP provider.
+// Actual app services -> installed client -> local API Worker -> HTTP provider.
 import assert from 'node:assert/strict';
 import { createRequire } from 'node:module';
 import { mkdtempSync, rmSync } from 'node:fs';
@@ -20,7 +20,8 @@ try {
       loader: 'ts',
       contents: `
  import assert from 'node:assert/strict';
- import {createApiClient,httpTransport} from '@clashking/api-client';
+ import {ApiResponseError,createApiClient,httpTransport} from '@clashking/api-client';
+ import {SearchService} from './src/features/search/search-service';
  import {WarCwlService} from './src/features/war/data/war-cwl-service';
  import {withApiDiagnostics} from './src/core/api/contract-api-observability';
  const requests:string[]=[],reports:unknown[]=[];
@@ -42,6 +43,23 @@ try {
  }
  await control(200,'',503,'inMaintenance');await assert.rejects(service.loadAllWarData([tag],{throwOnError:true}),error=>error._tag==='ApiResponseError'&&error.status===503);
  service.dispose();console.log('PASS real App war service: notInWar, private log, invalid credentials, maintenance, outages and retained readable state');
+
+ const search = new SearchService(client);
+ reports.length = 0;
+ await control(404, 'notFound');
+ await assert.rejects(
+   search.loadClanByTag(tag),
+   error => error instanceof ApiResponseError && error.status === 404,
+   'A missing clan must reach search as a typed HTTP 404',
+ );
+ assert.equal(reports.length, 0, 'A missing clan is an expected search outcome');
+ await control(503, 'inMaintenance');
+ await assert.rejects(
+   search.loadClanByTag(tag),
+   error => error instanceof ApiResponseError && error.status === 503,
+   'An upstream failure must remain distinct from a missing clan',
+ );
+ console.log('PASS real App clan lookup: missing tag and upstream failure remain distinct');
  `,
     },
     outfile: output,
